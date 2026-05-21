@@ -3,7 +3,7 @@
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ChevronUp } from "lucide-react";
-import { Question, Answer, Reaction, Section } from "@/lib/types";
+import { Question, Answer, Section } from "@/lib/types";
 import { TrunkChip } from "./trunk-chip";
 import { QuestionCard } from "./question-card";
 import { cn } from "@/lib/utils";
@@ -14,10 +14,8 @@ interface Props {
   activeId: string;
   onActivate: (id: string) => void;
   onAnswer: (partial: Partial<Answer>) => void;
-  onReact: (r: Reaction) => void;
   onNext: () => void;
   loadingNext?: boolean;
-  reactionBusy?: boolean;
   positionLabel?: string;
 }
 
@@ -37,10 +35,8 @@ export function AssessmentGraph({
   onAnswer,
   onReact,
   onNext,
-  loadingNext,
-  reactionBusy,
-  positionLabel,
-}: Props) {
+  loNext,
+  loadingNext
   const activeIndex = trunk.findIndex((q) => q.id === activeId);
   const active = trunk[activeIndex];
   const before = trunk.slice(0, activeIndex);
@@ -110,11 +106,9 @@ export function AssessmentGraph({
                 onAnswer={onAnswer}
                 onReact={onReact}
                 onNext={onNext}
+                onNext={onNext}
                 onAutoAdvance={onNext}
-                loadingNext={loadingNext}
-                reactionBusy={reactionBusy}
-                positionLabel={positionLabel}
-              />
+                loadingNext={loadingNext
             </motion.div>
           </AnimatePresence>
         </div>

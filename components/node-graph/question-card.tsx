@@ -3,8 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
 import { ArrowRight, Check, Sparkles } from "lucide-react";
-import { Question, Answer, Reaction } from "@/lib/types";
-import { ReactionBar } from "./reaction-bar";
+import { Question, Answer } from "@/lib/types";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
@@ -12,13 +11,10 @@ interface Props {
   question: Question;
   answer?: Answer;
   onAnswer: (partial: Partial<Answer>) => void;
-  onReact: (r: Reaction) => void;
   onNext: () => void;
   /** Called after a single_choice option is selected, to auto-advance. */
   onAutoAdvance?: () => void;
   loadingNext?: boolean;
-  /** True while a reaction is generating a deeper probe or rephrase. */
-  reactionBusy?: boolean;
   positionLabel?: string;
 }
 
@@ -32,8 +28,9 @@ export function QuestionCard({
   onReact,
   onNext,
   onAutoAdvance,
+  loNext,
+  onAutoAdvance,
   loadingNext,
-  reactionBusy,
   positionLabel,
 }: Props) {
   const canAdvance = isAnswered(question, answer);
@@ -47,10 +44,7 @@ export function QuestionCard({
 
   const handleSelect = (optionIds: string[]) => {
     onAnswer({ optionIds });
-    if (optionIds.length === 0 || !onAutoAdvance || reactionBusy) return;
-
-    if (question.type === "single_choice") {
-      if (advancedRef.current) return;
+    if (optionIds.length === 0 || !onAutoAdvance
       advancedRef.current = true;
       advanceTimeoutRef.current = window.setTimeout(() => {
         onAutoAdvance();
@@ -79,19 +73,7 @@ export function QuestionCard({
 
   // Cancel any pending auto-advance the moment a reaction starts processing.
   // Without this, a user who quickly clicks Option-then-Emoji gets skipped
-  // off the card before their rewrite lands.
-  useEffect(() => {
-    if (reactionBusy && advanceTimeoutRef.current !== null) {
-      window.clearTimeout(advanceTimeoutRef.current);
-      advanceTimeoutRef.current = null;
-      advancedRef.current = false;
-    }
-  }, [reactionBusy]);
 
-  const reactionTone = answer?.reaction;
-  const wasReworked = !!reactionTone && reactionTone !== "think";
-
-  return (
     <div
       className={cn(
         "panel relative w-full p-8 md:p-10",
@@ -125,10 +107,7 @@ export function QuestionCard({
         </div>
       </div>
 
-      <motion.h2
-        key={question.prompt}
-        initial={{ opacity: 0, y: 4 }}
-        animate={{ opacity: 1, y: 0 }}
+      <motioate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className="display-md text-[28px] md:text-[32px] text-ink mb-2 text-balance"
       >
@@ -137,9 +116,7 @@ export function QuestionCard({
       {question.hint && (
         <p className="text-[14px] text-ink-400 mb-6">{question.hint}</p>
       )}
-
-      <div className="mt-6">
-        <QuestionBody
+<QuestionBody
           question={question}
           answer={answer}
           onAnswer={handleSelect}
@@ -165,13 +142,7 @@ export function QuestionCard({
           <div className={cn("mono-eyebrow", canAdvance ? "text-ink-400" : "text-ink-300")}>
             {canAdvance ? "ADVANCING…" : "PICK AN OPTION"}
           </div>
-        )}
-        {!showManualNext && question.type === "multi_choice" && (
-          <div className={cn("mono-eyebrow", canAdvance ? "text-ink-400" : "text-ink-300")}>
-            {canAdvance ? "ADVANCING · TAP MORE TO STAY" : "PICK ONE OR MORE"}
-          </div>
-        )}
-      </div>
+        )}/
     </div>
   );
 }

@@ -1,0 +1,473 @@
+================================================================================
+SECURE STEPS - ALL QUESTIONS DATABASE
+================================================================================
+Total Questions: 38
+- Context Questions: 10
+- Roots Anchors: 20
+- Routes-BCA: 8
+================================================================================
+
+
+SECTION 1: CONTEXT QUESTIONS (10 total)
+================================================================================
+
+1. BUDGET
+ID: ctx_budget | Type: Single Choice
+Question: What's the rough annual budget your family is comfortable with for college?
+Hint: Tuition + living, INR. Honest answer here saves you from a dream-school heartbreak later.
+Options:
+  • Under ₹5L / year
+  • ₹5L – ₹15L / year
+  • ₹15L – ₹30L / year
+  • ₹30L+ / year
+  • Honestly not sure yet
+
+---
+
+2. GEOGRAPHY
+ID: ctx_geo | Type: Multi Choice
+Question: Where would you actually be willing to study?
+Hint: Pick anything that's a real option. Not where it'd be cool — where you'd actually go.
+Options:
+  • India
+  • UK
+  • US / Canada
+  • Europe (non-UK)
+  • Singapore / Asia
+  • Australia / NZ
+  • Open to anywhere
+
+---
+
+3. FAMILY
+ID: ctx_family | Type: Single Choice
+Question: How much room do you have to choose your own path?
+Hint: No judgment either way. We just need to know what we're working with.
+Options:
+  • Total freedom — they'll back whatever I pick
+  • Strong opinions, but they'll listen to a real plan
+  • Pretty specific course/career they expect
+  • Locked in — almost no flexibility
+
+---
+
+4. AMBITION (Tier)
+ID: ctx_tier | Type: Single Choice
+Question: When you picture the kind of college you want to land at, what's the vibe?
+Options:
+  • Top-tier global (Ivies, Oxbridge, top US/UK)
+  • Strong global, just not the household names
+  • Top of the Indian system (IIT/IIM/NID/NLU…)
+  • Solid Indian college, good fit > prestige
+  • Honestly, I just want to figure it out
+
+---
+
+5. TIMELINE
+ID: ctx_timeline | Type: Single Choice
+Question: When are you applying?
+Options:
+  • This cycle (next 6 months)
+  • Next cycle (~1 year out)
+  • 2+ years out, planning early
+  • Not decided yet
+
+---
+
+6. DREAM
+ID: ctx_dream | Type: Short Text
+Question: Picture yourself five years from now on a really good day. What are you doing?
+Hint: One or two sentences. No pressure, no right answer — just whatever first comes to mind.
+
+---
+
+7. FREE TIME (Hobbies)
+ID: ctx_hobbies | Type: Multi Choice
+Question: When you have a free Sunday, what's most likely to fill it?
+Hint: Pick all that apply — what you actually do, not what'd sound impressive.
+Options:
+  • Reading (fiction, non-fiction, anything)
+  • Gaming or watching content (YouTube, Netflix, anime)
+  • Sports or working out
+  • Music — playing or producing
+  • Building / coding / making things
+  • Art, design, photography
+  • Hanging out with friends / family
+  • Volunteering / activism / community work
+  • Cooking / experimenting in the kitchen
+  • Just resting and recovering
+
+---
+
+8. VALUES
+ID: ctx_values | Type: Multi Choice
+Question: When you imagine 'a life well lived', which of these matter most to you?
+Hint: Top 3 ideally. Be honest with yourself — not the Instagram answer.
+Options:
+  • Financial independence and security
+  • Recognition for what I build / make
+  • Deep, meaningful relationships
+  • Adventure, travel, novelty
+  • Mastery — being genuinely good at something
+  • Helping others / leaving things better
+  • Freedom and autonomy over my time
+  • Creative expression
+  • Family stability and roots
+  • Status and influence
+
+---
+
+9. IDENTITY
+ID: ctx_self | Type: Short Text
+Question: If a stranger asked you 'so, what kind of person are you?' — how would you actually answer?
+Hint: Three sentences max. No CV-speak. The version you'd say to a friend's older sibling at a wedding.
+
+---
+
+10. DAILY CLOCK (Energy)
+ID: ctx_energy_clock | Type: Single Choice
+Question: When in the day are you actually at your sharpest?
+Options:
+  • Early morning — I do my best work before 10 AM
+  • Mid-day — settled in by 11, peak around 2
+  • Evening — I really get going after the sun's down
+  • Late night — between 10 PM and 2 AM is where I live
+  • Honestly chaotic — depends on the week
+
+
+================================================================================
+SECTION 2: ROOTS ANCHORS (20 total)
+================================================================================
+
+1. DECISION STYLE - GROUP PROJECT
+ID: rt_decision_groupproj | Dimension: decision_style
+Question: It's 11 PM. Your group project is due tomorrow morning, and the doc is a mess. What's your move?
+Options:
+  • Open a new doc, restructure the whole thing, message the group at 6 AM with a clean version.
+  • Send a voice note saying "chill, we'll fix it tomorrow" — and mostly mean it.
+  • Start fixing the section I wrote. The rest is not my problem.
+  • Call the most chaotic person in the group. Misery loves company.
+
+---
+
+2. ENERGY & PEOPLE - SATURDAY
+ID: rt_energy_saturday | Dimension: energy
+Question: After a long week, your idea of a perfect Saturday is:
+Options:
+  • A tiny, loud rooftop party where I know exactly three people.
+  • Brunch with one friend who actually gets it. Then a long nap.
+  • Alone, headphones on, deep in something I'm building or watching.
+  • Honestly? Whatever the group chat decides. I'm down.
+
+---
+
+3. STRUCTURE - TRIP PLANNING
+ID: rt_structure_planning | Dimension: structure
+Question: You're planning a trip with friends in three weeks. By Tuesday, you have:
+Options:
+  • A spreadsheet. Tabs for budget, transport, day-by-day. It's beautiful.
+  • A vague plan. Flights booked, the rest is vibes.
+  • Nothing. We'll figure it out the night before. We always do.
+  • I'm waiting for someone else to start the spreadsheet.
+
+---
+
+4. RISK - STARTUP OPPORTUNITY
+ID: rt_risk_opportunity | Dimension: risk
+Question: A senior offers you a spot on their startup project. Unpaid, unproven, sounds wild. You have midterms in 4 weeks.
+Options:
+  • In. I'll figure out midterms somehow — this won't come around again.
+  • Yes, but I'm setting hard hours so it doesn't tank my grades.
+  • Pass. Cool idea, wrong timing. Maybe summer.
+  • Hard no. I came to college to do well in college.
+
+---
+
+5. DRIVE - FREE SUNDAY
+ID: rt_drive_boredom | Dimension: drive
+Question: You've got a free Sunday afternoon and zero plans. Most likely?
+Options:
+  • I open the laptop and start something — a project, a deck, a side hustle.
+  • I message someone. Whatever they're doing, I'm now doing.
+  • I disappear into a YouTube rabbit hole and lose 4 hours, no regrets.
+  • I sleep. Aggressively.
+
+---
+
+6. SOCIAL MODE - FRIEND'S BAD DECISION
+ID: rt_social_conflict | Dimension: social
+Question: Your closest friend is making a decision you think is genuinely bad. They haven't asked your opinion.
+Options:
+  • I tell them anyway. Gently. Friendship > comfort.
+  • I drop hints. If they ask, I'll go all in.
+  • Not my call. They'll figure it out themselves.
+  • I'd ask three other friends what they think first. Group call.
+
+---
+
+7. DECISION STYLE - RESTAURANT MENU
+ID: rt_decision_choices | Dimension: decision_style
+Question: You're at a restaurant with a giant menu. How do you order?
+Options:
+  • I read every section, eliminate, narrow down, commit. 4 minutes flat.
+  • I ask the waiter what's good and just go with it.
+  • I always order the same thing. I know what I like.
+  • Whatever the table is getting. Fork-tax everyone's plate.
+
+---
+
+8. ENERGY - BIG EVENT
+ID: rt_energy_bigevent | Dimension: energy
+Question: You walk into a room of 60 people you've never met. There's a mic and an open floor.
+Options:
+  • I'd grab the mic. I'll think of what to say while I walk up.
+  • I'd find one interesting-looking person and talk to them all night.
+  • I'd hover near the food, polite smile, leave by 9.
+  • I'd be early. I'd already know half the room by the time it filled up.
+
+---
+
+9. DRIVE - FEEDBACK
+ID: rt_drive_feedback | Dimension: drive
+Question: You get back a piece of work with brutal feedback. Honest but painful. Your first 24 hours look like:
+Options:
+  • Sulk for an hour. Then re-read it cold and start fixing the real points.
+  • Defend it in my head for two days before I can look at it again.
+  • Send it to a friend and get a second opinion before I act on anything.
+  • Throw the whole thing out. Restart from zero. Spite is fuel.
+
+---
+
+10. STRUCTURE - MORNINGS
+ID: rt_structure_morning | Dimension: structure
+Question: Your weekday mornings look like:
+Options:
+  • Same wake-up, same coffee, same playlist. The routine is the point.
+  • I have a routine in theory. In practice, I snooze 5 times.
+  • Different every day. I like the surprise.
+  • I don't really have mornings. I have late starts.
+
+---
+
+11. DETAIL - PROOFREADING
+ID: rt_detail_proofreading | Dimension: structure
+Question: Your friend asks you to proofread their statement of purpose for a top program. It's solid but you spot a typo, a wonky sentence, and a stat that feels wrong. They want it back in an hour.
+Options:
+  • Full pass — typo, sentence, stat, plus three more I find. Track changes, comments, the works.
+  • Fix the obvious typo and the sentence. Flag the stat with a question. Move on.
+  • Read once for vibe, not detail. Tell them it's good. The big stuff matters more than the polish.
+  • Honestly, I'd skim it and say 'looks great' just to not delay them.
+
+---
+
+12. COMPLIANCE - RULES
+ID: rt_compliance_rule | Dimension: structure
+Question: Your hostel has a rule: no guests after 10 PM. Your friend gets stranded at midnight needing a place to crash. The warden's asleep.
+Options:
+  • Sneak them in. Worst case I argue it later. They needed help.
+  • Wake the warden, explain, ask for a one-time exception.
+  • Find them an alternative — book a budget hotel, call an Uber, anything that doesn't break the rule.
+  • Tell them sorry, can't help. The rule's the rule.
+
+---
+
+13. EMPATHY - ROOMMATE
+ID: rt_empathy_roommate | Dimension: social
+Question: Your roommate has been off all week — short answers, eating alone, not their usual self. They haven't said anything's wrong.
+Options:
+  • Sit down, say I noticed, ask if they want to talk. No pressure.
+  • Drop something thoughtful — their favorite snack, a meme, an invite to chai. Open a door, don't push.
+  • Give them space. If they want to talk, they'll bring it up.
+  • Honestly, I probably wouldn't have noticed.
+
+---
+
+14. DRIVE - BURNOUT
+ID: rt_drive_burnout | Dimension: drive
+Question: It's the last week before finals. You've been studying 8+ hours daily for three weeks. You're exhausted and your retention has dropped.
+Options:
+  • Push through. You can recover after exams. The stakes are too high to ease up now.
+  • Cut to 5 hours, sleep more, focus on weak spots only. Smart > hard.
+  • Take a full day off. Reset properly. Come back fresh.
+  • I'd already have given up by now and be doom-scrolling.
+
+---
+
+15. MONEY - WINDFALL
+ID: rt_money_windfall | Dimension: risk
+Question: An aunt unexpectedly hands you ₹50,000 with 'just spend it on something good for yourself.' What's your move?
+Options:
+  • Save 80%. Invest a piece. Treat myself with the rest. Boring but smart.
+  • One big experience — a trip, a workshop, a thing I'd remember in 10 years.
+  • Buy the laptop / camera / gear I've been wanting forever. Tools, not stuff.
+  • Honestly, half of it would be gone in a week before I really thought about it.
+
+---
+
+16. CONFLICT - PUBLICLY WRONG
+ID: rt_conflict_publicly_wrong | Dimension: decision_style
+Question: You confidently made a claim in front of a group. Mid-sentence someone shows you, with receipts, that you're wrong.
+Options:
+  • Stop, say 'okay yeah you're right', adjust live. Move on inside two seconds.
+  • Acknowledge it but defend the spirit of what I meant. Save some face.
+  • Get quiet. Stew on it for the rest of the conversation.
+  • Push back hard, even if I'm not sure. The room respects confidence.
+
+---
+
+17. CURIOSITY - RABBIT HOLE
+ID: rt_curiosity_rabbithole | Dimension: drive
+Question: You hear something interesting in passing — a half-fact, a name, a concept you've never come across. The next 24 hours look like:
+Options:
+  • Three Wikipedia tabs deep within an hour. By next week I'll know more than the person who said it.
+  • Mental note. I'll get to it eventually. Maybe.
+  • Bring it up with someone smart who'd know more, save myself the search.
+  • If it's not directly useful to me, it won't stick.
+
+---
+
+18. FAILURE - PUBLIC FAIL
+ID: rt_failure_publicfail | Dimension: drive
+Question: You bombed a presentation in front of a room that mattered. Walking out, you know you blew it.
+Options:
+  • Replay it that night to figure out exactly what broke. Notes by morning. Already drafting the redo.
+  • Need a day or two of avoidance. Then I'll process it. Then I'll come back stronger.
+  • Carry it for weeks. It'll come up in 3 AM thoughts long after everyone else has forgotten.
+  • Talk to friends, laugh about it, decide presenting just isn't my thing.
+
+---
+
+19. LIFESTYLE - ENVIRONMENT
+ID: rt_lifestyle_environment | Dimension: energy
+Question: Pick the version of your daily environment that would make you happiest, most energized.
+Options:
+  • Buzzing city. Cafés, late-night metros, plans materializing two hours before they happen.
+  • Mid-sized place. Quiet street, good coffee within walking distance, my people in a 20-min radius.
+  • Off the beaten path. Big sky, less noise, maybe a college town with character.
+  • Honestly I just need a great room. The city around it doesn't matter that much.
+
+---
+
+20. IDENTITY - COMPLIMENTS
+ID: rt_identity_compliments | Dimension: social
+Question: What's the kind of compliment that actually lands for you? The one that makes you feel seen, not just flattered.
+Options:
+  • 'You actually thought about that, didn't you' — being recognized for the thinking under the work.
+  • 'You made everyone in that room feel comfortable' — the people piece, not the work.
+  • 'You just got it done while everyone else was still talking' — the bias to action.
+  • 'I've never seen anyone do it that way' — the originality.
+
+
+================================================================================
+SECTION 3: ROUTES-BCA (8 total - CS/Engineering Discipline Questions)
+================================================================================
+
+1. CURIOSITY - NEW FRAMEWORK
+ID: rb_framework | Dimension: drive
+Question: A new framework just dropped on Twitter. Everyone in your class is hyped. Your honest reaction is:
+Options:
+  • Already cloned the repo. Reading the source on the bus home.
+  • I'll wait for a good YouTube breakdown next weekend.
+  • Cool, but I have semesters to finish first.
+  • Wait, who's this 'everyone' you're talking about?
+
+---
+
+2. PROBLEM MODE - BUG AT 2AM
+ID: rb_bug_at_2am | Dimension: decision_style
+Question: It's 2 AM. Your code has been broken for three hours. The bug makes no sense. What do you do?
+Options:
+  • Stay up. I'm not sleeping until I see it work.
+  • Sleep. I always solve it in the shower the next morning anyway.
+  • Post the error in a Discord and go scroll until someone helps.
+  • Comment it out, mark a TODO, push the rest. Deal with it tomorrow.
+
+---
+
+3. WORKING STYLE - PAIR PROGRAMMING
+ID: rb_pair_programming | Dimension: social
+Question: You're paired with someone for a hackathon. They want to use a stack you've never touched.
+Options:
+  • Cool. I learn fastest under pressure anyway.
+  • Push back. Suggest the stack I know — we're here to win.
+  • Split work — I'll do the bits I know, they'll do the new stack.
+  • I'd rather just build it solo, honestly.
+
+---
+
+4. OUTPUT TASTE - BUILD OR POLISH
+ID: rb_build_or_polish | Dimension: structure
+Question: You're 80% done with a project. The last 20% is unglamorous polish. You have a deadline in 3 days.
+Options:
+  • Polish properly. Shipping ugly is worse than shipping late.
+  • Ship at 80. Iterate after feedback. Done > perfect.
+  • Start a second, better version. The first one was a draft.
+  • Honestly, I'd ask a friend to do the polish bit.
+
+---
+
+5. PATH - CAREER PICTURE
+ID: rb_career_picture | Dimension: drive
+Question: Three years out of college, what's the version of work that would feel like a win?
+Options:
+  • Senior engineer at a top product company. Real systems, real scale.
+  • Co-founder of something I started. Even if it's small.
+  • Solid job, side projects on the weekend. Both hands full.
+  • Honestly, I'm not sure I'm staying in tech.
+
+---
+
+6. PRESSURE - ACADEMIC COLLISION
+ID: rb_academic_pressure | Dimension: structure
+Question: Two assignments + a viva + your side project all collide in the same week. How do you actually handle it?
+Options:
+  • I make a literal hour-by-hour plan, do hardest first, treat it like ops.
+  • I quietly drop the side project, refocus on grades, pick it back up after.
+  • I do the assignments at 60%, ace the viva, side project in any breathing room.
+  • I would absolutely panic for the first 36 hours. Then crank the last 48.
+
+---
+
+7. HORIZON - STABLE VS FRONTIER
+ID: rb_horizon | Dimension: decision_style
+Question: Pick the bet you'd make: a job that pays well now in a stable but boring stack, or low pay in a frontier area you'd be learning the bleeding edge of.
+Options:
+  • Boring stable stack. Compounding earnings + free time = leverage.
+  • Frontier area. Money compounds — but compounded skill compounds harder.
+  • Find the rare job that's both. Won't settle for either.
+  • Honestly I'd take whichever one had cooler people.
+
+---
+
+8. ENGAGEMENT CHECK (Honest Signal)
+ID: rb_engagement | Type: Engagement Scale (0-3)
+Question: In the last 6 months — outside of class, with zero pressure — have you actually built, broken, or tinkered with anything code-related? Be honest. No judgment.
+Hint: There's no right answer. We're trying to read your real connection to this field, not your resume.
+Options:
+  • Yeah — I actively build/tinker. It's kind of my thing. (Engagement: 3)
+  • A little. I poked at one thing because I had to. (Engagement: 2)
+  • Nope. I keep meaning to. Haven't. (Engagement: 1)
+  • Honestly, I don't really care about the technical side. (Engagement: 0)
+
+
+================================================================================
+SUMMARY
+================================================================================
+Total Questions: 38
+
+Breakdown by Section:
+  • Context Questions: 10 (practical constraints, background, values)
+  • Roots Anchors: 20 (psychometric base, core dimensions)
+  • Routes-BCA: 8 (CS/Engineering-specific, engagement check)
+
+Dimensions Tracked:
+  decision_style, drive, structure, risk, energy, social
+
+Questions Organization:
+  All questions are organized by section with ID, type, dimension, and multiple choice options.
+  Short text questions (ctx_dream, ctx_self) are open-ended responses.
+  Engagement check (rb_engagement) scored on 0-3 scale instead of dimensions.
+
+================================================================================
+END OF QUESTIONS DATABASE
+================================================================================

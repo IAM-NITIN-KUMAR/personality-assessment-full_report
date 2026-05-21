@@ -25,16 +25,13 @@ export default function AssessmentPage() {
   const setTrunk = useAssessment((s) => s.setTrunk);
   const setSection = useAssessment((s) => s.setSection);
   const answer = useAssessment((s) => s.answer);
-  const react = useAssessment((s) => s.react);
   const pushAdaptive = useAssessment((s) => s.pushAdaptive);
-  const setRewrite = useAssessment((s) => s.setRewrite);
   const computeArchetype = useAssessment((s) => s.computeArchetype);
   const getQuestion = useAssessment((s) => s.getQuestion);
   const reset = useAssessment((s) => s.reset);
 
   const [activeId, setActiveId] = useState<string | null>(null);
   const [loadingProbe, setLoadingProbe] = useState(false);
-  const [reactionBusy, setReactionBusy] = useState(false);
   /** Once true, we never auto-pick an activeId again — user navigation owns it.
    *  Without this guard, the initial "find first unanswered" logic re-runs on
    *  every keystroke into a short-text question (answers changes → effect re-fires
@@ -245,10 +242,8 @@ export default function AssessmentPage() {
         activeId={activeId}
         onActivate={setActiveId}
         onAnswer={handleAnswer}
-        onReact={handleReact}
         onNext={handleNextOrAdvance}
         loadingNext={loadingProbe}
-        reactionBusy={reactionBusy}
         positionLabel={positionLabel}
       />
     </main>
