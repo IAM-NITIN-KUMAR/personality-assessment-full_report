@@ -87,8 +87,8 @@ export function RadarChart({ axes, size = 320, rings = true, className }: RadarP
       {/* Filled polygon */}
       <motion.polygon
         points={polygonPoints}
-        fill="rgba(250,123,214,0.18)"
-        stroke="#FA7BD6"
+        fill="rgba(243,166,217,0.18)"
+        stroke="#F3A6D9"
         strokeWidth={2}
         strokeLinejoin="round"
         initial={{ opacity: 0, scale: 0.85 }}
@@ -106,7 +106,7 @@ export function RadarChart({ axes, size = 320, rings = true, className }: RadarP
             cx={p.x}
             cy={p.y}
             r={3.5}
-            fill="#FA7BD6"
+            fill="#F3A6D9"
             stroke="white"
             strokeWidth={1.5}
           />
@@ -223,7 +223,7 @@ export function EngagementDial({ score, level, size = 200 }: DialProps) {
       <motion.path
         d={arcPath(startAngle, startAngle + Math.max(0.01, fillAngle))}
         fill="none"
-        stroke={isWarning ? "#E76F51" : "#FA7BD6"}
+        stroke={isWarning ? "#E76F51" : "#F3A6D9"}
         strokeWidth={10}
         strokeLinecap="round"
         initial={{ pathLength: 0 }}
@@ -250,7 +250,7 @@ export function EngagementDial({ score, level, size = 200 }: DialProps) {
             y1={y1}
             x2={x2}
             y2={y2}
-            stroke={t <= score ? (isWarning ? "#E76F51" : "#FA7BD6") : "#D1D5DB"}
+            stroke={t <= score ? (isWarning ? "#E76F51" : "#F3A6D9") : "#D1D5DB"}
             strokeWidth={2}
             strokeLinecap="round"
           />
@@ -288,7 +288,7 @@ export function EngagementDial({ score, level, size = 200 }: DialProps) {
         fontSize={10}
         letterSpacing={1.5}
         fontWeight={700}
-        fill={isWarning ? "#E76F51" : "#FA7BD6"}
+        fill={isWarning ? "#E76F51" : "#F3A6D9"}
       >
         {level.toUpperCase()}
       </text>

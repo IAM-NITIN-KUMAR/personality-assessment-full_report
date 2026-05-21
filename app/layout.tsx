@@ -19,10 +19,17 @@ export default function RootLayout({
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link
           rel="stylesheet"
-          href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
         />
       </head>
-      <body className="min-h-dvh bg-white text-ink antialiased">
+      <body className="min-h-dvh text-ink antialiased">
+        <div aria-hidden className="clouds-bg">
+          <div className="cloud cloud-1" />
+          <div className="cloud cloud-2" />
+          <div className="cloud cloud-3" />
+          <div className="cloud cloud-4" />
+          <div className="cloud cloud-5" />
+        </div>
         {children}
       </body>
     </html>

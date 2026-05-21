@@ -45,7 +45,7 @@ export default function TeaserPage() {
   };
 
   return (
-    <main className="min-h-dvh bg-white">
+    <main className="min-h-dvh">
       <div className="max-w-3xl mx-auto px-6 py-20 md:py-28">
         <motion.div
           initial={{ opacity: 0, y: 12 }}

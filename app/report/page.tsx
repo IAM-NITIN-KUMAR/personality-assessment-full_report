@@ -74,15 +74,15 @@ export default function ReportPage() {
   if (!hydrated || !profile) return null;
   if (!data) {
     return (
-      <main className="min-h-dvh bg-white flex items-center justify-center">
+      <main className="min-h-dvh flex items-center justify-center">
         <div className="mono-eyebrow text-ink-300 animate-pulse">COMPOSING REPORT…</div>
       </main>
     );
   }
 
   return (
-    <main className="min-h-dvh bg-white">
-      <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-line">
+    <main className="min-h-dvh">
+      <header className="sticky top-0 z-30 bg-surface/90 backdrop-blur border-b border-line">
         <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
           <Button variant="ghost" onClick={() => router.push("/assessment")}>
             <ArrowLeft className="h-3 w-3" />

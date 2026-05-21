@@ -9,9 +9,9 @@ const config: Config = {
         // electric blue accent, monospace eyebrows. Replaces the earlier cream
         // theme entirely.
         surface: {
-          DEFAULT: "#FFFFFF",
-          panel: "#F4F4F6",
-          subtle: "#FAFAFB",
+          DEFAULT: "#FDF7FB",
+          panel: "#F5E8F0",
+          subtle: "#FBF0F7",
         },
         ink: {
           DEFAULT: "#0A0E1A",
@@ -30,12 +30,12 @@ const config: Config = {
         // Brand accent — Secure Steps pink. Token name kept as "electric" to
         // avoid churning every consumer; the value is what changed.
         electric: {
-          DEFAULT: "#FA7BD6",
-          400: "#FCA0E0",
-          500: "#FA7BD6",
-          600: "#E254BC",
-          700: "#B73D96",
-          tint: "#FEE9F8",
+          DEFAULT: "#F3A6D9",
+          400: "#F8C2E4",
+          500: "#F3A6D9",
+          600: "#C59AE8",
+          700: "#A878D0",
+          tint: "#FDEEF8",
         },
         positive: "#16A34A",
         warning: "#E76F51",

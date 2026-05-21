@@ -224,7 +224,7 @@ export default function AssessmentPage() {
   const positionLabel = `${currentIndex + 1} of ~${totalQs}`;
 
   return (
-    <main className="min-h-dvh bg-white relative">
+    <main className="min-h-dvh relative">
       <Header
         profile={profile}
         sectionLabel={SECTION_HEADER[section]}
@@ -268,7 +268,7 @@ function Header({
   onReset: () => void;
 }) {
   return (
-    <header className="sticky top-0 z-30 bg-white/90 backdrop-blur border-b border-line">
+    <header className="sticky top-0 z-30 bg-surface/90 backdrop-blur border-b border-line">
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Logo className="size-8 text-ink" />
@@ -292,7 +292,7 @@ function Header({
 
 function LoadingShell() {
   return (
-    <main className="min-h-dvh bg-white flex items-center justify-center">
+    <main className="min-h-dvh flex items-center justify-center">
       <div className="mono-eyebrow text-ink-300 animate-pulse">LOADING ASSESSMENT…</div>
     </main>
   );

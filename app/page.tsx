@@ -31,7 +31,7 @@ export default function LandingPage() {
   const [course, setCourse] = useState<string | undefined>(undefined);
 
   if (!hydrated) {
-    return <main className="min-h-dvh bg-white" />;
+    return <main className="min-h-dvh" />;
   }
 
   const handleStart = (e: React.FormEvent) => {
@@ -49,7 +49,7 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="min-h-dvh bg-white">
+    <main className="min-h-dvh">
       <Header />
 
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-20">
@@ -250,8 +250,8 @@ function Form(props: {
         }
         :global(.form-input:focus) {
           outline: none;
-          border-color: #FA7BD6;
-          box-shadow: 0 0 0 3px rgba(250, 123, 214, 0.18);
+          border-color: #F3A6D9;
+          box-shadow: 0 0 0 3px rgba(243, 166, 217, 0.22);
           background: #FFFFFF;
         }
         :global(.form-input::placeholder) {

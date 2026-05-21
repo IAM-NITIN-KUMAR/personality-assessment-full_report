@@ -137,7 +137,7 @@ function MatchScoreDisk({ score }: { score: number }) {
           cy={cy}
           r={r}
           fill="none"
-          stroke="#FA7BD6"
+          stroke="#F3A6D9"
           strokeWidth="6"
           strokeLinecap="round"
           strokeDasharray={circumference}

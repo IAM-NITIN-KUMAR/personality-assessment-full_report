@@ -41,12 +41,12 @@ export default function ThankYouPage() {
     return () => window.clearTimeout(t);
   }, [hydrated, secondsLeft, router]);
 
-  if (!hydrated) return <main className="min-h-dvh bg-white" />;
+  if (!hydrated) return <main className="min-h-dvh" />;
 
   const firstName = name ? name.split(" ")[0] : "";
 
   return (
-    <main className="min-h-dvh bg-white flex flex-col">
+    <main className="min-h-dvh flex flex-col">
       <header className="border-b border-line">
         <div className="max-w-6xl mx-auto px-6 py-5 flex items-center gap-3">
           <Logo className="size-8 text-ink" />

@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
@@ -18,25 +18,19 @@ interface Props {
   positionLabel?: string;
 }
 
-const AUTO_ADVANCE_DELAY = 420;        // ms — single_choice, snappy
-const MULTI_ADVANCE_DELAY = 2200;      // ms — multi_choice, gives room to pick more
+const AUTO_ADVANCE_DELAY = 420;
+const MULTI_ADVANCE_DELAY = 2200;
 
 export function QuestionCard({
   question,
   answer,
   onAnswer,
-  onReact,
   onNext,
-  onAutoAdvance,
-  loNext,
   onAutoAdvance,
   loadingNext,
   positionLabel,
 }: Props) {
   const canAdvance = isAnswered(question, answer);
-  // Manual Next button shows ONLY on free-text questions. Choice questions
-  // (single or multi) auto-advance — single after a snappy beat, multi after
-  // a slightly longer beat that resets if the student taps another option.
   const showManualNext = question.type === "short_text";
 
   const advancedRef = useRef(false);
@@ -44,7 +38,10 @@ export function QuestionCard({
 
   const handleSelect = (optionIds: string[]) => {
     onAnswer({ optionIds });
-    if (optionIds.length === 0 || !onAutoAdvance
+    if (optionIds.length === 0 || !onAutoAdvance) return;
+
+    if (question.type === "single_choice") {
+      if (advancedRef.current) return;
       advancedRef.current = true;
       advanceTimeoutRef.current = window.setTimeout(() => {
         onAutoAdvance();
@@ -54,8 +51,6 @@ export function QuestionCard({
     }
 
     if (question.type === "multi_choice") {
-      // Reset the pending timer every tap so the student can keep picking
-      // until they stop. Once they pause for MULTI_ADVANCE_DELAY, we advance.
       if (advanceTimeoutRef.current !== null) {
         window.clearTimeout(advanceTimeoutRef.current);
       }
@@ -71,20 +66,11 @@ export function QuestionCard({
     advancedRef.current = false;
   }, [question.id]);
 
-  // Cancel any pending auto-advance the moment a reaction starts processing.
-  // Without this, a user who quickly clicks Option-then-Emoji gets skipped
-
-    <div
-      className={cn(
-        "panel relative w-full p-8 md:p-10",
-        question.kind === "adaptive" && "ring-1 ring-electric/20",
-        reactionBusy && "pointer-events-none",
-      )}
-    >
+  return (
+    <div className="panel relative w-full p-8 md:p-10">
       <CornerMotif kind={question.kind} />
 
       <div className="mb-7 relative">
-        {/* Eyebrow row — wraps freely, reactions never compete with it. */}
         <div className="flex items-center gap-2 flex-wrap mb-1">
           <span className="active-dot" />
           <span className="mono-eyebrow text-ink-700">{question.category}</span>
@@ -94,20 +80,18 @@ export function QuestionCard({
               ADAPTIVE
             </span>
           )}
-          {wasReworked && (
-            <span className="mono-eyebrow text-electric">· REWORKED</span>
-          )}
         </div>
         <div className="flex items-end justify-between gap-3 flex-wrap">
           {positionLabel && (
             <div className="mono-eyebrow text-ink-300">{positionLabel}</div>
           )}
-          {/* Reaction bar — its own line on narrow screens, end-aligned on wide. */}
-          <ReactionBar selected={answer?.reaction} onSelect={onReact} busy={reactionBusy} />
         </div>
       </div>
 
-      <motioate={{ opacity: 1, y: 0 }}
+      <motion.h2
+        key={question.prompt}
+        initial={{ opacity: 0, y: 4 }}
+        animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
         className="display-md text-[28px] md:text-[32px] text-ink mb-2 text-balance"
       >
@@ -116,7 +100,9 @@ export function QuestionCard({
       {question.hint && (
         <p className="text-[14px] text-ink-400 mb-6">{question.hint}</p>
       )}
-<QuestionBody
+
+      <div className="mt-6">
+        <QuestionBody
           question={question}
           answer={answer}
           onAnswer={handleSelect}
@@ -124,25 +110,14 @@ export function QuestionCard({
         />
       </div>
 
-      <div className="flex items-center justify-between mt-8 pt-6 border-t border-line/70">
-        <div className="mono-eyebrow text-ink-300">
-          {reactionBusy
-            ? "REWORKING THIS QUESTION…"
-            : answer?.reaction
-              ? "QUESTION RATED ✓"
-              : "RATE THE QUESTION (NOT YOUR ANSWER) ↗"}
-        </div>
-        {showManualNext && (
+      {showManualNext && (
+        <div className="flex items-center justify-end mt-8 pt-6 border-t border-line/70">
           <Button variant="outline" onClick={onNext} disabled={!canAdvance || loadingNext}>
             {loadingNext ? "…" : "Next"}
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>
-        )}
-        {!showManualNext && question.type === "single_choice" && (
-          <div className={cn("mono-eyebrow", canAdvance ? "text-ink-400" : "text-ink-300")}>
-            {canAdvance ? "ADVANCING…" : "PICK AN OPTION"}
-          </div>
-        )}/
+        </div>
+      )}
     </div>
   );
 }
@@ -154,7 +129,6 @@ function isAnswered(q: Question, a?: Answer): boolean {
 }
 
 function CornerMotif({ kind }: { kind: string }) {
-  // Subtle geometric corner mark, like the BASIC/PRO/ELITE tiles.
   return (
     <div className="absolute top-7 right-7 pointer-events-none">
       <div
@@ -223,7 +197,8 @@ function ChoiceList({
           <motion.button
             key={o.id}
             type="button"
-            whileTap={{ scale: 0.995 }}
+            whileHover={{ y: -4, scale: 1.02, transition: { type: "spring", stiffness: 360, damping: 22 } }}
+            whileTap={{ scale: 0.985 }}
             onClick={() => {
               if (multi) {
                 onChange(
@@ -237,7 +212,7 @@ function ChoiceList({
               "group w-full text-left rounded-xl px-4 py-3.5 border transition-all flex items-center gap-3.5",
               isSelected
                 ? "border-ink bg-ink text-white shadow-sm"
-                : "border-line bg-white hover:border-ink/50 text-ink",
+                : "border-line bg-white hover:bg-electric-tint hover:border-[#C8A35C] hover:shadow-[0_12px_24px_-8px_rgba(110,110,180,0.25)] text-ink",
             )}
           >
             <span
@@ -245,7 +220,7 @@ function ChoiceList({
                 "shrink-0 size-6 rounded-full border flex items-center justify-center transition-all",
                 isSelected
                   ? "bg-electric border-electric"
-                  : "border-line group-hover:border-ink/40",
+                  : "border-line group-hover:border-[#C8A35C]",
               )}
             >
               {isSelected && <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />}
@@ -273,8 +248,8 @@ function ShortText({
       rows={4}
       className={cn(
         "w-full rounded-xl border border-line bg-surface-subtle px-4 py-3 text-[15px] text-ink",
-        "placeholder:text-ink-300 focus:outline-none focus:border-electric/60",
-        "focus:bg-white focus:shadow-[0_0_0_3px_rgba(30,58,255,0.10)] transition-all resize-none",
+        "placeholder:text-ink-300 focus:outline-none focus:border-electric",
+        "focus:bg-white focus:shadow-[0_0_0_3px_rgba(243,166,217,0.25)] transition-all resize-none",
       )}
     />
   );

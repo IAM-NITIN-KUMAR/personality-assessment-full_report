@@ -1,4 +1,4 @@
-"use client";
+﻿"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -20,11 +20,11 @@ interface Props {
 }
 
 const SECTION_META: Record<Section, { label: string; index: number }> = {
-  context: { label: "CONTEXT",   index: 1 },
-  roots:   { label: "ROOTS",     index: 2 },
-  teaser:  { label: "ARCHETYPE", index: 3 },
-  routes:  { label: "ROUTES",    index: 4 },
-  report:  { label: "REPORT",    index: 5 },
+  context: { label: "CONTEXT", index: 1 },
+  roots: { label: "ROOTS", index: 2 },
+  teaser: { label: "ARCHETYPE", index: 3 },
+  routes: { label: "ROUTES", index: 4 },
+  report: { label: "REPORT", index: 5 },
 };
 
 export function AssessmentGraph({
@@ -33,19 +33,17 @@ export function AssessmentGraph({
   activeId,
   onActivate,
   onAnswer,
-  onReact,
   onNext,
-  loNext,
-  loadingNext
+  loadingNext,
+  positionLabel,
+}: Props) {
   const activeIndex = trunk.findIndex((q) => q.id === activeId);
   const active = trunk[activeIndex];
   const before = trunk.slice(0, activeIndex);
 
   const [historyOpen, setHistoryOpen] = useState(false);
-
-  // Animate the page scroll once, smoothly, when the active card changes —
-  // but only if it's actually outside the viewport. Avoids fighting the user.
   const stageRef = useRef<HTMLDivElement | null>(null);
+
   useEffect(() => {
     const el = stageRef.current;
     if (!el) return;
@@ -63,7 +61,6 @@ export function AssessmentGraph({
 
   return (
     <div className="relative w-full">
-      {/* Compact history affordance — collapsed by default so the stage owns the screen. */}
       {before.length > 0 && (
         <HistoryRail
           open={historyOpen}
@@ -77,7 +74,6 @@ export function AssessmentGraph({
         />
       )}
 
-      {/* Active card stage — viewport-centered, no internal scroll fight. */}
       <section
         ref={stageRef}
         className="min-h-[88dvh] flex flex-col items-center justify-center px-4 py-12"
@@ -104,11 +100,11 @@ export function AssessmentGraph({
                 question={active}
                 answer={answers[active.id]}
                 onAnswer={onAnswer}
-                onReact={onReact}
-                onNext={onNext}
                 onNext={onNext}
                 onAutoAdvance={onNext}
-                loadingNext={loadingNext
+                loadingNext={loadingNext}
+                positionLabel={positionLabel}
+              />
             </motion.div>
           </AnimatePresence>
         </div>
@@ -131,7 +127,7 @@ function HistoryRail({
   onActivate: (id: string) => void;
 }) {
   return (
-    <div className="border-b border-line/60 bg-white/80 backdrop-blur sticky top-[64px] z-20">
+    <div className="border-b border-line/60 bg-surface/80 backdrop-blur sticky top-[64px] z-20">
       <div className="max-w-3xl mx-auto px-4 py-2.5 flex items-center justify-between">
         <button
           onClick={onToggle}

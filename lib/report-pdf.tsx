@@ -36,8 +36,8 @@ const COLORS = {
   inkMuted: "#6B6F78",
   inkFaint: "#9CA0A8",
   line: "#E5E7EB",
-  electric: "#FA7BD6",
-  electricTint: "#FEE9F8",
+  electric: "#F3A6D9",
+  electricTint: "#FDEEF8",
   positive: "#16A34A",
   warning: "#E76F51",
 };
@@ -993,7 +993,7 @@ function PdfRadar({ axes, size }: { axes: PdfRadarAxis[]; size: number }) {
       {/* Filled polygon */}
       <Polygon
         points={polygonPoints}
-        fill="rgba(250,123,214,0.22)"
+        fill="rgba(243,166,217,0.22)"
         stroke={COLORS.electric}
         strokeWidth={1.6}
       />
