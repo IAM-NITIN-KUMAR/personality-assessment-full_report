@@ -67,7 +67,7 @@ export function QuestionCard({
   }, [question.id]);
 
   return (
-    <div className="panel relative w-full p-8 md:p-10">
+    <div className="panel relative w-full p-12 md:p-16">
       <CornerMotif kind={question.kind} />
 
       <div className="mb-7 relative">
@@ -93,12 +93,12 @@ export function QuestionCard({
         initial={{ opacity: 0, y: 4 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="display-md text-[28px] md:text-[32px] text-ink mb-2 text-balance"
+        className="display-md text-[36px] md:text-[40px] text-ink mb-2 text-balance"
       >
         {question.prompt}
       </motion.h2>
       {question.hint && (
-        <p className="text-[14px] text-ink-400 mb-6">{question.hint}</p>
+        <p className="text-[16px] text-ink-400 mb-6">{question.hint}</p>
       )}
 
       <div className="mt-6">
@@ -190,14 +190,22 @@ function ChoiceList({
 }) {
   if (!question.options) return null;
   return (
-    <div className="grid gap-2">
+    <div className="grid gap-3">
       {question.options.map((o) => {
         const isSelected = selected.includes(o.id);
         return (
           <motion.button
             key={o.id}
             type="button"
-            whileHover={{ y: -4, scale: 1.02, transition: { type: "spring", stiffness: 360, damping: 22 } }}
+            whileHover={{
+              y: -3,
+              scale: 1.02,
+              transition: {
+                type: "tween",
+                duration: 0.08,   // nearly instant
+                ease: "easeOut",
+              }
+              }}
             whileTap={{ scale: 0.985 }}
             onClick={() => {
               if (multi) {
@@ -209,23 +217,23 @@ function ChoiceList({
               }
             }}
             className={cn(
-              "group w-full text-left rounded-xl px-4 py-3.5 border transition-all flex items-center gap-3.5",
+              "group w-full text-left rounded-xl px-5 py-4 border transition-all flex items-center gap-3.5",
               isSelected
                 ? "border-ink bg-ink text-white shadow-sm"
-                : "border-line bg-white hover:bg-electric-tint hover:border-[#C8A35C] hover:shadow-[0_12px_24px_-8px_rgba(110,110,180,0.25)] text-ink",
+                : "border-line bg-white hover:bg-electric-tint hover:border-[#FAE251] hover:shadow-[0_12px_24px_-8px_rgba(110,110,180,0.25)] text-ink",
             )}
           >
             <span
               className={cn(
-                "shrink-0 size-6 rounded-full border flex items-center justify-center transition-all",
+                "shrink-0 size-7 rounded-full border flex items-center justify-center transition-all",
                 isSelected
                   ? "bg-electric border-electric"
-                  : "border-line group-hover:border-[#C8A35C]",
+                  : "border-line group-hover:border-[#FAE251]",
               )}
             >
-              {isSelected && <Check className="h-3.5 w-3.5 text-white" strokeWidth={3} />}
+              {isSelected && <Check className="h-4 w-4 text-white" strokeWidth={3} />}
             </span>
-            <span className="text-[15px] leading-snug flex-1">{o.label}</span>
+            <span className="text-[17px] leading-snug flex-1">{o.label}</span>
           </motion.button>
         );
       })}
@@ -245,9 +253,9 @@ function ShortText({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Type freely. No right answer."
-      rows={4}
+      rows={5}
       className={cn(
-        "w-full rounded-xl border border-line bg-surface-subtle px-4 py-3 text-[15px] text-ink",
+        "w-full rounded-xl border border-line bg-surface-subtle px-5 py-4 text-[17px] text-ink",
         "placeholder:text-ink-300 focus:outline-none focus:border-electric",
         "focus:bg-white focus:shadow-[0_0_0_3px_rgba(243,166,217,0.25)] transition-all resize-none",
       )}
