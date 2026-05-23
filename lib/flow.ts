@@ -6,8 +6,8 @@ import { ROUTES_BCA, ROUTES_BCA_ENGAGEMENT } from "./question-bank/routes-bca";
 /** Positions inside the Roots anchor list where we fire an adaptive probe.
  *  Roots now has 20 anchors; we sprinkle 5 probes across the journey so the
  *  feel stays personal without over-stretching. Routes has 8 anchors with 3 probes. */
-const ROOTS_PROBE_AFTER_ANCHOR_INDEX = [2, 6, 10, 14, 18];
-const ROUTES_PROBE_AFTER_ANCHOR_INDEX = [1, 4, 6];
+const ROOTS_PROBE_AFTER_ANCHOR_INDEX = [2];
+const ROUTES_PROBE_AFTER_ANCHOR_INDEX = [0];
 
 export function anchorsForSection(
   section: Section,

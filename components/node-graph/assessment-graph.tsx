@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
@@ -82,16 +82,6 @@ export function AssessmentGraph({
         <div className="w-full flex justify-center">
   <div className="relative w-full max-w-2xl">
 
-    {/* Outside AnimatePresence — not clipped, not animated */}
-    <img
-      src="/animal-peek.png"
-      alt="cat assistant"
-      style={{ left: "-3.25rem", top: "-9rem" , width: "100%" }}
-      className={cn(
-      "absolute w-70 z-30 pointer-events-none select-none transition-opacity duration-300",
-      loadingNext ? "opacity-0" : "opacity-100"
-      )}    />
-
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={active.id}
@@ -106,8 +96,14 @@ export function AssessmentGraph({
           opacity: { duration: 0.25 },
           filter: { duration: 0.25 },
         }}
-        className="w-full"
+        className="w-full relative"
       >
+        <img
+          src="/animal-peek.png"
+          alt="cat assistant"
+          style={{ left: "-3.25rem", top: "-9rem" , width: "100%" }}
+          className="absolute w-70 z-30 pointer-events-none select-none"
+        />
         <QuestionCard
           question={active}
           answer={answers[active.id]}

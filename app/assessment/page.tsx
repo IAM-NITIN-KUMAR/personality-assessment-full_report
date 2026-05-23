@@ -81,7 +81,7 @@ export default function AssessmentPage() {
 
       setActiveId(
         firstUnanswered ??
-          trunkIds[trunkIds.length - 1]
+        trunkIds[trunkIds.length - 1]
       );
     }
 
@@ -209,9 +209,8 @@ export default function AssessmentPage() {
       profile.discipline
     );
 
-  const positionLabel = `${
-    currentIndex + 1
-  } of ~${totalQs}`;
+  const positionLabel = `${currentIndex + 1
+    } of ~${totalQs}`;
 
   return (
     <main
@@ -257,19 +256,19 @@ export default function AssessmentPage() {
         }}
       />
 
-  <div className="relative z-10">
+      <div className="relative z-10">
 
-  <AssessmentGraph
-    trunk={trunk}
-    answers={answers}
-    activeId={activeId}
-    onActivate={setActiveId}
-    onAnswer={handleAnswer}
-    onNext={handleNextOrAdvance}
-    loadingNext={false}
-    positionLabel={positionLabel}
-  />
-</div>
+        <AssessmentGraph
+          trunk={trunk}
+          answers={answers}
+          activeId={activeId}
+          onActivate={setActiveId}
+          onAnswer={handleAnswer}
+          onNext={handleNextOrAdvance}
+          loadingNext={false}
+          positionLabel={positionLabel}
+        />
+      </div>
     </main>
   );
 }
