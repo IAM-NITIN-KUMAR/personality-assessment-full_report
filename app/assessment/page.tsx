@@ -257,33 +257,19 @@ export default function AssessmentPage() {
         }}
       />
 
-      <div className="relative z-10">
-  {/* Cat Assistant */}
-  <img
-    src="/animal-peek.png"
-    alt="cat assistant"
-    className="
-      absolute
-      left-[20.75%]
-      top-[13%]
-      w-44
-      md:w-52
-      z-30
-      pointer-events-none
-      select-none
-    "
+  <div className="relative z-10">
+
+  <AssessmentGraph
+    trunk={trunk}
+    answers={answers}
+    activeId={activeId}
+    onActivate={setActiveId}
+    onAnswer={handleAnswer}
+    onNext={handleNextOrAdvance}
+    loadingNext={false}
+    positionLabel={positionLabel}
   />
-        <AssessmentGraph
-          trunk={trunk}
-          answers={answers}
-          activeId={activeId}
-          onActivate={setActiveId}
-          onAnswer={handleAnswer}
-          onNext={handleNextOrAdvance}
-          loadingNext={false}
-          positionLabel={positionLabel}
-        />
-      </div>
+</div>
     </main>
   );
 }

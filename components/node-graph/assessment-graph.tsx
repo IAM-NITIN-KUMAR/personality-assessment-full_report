@@ -80,34 +80,47 @@ export function AssessmentGraph({
       >
         <SectionPin section={active.section} />
         <div className="w-full flex justify-center">
-          <AnimatePresence mode="wait" initial={false}>
-            <motion.div
-              key={active.id}
-              initial={{ opacity: 0, x: 32, filter: "blur(4px)" }}
-              animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-              exit={{ opacity: 0, x: -32, filter: "blur(4px)" }}
-              transition={{
-                type: "spring",
-                stiffness: 220,
-                damping: 28,
-                mass: 0.8,
-                opacity: { duration: 0.25 },
-                filter: { duration: 0.25 },
-              }}
-              className="w-full max-w-2xl"
-            >
-              <QuestionCard
-                question={active}
-                answer={answers[active.id]}
-                onAnswer={onAnswer}
-                onNext={onNext}
-                onAutoAdvance={onNext}
-                loadingNext={loadingNext}
-                positionLabel={positionLabel}
-              />
-            </motion.div>
-          </AnimatePresence>
-        </div>
+  <div className="relative w-full max-w-2xl">
+
+    {/* Outside AnimatePresence — not clipped, not animated */}
+    <img
+      src="/animal-peek.png"
+      alt="cat assistant"
+      style={{ left: "-3.25rem", top: "-9rem" , width: "100%" }}
+      className={cn(
+      "absolute w-70 z-30 pointer-events-none select-none transition-opacity duration-300",
+      loadingNext ? "opacity-0" : "opacity-100"
+      )}    />
+
+    <AnimatePresence mode="wait" initial={false}>
+      <motion.div
+        key={active.id}
+        initial={{ opacity: 0, x: 32, filter: "blur(4px)" }}
+        animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
+        exit={{ opacity: 0, x: -32, filter: "blur(4px)" }}
+        transition={{
+          type: "spring",
+          stiffness: 220,
+          damping: 28,
+          mass: 0.8,
+          opacity: { duration: 0.25 },
+          filter: { duration: 0.25 },
+        }}
+        className="w-full"
+      >
+        <QuestionCard
+          question={active}
+          answer={answers[active.id]}
+          onAnswer={onAnswer}
+          onNext={onNext}
+          onAutoAdvance={onNext}
+          loadingNext={loadingNext}
+          positionLabel={positionLabel}
+        />
+      </motion.div>
+    </AnimatePresence>
+  </div>
+</div>
       </section>
     </div>
   );
