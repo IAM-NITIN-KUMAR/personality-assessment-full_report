@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { motion } from "framer-motion";
 import { useEffect, useRef } from "react";
@@ -67,10 +67,10 @@ export function QuestionCard({
   }, [question.id]);
 
   return (
-    <div className="panel relative w-full p-12 md:p-16">
+    <div className="panel relative w-full p-4.5 sm:p-8 md:p-12">
       <CornerMotif kind={question.kind} />
 
-      <div className="mb-7 relative">
+      <div className="mb-4 sm:mb-7 relative">
         <div className="flex items-center gap-2 flex-wrap mb-1">
           <span className="active-dot" />
           <span className="mono-eyebrow text-ink-700">{question.category}</span>
@@ -93,12 +93,12 @@ export function QuestionCard({
         initial={{ opacity: 0, y: 4 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, ease: [0.22, 1, 0.36, 1] }}
-        className="display-md text-[36px] md:text-[40px] text-ink mb-2 text-balance"
+        className="display-md text-[18px] sm:text-[26px] md:text-[34px] lg:text-[40px] text-ink mb-1.5 sm:mb-2 text-balance leading-tight"
       >
         {question.prompt}
       </motion.h2>
       {question.hint && (
-        <p className="text-[16px] text-ink-400 mb-6">{question.hint}</p>
+        <p className="text-[14px] sm:text-[16px] text-ink-400 mb-4 sm:mb-6">{question.hint}</p>
       )}
 
       <div className="mt-6">
@@ -111,7 +111,7 @@ export function QuestionCard({
       </div>
 
       {showManualNext && (
-        <div className="flex items-center justify-end mt-8 pt-6 border-t border-line/70">
+        <div className="flex items-center justify-end mt-5 sm:mt-8 pt-4 sm:pt-6 border-t border-line/70">
           <Button variant="outline" onClick={onNext} disabled={!canAdvance || loadingNext}>
             {loadingNext ? "…" : "Next"}
             <ArrowRight className="h-3.5 w-3.5" />
@@ -190,7 +190,7 @@ function ChoiceList({
 }) {
   if (!question.options) return null;
   return (
-    <div className="grid gap-3">
+    <div className="grid gap-2 sm:gap-3">
       {question.options.map((o) => {
         const isSelected = selected.includes(o.id);
         return (
@@ -217,7 +217,7 @@ function ChoiceList({
               }
             }}
             className={cn(
-              "group w-full text-left rounded-xl px-5 py-4 border transition-all flex items-center gap-3.5",
+              "group w-full text-left rounded-xl px-4 py-2.5 sm:px-5 sm:py-3.5 border transition-all flex items-center gap-2.5 sm:gap-3.5",
               isSelected
                 ? "border-ink bg-ink text-white shadow-sm"
                 : "border-line bg-white hover:bg-electric-tint hover:border-[#FAE251] hover:shadow-[0_12px_24px_-8px_rgba(110,110,180,0.25)] text-ink",
@@ -225,7 +225,7 @@ function ChoiceList({
           >
             <span
               className={cn(
-                "shrink-0 size-7 rounded-full border flex items-center justify-center transition-all",
+                "shrink-0 size-6 sm:size-7 rounded-full border flex items-center justify-center transition-all",
                 isSelected
                   ? "bg-electric border-electric"
                   : "border-line group-hover:border-[#FAE251]",
@@ -233,7 +233,7 @@ function ChoiceList({
             >
               {isSelected && <Check className="h-4 w-4 text-white" strokeWidth={3} />}
             </span>
-            <span className="text-[17px] leading-snug flex-1">{o.label}</span>
+            <span className="text-[14px] sm:text-[16px] md:text-[17px] leading-snug flex-1">{o.label}</span>
           </motion.button>
         );
       })}
@@ -253,9 +253,9 @@ function ShortText({
       value={value}
       onChange={(e) => onChange(e.target.value)}
       placeholder="Type freely. No right answer."
-      rows={5}
+      rows={3}
       className={cn(
-        "w-full rounded-xl border border-line bg-surface-subtle px-5 py-4 text-[17px] text-ink",
+        "w-full rounded-xl border border-line bg-surface-subtle px-4 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-[16px] md:text-[17px] text-ink",
         "placeholder:text-ink-300 focus:outline-none focus:border-electric",
         "focus:bg-white focus:shadow-[0_0_0_3px_rgba(243,166,217,0.25)] transition-all resize-none",
       )}

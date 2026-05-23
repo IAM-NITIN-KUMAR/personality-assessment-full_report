@@ -13,8 +13,15 @@ import {
   coursesByDiscipline,
   type Discipline,
 } from "@/lib/course-catalog";
+import { CONTEXT_QUESTIONS } from "@/lib/question-bank/context";
+import { ROOTS_ANCHORS } from "@/lib/question-bank/roots";
+import { ROUTES_BCA } from "@/lib/question-bank/routes-bca";
+
+const ANCHORS_COUNT = CONTEXT_QUESTIONS.length + ROOTS_ANCHORS.length + ROUTES_BCA.length + 1;
+const TOTAL_QUESTIONS = ANCHORS_COUNT + 2; // includes the 2 adaptive probes
+const ESTIMATED_DURATION = Math.ceil(TOTAL_QUESTIONS * 0.8);
 const ORBS = [
-  { x: 0.15, y: 0.40, r: 0.32, color: [244, 184, 212] as const, alpha: 0.82, speed: 0.00075, phase: 0,   rx: 0.32, ry: 0.28 },
+  { x: 0.15, y: 0.40, r: 0.32, color: [244, 184, 212] as const, alpha: 0.82, speed: 0.00075, phase: 0, rx: 0.32, ry: 0.28 },
   { x: 0.80, y: 0.22, r: 0.28, color: [196, 181, 253] as const, alpha: 0.75, speed: 0.00075, phase: 1.1, rx: 0.28, ry: 0.32 },
   { x: 0.65, y: 0.75, r: 0.25, color: [186, 230, 253] as const, alpha: 0.68, speed: 0.00075, phase: 2.3, rx: 0.30, ry: 0.24 },
   { x: 0.45, y: 0.50, r: 0.18, color: [221, 190, 253] as const, alpha: 0.62, speed: 0.00075, phase: 3.7, rx: 0.22, ry: 0.26 },
@@ -75,9 +82,9 @@ function AnimatedGradient() {
         const r = o.r * Math.min(W, H);
         const [rc, gc, bc] = o.color;
         const grd = ctx.createRadialGradient(fx, fy, 0, fx, fy, r);
-        grd.addColorStop(0,   `rgba(${rc},${gc},${bc},${o.alpha})`);
+        grd.addColorStop(0, `rgba(${rc},${gc},${bc},${o.alpha})`);
         grd.addColorStop(0.5, `rgba(${rc},${gc},${bc},${o.alpha * 0.55})`);
-        grd.addColorStop(1,   `rgba(${rc},${gc},${bc},0)`);
+        grd.addColorStop(1, `rgba(${rc},${gc},${bc},0)`);
         ctx.beginPath();
         ctx.arc(fx, fy, r, 0, Math.PI * 2);
         ctx.fillStyle = grd;
@@ -212,13 +219,13 @@ function Hero() {
         A scientifically rigorous self-assessment that students actually finish.
       </h2>
       <p className="text-[16px] text-ink-500 leading-relaxed max-w-lg mb-8">
-        Twenty-five short scenarios. Adaptive follow-ups. An honest engagement
+        {ANCHORS_COUNT} short scenarios. Adaptive follow-ups. An honest engagement
         check. At the end you walk away with a 20+ stat profile and a
         downloadable report — not a horoscope.
       </p>
       <div className="flex items-center gap-4 flex-wrap">
-        <Stat label="DURATION" value="~22 MIN" />
-        <Stat label="QUESTIONS" value="25 · 27" />
+        <Stat label="DURATION" value={`~${Math.ceil(ANCHORS_COUNT * 0.8)} MIN`} />
+        <Stat label="QUESTIONS" value={`${ANCHORS_COUNT}`} />
         <Stat label="OUTPUT" value="PDF REPORT" />
       </div>
     </motion.div>

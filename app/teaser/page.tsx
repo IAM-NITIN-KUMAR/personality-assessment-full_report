@@ -9,6 +9,150 @@ import { Button } from "@/components/ui/button";
 import { DIMENSION_LABELS, Dimension } from "@/lib/types";
 import { ROUTES_BCA, ROUTES_BCA_ENGAGEMENT } from "@/lib/question-bank/routes-bca";
 
+interface CloudProps {
+  duration: number;
+  delay: number;
+  size: number;
+  top: string;
+  opacity: number;
+  shape: "A" | "B" | "C";
+  direction: "left" | "right";
+}
+
+const CLOUD_PATHS: Record<"A" | "B" | "C", string> = {
+  A: "M20 35a12 12 0 0 1 10-18h4a16 16 0 0 1 30-4h4a14 14 0 0 1 12 22 14 14 0 0 1-14 14H30a10 10 0 0 1-10-14z",
+  B: "M15 35a10 10 0 0 1 8-15h4a14 14 0 0 1 24-6h4a16 16 0 0 1 28 4h4a12 12 0 0 1 10 18a12 12 0 0 1-12 12H25a10 10 0 0 1-10-13z",
+  C: "M20 30a10 10 0 0 1 8-14h2a12 12 0 0 1 20-2h2a10 10 0 0 1 8 16a10 10 0 0 1-10 10H30a10 10 0 0 1-10-10z",
+};
+
+const CLOUD_HIGHLIGHTS: Record<"A" | "B" | "C", React.ReactNode> = {
+  A: (
+    <>
+      <path d="M24 30a7 7 0 0 1 7-9" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path d="M38 18a11 11 0 0 1 12-4" stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      <path d="M66 22a8 8 0 0 1 8 4" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+    </>
+  ),
+  B: (
+    <>
+      <path d="M20 28a6 6 0 0 1 6-7" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path d="M32 22a10 10 0 0 1 12-4" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none" />
+      <path d="M58 18a12 12 0 0 1 14-3" stroke="white" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+    </>
+  ),
+  C: (
+    <>
+      <path d="M22 26a6 6 0 0 1 6-7" stroke="white" strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <path d="M33 18a8 8 0 0 1 10-3" stroke="white" strokeWidth="3" strokeLinecap="round" fill="none" />
+    </>
+  ),
+};
+
+function Cloud({ duration, delay, size, top, opacity, shape, direction }: CloudProps) {
+  const isLeft = direction === "left";
+  return (
+    <motion.div
+      initial={{ left: isLeft ? "-30%" : "120%" }}
+      animate={{ left: isLeft ? "120%" : "-30%" }}
+      transition={{
+        duration,
+        delay,
+        repeat: Infinity,
+        ease: "linear",
+      }}
+      className="absolute pointer-events-none select-none"
+      style={{
+        top,
+        opacity,
+        width: size,
+      }}
+    >
+      <svg
+        viewBox="0 0 100 60"
+        className="w-full h-auto"
+        style={{
+          filter: "drop-shadow(0 6px 12px rgba(150, 130, 190, 0.12))"
+        }}
+      >
+        <defs>
+          <linearGradient id={`grad-teaser-${shape}`} x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="65%" stopColor="#ffffff" />
+            <stop offset="100%" stopColor="#eae3f5" />
+          </linearGradient>
+        </defs>
+        {/* Sticker offset shadow layer */}
+        <path
+          d={CLOUD_PATHS[shape]}
+          fill="#dcd6e8"
+          transform="translate(0, 3)"
+        />
+        {/* Main cloud body with 3D gradient fill */}
+        <path
+          d={CLOUD_PATHS[shape]}
+          fill={`url(#grad-teaser-${shape})`}
+          stroke="#beb5d0"
+          strokeWidth="2.2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        {/* Volumetric gloss highlights */}
+        {CLOUD_HIGHLIGHTS[shape]}
+      </svg>
+    </motion.div>
+  );
+}
+
+function CircularProgress({ percentage, size = 96, strokeWidth = 7.5 }: { percentage: number; size?: number; strokeWidth?: number }) {
+  const radius = size / 2;
+  const normalizedRadius = radius - strokeWidth;
+  const circumference = normalizedRadius * 2 * Math.PI;
+  const strokeDashoffset = circumference - (percentage / 100) * circumference;
+
+  return (
+    <div className="relative flex flex-col items-center justify-center select-none" style={{ width: size, height: size }}>
+      <svg
+        height={size}
+        width={size}
+        className="transform -rotate-90 shrink-0"
+      >
+        {/* Background track circle */}
+        <circle
+          stroke="rgba(110, 110, 240, 0.08)"
+          fill="transparent"
+          strokeWidth={strokeWidth}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+        />
+        {/* Animated fill progress circle */}
+        <motion.circle
+          stroke="#6e6ef0"
+          fill="transparent"
+          strokeWidth={strokeWidth}
+          strokeDasharray={circumference + ' ' + circumference}
+          initial={{ strokeDashoffset: circumference }}
+          animate={{ strokeDashoffset }}
+          transition={{ duration: 1.2, ease: [0.22, 1, 0.36, 1], delay: 0.3 }}
+          r={normalizedRadius}
+          cx={radius}
+          cy={radius}
+          strokeLinecap="round"
+        />
+      </svg>
+      {/* Centered percentage text inside the circle */}
+      <div className="absolute flex flex-col items-center justify-center text-center">
+        <span className="font-mono text-[20px] font-black tracking-tight text-ink leading-none">
+          {percentage}%
+        </span>
+        <span className="mono-eyebrow text-[7.5px] text-ink-400 mt-0.5 font-bold uppercase tracking-wider">
+          DONE
+        </span>
+      </div>
+    </div>
+  );
+}
+
 export default function TeaserPage() {
   const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
@@ -36,17 +180,48 @@ export default function TeaserPage() {
     .slice(0, 3);
 
   const handleContinue = () => {
-    const routesIds = [...ROUTES_BCA, ROUTES_BCA_ENGAGEMENT].map((q) => q.id);
+    const firstRouteId = ROUTES_BCA[0].id;
     const merged = [...trunkIds];
-    for (const id of routesIds) if (!merged.includes(id)) merged.push(id);
+    if (!merged.includes(firstRouteId)) {
+      merged.push(firstRouteId);
+    }
     setTrunk(merged);
     setSection("routes");
     router.push("/assessment");
   };
 
   return (
-    <main className="min-h-dvh">
-      <div className="max-w-3xl mx-auto px-6 py-20 md:py-28">
+    <main
+      className="min-h-dvh relative overflow-hidden"
+      style={{
+        background: `
+          radial-gradient(circle at 12% 15%, rgba(244, 184, 212, 0.22), transparent 30%),
+          radial-gradient(circle at 88% 25%, rgba(196, 181, 253, 0.2), transparent 28%),
+          radial-gradient(circle at 30% 75%, rgba(186, 230, 253, 0.16), transparent 32%),
+          radial-gradient(circle at 75% 85%, rgba(254, 243, 199, 0.18), transparent 32%),
+          linear-gradient(
+            135deg,
+            #f8eef2 0%,
+            #f1edf6 45%,
+            #eef3f9 100%
+          )
+        `,
+      }}
+    >
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute top-[5%] left-[-6%] h-[500px] w-[500px] rounded-full bg-pink-300/18 blur-[130px]" />
+        <div className="absolute top-[25%] right-[-8%] h-[480px] w-[480px] rounded-full bg-violet-300/16 blur-[130px]" />
+        <div className="absolute bottom-[20%] left-[-4%] h-[450px] w-[450px] rounded-full bg-blue-200/14 blur-[120px]" />
+        <div className="absolute bottom-[5%] right-[10%] h-[380px] w-[380px] rounded-full bg-amber-200/12 blur-[100px]" />
+
+        {/* Floating background clouds */}
+        <Cloud shape="A" direction="left" size={280} top="8%" duration={85} delay={0} opacity={0.75} />
+        <Cloud shape="B" direction="left" size={380} top="42%" duration={110} delay={-35} opacity={0.65} />
+        <Cloud shape="C" direction="right" size={240} top="22%" duration={90} delay={-15} opacity={0.7} />
+        <Cloud shape="A" direction="right" size={310} top="65%" duration={120} delay={-60} opacity={0.65} />
+      </div>
+
+      <div className="relative z-10 max-w-3xl mx-auto px-6 py-20 md:py-28">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -61,7 +236,7 @@ export default function TeaserPage() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.05 }}
-          className="display-xl text-[64px] md:text-[88px] text-ink"
+          className="display-xl text-[38px] sm:text-[54px] md:text-[76px] lg:text-[88px] text-ink leading-tight"
         >
           {archetype.name.replace(/^The\s/, "").toUpperCase()}
         </motion.h1>
@@ -81,20 +256,27 @@ export default function TeaserPage() {
           transition={{ duration: 0.5, delay: 0.35 }}
           className="panel mt-12 p-7 md:p-9"
         >
-          <div className="mono-eyebrow text-ink-300 mb-3">CORE READING</div>
-          <p className="text-[16px] leading-relaxed text-ink-500 text-balance">
-            {archetype.description}
-          </p>
+          <div className="mono-eyebrow text-ink-300 mb-5">CORE READING</div>
+          <div className="grid sm:grid-cols-[1fr,110px] gap-6 items-center">
+            <div>
+              <p className="text-[16px] leading-relaxed text-ink-500 text-balance">
+                {archetype.description}
+              </p>
+            </div>
+            <div className="flex flex-col items-center justify-center shrink-0">
+              <CircularProgress percentage={50} size={96} strokeWidth={7.5} />
+            </div>
+          </div>
         </motion.div>
 
         <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
+          initial={{ opacity: 0, y: 14 }}
+          animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="mt-10"
+          className="panel mt-10 p-7 md:p-9"
         >
           <div className="mono-eyebrow text-ink-300 mb-4">TOP DIMENSIONS</div>
-          <div className="grid gap-2">
+          <div className="grid gap-3">
             {top3.map((s) => (
               <DimensionRow key={s.dimension} dimension={s.dimension} value={s.normalized} />
             ))}

@@ -87,7 +87,7 @@ function Cover({ data }: { data: ReportData }) {
         )}
         <div className="mono-eyebrow text-ink-400">{data.profile.name.toUpperCase()} · {data.profile.discipline.toUpperCase()}</div>
       </div>
-      <h1 className="display-xl text-[64px] md:text-[88px] text-ink leading-[0.95]">
+      <h1 className="display-xl text-[38px] sm:text-[54px] md:text-[76px] lg:text-[88px] text-ink leading-[0.95]">
         {data.archetype.name.replace(/^The\s/, "").toUpperCase()}
       </h1>
       <p className="display-md text-[20px] md:text-[24px] text-ink-500 mt-4">{data.archetype.tagline}</p>

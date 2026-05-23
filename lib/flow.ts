@@ -126,9 +126,6 @@ export function totalQuestionCountFor(
   return (
     CONTEXT_QUESTIONS.length +
     ROOTS_ANCHORS.length +
-    ROUTES_BCA.length +
-    1 +
-    ROOTS_PROBE_AFTER_ANCHOR_INDEX.length +
-    ROUTES_PROBE_AFTER_ANCHOR_INDEX.length
+    anchorsForSection("routes", discipline).length
   );
 }

@@ -41,7 +41,6 @@ export function AssessmentGraph({
   const active = trunk[activeIndex];
   const before = trunk.slice(0, activeIndex);
 
-  const [historyOpen, setHistoryOpen] = useState(false);
   const stageRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -60,23 +59,11 @@ export function AssessmentGraph({
   if (!active) return null;
 
   return (
-    <div className="relative w-full">
-      {before.length > 0 && (
-        <HistoryRail
-          open={historyOpen}
-          onToggle={() => setHistoryOpen((s) => !s)}
-          items={before}
-          answers={answers}
-          onActivate={(id) => {
-            setHistoryOpen(false);
-            onActivate(id);
-          }}
-        />
-      )}
+    <div className="relative w-full flex-1 flex flex-col justify-center overflow-hidden">
 
       <section
         ref={stageRef}
-        className="min-h-[88dvh] flex flex-col items-center justify-center px-4 py-12"
+        className="flex-1 flex flex-col items-center justify-center px-4 py-3 sm:py-6 overflow-hidden w-full"
       >
         <SectionPin section={active.section} />
         <div className="w-full flex justify-center">
@@ -101,8 +88,7 @@ export function AssessmentGraph({
         <img
           src="/animal-peek.png"
           alt="cat assistant"
-          style={{ left: "-3.25rem", top: "-9rem" , width: "100%" }}
-          className="absolute w-70 z-30 pointer-events-none select-none"
+          className="absolute z-30 pointer-events-none select-none w-[280px] sm:w-[400px] md:w-[540px] left-[-16px] sm:left-[-28px] md:left-[-40px] top-[-3.5rem] sm:top-[-5rem] md:top-[-6.75rem]"
         />
         <QuestionCard
           question={active}
@@ -122,7 +108,7 @@ export function AssessmentGraph({
   );
 }
 
-function HistoryRail({
+export function HistoryRail({
   open,
   onToggle,
   items,
@@ -136,7 +122,7 @@ function HistoryRail({
   onActivate: (id: string) => void;
 }) {
   return (
-    <div className="border-b border-line/60 bg-surface/80 backdrop-blur sticky top-[64px] z-20">
+    <div className="border-b border-line/60 bg-surface/80 backdrop-blur relative z-20">
       <div className="max-w-3xl mx-auto px-4 py-2.5 flex items-center justify-between">
         <button
           onClick={onToggle}
@@ -176,16 +162,14 @@ function HistoryRail({
 function SectionPin({ section }: { section: Section }) {
   const meta = SECTION_META[section];
   return (
-    <div className="flex items-center gap-3 mb-7">
-      <span className="mono-eyebrow text-ink-300">STEP {meta.index} OF 5</span>
-      <span className="h-px w-10 bg-line" />
+    <div className="flex items-center gap-1.5 mb-3 sm:mb-5">
       <span
         className={cn(
-          "mono-eyebrow flex items-center gap-1.5",
+          "mono-eyebrow text-[13px] sm:text-[14px] font-bold flex items-center gap-2",
           section === "context" || section === "roots" ? "text-ink" : "text-electric",
         )}
       >
-        <span className="active-dot" />
+        <span className="active-dot size-2" />
         {meta.label}
       </span>
     </div>
