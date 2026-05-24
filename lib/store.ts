@@ -15,6 +15,7 @@ import { CONTEXT_QUESTIONS } from "./question-bank/context";
 import { ROOTS_ANCHORS } from "./question-bank/roots";
 import { ROUTES_BCA, ROUTES_BCA_ENGAGEMENT } from "./question-bank/routes-bca";
 import { computeDimensionScores, pickArchetype } from "./archetype";
+import { supabase } from "./supabase";
 
 const ROOTS_ADAPTIVE_BUDGET = 3; // probes interleaved across Roots
 const ROUTES_ADAPTIVE_BUDGET = 2;
@@ -66,7 +67,7 @@ export const useAssessment = create<Store>()(
 
       setProfile: (profile) => set({ profile }),
 
-      answer: (questionId, partial) =>
+      answer: (questionId, partial) => {
         set((s) => ({
           answers: {
             ...s.answers,
@@ -77,7 +78,23 @@ export const useAssessment = create<Store>()(
               ...partial,
             },
           },
-        })),
+        }));
+
+        // Save to Supabase
+        const studentId = get().profile?.studentId;
+        if (studentId) {
+          const answer = { ...get().answers[questionId], ...partial };
+          supabase.from("student_answers").upsert({
+            student_id: studentId,
+            question_id: questionId,
+            option_ids: answer.optionIds ?? [],
+            text_response: answer.text ?? null,
+            reaction: answer.reaction ?? null,
+          }).then(({ error }) => {
+            if (error) console.error("Answer save error:", error);
+          });
+        }
+      },
 
       react: (questionId, reaction) =>
         set((s) => ({
