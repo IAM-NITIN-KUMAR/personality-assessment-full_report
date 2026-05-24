@@ -67,7 +67,7 @@ export function QuestionCard({
   }, [question.id]);
 
   return (
-    <div className="panel relative w-full p-4.5 sm:p-8 md:p-12">
+    <div className="panel relative w-full p-5 sm:p-8 md:p-12">
       <CornerMotif kind={question.kind} />
 
       <div className="mb-4 sm:mb-7 relative">

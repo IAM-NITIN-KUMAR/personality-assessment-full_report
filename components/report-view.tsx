@@ -203,13 +203,13 @@ export function ReportView({ data }: { data: ReportData }) {
   }, []);
 
   return (
-    <article className="max-w-4xl mx-auto px-6 pb-20 mt-8">
+    <article className="max-w-4xl mx-auto px-3 sm:px-6 pb-20 mt-4 sm:mt-8">
       {/* Printable Sheet Card Container */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white border border-line rounded-[24px] shadow-2xl p-6 md:p-12 text-ink"
+        className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink"
       >
         {/* Header Block */}
         <header className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-line">
@@ -219,7 +219,7 @@ export function ReportView({ data }: { data: ReportData }) {
               SecureSteps
             </span>
           </div>
-          <div className="flex items-center gap-4 pl-4 border-l border-line/60">
+          <div className="flex items-center gap-4 pl-0 sm:pl-4 border-l-0 sm:border-l border-line/60">
             <div className="text-right">
               <div className="text-[11px] font-bold text-ink-700 tracking-wider">
                 Your SecureSteps Report
@@ -325,7 +325,7 @@ export function ReportView({ data }: { data: ReportData }) {
             </div>
 
             {/* Hexagon Radar Container */}
-            <div className="relative w-full max-w-[360px] h-[320px] flex items-center justify-center mt-2 shrink-0">
+            <div className="relative w-full max-w-[290px] sm:max-w-[360px] h-[260px] sm:h-[320px] flex items-center justify-center mt-2 shrink-0">
               <DashboardRadarChart
                 analytical={scores.analytical}
                 creative={scores.creative}
@@ -345,7 +345,7 @@ export function ReportView({ data }: { data: ReportData }) {
               </div>
 
               {/* Top Right: Creative */}
-              <div className="absolute top-[20%] right-0 flex flex-col items-start">
+              <div className="absolute top-[18%] -right-2 sm:right-0 flex flex-col items-start">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
                   <Palette className="size-3.5 text-[#6e6ef0]" />
                   <span>Creative</span>
@@ -354,7 +354,7 @@ export function ReportView({ data }: { data: ReportData }) {
               </div>
 
               {/* Bottom Right: Leadership */}
-              <div className="absolute bottom-[20%] right-0 flex flex-col items-start">
+              <div className="absolute bottom-[18%] -right-2 sm:right-0 flex flex-col items-start">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
                   <UserCheck className="size-3.5 text-[#6e6ef0]" />
                   <span>Leadership</span>
@@ -372,7 +372,7 @@ export function ReportView({ data }: { data: ReportData }) {
               </div>
 
               {/* Bottom Left: Practical */}
-              <div className="absolute bottom-[20%] left-0 flex flex-col items-end">
+              <div className="absolute bottom-[18%] -left-2 sm:left-0 flex flex-col items-end">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
                   <Settings className="size-3.5 text-[#6e6ef0]" />
                   <span>Practical</span>
@@ -381,7 +381,7 @@ export function ReportView({ data }: { data: ReportData }) {
               </div>
 
               {/* Top Left: Entrepreneurial */}
-              <div className="absolute top-[20%] left-0 flex flex-col items-end">
+              <div className="absolute top-[18%] -left-2 sm:left-0 flex flex-col items-end">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
                   <Rocket className="size-3.5 text-[#6e6ef0]" />
                   <span>Entrepreneurial</span>
@@ -602,7 +602,7 @@ function DashboardRadarChart({
     .join(" ");
 
   return (
-    <svg viewBox={`0 0 ${size} ${size}`} className="w-[180px] h-[180px] sm:w-[220px] sm:h-[220px] max-w-full h-auto">
+    <svg viewBox={`0 0 ${size} ${size}`} className="w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] max-w-full h-auto">
       {/* Concentric rings */}
       {ringValues.map((rv) => {
         const r = (rv / 100) * radius;

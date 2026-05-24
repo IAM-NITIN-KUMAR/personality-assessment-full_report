@@ -87,7 +87,7 @@ export function AssessmentGraph({
         <img
           src="/animal-peek.png"
           alt="cat assistant"
-          className="absolute z-30 pointer-events-none select-none w-[280px] sm:w-[400px] md:w-[540px] left-[-16px] sm:left-[-28px] md:left-[-40px] top-[-3.5rem] sm:top-[-5rem] md:top-[-6.75rem]"
+          className="absolute z-30 pointer-events-none select-none w-[180px] sm:w-[400px] md:w-[540px] left-[-10px] sm:left-[-28px] md:left-[-40px] top-[-2.25rem] sm:top-[-5rem] md:top-[-6.75rem]"
         />
         <QuestionCard
           question={active}

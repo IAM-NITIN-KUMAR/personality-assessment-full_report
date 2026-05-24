@@ -32,8 +32,22 @@ const ORBS = [
 function AnimatedGradient() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -999, y: -999 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        window.innerWidth < 768 ||
+        /Mobi|Android|iPhone/i.test(navigator.userAgent)
+      );
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const parent = canvas.parentElement!;
@@ -105,7 +119,27 @@ function AnimatedGradient() {
       parent.removeEventListener("mousemove", onMove);
       parent.removeEventListener("mouseleave", onLeave);
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) {
+    return (
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(circle at 15% 40%, rgba(244, 184, 212, 0.65), transparent 40%),
+            radial-gradient(circle at 80% 22%, rgba(196, 181, 253, 0.6), transparent 35%),
+            radial-gradient(circle at 65% 75%, rgba(186, 230, 253, 0.55), transparent 35%),
+            radial-gradient(circle at 45% 50%, rgba(221, 190, 253, 0.5), transparent 25%),
+            radial-gradient(circle at 30% 70%, rgba(253, 206, 228, 0.55), transparent 30%),
+            radial-gradient(circle at 88% 62%, rgba(167, 207, 249, 0.5), transparent 28%),
+            linear-gradient(135deg, #f7e8ee 0%, #efe7f4 42%, #edf2f9 100%)
+          `
+        }}
+      />
+    );
+  }
 
   return <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" />;
 }
@@ -164,7 +198,7 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="min-h-dvh overflow-hidden relative bg-[#f7e8ee]">
+    <main className="min-h-dvh overflow-x-hidden relative bg-[#f7e8ee]">
       <AnimatedGradient />
       <Header />
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-20 relative z-10">
@@ -192,7 +226,7 @@ export default function LandingPage() {
 function Header() {
   return (
     <header className="border-b border-white/20 bg-white/20 backdrop-blur-xl relative z-10">
-      <div className="max-w-6xl mx-auto px-6 py-5 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 text-center">
         <div className="flex items-center gap-3">
           <Logo className="size-8 text-ink" />
           <div className="font-mono text-[13px] font-semibold tracking-wide uppercase">
@@ -212,7 +246,7 @@ function Hero() {
         <span className="active-dot" />
         <span className="mono-eyebrow text-ink-700">PERSONALITY · CAREER FIT · ENGAGEMENT</span>
       </div>
-      <h1 className="display-xl text-[64px] md:text-[88px] text-ink mb-2">
+      <h1 className="display-xl text-[42px] sm:text-[64px] md:text-[88px] text-ink mb-2">
         ROOTS<span className="text-ink-300">/</span>ROUTES
       </h1>
       <h2 className="display-md text-[20px] md:text-[22px] text-ink-500 mb-8">
@@ -329,7 +363,7 @@ function FeatureRow() {
     { eyebrow: "04", title: "Crystalline Blueprints", body: "Walk away with a precise map of your cognitive signatures, hidden blind spots, and ultimate career fit." },
   ];
   return (
-    <div className="grid md:grid-cols-4 gap-4 mt-24">
+    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mt-16 md:mt-24">
       {items.map((it) => (
         <div key={it.title} className="panel p-6 relative">
           <div className="mono-eyebrow text-electric">{it.eyebrow}</div>

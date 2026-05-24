@@ -141,27 +141,28 @@ export default function ReportPage() {
       </div>
 
       <header className="sticky top-0 z-30 bg-white/25 backdrop-blur-xl border-b border-white/20">
-        <div className="max-w-5xl mx-auto px-6 py-4 flex items-center justify-between gap-4">
+        <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 flex items-center justify-between gap-3 sm:gap-4">
           <Button variant="ghost" onClick={() => router.push("/assessment")}>
             <ArrowLeft className="h-3 w-3" />
             Back
           </Button>
-          <div className="mono-eyebrow text-ink-700 flex items-center gap-2">
-            <span className="active-dot" />
-            REPORT · {data.profile.name.toUpperCase()}
+          <div className="mono-eyebrow text-ink-700 flex items-center gap-2 truncate max-w-[120px] sm:max-w-none">
+            <span className="active-dot shrink-0" />
+            <span className="truncate">REPORT · {data.profile.name.toUpperCase()}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <Button variant="outline" disabled title="Sharing coming soon">
+          <div className="flex items-center gap-1.5 sm:gap-2">
+            <Button variant="outline" className="hidden sm:inline-flex" disabled title="Sharing coming soon">
               <Share2 className="h-3 w-3" />
               Share
             </Button>
             <Button variant="solid" onClick={handleDownload} disabled={downloading}>
               <Download className="h-3 w-3" />
-              {downloading ? "Generating…" : "Download PDF"}
+              <span className="hidden sm:inline">{downloading ? "Generating…" : "Download PDF"}</span>
+              <span className="inline sm:hidden">{downloading ? "…" : "PDF"}</span>
             </Button>
             <Button variant="ghost" onClick={handleEndSession} title="End session and return home">
               <LogOut className="h-3 w-3" />
-              End session
+              <span className="hidden sm:inline">End session</span>
             </Button>
           </div>
         </div>

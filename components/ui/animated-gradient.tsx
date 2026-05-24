@@ -1,13 +1,27 @@
 // components/ui/animated-gradient.tsx
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export function AnimatedGradient() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const mouseRef = useRef({ x: -999, y: -999 });
+  const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(
+        window.innerWidth < 768 ||
+        /Mobi|Android|iPhone/i.test(navigator.userAgent)
+      );
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (isMobile) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const parent = canvas.parentElement!;
@@ -93,7 +107,27 @@ export function AnimatedGradient() {
       parent.removeEventListener("mousemove", onMove);
       parent.removeEventListener("mouseleave", onLeave);
     };
-  }, []);
+  }, [isMobile]);
+
+  if (isMobile) {
+    return (
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 w-full h-full pointer-events-none"
+        style={{
+          background: `
+            radial-gradient(circle at 15% 40%, rgba(244, 184, 212, 0.45), transparent 40%),
+            radial-gradient(circle at 80% 22%, rgba(196, 181, 253, 0.4), transparent 35%),
+            radial-gradient(circle at 65% 75%, rgba(186, 230, 253, 0.35), transparent 35%),
+            radial-gradient(circle at 45% 50%, rgba(221, 190, 253, 0.3), transparent 25%),
+            radial-gradient(circle at 30% 70%, rgba(253, 206, 228, 0.35), transparent 30%),
+            radial-gradient(circle at 88% 62%, rgba(167, 207, 249, 0.3), transparent 28%),
+            linear-gradient(135deg, #f7e8ee 0%, #efe7f4 42%, #edf2f9 100%)
+          `
+        }}
+      />
+    );
+  }
 
   return (
     <canvas
