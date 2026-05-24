@@ -37,8 +37,8 @@ function AnimatedGradient() {
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(
-        window.innerWidth < 768 ||
-        /Mobi|Android|iPhone/i.test(navigator.userAgent)
+        window.innerWidth < 1024 ||
+        /Mobi|Android|iPhone|iPad|Tablet/i.test(navigator.userAgent)
       );
     };
     checkMobile();
@@ -57,12 +57,12 @@ function AnimatedGradient() {
     const resize = () => {
       const W = parent.offsetWidth;
       const H = parent.offsetHeight;
-      canvas.width = W * devicePixelRatio;
-      canvas.height = H * devicePixelRatio;
+      canvas.width = W;
+      canvas.height = H;
       canvas.style.width = W + "px";
       canvas.style.height = H + "px";
       ctx = canvas.getContext("2d")!;
-      ctx.scale(devicePixelRatio, devicePixelRatio);
+      ctx.scale(1, 1);
     };
     resize();
     const ro = new ResizeObserver(resize);
@@ -201,8 +201,8 @@ export default function LandingPage() {
     <main className="min-h-dvh overflow-x-hidden relative bg-[#f7e8ee]">
       <AnimatedGradient />
       <Header />
-      <div className="max-w-7xl mx-auto px-6 py-16 md:py-20 relative z-10">
-        <div className="grid md:grid-cols-[1fr,minmax(420px,520px)] gap-12 lg:gap-16 items-start">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20 relative z-10">
+        <div className="grid lg:grid-cols-[1fr,minmax(420px,520px)] gap-12 lg:gap-16 items-start">
           <Hero />
           <Form
             name={name} setName={setName}
@@ -226,7 +226,7 @@ export default function LandingPage() {
 function Header() {
   return (
     <header className="border-b border-white/20 bg-white/20 backdrop-blur-xl relative z-10">
-      <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-3 text-center">
+      <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col lg:flex-row items-center justify-center lg:justify-between gap-3 text-center">
         <div className="flex items-center gap-3">
           <Logo className="size-8 text-ink" />
           <div className="font-mono text-[13px] font-semibold tracking-wide uppercase">

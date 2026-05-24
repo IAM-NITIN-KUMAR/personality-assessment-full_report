@@ -11,8 +11,8 @@ export function AnimatedGradient() {
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(
-        window.innerWidth < 768 ||
-        /Mobi|Android|iPhone/i.test(navigator.userAgent)
+        window.innerWidth < 1024 ||
+        /Mobi|Android|iPhone|iPad|Tablet/i.test(navigator.userAgent)
       );
     };
     checkMobile();
@@ -40,12 +40,12 @@ export function AnimatedGradient() {
     const resize = () => {
       const W = parent.offsetWidth;
       const H = parent.offsetHeight;
-      canvas.width = W * devicePixelRatio;
-      canvas.height = H * devicePixelRatio;
+      canvas.width = W;
+      canvas.height = H;
       canvas.style.width = W + "px";
       canvas.style.height = H + "px";
       ctx = canvas.getContext("2d")!;
-      ctx.scale(devicePixelRatio, devicePixelRatio);
+      ctx.scale(1, 1);
     };
     resize();
     window.addEventListener("resize", resize);
