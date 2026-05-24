@@ -16,10 +16,10 @@ import {
 import { CONTEXT_QUESTIONS } from "@/lib/question-bank/context";
 import { ROOTS_ANCHORS } from "@/lib/question-bank/roots";
 import { ROUTES_BCA } from "@/lib/question-bank/routes-bca";
+import { supabase } from "@/lib/supabase";
 
 const ANCHORS_COUNT = CONTEXT_QUESTIONS.length + ROOTS_ANCHORS.length + ROUTES_BCA.length + 1;
-const TOTAL_QUESTIONS = ANCHORS_COUNT + 2; // includes the 2 adaptive probes
-const ESTIMATED_DURATION = Math.ceil(TOTAL_QUESTIONS * 0.8);
+
 const ORBS = [
   { x: 0.15, y: 0.40, r: 0.32, color: [244, 184, 212] as const, alpha: 0.82, speed: 0.00075, phase: 0, rx: 0.32, ry: 0.28 },
   { x: 0.80, y: 0.22, r: 0.28, color: [196, 181, 253] as const, alpha: 0.75, speed: 0.00075, phase: 1.1, rx: 0.28, ry: 0.32 },
@@ -58,7 +58,6 @@ function AnimatedGradient() {
       const W = canvas.offsetWidth;
       const H = canvas.offsetHeight;
       if (!W || !H) { raf = requestAnimationFrame(draw); return; }
-
       ctx.clearRect(0, 0, W, H);
       const bg = ctx.createLinearGradient(0, 0, W, H);
       bg.addColorStop(0, "#f7e8ee");
@@ -66,10 +65,8 @@ function AnimatedGradient() {
       bg.addColorStop(1, "#edf2f9");
       ctx.fillStyle = bg;
       ctx.fillRect(0, 0, W, H);
-
       const t = performance.now();
       const { x: mx, y: my } = mouseRef.current;
-
       ORBS.forEach((o) => {
         const ox = (o.x + Math.cos(t * o.speed + o.phase) * o.rx) * W;
         const oy = (o.y + Math.sin(t * o.speed * 1.3 + o.phase) * o.ry) * H;
@@ -90,17 +87,13 @@ function AnimatedGradient() {
         ctx.fillStyle = grd;
         ctx.fill();
       });
-
       raf = requestAnimationFrame(draw);
     };
     draw();
 
     const onMove = (e: MouseEvent) => {
       const rect = parent.getBoundingClientRect();
-      mouseRef.current = {
-        x: (e.clientX - rect.left) / rect.width,
-        y: (e.clientY - rect.top) / rect.height,
-      };
+      mouseRef.current = { x: (e.clientX - rect.left) / rect.width, y: (e.clientY - rect.top) / rect.height };
     };
     const onLeave = () => { mouseRef.current = { x: -999, y: -999 }; };
     parent.addEventListener("mousemove", onMove);
@@ -114,19 +107,12 @@ function AnimatedGradient() {
     };
   }, []);
 
-  return (
-    <canvas
-      ref={canvasRef}
-      aria-hidden="true"
-      className="absolute inset-0 w-full h-full pointer-events-none"
-    />
-  );
+  return <canvas ref={canvasRef} aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" />;
 }
 
 export default function LandingPage() {
   const router = useRouter();
   const [hydrated, setHydrated] = useState(false);
-
   useEffect(() => setHydrated(true), []);
 
   const setProfile = useAssessment((s) => s.setProfile);
@@ -138,46 +124,53 @@ export default function LandingPage() {
   const [photo, setPhoto] = useState<string | undefined>(undefined);
   const [discipline, setDiscipline] = useState<Discipline>("tech_cs");
   const [course, setCourse] = useState<string | undefined>(undefined);
+  const [submitting, setSubmitting] = useState(false);
 
-  if (!hydrated) {
-    return <main className="min-h-dvh" />;
-  }
+  if (!hydrated) return <main className="min-h-dvh" />;
 
-  const handleStart = (e: React.FormEvent) => {
+  const handleStart = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!name.trim() || !email.trim()) return;
     if (existingProfile) reset();
+
+    setSubmitting(true);
+
+    const { error } = await supabase.from("students").insert({
+      name: name.trim(),
+      email: email.trim(),
+      discipline,
+      course_id: course ?? null,
+      photo_url: photo ?? null,
+    });
+
+    if (error) console.error("Supabase insert error:", error);
+
     setProfile({ name: name.trim(), email: email.trim(), discipline, course, photo });
+    setSubmitting(false);
     router.push("/assessment");
   };
 
   return (
     <main className="min-h-dvh overflow-hidden relative bg-[#f7e8ee]">
       <AnimatedGradient />
-
       <Header />
-
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-20 relative z-10">
         <div className="grid md:grid-cols-[1fr,minmax(420px,520px)] gap-12 lg:gap-16 items-start">
           <Hero />
           <Form
-            name={name}
-            setName={setName}
-            email={email}
-            setEmail={setEmail}
-            photo={photo}
-            setPhoto={setPhoto}
+            name={name} setName={setName}
+            email={email} setEmail={setEmail}
+            photo={photo} setPhoto={setPhoto}
             discipline={discipline}
             setDiscipline={(d) => { setDiscipline(d); setCourse(undefined); }}
-            course={course}
-            setCourse={setCourse}
+            course={course} setCourse={setCourse}
             onSubmit={handleStart}
             existing={!!existingProfile}
+            submitting={submitting}
           />
         </div>
         <FeatureRow />
       </div>
-
       <PageFooter />
     </main>
   );
@@ -201,16 +194,10 @@ function Header() {
 
 function Hero() {
   return (
-    <motion.div
-      initial={{ opacity: 0, y: 12 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5 }}
-    >
+    <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
       <div className="flex items-center gap-2 mb-6">
         <span className="active-dot" />
-        <span className="mono-eyebrow text-ink-700">
-          PERSONALITY · CAREER FIT · ENGAGEMENT
-        </span>
+        <span className="mono-eyebrow text-ink-700">PERSONALITY · CAREER FIT · ENGAGEMENT</span>
       </div>
       <h1 className="display-xl text-[64px] md:text-[88px] text-ink mb-2">
         ROOTS<span className="text-ink-300">/</span>ROUTES
@@ -219,7 +206,7 @@ function Hero() {
         A scientifically rigorous self-assessment that students actually finish.
       </h2>
       <p className="text-[16px] text-ink-500 leading-relaxed max-w-lg mb-8">
-        Answer {ANCHORS_COUNT} reflective questions that adapt to your choices in real-time. 
+        Answer {ANCHORS_COUNT} reflective questions that adapt to your choices in real-time.
         Uncover an unfiltered, data-backed blueprint of your professional DNA—no generic advice, just future-ready direction.
       </p>
       <div className="flex items-center gap-4 flex-wrap">
@@ -248,179 +235,74 @@ function Form(props: {
   course: string | undefined; setCourse: (c: string | undefined) => void;
   onSubmit: (e: React.FormEvent) => void;
   existing: boolean;
+  submitting: boolean;
 }) {
   const courses = coursesByDiscipline(props.discipline);
+  const inputStyle = { background: "rgba(255,255,255,0.7)", border: "1px solid rgba(200,190,220,0.4)", boxShadow: "inset 0 1px 3px rgba(180,140,200,0.08)" };
+  const focusStyle = { background: "rgba(255,255,255,0.95)", border: "1px solid rgba(180,140,220,0.6)", boxShadow: "0 0 0 3px rgba(196,181,253,0.2), inset 0 1px 3px rgba(180,140,200,0.08)" };
+  const blurStyle = inputStyle;
 
   return (
     <motion.form
-      initial={{ opacity: 0, y: 16 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.5, delay: 0.15 }}
+      initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}
       onSubmit={props.onSubmit}
       className="relative rounded-[28px] p-7 md:p-8"
-      style={{
-        background: "rgba(255, 255, 255, 0.55)",
-        backdropFilter: "blur(28px)",
-        WebkitBackdropFilter: "blur(28px)",
-        border: "1px solid rgba(255, 255, 255, 0.75)",
-        boxShadow: `
-          0 8px 32px -4px rgba(180, 140, 200, 0.18),
-          0 2px 8px -2px rgba(180, 140, 200, 0.12),
-          inset 0 1px 0 rgba(255,255,255,0.9)
-        `,
-      }}
+      style={{ background: "rgba(255,255,255,0.55)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)", border: "1px solid rgba(255,255,255,0.75)", boxShadow: "0 8px 32px -4px rgba(180,140,200,0.18), 0 2px 8px -2px rgba(180,140,200,0.12), inset 0 1px 0 rgba(255,255,255,0.9)" }}
     >
-      {/* Subtle inner gradient shimmer */}
-      <div
-        className="absolute inset-0 rounded-[28px] pointer-events-none"
-        style={{
-          background: "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.0) 60%)",
-        }}
-      />
-
+      <div className="absolute inset-0 rounded-[28px] pointer-events-none" style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.0) 60%)" }} />
       <div className="relative">
         <div className="flex items-center gap-2 mb-6">
           <span className="active-dot" />
           <span className="mono-eyebrow text-ink-700">SIGN-UP · 30 SEC</span>
         </div>
-
         <div className="space-y-4">
           <Field label="NAME" required>
-            <input
-              type="text"
-              value={props.name}
-              onChange={(e) => props.setName(e.target.value)}
-              placeholder="Riya Mehta"
+            <input type="text" value={props.name} onChange={(e) => props.setName(e.target.value)} placeholder="Riya Mehta"
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink placeholder:text-ink-300 outline-none transition-all"
-              style={{
-                background: "rgba(255,255,255,0.7)",
-                border: "1px solid rgba(200,190,220,0.4)",
-                boxShadow: "inset 0 1px 3px rgba(180,140,200,0.08)",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.95)";
-                e.currentTarget.style.border = "1px solid rgba(180,140,220,0.6)";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(196,181,253,0.2), inset 0 1px 3px rgba(180,140,200,0.08)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.7)";
-                e.currentTarget.style.border = "1px solid rgba(200,190,220,0.4)";
-                e.currentTarget.style.boxShadow = "inset 0 1px 3px rgba(180,140,200,0.08)";
-              }}
-            />
+              style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)} />
           </Field>
-
           <Field label="EMAIL">
-            <input
-              type="email"
-              value={props.email}
-              onChange={(e) => props.setEmail(e.target.value)}
-              placeholder="riya@example.com"
+            <input type="email" value={props.email} onChange={(e) => props.setEmail(e.target.value)} placeholder="riya@example.com"
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink placeholder:text-ink-300 outline-none transition-all"
-              style={{
-                background: "rgba(255,255,255,0.7)",
-                border: "1px solid rgba(200,190,220,0.4)",
-                boxShadow: "inset 0 1px 3px rgba(180,140,200,0.08)",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.95)";
-                e.currentTarget.style.border = "1px solid rgba(180,140,220,0.6)";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(196,181,253,0.2), inset 0 1px 3px rgba(180,140,200,0.08)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.7)";
-                e.currentTarget.style.border = "1px solid rgba(200,190,220,0.4)";
-                e.currentTarget.style.boxShadow = "inset 0 1px 3px rgba(180,140,200,0.08)";
-              }}
-            />
+              style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)} />
           </Field>
-
           <PhotoUpload value={props.photo} onChange={props.setPhoto} />
-
           <Field label="INTEREST AREA">
-            <select
-              value={props.discipline}
-              onChange={(e) => props.setDiscipline(e.target.value as Discipline)}
+            <select value={props.discipline} onChange={(e) => props.setDiscipline(e.target.value as Discipline)}
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink outline-none transition-all appearance-none cursor-pointer"
-              style={{
-                background: "rgba(255,255,255,0.7)",
-                border: "1px solid rgba(200,190,220,0.4)",
-                boxShadow: "inset 0 1px 3px rgba(180,140,200,0.08)",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.95)";
-                e.currentTarget.style.border = "1px solid rgba(180,140,220,0.6)";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(196,181,253,0.2)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.7)";
-                e.currentTarget.style.border = "1px solid rgba(200,190,220,0.4)";
-                e.currentTarget.style.boxShadow = "inset 0 1px 3px rgba(180,140,200,0.08)";
-              }}
-            >
+              style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)}>
               {DISCIPLINES.map((d) => <option key={d.id} value={d.id}>{d.label}</option>)}
             </select>
           </Field>
-
           <Field label={`SPECIFIC COURSE · OPTIONAL · ${courses.length} OPTIONS`}>
-            <select
-              value={props.course ?? ""}
-              onChange={(e) => props.setCourse(e.target.value || undefined)}
+            <select value={props.course ?? ""} onChange={(e) => props.setCourse(e.target.value || undefined)}
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink outline-none transition-all appearance-none cursor-pointer"
-              style={{
-                background: "rgba(255,255,255,0.7)",
-                border: "1px solid rgba(200,190,220,0.4)",
-                boxShadow: "inset 0 1px 3px rgba(180,140,200,0.08)",
-              }}
-              onFocus={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.95)";
-                e.currentTarget.style.border = "1px solid rgba(180,140,220,0.6)";
-                e.currentTarget.style.boxShadow = "0 0 0 3px rgba(196,181,253,0.2)";
-              }}
-              onBlur={(e) => {
-                e.currentTarget.style.background = "rgba(255,255,255,0.7)";
-                e.currentTarget.style.border = "1px solid rgba(200,190,220,0.4)";
-                e.currentTarget.style.boxShadow = "inset 0 1px 3px rgba(180,140,200,0.08)";
-              }}
-            >
+              style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)}>
               <option value="">— I'm not sure yet, recommend for me —</option>
               {courses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
             </select>
           </Field>
         </div>
-
         <button
           type="submit"
-          disabled={!props.name.trim() || !props.email.trim()}
+          disabled={!props.name.trim() || !props.email.trim() || props.submitting}
           className="w-full mt-6 py-4 rounded-2xl text-white font-mono text-[13px] tracking-[0.12em] uppercase font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{
-            background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)",
-            boxShadow: "0 4px 16px -4px rgba(10,14,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1)",
-          }}
-          onMouseEnter={(e) => {
-            if (!e.currentTarget.disabled) {
-              e.currentTarget.style.boxShadow = "0 8px 24px -4px rgba(10,14,26,0.5), inset 0 1px 0 rgba(255,255,255,0.1)";
-              e.currentTarget.style.transform = "translateY(-1px)";
-            }
-          }}
-          onMouseLeave={(e) => {
-            e.currentTarget.style.boxShadow = "0 4px 16px -4px rgba(10,14,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1)";
-            e.currentTarget.style.transform = "translateY(0)";
-          }}
+          style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)", boxShadow: "0 4px 16px -4px rgba(10,14,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" }}
+          onMouseEnter={(e) => { if (!e.currentTarget.disabled) { e.currentTarget.style.boxShadow = "0 8px 24px -4px rgba(10,14,26,0.5), inset 0 1px 0 rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 4px 16px -4px rgba(10,14,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
         >
-          Begin Assessment
+          {props.submitting ? "Starting…" : "Begin Assessment"}
           <ArrowRight className="h-3.5 w-3.5" />
         </button>
       </div>
     </motion.form>
   );
 }
+
 function Field({ label, required, children }: { label: string; required?: boolean; children: React.ReactNode }) {
   return (
     <label className="block">
-      <div className="mono-eyebrow text-ink-700 mb-2">
-        {label}{required && <span className="text-electric"> *</span>}
-      </div>
+      <div className="mono-eyebrow text-ink-700 mb-2">{label}{required && <span className="text-electric"> *</span>}</div>
       {children}
     </label>
   );
