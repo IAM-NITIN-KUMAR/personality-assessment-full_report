@@ -1,5 +1,6 @@
 "use client";
 
+import React from "react";
 import {
   Document,
   Page,
@@ -14,18 +15,59 @@ import {
   Line,
   Path,
   G,
+  Font,
 } from "@react-pdf/renderer";
 import { ReportData, Stat } from "./report-data";
-import { DIMENSION_LABELS } from "./types";
+import { DIMENSION_LABELS, Dimension } from "./types";
 
-// PDF built-in fonts — guaranteed available, no fetch.
-const SERIF_BOLD = "Times-Bold";
-const SERIF_ITALIC = "Times-Italic";
-const SANS = "Helvetica";
-const SANS_BOLD = "Helvetica-Bold";
-const SANS_OBL = "Helvetica-Oblique";
-const MONO = "Courier";
-const MONO_BOLD = "Courier-Bold";
+// Register premium custom fonts from Fontsource jsDelivr CDN
+Font.register({
+  family: "Outfit",
+  src: "https://cdn.jsdelivr.net/fontsource/fonts/outfit@latest/latin-400-normal.ttf",
+});
+
+Font.register({
+  family: "Outfit-Bold",
+  src: "https://cdn.jsdelivr.net/fontsource/fonts/outfit@latest/latin-700-normal.ttf",
+});
+
+Font.register({
+  family: "Outfit-ExtraBold",
+  src: "https://cdn.jsdelivr.net/fontsource/fonts/outfit@latest/latin-800-normal.ttf",
+});
+
+Font.register({
+  family: "PlusJakartaSans",
+  src: "https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-400-normal.ttf",
+});
+
+Font.register({
+  family: "PlusJakartaSans-Bold",
+  src: "https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-700-normal.ttf",
+});
+
+Font.register({
+  family: "PlusJakartaSans-Italic",
+  src: "https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-400-italic.ttf",
+});
+
+Font.register({
+  family: "JetBrainsMono",
+  src: "https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.ttf",
+});
+
+Font.register({
+  family: "JetBrainsMono-Bold",
+  src: "https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-700-normal.ttf",
+});
+
+const SERIF_BOLD = "PlusJakartaSans-Bold";
+const SERIF_ITALIC = "PlusJakartaSans-Italic";
+const SANS = "Outfit";
+const SANS_BOLD = "Outfit-Bold";
+const SANS_OBL = "Outfit";
+const MONO = "JetBrainsMono";
+const MONO_BOLD = "JetBrainsMono-Bold";
 
 const COLORS = {
   white: "#FFFFFF",
@@ -139,15 +181,501 @@ const styles = StyleSheet.create({
     height: 6,
     backgroundColor: COLORS.electric,
   },
+});function PdfLogo({ size }: { size: number }) {
+  return (
+    <Svg style={{ width: size, height: size }} viewBox="0 0 64 64">
+      <Path
+        d="M 6 22 C 18 22, 26 24, 32 32 C 38 40, 46 42, 58 42"
+        stroke="#6e6ef0"
+        strokeWidth={8.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+      <Path
+        d="M 42 6 C 42 18, 40 26, 32 32 C 24 38, 22 46, 22 58"
+        stroke="#6e6ef0"
+        strokeWidth={8.5}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        fill="none"
+      />
+    </Svg>
+  );
+}
+
+function PdfBulletIcon({ index }: { index: number }) {
+  return (
+    <Svg style={{ width: 10, height: 10 }} viewBox="0 0 24 24">
+      {index === 0 && (
+        <Path
+          d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .5 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"
+          stroke="#6e6ef0"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      )}
+      {index === 1 && (
+        <Path
+          d="M4.5 16.5c-1.5 1.25-2.5 3.5-2.5 3.5s2.25-1 3.5-2.5M12 5l-8 8M19 12l-8 8M19 5a5 5 0 0 0-7 7l7-7Z"
+          stroke="#6e6ef0"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      )}
+      {index === 2 && (
+        <Path
+          d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
+          stroke="#6e6ef0"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      )}
+      {index === 3 && (
+        <Path
+          d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12zM12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10z"
+          stroke="#6e6ef0"
+          strokeWidth={2}
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          fill="none"
+        />
+      )}
+    </Svg>
+  );
+}
+
+const pdfStyles = StyleSheet.create({
+  page: {
+    paddingHorizontal: 30,
+    paddingTop: 30,
+    paddingBottom: 30,
+    backgroundColor: "#FFFFFF",
+    color: "#0A0E1A",
+    fontFamily: SANS,
+    fontSize: 8.5,
+    lineHeight: 1.35,
+  },
+  header: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    borderBottomWidth: 1,
+    borderBottomColor: "#E5E7EB",
+    paddingBottom: 6,
+    marginBottom: 12,
+  },
+  logoSection: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+  },
+  brandText: {
+    fontFamily: SANS_BOLD,
+    fontSize: 15,
+    color: "#0A0E1A",
+  },
+  headerMeta: {
+    textAlign: "right",
+  },
+  headerMetaTitle: {
+    fontFamily: SANS_BOLD,
+    fontSize: 8,
+    color: "#1A1D26",
+  },
+  headerMetaSub: {
+    fontFamily: MONO,
+    fontSize: 6.5,
+    color: "#9CA0A8",
+    marginTop: 1,
+  },
+  insightSection: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    gap: 15,
+    marginBottom: 12,
+  },
+  insightText: {
+    flex: 1.1,
+  },
+  insightTitle: {
+    fontFamily: SANS_BOLD,
+    fontSize: 13,
+    letterSpacing: -0.3,
+    color: "#0A0E1A",
+    lineHeight: 1.25,
+    marginBottom: 4,
+  },
+  insightArchetype: {
+    fontFamily: MONO_BOLD,
+    fontSize: 9,
+    color: "#6e6ef0",
+    textTransform: "uppercase",
+    marginTop: 4,
+    marginBottom: 4,
+  },
+  insightDesc: {
+    fontFamily: SANS,
+    fontSize: 8.5,
+    color: "#6B6F78",
+    lineHeight: 1.4,
+  },
+  profileCard: {
+    flex: 0.9,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 8,
+    backgroundColor: "#f8f7fd",
+    padding: 8,
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 8,
+  },
+  avatar: {
+    width: 28,
+    height: 28,
+    borderRadius: 14,
+    backgroundColor: "#0A0E1A",
+    color: "#FFFFFF",
+    fontFamily: MONO_BOLD,
+    fontSize: 10,
+    textAlign: "center",
+    paddingTop: 7,
+  },
+  profileInfo: {
+    flex: 1,
+  },
+  profileName: {
+    fontFamily: SANS_BOLD,
+    fontSize: 10,
+    color: "#0A0E1A",
+  },
+  profileSub: {
+    fontFamily: SANS_BOLD,
+    fontSize: 7.5,
+    color: "#6e6ef0",
+    marginTop: 1,
+  },
+  profileMeta: {
+    fontFamily: MONO,
+    fontSize: 7,
+    color: "#6B6F78",
+    marginTop: 2,
+  },
+  mainGrid: {
+    flexDirection: "row",
+    gap: 15,
+    marginBottom: 12,
+  },
+  strengthsColumn: {
+    flex: 1.1,
+    gap: 6,
+  },
+  sectionHeading: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 6,
+    marginBottom: 6,
+  },
+  sectionTitleText: {
+    fontFamily: SANS_BOLD,
+    fontSize: 9,
+    letterSpacing: 0.5,
+    color: "#1A1D26",
+    textTransform: "uppercase",
+  },
+  sectionSubtitleText: {
+    fontFamily: MONO_BOLD,
+    fontSize: 7.5,
+    color: "#6e6ef0",
+    textTransform: "uppercase",
+  },
+  strengthCard: {
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 6,
+    backgroundColor: "#fbfaff",
+    padding: 6,
+    flexDirection: "row",
+    gap: 6,
+    alignItems: "flex-start",
+  },
+  strengthIconContainer: {
+    width: 18,
+    height: 18,
+    borderRadius: 9,
+    backgroundColor: "#f3f0fc",
+    justifyContent: "center",
+    alignItems: "center",
+    paddingTop: 1.5,
+  },
+  strengthContent: {
+    flex: 1,
+  },
+  strengthTitle: {
+    fontFamily: SANS_BOLD,
+    fontSize: 8.5,
+    color: "#1A1D26",
+  },
+  strengthDesc: {
+    fontFamily: SANS,
+    fontSize: 8,
+    color: "#6B6F78",
+    marginTop: 1,
+    lineHeight: 1.25,
+  },
+  radarColumn: {
+    flex: 0.9,
+    alignItems: "center",
+    justifyContent: "flex-start",
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 8,
+    backgroundColor: "#FFFFFF",
+    padding: 8,
+    position: "relative",
+  },
+  radarLabelContainer: {
+    position: "absolute",
+    alignItems: "center",
+  },
+  radarLabelText: {
+    fontFamily: SANS_BOLD,
+    fontSize: 7.5,
+    color: "#1A1D26",
+  },
+  radarLabelScore: {
+    fontFamily: MONO_BOLD,
+    fontSize: 6.5,
+    color: "#9CA0A8",
+    marginTop: 0.5,
+  },
+  matchesSection: {
+    marginBottom: 12,
+  },
+  matchesGrid: {
+    flexDirection: "row",
+    gap: 6,
+  },
+  matchCard: {
+    flex: 1,
+    borderWidth: 1,
+    borderColor: "#E5E7EB",
+    borderRadius: 8,
+    backgroundColor: "#f8f7fd",
+    padding: 8,
+    flexDirection: "column",
+    justifyContent: "flex-start",
+    gap: 6,
+    minHeight: 95,
+  },
+  matchCardHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  matchBadge: {
+    fontFamily: MONO_BOLD,
+    fontSize: 7,
+    color: "#6e6ef0",
+    backgroundColor: "#f3f0fc",
+    paddingHorizontal: 3,
+    paddingVertical: 0.5,
+    borderRadius: 2,
+  },
+  matchCardIndexContainer: {
+    backgroundColor: "#6e6ef0",
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  matchCardIndexText: {
+    fontFamily: MONO_BOLD,
+    fontSize: 7.5,
+    color: "#FFFFFF",
+    textAlign: "center",
+  },
+  matchTitle: {
+    fontFamily: SANS_BOLD,
+    fontSize: 8,
+    color: "#1A1D26",
+    lineHeight: 1.15,
+  },
+  matchWhy: {
+    fontFamily: SANS,
+    fontSize: 7.5,
+    color: "#6B6F78",
+    marginTop: 2,
+    lineHeight: 1.2,
+  },
+  bottomGrid: {
+    flexDirection: "row",
+    gap: 15,
+    marginBottom: 12,
+  },
+  bottomColumn: {
+    flex: 1,
+    gap: 5,
+  },
+  checkrow: {
+    flexDirection: "row",
+    gap: 6,
+    alignItems: "flex-start",
+    marginBottom: 4,
+  },
+  checkIcon: {
+    fontFamily: SANS_BOLD,
+    fontSize: 7.5,
+    color: "#16A34A",
+  },
+  checkText: {
+    fontFamily: SANS,
+    fontSize: 8,
+    color: "#3A3D48",
+    flex: 1,
+    lineHeight: 1.25,
+  },
+  stepNumContainer: {
+    width: 12,
+    height: 12,
+    borderRadius: 6,
+    backgroundColor: "#2563EB",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  stepNumText: {
+    fontFamily: MONO_BOLD,
+    fontSize: 7,
+    color: "#FFFFFF",
+    textAlign: "center",
+  },
+  stepText: {
+    fontFamily: SANS_BOLD,
+    fontSize: 8,
+    color: "#3A3D48",
+    flex: 1,
+    lineHeight: 1.25,
+  },
+  quoteSection: {
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+    paddingTop: 6,
+    paddingBottom: 6,
+    alignItems: "center",
+    marginBottom: 4,
+  },
+  quoteText: {
+    fontFamily: SERIF_ITALIC,
+    fontSize: 9,
+    color: "#3A3D48",
+    textAlign: "center",
+    maxWidth: 300,
+  },
+  footer: {
+    borderTopWidth: 1,
+    borderTopColor: "#E5E7EB",
+    paddingTop: 6,
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+  },
+  footerBrand: {
+    flexDirection: "row",
+    alignItems: "center",
+    gap: 4,
+  },
+  footerBrandText: {
+    fontFamily: SANS_BOLD,
+    fontSize: 8.5,
+    color: "#6B6F78",
+  },
+  footerLink: {
+    fontFamily: SANS_BOLD,
+    fontSize: 8,
+    color: "#6e6ef0",
+  },
 });
 
 export function ReportDocument({ data }: { data: ReportData }) {
-  const sections: Array<{ id: Stat["section"]; index: string; eyebrow: string; title: string }> = [
-    { id: "self",   index: "01", eyebrow: "WHO YOU ARE · ROOTS LAYER",   title: "Self" },
-    { id: "fit",    index: "02", eyebrow: "WHERE IT FITS · ROUTES LAYER", title: "Fit" },
-    { id: "honest", index: "03", eyebrow: "ENGAGEMENT · REALITY CHECK",   title: "Honest signal" },
-    { id: "plan",   index: "04", eyebrow: "WHAT TO DO NEXT",              title: "Plan" },
-  ];
+  // Convert -100..100 dimension scores to clean 0..10 radar scores
+  const dimMap = data.rootsReadout.reduce(
+    (acc, r) => ({ ...acc, [r.dimension]: r.value }),
+    {} as Record<Dimension, number>
+  );
+
+  const scale = (val: number) => {
+    const raw = 7.8 + (val / 100) * 1.4; // maps range roughly between 6.4 and 9.2
+    return Math.round(raw * 10) / 10;
+  };
+  const scores = {
+    analytical: scale(dimMap.decision_style ?? 0),
+    entrepreneurial: scale(dimMap.risk ?? 0),
+    practical: scale(dimMap.structure ?? 0),
+    leadership: scale(dimMap.drive ?? 0),
+    peopleSkills: scale(dimMap.social ?? 0),
+    creative: scale(dimMap.energy ?? 0),
+  };
+
+  const initials = data.profile.name
+    .split(" ")
+    .map((n) => n[0])
+    .join("")
+    .toUpperCase()
+    .slice(0, 2);
+
+  let hash = 0;
+  const name = data.profile.name;
+  for (let i = 0; i < name.length; i++) {
+    hash = name.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const suffix = Math.abs(hash % 9000) + 1000;
+  const profileId = `SS-052025-${suffix}`;
+
+  const todayStr = today();
+
+  // Strengths
+  const strengths = [];
+  const s0 = data.stats.find((s) => s.key === "strength-0");
+  if (s0) strengths.push({ title: `Strength: ${s0.value}`, desc: s0.detail });
+  const s1 = data.stats.find((s) => s.key === "strength-1");
+  if (s1) strengths.push({ title: `Strength: ${s1.value}`, desc: s1.detail });
+  const s2 = data.stats.find((s) => s.key === "strength-2");
+  if (s2) strengths.push({ title: `Strength: ${s2.value}`, desc: s2.detail });
+  const talent = data.stats.find((s) => s.key === "hidden-talent");
+  if (talent) {
+    strengths.push({ title: `Hidden Talent: ${talent.value}`, desc: talent.detail });
+  } else {
+    const teamRole = data.stats.find((s) => s.key === "team-role");
+    if (teamRole) {
+      strengths.push({ title: `Team Role: ${teamRole.value}`, desc: teamRole.detail });
+    }
+  }
+
+  // Matches
+  const bestMatches = [];
+  if (data.topDegrees && data.topDegrees.length > 0) {
+    bestMatches.push(...data.topDegrees.slice(0, 2));
+  }
+  if (data.alternativeDegrees && data.alternativeDegrees.length > 0) {
+    bestMatches.push(...data.alternativeDegrees.slice(0, 2));
+  }
+  while (bestMatches.length < 4) {
+    bestMatches.push({
+      title: "Exploring Pathways",
+      why: "Shortlist other interesting adjacent domains with your counsellor.",
+      match: 75,
+    });
+  }
 
   return (
     <Document
@@ -155,607 +683,217 @@ export function ReportDocument({ data }: { data: ReportData }) {
       author="Secure Steps"
       subject="Personality & career-fit assessment report"
     >
-      {/* Cover */}
-      <Page size="A4" style={styles.page}>
-        <PageHeader />
-        <View style={{ marginTop: 50 }}>
-          {/* Match score disc, top-right corner */}
-          <View style={{ position: "absolute", right: 0, top: 0 }}>
-            <MatchDisc score={data.matchScore} />
+      <Page size="A4" style={pdfStyles.page}>
+        {/* Header Block */}
+        <View style={pdfStyles.header}>
+          <View style={pdfStyles.logoSection}>
+            <PdfLogo size={22} />
+            <Text style={pdfStyles.brandText}>SecureSteps</Text>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 14 }}>
-            <View style={styles.electricDot} />
-            <Text style={[styles.monoEyebrow, { color: COLORS.electric }]}>PERSONAL REPORT</Text>
-            <Text style={styles.monoEyebrow}>· {today()}</Text>
+          <View style={pdfStyles.headerMeta}>
+            <Text style={pdfStyles.headerMetaTitle}>Your SecureSteps Report</Text>
+            <Text style={pdfStyles.headerMetaSub}>Generated on: {todayStr}</Text>
           </View>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 10, marginBottom: 18 }}>
-            {data.profile.photo && (
-              <Image
-                src={data.profile.photo}
-                style={{
-                  width: 36,
-                  height: 36,
-                  borderRadius: 18,
-                }}
-              />
-            )}
-            <Text style={[styles.monoLabel, { fontFamily: MONO_BOLD, color: COLORS.inkSoft }]}>
-              {data.profile.name.toUpperCase()} · {data.profile.discipline.toUpperCase()}
+        </View>
+
+        {/* Pathway Insight Title & Profile Card Grid */}
+        <View style={pdfStyles.insightSection}>
+          <View style={pdfStyles.insightText}>
+            <Text style={pdfStyles.insightTitle}>YOUR PERSONAL PATHWAY INSIGHT</Text>
+            <Text style={pdfStyles.insightArchetype}>ARCHETYPE: {data.archetype.name.toUpperCase()}</Text>
+            <Text style={pdfStyles.insightDesc}>
+              This is you — decoded. Your answers reveal your natural strengths, what drives you, and the paths that will help you thrive.
             </Text>
           </View>
 
-          <Text style={styles.h1}>{data.archetype.name.replace(/^The\s/, "").toUpperCase()}</Text>
-
-          <Text style={[{ fontFamily: SERIF_ITALIC, fontSize: 18, color: COLORS.inkSoft, marginTop: 18 }]}>
-            {data.archetype.tagline}
-          </Text>
-
-          <Text style={[styles.body, { marginTop: 26, lineHeight: 1.65, maxWidth: 380 }]}>
-            {data.archetype.description}
-          </Text>
-
-          {/* Core theme chips */}
-          {data.coreThemes.length > 0 && (
-            <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 6, marginTop: 22 }}>
-              {data.coreThemes.map((t) => (
-                <View
-                  key={t}
-                  style={{
-                    paddingHorizontal: 9,
-                    paddingVertical: 4,
-                    borderRadius: 999,
-                    backgroundColor: COLORS.electricTint,
-                    borderWidth: 0.6,
-                    borderColor: COLORS.electric,
-                  }}
-                >
-                  <Text style={[styles.monoEyebrow, { color: COLORS.electric, marginBottom: 0, fontSize: 7 }]}>
-                    {t.toUpperCase()}
-                  </Text>
-                </View>
-              ))}
+          {/* User Profile Card */}
+          <View style={pdfStyles.profileCard}>
+            <View style={pdfStyles.avatar}>
+              <Text>{initials}</Text>
             </View>
-          )}
-        </View>
-
-        <View style={{ marginTop: 40, flexDirection: "row", gap: 22 }}>
-          <CoverStat label="MEASUREMENTS" value={`${data.measurementCount}`} />
-          <CoverStat label="DIMENSIONS" value={`${data.rootsReadout.length}`} />
-          <CoverStat label="CAREER TRAITS" value={`${data.careerTraits.reduce((a, g) => a + g.traits.length, 0)}`} />
-          <CoverStat label="ROLES" value={`${data.routesClusters.length}`} />
-          <CoverStat label="NICHES" value={`${data.niches.length}`} />
-        </View>
-
-        {/* Table of contents */}
-        <View style={{ marginTop: 50 }}>
-          <Text style={[styles.monoEyebrow, { marginBottom: 12 }]}>CONTENTS</Text>
-          {sections.map((s) => (
-            <View key={s.id} style={[styles.rowBetween, { paddingVertical: 7, borderBottomWidth: 0.5, borderBottomColor: COLORS.line }]}>
-              <View style={{ flexDirection: "row", gap: 10 }}>
-                <Text style={[styles.monoLabel, { width: 22 }]}>{s.index}</Text>
-                <Text style={[styles.body, { color: COLORS.ink, fontFamily: SANS_BOLD }]}>{s.title}</Text>
-              </View>
-              <Text style={[styles.monoEyebrow]}>{s.eyebrow}</Text>
+            <View style={pdfStyles.profileInfo}>
+              <Text style={pdfStyles.profileName}>{data.profile.name}</Text>
+              <Text style={pdfStyles.profileMeta}>Profile ID: {profileId}</Text>
+              <Text style={pdfStyles.profileMeta}>Assessment: SecureSteps Discovery</Text>
             </View>
-          ))}
-          <View style={[styles.rowBetween, { paddingVertical: 7, borderBottomWidth: 0.5, borderBottomColor: COLORS.line }]}>
-            <View style={{ flexDirection: "row", gap: 10 }}>
-              <Text style={[styles.monoLabel, { width: 22 }]}>05</Text>
-              <Text style={[styles.body, { color: COLORS.ink, fontFamily: SANS_BOLD }]}>Niches & Context</Text>
-            </View>
-            <Text style={styles.monoEyebrow}>SUB-FIELDS · WHAT YOU SAID</Text>
           </View>
         </View>
 
-        <PageFooter pageLabel="COVER" sectionLabel={data.profile.name} />
-      </Page>
-
-      {/* Future Day + Quote */}
-      <Page size="A4" style={styles.page}>
-        <PageHeader />
-        <SectionTitle index="01" eyebrow="WHERE THE ROUTES LEAD" title="Five Years From Today" />
-        <View style={{ marginTop: 14, flexDirection: "row", gap: 18 }}>
-          <View style={{ flex: 1.4 }}>
-            <Text style={[styles.body, { fontSize: 10.5, lineHeight: 1.75, color: COLORS.ink }]}>
-              {data.futureDay.narrative}
-            </Text>
-          </View>
-          <View style={[styles.panel, { flex: 1, padding: 16, justifyContent: "center" }]}>
-            <Text style={[styles.monoEyebrow, { marginBottom: 8 }]}>WORDS THAT FIT</Text>
-            <Text style={[{ fontFamily: SERIF_ITALIC, fontSize: 14, color: COLORS.ink, lineHeight: 1.5 }]}>
-              &ldquo;{data.archetypeQuote.text}&rdquo;
-            </Text>
-            <Text style={[styles.monoEyebrow, { color: COLORS.electric, marginTop: 10 }]}>
-              — {data.archetypeQuote.attribution.toUpperCase()}
-            </Text>
-          </View>
-        </View>
-        <PageFooter pageLabel="VISION BOARD" sectionLabel="FUTURE DAY · QUOTE" />
-      </Page>
-
-      {/* Drivers */}
-      <Page size="A4" style={styles.page} wrap>
-        <PageHeader />
-        <SectionTitle index="02" eyebrow="FORCES AT PLAY" title="What's Underneath" />
-        <View style={{ marginTop: 14 }}>
-          {data.drivers.map((d, i) => (
-            <View key={d.key} style={[styles.panel, { marginBottom: 7 }]} wrap={false}>
-              <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 6 }}>
-                <Text style={[styles.monoLabel, { fontSize: 9, color: COLORS.inkMuted }]}>0{i + 1}</Text>
-                <View style={{ width: 5, height: 5, backgroundColor: COLORS.electric }} />
-                <Text style={[styles.monoEyebrow, { color: COLORS.electric }]}>{d.category}</Text>
-              </View>
-              <Text style={[styles.h3, { marginBottom: 4 }]}>{d.label}</Text>
-              <Text style={styles.bodyLight}>{d.description}</Text>
+        {/* Main Grid: Strengths & Radar Chart */}
+        <View style={pdfStyles.mainGrid}>
+          {/* Core Strengths */}
+          <View style={pdfStyles.strengthsColumn}>
+            <View style={pdfStyles.sectionHeading}>
+              <Text style={pdfStyles.sectionTitleText}>YOUR CORE STRENGTHS</Text>
             </View>
-          ))}
-        </View>
-        <PageFooter pageLabel="DRIVERS" sectionLabel="FIVE FORCES" />
-      </Page>
 
-      {/* Dimensional reading page */}
-      <Page size="A4" style={styles.page} wrap>
-        <PageHeader />
-        <SectionTitle index="00" eyebrow="DIMENSIONAL READING · 6 AXES" title="Dimensions" />
-        <View style={{ marginTop: 14, alignItems: "center" }}>
-          <PdfRadar
-            axes={data.rootsReadout.map((r) => ({
-              key: r.dimension,
-              label: DIMENSION_LABELS[r.dimension].label,
-              value: Math.round(50 + r.value / 2),
-            }))}
-            size={230}
-          />
-        </View>
-        <View style={{ marginTop: 14 }}>
-          {data.rootsReadout.map((r) => {
-            const meta = DIMENSION_LABELS[r.dimension];
-            const pole = r.value >= 0 ? meta.high : meta.low;
-            return (
-              <View key={r.dimension} style={[styles.panel, { marginBottom: 8 }]} wrap={false}>
-                <View style={styles.rowBetween}>
-                  <Text style={styles.monoEyebrow}>{meta.label.toUpperCase()}</Text>
-                  <Text style={[styles.monoLabel, { fontFamily: MONO_BOLD }]}>
-                    {r.value > 0 ? "+" : ""}{r.value}
-                  </Text>
+            {strengths.map((str, idx) => (
+              <View key={idx} style={pdfStyles.strengthCard}>
+                <View style={pdfStyles.strengthIconContainer}>
+                  <PdfBulletIcon index={idx} />
                 </View>
-                <Text style={[styles.h3, { marginTop: 6, marginBottom: 8 }]}>{pole}</Text>
-                <View style={[styles.meterTrack, { marginBottom: 8 }]}>
-                  <View style={{ height: 3, backgroundColor: COLORS.electric, width: `${Math.min(100, Math.abs(r.value))}%` }} />
-                </View>
-                <Text style={styles.bodyLight}>{r.sentence}</Text>
-              </View>
-            );
-          })}
-        </View>
-        <PageFooter pageLabel="DIMENSIONS" sectionLabel="ROOTS LAYER" />
-      </Page>
-
-      {/* Stat sections */}
-      {sections.map((section) => {
-        const sectionStats = data.stats.filter((s) => s.section === section.id);
-        if (!sectionStats.length) return null;
-        const isHonest = section.id === "honest" && data.engagement;
-        const renderable = isHonest
-          ? sectionStats.filter((s) => s.key !== "engagement")
-          : sectionStats;
-        return (
-          <Page key={section.id} size="A4" style={styles.page} wrap>
-            <PageHeader />
-            <SectionTitle index={section.index} eyebrow={section.eyebrow} title={section.title} />
-            {isHonest && data.engagement && (
-              <View
-                style={[
-                  styles.panel,
-                  {
-                    marginTop: 14,
-                    flexDirection: "row",
-                    alignItems: "center",
-                    gap: 14,
-                    paddingVertical: 14,
-                  },
-                ]}
-                wrap={false}
-              >
-                <View style={{ width: 130 }}>
-                  <PdfDial score={data.engagement.score} level={data.engagement.level} size={130} />
-                </View>
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.monoEyebrow, { marginBottom: 4 }]}>
-                    FIELD ENGAGEMENT · LIVED VS STATED
-                  </Text>
-                  <Text style={styles.h3}>{data.engagement.level}</Text>
-                  <Text style={[styles.bodyLight, { marginTop: 4 }]}>{data.engagement.message}</Text>
-                </View>
-              </View>
-            )}
-            <View style={{ marginTop: 12 }}>
-              {renderable.map((s) => (
-                <StatRow key={s.key} stat={s} />
-              ))}
-            </View>
-            <PageFooter pageLabel={section.title.toUpperCase()} sectionLabel={section.eyebrow} />
-          </Page>
-        );
-      })}
-
-      {/* Niches table */}
-      {data.niches.length > 0 && (
-        <Page size="A4" style={styles.page} wrap>
-          <PageHeader />
-          <SectionTitle index="05" eyebrow="NICHE FIELDS · RANKED FIT" title="Niches" />
-          <View style={[styles.panel, { padding: 0, marginTop: 14 }]}>
-            {data.niches.map((n, i) => (
-              <View
-                key={n.tag}
-                style={{
-                  flexDirection: "row",
-                  alignItems: "center",
-                  paddingVertical: 12,
-                  paddingHorizontal: 14,
-                  borderBottomWidth: i === data.niches.length - 1 ? 0 : 0.5,
-                  borderBottomColor: COLORS.line,
-                  gap: 10,
-                }}
-                wrap={false}
-              >
-                <Text style={[styles.monoLabel, { width: 18 }]}>{String(i + 1).padStart(2, "0")}</Text>
-                <View style={{ flex: 1 }}>
-                  <Text style={[styles.monoEyebrow]}>{n.tag}</Text>
-                  <Text style={[styles.h4, { marginTop: 2 }]}>{n.name}</Text>
-                  <Text style={[styles.bodyLight, { marginTop: 3 }]}>{n.why}</Text>
-                </View>
-                <View style={{ flexDirection: "row", alignItems: "center", gap: 6 }}>
-                  <View style={[styles.meterTrack, { width: 60 }]}>
-                    <View style={{ height: 3, backgroundColor: COLORS.electric, width: `${n.fit}%` }} />
-                  </View>
-                  <Text style={[styles.monoLabel, { fontFamily: MONO_BOLD, width: 18, textAlign: "right" }]}>{n.fit}</Text>
+                <View style={pdfStyles.strengthContent}>
+                  <Text style={pdfStyles.strengthTitle}>{str.title}</Text>
+                  <Text style={pdfStyles.strengthDesc}>{str.desc}</Text>
                 </View>
               </View>
             ))}
           </View>
-          <PageFooter pageLabel="NICHES" sectionLabel="SUB-FIELD FIT" />
-        </Page>
-      )}
 
-      {/* Work Preferences */}
-      <Page size="A4" style={styles.page} wrap>
-        <PageHeader />
-        <SectionTitle index="06" eyebrow={`PREFERENCES · ${data.workPreferences.length} ITEMS`} title="Work Preferences" />
-        <Text style={[styles.body, { marginTop: 6, marginBottom: 10 }]}>
-          How comfortable you are using each behaviour, instinctively. Far-right = a strength you reach for unprompted.
-        </Text>
-        {data.workPreferences.map((p) => (
-          <View key={p.key} style={[styles.panel, { marginBottom: 6, paddingVertical: 10 }]} wrap={false}>
-            <View style={styles.rowBetween}>
-              <View style={{ flex: 1, paddingRight: 10 }}>
-                <Text style={styles.h4}>{p.label}</Text>
-                <Text style={[styles.bodyLight, { marginTop: 3 }]}>{p.detail}</Text>
-              </View>
-              <PrefTierBar level={p.level} score={p.score} />
+          {/* Radar Chart */}
+          <View style={pdfStyles.radarColumn}>
+            <View style={[pdfStyles.sectionHeading, { alignSelf: "flex-start", marginBottom: 12 }]}>
+              <Text style={pdfStyles.sectionTitleText}>YOUR PATH FIT SCORE</Text>
             </View>
-          </View>
-        ))}
-        <PageFooter pageLabel="WORK PREFERENCES" sectionLabel="PRISM-EQUIVALENT" />
-      </Page>
+            <Text style={[pdfStyles.sectionSubtitleText, { alignSelf: "flex-start", marginBottom: 12 }]}>
+              {data.archetype.name.toUpperCase()} PATHWAY
+            </Text>
 
-      {/* Work Aptitudes */}
-      <Page size="A4" style={styles.page} wrap>
-        <PageHeader />
-        <SectionTitle index="07" eyebrow="APTITUDES · 0–100 SCALE" title="Work Aptitudes" />
-        <Text style={[styles.body, { marginTop: 6, marginBottom: 10 }]}>
-          Natural talents — the kinds of work you'd find easiest to enjoy and learn fast.
-        </Text>
-        <View style={{ alignItems: "center", marginBottom: 8 }}>
-          <PdfRadar
-            axes={data.workAptitudes.map((a) => ({
-              key: a.key,
-              label: APTITUDE_SHORT_LABEL[a.key] ?? a.label,
-              value: a.score,
-            }))}
-            size={210}
-          />
-        </View>
-        {data.workAptitudes.map((a) => (
-          <View key={a.key} style={[styles.panel, { marginBottom: 7 }]} wrap={false}>
-            <View style={styles.rowBetween}>
-              <Text style={styles.h4}>{a.label}</Text>
-              <Text style={[styles.monoLabel, { fontFamily: MONO_BOLD }]}>{a.score} / 100</Text>
-            </View>
-            <View style={[styles.meterTrack, { marginTop: 6, marginBottom: 6 }]}>
-              <View
-                style={{
-                  height: 3,
-                  backgroundColor: a.score >= 70 ? COLORS.electric : a.score < 35 ? COLORS.line : COLORS.inkMuted,
-                  width: `${a.score}%`,
-                }}
-              />
-            </View>
-            <Text style={styles.bodyLight}>{a.detail}</Text>
-          </View>
-        ))}
-        <PageFooter pageLabel="WORK APTITUDES" sectionLabel="0–100 SCORE" />
-      </Page>
-
-      {/* Environment Fit */}
-      <Page size="A4" style={styles.page} wrap>
-        <PageHeader />
-        <SectionTitle index="08" eyebrow={`ENVIRONMENT · ${data.environmentFit.length} PREDICTIONS`} title="Where You'll Thrive" />
-        <Text style={[styles.body, { marginTop: 6, marginBottom: 10 }]}>
-          How various work environments are likely to affect your performance.
-        </Text>
-        <View style={[styles.panel, { padding: 0 }]}>
-          {data.environmentFit.map((it, idx) => (
-            <View
-              key={it.key}
-              style={{
-                flexDirection: "row",
-                alignItems: "flex-start",
-                paddingVertical: 8,
-                paddingHorizontal: 12,
-                borderBottomWidth: idx === data.environmentFit.length - 1 ? 0 : 0.5,
-                borderBottomColor: COLORS.line,
-                gap: 10,
-              }}
-              wrap={false}
-            >
-              <Text style={[styles.body, { flex: 1, fontSize: 9 }]}>{it.description}</Text>
-              <Text
-                style={[
-                  styles.monoEyebrow,
-                  {
-                    width: 70,
-                    textAlign: "right",
-                    color:
-                      it.fit === "Enhanced" ? COLORS.electric :
-                      it.fit === "Inhibited" ? COLORS.warning : COLORS.inkMuted,
-                  },
+            {/* Radar Chart Container with relative positioning */}
+            <View style={{ position: "relative", width: 140, height: 140, justifyContent: "center", alignItems: "center", marginTop: 8, alignSelf: "center" }}>
+              <PdfRadar
+                axes={[
+                  { key: "analytical", label: "Analytical", value: scores.analytical * 10 },
+                  { key: "creative", label: "Creative", value: scores.creative * 10 },
+                  { key: "leadership", label: "Leadership", value: scores.leadership * 10 },
+                  { key: "peopleSkills", label: "People Skills", value: scores.peopleSkills * 10 },
+                  { key: "practical", label: "Practical", value: scores.practical * 10 },
+                  { key: "entrepreneurial", label: "Entrepreneurial", value: scores.entrepreneurial * 10 },
                 ]}
-              >
-                {it.fit.toUpperCase()}
-              </Text>
-            </View>
-          ))}
-        </View>
-        <PageFooter pageLabel="ENVIRONMENT FIT" sectionLabel="ENHANCED · NEUTRAL · INHIBITED" />
-      </Page>
+                size={95}
+              />
 
-      {/* Career Development Traits */}
-      {data.careerTraits.map((g, gi) => (
-        <Page key={g.category} size="A4" style={styles.page} wrap>
-          <PageHeader />
-          {gi === 0 && (
-            <SectionTitle
-              index="09"
-              eyebrow={`DEEP DIVE · ${data.careerTraits.reduce((a, x) => a + x.traits.length, 0)} TRAITS`}
-              title="Career Development Analysis"
-            />
-          )}
-          <Text style={[styles.monoEyebrow, { color: COLORS.electric, marginTop: gi === 0 ? 12 : 4, marginBottom: 8 }]}>
-            {g.category.toUpperCase()}
-          </Text>
-          {g.traits.map((t) => (
-            <View key={t.key} style={[styles.panel, { marginBottom: 5, paddingVertical: 9 }]} wrap={false}>
-              <View style={styles.rowBetween}>
-                <Text style={styles.h4}>{t.label}</Text>
-                <Text style={[styles.monoLabel, { fontFamily: MONO_BOLD, fontSize: 9 }]}>{t.score} / 100</Text>
+              {/* Absolute labels placed relative to this 140x140 container */}
+              {/* Top Center: Analytical */}
+              <View style={[pdfStyles.radarLabelContainer, { top: -4, left: 0, right: 0 }]}>
+                <Text style={pdfStyles.radarLabelText}>Analytical</Text>
+                <Text style={pdfStyles.radarLabelScore}>{scores.analytical.toFixed(1)}/10</Text>
               </View>
-              <View style={{ flexDirection: "row", marginTop: 5, gap: 8, alignItems: "center" }}>
-                <Text style={[styles.bodyLight, { flex: 1, fontSize: 8.5 }]}>{t.lowLabel}</Text>
-                <View style={{ width: 90 }}>
-                  <View style={[styles.meterTrack, { backgroundColor: COLORS.line }]}>
-                    <View
-                      style={{
-                        position: "absolute",
-                        left: `${Math.max(0, t.score - 1.5)}%`,
-                        top: -2,
-                        width: 6,
-                        height: 6,
-                        borderRadius: 3,
-                        backgroundColor: COLORS.electric,
-                      }}
-                    />
-                  </View>
-                </View>
-                <Text style={[styles.bodyLight, { flex: 1, fontSize: 8.5, textAlign: "right" }]}>{t.highLabel}</Text>
+              {/* Top Right: Creative */}
+              <View style={[pdfStyles.radarLabelContainer, { top: 28, right: -4, alignItems: "flex-start" }]}>
+                <Text style={pdfStyles.radarLabelText}>Creative</Text>
+                <Text style={pdfStyles.radarLabelScore}>{scores.creative.toFixed(1)}/10</Text>
+              </View>
+              {/* Bottom Right: Leadership */}
+              <View style={[pdfStyles.radarLabelContainer, { bottom: 28, right: -4, alignItems: "flex-start" }]}>
+                <Text style={pdfStyles.radarLabelText}>Leadership</Text>
+                <Text style={pdfStyles.radarLabelScore}>{scores.leadership.toFixed(1)}/10</Text>
+              </View>
+              {/* Bottom Center: People Skills */}
+              <View style={[pdfStyles.radarLabelContainer, { bottom: -4, left: 0, right: 0 }]}>
+                <Text style={pdfStyles.radarLabelText}>People Skills</Text>
+                <Text style={pdfStyles.radarLabelScore}>{scores.peopleSkills.toFixed(1)}/10</Text>
+              </View>
+              {/* Bottom Left: Practical */}
+              <View style={[pdfStyles.radarLabelContainer, { bottom: 28, left: -4, alignItems: "flex-end" }]}>
+                <Text style={pdfStyles.radarLabelText}>Practical</Text>
+                <Text style={pdfStyles.radarLabelScore}>{scores.practical.toFixed(1)}/10</Text>
+              </View>
+              {/* Top Left: Entrepreneurial */}
+              <View style={[pdfStyles.radarLabelContainer, { top: 28, left: -4, alignItems: "flex-end" }]}>
+                <Text style={pdfStyles.radarLabelText}>Entrepreneurial</Text>
+                <Text style={pdfStyles.radarLabelScore}>{scores.entrepreneurial.toFixed(1)}/10</Text>
               </View>
             </View>
-          ))}
-          <PageFooter pageLabel={g.category.toUpperCase()} sectionLabel="CAREER DEVELOPMENT" />
-        </Page>
-      ))}
-
-      {/* Context page */}
-      <Page size="A4" style={styles.page}>
-        <PageHeader />
-        <SectionTitle index="06" eyebrow="CONTEXT · WHAT YOU TOLD US" title="Context" />
-        <View style={[styles.panel, { marginTop: 14 }]}>
-          <ContextRow label="BUDGET"   value={data.context.budget} />
-          <ContextRow label="WHERE"    value={data.context.geographies.join(" · ").toUpperCase() || "—"} />
-          <ContextRow label="FAMILY"   value={data.context.family} />
-          <ContextRow label="AMBITION" value={data.context.tier} />
-          <ContextRow label="TIMELINE" value={data.context.timeline} last />
-        </View>
-        {data.context.dream && (
-          <View style={[styles.panelSubtle, { marginTop: 10 }]}>
-            <Text style={[styles.monoEyebrow, { marginBottom: 6 }]}>FIVE YEARS FROM NOW</Text>
-            <Text style={[{ fontFamily: SERIF_ITALIC, fontSize: 14, color: COLORS.inkSoft, lineHeight: 1.55 }]}>
-              "{data.context.dream}"
-            </Text>
           </View>
-        )}
+        </View>
 
-        <PageFooter pageLabel="CONTEXT" sectionLabel="WHAT YOU TOLD US" />
-      </Page>
-
-      {/* Top Degree Recommendations */}
-      {data.topDegrees.length > 0 && data.topDegrees[0].match > 0 && (
-        <Page size="A4" style={styles.page} wrap>
-          <PageHeader />
-          <SectionTitle index="10" eyebrow="BEST-FIT COURSES" title="Routes Worth Walking" />
-          {data.topDegrees.map((d, i) => (
-            <View key={d.title} style={[styles.panel, { marginTop: i === 0 ? 14 : 7, padding: 14 }]} wrap={false}>
-              <View style={styles.rowBetween}>
-                <View style={{ flex: 1, paddingRight: 10 }}>
-                  <Text style={[styles.monoEyebrow, { marginBottom: 4 }]}>OPTION {String(i + 1).padStart(2, "0")}</Text>
-                  <Text style={styles.h3}>{d.title}</Text>
-                </View>
-                <View style={{ alignItems: "flex-end" }}>
-                  <Text style={[styles.monoEyebrow, { marginBottom: 1 }]}>MATCH</Text>
-                  <Text style={{ fontFamily: SANS_BOLD, fontSize: 18, color: COLORS.electric }}>{d.match}%</Text>
-                </View>
-              </View>
-              <Text style={[styles.bodyLight, { marginTop: 6 }]}>{d.why}</Text>
-              <View
-                style={{
-                  marginTop: 8,
-                  paddingLeft: 8,
-                  paddingVertical: 6,
-                  borderLeftWidth: 2,
-                  borderLeftColor: COLORS.electric,
-                  backgroundColor: COLORS.electricTint,
-                }}
-              >
-                <Text style={[styles.monoEyebrow, { color: COLORS.electric, marginBottom: 2 }]}>FIELD READ</Text>
-                <Text style={[styles.bodyLight, { fontSize: 9, color: COLORS.ink }]}>{d.insight}</Text>
-              </View>
-            </View>
-          ))}
-          <PageFooter pageLabel="TOP DEGREES" sectionLabel="RECOMMENDED PATHS" />
-        </Page>
-      )}
-
-      {/* Alternative Pathways */}
-      {data.alternativeDegrees.length > 0 && (
-        <Page size="A4" style={styles.page} wrap>
-          <PageHeader />
-          <SectionTitle index="11" eyebrow="ROUTES JUST OFF THE MAIN PATH" title="Branches Worth Knowing" />
-          {data.alternativeDegrees.map((d) => (
-            <View key={d.title} style={[styles.panel, { marginTop: 7, padding: 14 }]} wrap={false}>
-              <View style={styles.rowBetween}>
-                <Text style={[styles.h4, { flex: 1, paddingRight: 10 }]}>{d.title}</Text>
-                <View style={{ alignItems: "flex-end" }}>
-                  <Text style={[styles.monoEyebrow, { marginBottom: 1 }]}>MATCH</Text>
-                  <Text style={{ fontFamily: SANS_BOLD, fontSize: 14, color: COLORS.electric }}>{d.match}%</Text>
-                </View>
-              </View>
-              <Text style={[styles.bodyLight, { marginTop: 5 }]}>{d.why}</Text>
-              <Text style={[styles.bodyLight, { marginTop: 6, fontStyle: "italic", color: COLORS.inkMuted, fontSize: 8.5 }]}>
-                {d.insight}
-              </Text>
-            </View>
-          ))}
-          <PageFooter pageLabel="ALTERNATIVES" sectionLabel="ADJACENT PATHS" />
-        </Page>
-      )}
-
-      {/* Community Insights */}
-      {(data.commonCareerPaths.length > 0 || data.sharedInterests.length > 0) && (
-        <Page size="A4" style={styles.page}>
-          <PageHeader />
-          <SectionTitle index="12" eyebrow="OTHERS ON YOUR ROUTE" title="Where Students Like You Have Landed" />
-          <View style={{ marginTop: 14, gap: 8 }}>
-            {data.commonCareerPaths.length > 0 && (
-              <View style={[styles.panel, { padding: 14 }]}>
-                <Text style={[styles.monoEyebrow, { marginBottom: 8 }]}>FIVE-YEAR LANDING SPOTS · {data.archetype.name.toUpperCase()}</Text>
-                {data.commonCareerPaths.map((p) => (
-                  <View key={p.role} style={{ marginBottom: 8 }}>
-                    <View style={[styles.rowBetween, { marginBottom: 3 }]}>
-                      <Text style={[styles.body, { color: COLORS.ink }]}>{p.role}</Text>
-                      <Text style={[styles.monoLabel, { fontSize: 9 }]}>{p.percentage}%</Text>
-                    </View>
-                    <View style={[styles.meterTrack]}>
-                      <View style={{ height: 3, backgroundColor: COLORS.electric, width: `${p.percentage}%` }} />
-                    </View>
-                  </View>
-                ))}
-              </View>
-            )}
-            {data.sharedInterests.length > 0 && (
-              <View style={[styles.panel, { padding: 14 }]}>
-                <Text style={[styles.monoEyebrow, { marginBottom: 8 }]}>PURSUITS OFF THE SYLLABUS</Text>
-                <View style={{ flexDirection: "row", flexWrap: "wrap", gap: 5 }}>
-                  {data.sharedInterests.map((interest) => (
-                    <View
-                      key={interest}
-                      style={{
-                        paddingHorizontal: 8,
-                        paddingVertical: 4,
-                        borderRadius: 999,
-                        backgroundColor: COLORS.panel,
-                        borderWidth: 0.5,
-                        borderColor: COLORS.line,
-                      }}
-                    >
-                      <Text style={[styles.body, { fontSize: 9 }]}>{interest}</Text>
-                    </View>
-                  ))}
-                </View>
-              </View>
-            )}
+        {/* Best Matches */}
+        <View style={pdfStyles.matchesSection}>
+          <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+            <Text style={pdfStyles.sectionTitleText}>BEST PATH MATCHES FOR YOU</Text>
           </View>
-          <PageFooter pageLabel="COMMUNITY" sectionLabel="WHAT OTHERS DO" />
-        </Page>
-      )}
 
-      {/* Letter to parents */}
-      <Page size="A4" style={styles.page} wrap>
-        <PageHeader />
-        <SectionTitle index="13" eyebrow="PASS THIS TO THE PEOPLE WHO ASK" title="A Short Note for Your Family" />
-        <View style={[styles.panel, { marginTop: 14, padding: 22 }]}>
-          <Text style={[styles.h4, { marginBottom: 12 }]}>{data.parentLetter.greeting}</Text>
-          {data.parentLetter.paragraphs.map((p, i) => (
-            <Text
-              key={i}
-              style={[styles.body, { color: COLORS.ink, marginBottom: 9, lineHeight: 1.7 }]}
-            >
-              {p}
-            </Text>
-          ))}
-          <View style={{ marginTop: 14, paddingTop: 12, borderTopWidth: 0.5, borderTopColor: COLORS.line }}>
-            {data.parentLetter.signoff.split("\n").map((line, i) => (
-              <Text key={i} style={[styles.body, { color: COLORS.inkMuted }]}>
-                {line}
-              </Text>
+          <View style={pdfStyles.matchesGrid}>
+            {bestMatches.map((match, idx) => (
+              <View key={idx} style={pdfStyles.matchCard}>
+                <View style={pdfStyles.matchCardHeader}>
+                  <View style={pdfStyles.matchCardIndexContainer}>
+                    <Text style={pdfStyles.matchCardIndexText}>{idx + 1}</Text>
+                  </View>
+                  {match.match && (
+                    <Text style={pdfStyles.matchBadge}>{match.match}% FIT</Text>
+                  )}
+                </View>
+                <View>
+                  <Text style={pdfStyles.matchTitle}>{match.title}</Text>
+                  <Text style={pdfStyles.matchWhy}>{match.why}</Text>
+                </View>
+              </View>
             ))}
           </View>
         </View>
-        <PageFooter pageLabel="LETTER TO PARENTS" sectionLabel="FOR THE FAMILY" />
-      </Page>
 
-      {/* Thank you closer */}
-      <Page size="A4" style={styles.page}>
-        <PageHeader />
-        <View style={{ flex: 1, justifyContent: "center", alignItems: "center", paddingHorizontal: 40 }}>
-          <View style={{ flexDirection: "row", alignItems: "center", gap: 6, marginBottom: 16 }}>
-            <View style={styles.electricDot} />
-            <Text style={[styles.monoEyebrow, { color: COLORS.electric }]}>SESSION COMPLETE</Text>
+        {/* Growth Tips & Next Steps */}
+        <View style={pdfStyles.bottomGrid}>
+          {/* Growth Tips */}
+          <View style={pdfStyles.bottomColumn}>
+            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+              <Text style={pdfStyles.sectionTitleText}>GROWTH TIPS FOR YOU</Text>
+            </View>
+            <View style={pdfStyles.checkrow}>
+              <Text style={pdfStyles.checkIcon}>✓</Text>
+              <Text style={pdfStyles.checkText}>
+                <Text style={{ fontFamily: SANS_BOLD }}>Focus Your Energy:</Text> Pick a direction and go deep. Consistency &gt; perfection.
+              </Text>
+            </View>
+            <View style={pdfStyles.checkrow}>
+              <Text style={pdfStyles.checkIcon}>✓</Text>
+              <Text style={pdfStyles.checkText}>
+                <Text style={{ fontFamily: SANS_BOLD }}>Build Real-World Skills:</Text> Projects, internships and exposure will set you apart.
+              </Text>
+            </View>
+            <View style={pdfStyles.checkrow}>
+              <Text style={pdfStyles.checkIcon}>✓</Text>
+              <Text style={pdfStyles.checkText}>
+                <Text style={{ fontFamily: SANS_BOLD }}>Trust Your Voice:</Text> You have strong ideas. Share them more and lead with confidence.
+              </Text>
+            </View>
           </View>
-          <Text style={[styles.h1, { fontSize: 44, textAlign: "center" }]}>
-            Thanks, {data.profile.name.split(" ")[0]}.
-          </Text>
-          <Text
-            style={[
-              styles.body,
-              { textAlign: "center", marginTop: 18, color: COLORS.inkSoft, lineHeight: 1.65, maxWidth: 360 },
-            ]}
-          >
-            Your answers are in. Your Secure Steps counsellor will reach out within 48 hours with your alumni match
-            and the start of your college shortlist conversation.
-          </Text>
-          <View style={{ height: 30 }} />
-          <Text style={[{ fontFamily: SERIF_ITALIC, fontSize: 18, color: COLORS.ink, textAlign: "center" }]}>
-            Roots define you.
-          </Text>
-          <Text
-            style={[
-              { fontFamily: SERIF_ITALIC, fontSize: 18, color: COLORS.inkFaint, textAlign: "center", marginTop: 3 },
-            ]}
-          >
-            Routes are yours to choose.
+
+          {/* Next Steps */}
+          <View style={pdfStyles.bottomColumn}>
+            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+              <Text style={pdfStyles.sectionTitleText}>YOUR NEXT STEPS</Text>
+            </View>
+            <View style={pdfStyles.checkrow}>
+              <View style={pdfStyles.stepNumContainer}>
+                <Text style={pdfStyles.stepNumText}>1</Text>
+              </View>
+              <Text style={pdfStyles.stepText}>Explore these paths in detail with our 1:1 counselling.</Text>
+            </View>
+            <View style={pdfStyles.checkrow}>
+              <View style={pdfStyles.stepNumContainer}>
+                <Text style={pdfStyles.stepNumText}>2</Text>
+              </View>
+              <Text style={pdfStyles.stepText}>Shortlist colleges & courses that fit your profile.</Text>
+            </View>
+            <View style={pdfStyles.checkrow}>
+              <View style={pdfStyles.stepNumContainer}>
+                <Text style={pdfStyles.stepNumText}>3</Text>
+              </View>
+              <Text style={pdfStyles.stepText}>Build your roadmap and start early.</Text>
+            </View>
+          </View>
+        </View>
+
+        {/* Quote Block */}
+        <View style={pdfStyles.quoteSection}>
+          <Text style={pdfStyles.quoteText}>
+            "You don't need to have it all figured out. You just need the right direction."
           </Text>
         </View>
-        <PageFooter pageLabel="THANK YOU" sectionLabel="ROOTS / ROUTES · SECURE STEPS" />
+
+        {/* Footer */}
+        <View style={pdfStyles.footer}>
+          <View style={pdfStyles.footerBrand}>
+            <PdfLogo size={14} />
+            <Text style={pdfStyles.footerBrandText}>SecureSteps</Text>
+          </View>
+          <Text style={pdfStyles.footerLink}>
+            If you want more info, visit https://www.securesteps.co.in/
+          </Text>
+        </View>
       </Page>
     </Document>
   );
@@ -993,8 +1131,9 @@ function PdfRadar({ axes, size }: { axes: PdfRadarAxis[]; size: number }) {
       {/* Filled polygon */}
       <Polygon
         points={polygonPoints}
-        fill="rgba(243,166,217,0.22)"
-        stroke={COLORS.electric}
+        fill="#6e6ef0"
+        fillOpacity={0.14}
+        stroke="#6e6ef0"
         strokeWidth={1.6}
       />
 
@@ -1007,44 +1146,10 @@ function PdfRadar({ axes, size }: { axes: PdfRadarAxis[]; size: number }) {
             cx={p.x}
             cy={p.y}
             r={2.2}
-            fill={COLORS.electric}
+            fill="#6e6ef0"
             stroke={COLORS.white}
             strokeWidth={0.9}
           />
-        );
-      })}
-
-      {/* Labels */}
-      {axes.map((axis, i) => {
-        const labelRadius = radius + 14;
-        const a = angleFor(i);
-        const lx = cx + Math.cos(a) * labelRadius;
-        const ly = cy + Math.sin(a) * labelRadius;
-        const anchor =
-          Math.abs(Math.cos(a)) < 0.2
-            ? "middle"
-            : Math.cos(a) > 0
-            ? "start"
-            : "end";
-        return (
-          <G key={`label-${axis.key}`}>
-            <Text
-              x={lx}
-              y={ly}
-              style={{ fontFamily: MONO_BOLD, fontSize: 6, fill: COLORS.inkMuted }}
-              textAnchor={anchor as "start" | "middle" | "end"}
-            >
-              {axis.label.toUpperCase()}
-            </Text>
-            <Text
-              x={lx}
-              y={ly + 7}
-              style={{ fontFamily: MONO_BOLD, fontSize: 6.5, fill: COLORS.ink }}
-              textAnchor={anchor as "start" | "middle" | "end"}
-            >
-              {Math.round(axis.value)}
-            </Text>
-          </G>
         );
       })}
     </Svg>

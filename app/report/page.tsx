@@ -26,18 +26,52 @@ export default function ReportPage() {
 
   // Redirect from effect, never during render.
   useEffect(() => {
-    if (hydrated && !profile) router.replace("/");
+    if (hydrated && !profile) {
+      const isMock = typeof window !== "undefined" && window.location.search.includes("mock=true");
+      if (!isMock) {
+        router.replace("/");
+      }
+    }
   }, [hydrated, profile, router]);
 
+  const mockData = useMemo(() => {
+    return buildReport({
+      profile: {
+        name: "Riya Mehta",
+        email: "riya@example.com",
+        discipline: "tech_cs",
+        course: "bca",
+      },
+      archetype: {
+        name: "The Builder",
+        tagline: "You build systems, products, and solutions.",
+        description: "You thrive when converting ideas into tangible, working systems.",
+        scores: [
+          { dimension: "decision_style", raw: 5, normalized: 50 },
+          { dimension: "energy", raw: -2, normalized: -20 },
+          { dimension: "structure", raw: 8, normalized: 80 },
+          { dimension: "risk", raw: 4, normalized: 40 },
+          { dimension: "social", raw: -3, normalized: -30 },
+          { dimension: "drive", raw: 6, normalized: 60 },
+        ],
+      },
+      questions: [],
+      answers: {},
+    });
+  }, []);
+
   const data = useMemo(() => {
-    if (!profile || !archetype) return null;
+    if (!profile || !archetype) {
+      const isMock = typeof window !== "undefined" && window.location.search.includes("mock=true");
+      return isMock ? mockData : null;
+    }
     return buildReport({
       profile,
       archetype,
       questions: allQuestions(),
       answers,
     });
-  }, [profile, archetype, answers, allQuestions]);
+  }, [profile, archetype, answers, allQuestions, mockData]);
 
   const [downloading, setDownloading] = useState(false);
 
@@ -71,7 +105,8 @@ export default function ReportPage() {
     router.push("/thank-you");
   };
 
-  if (!hydrated || !profile) return null;
+  const isMock = typeof window !== "undefined" && window.location.search.includes("mock=true");
+  if (!hydrated || (!profile && !isMock)) return null;
   if (!data) {
     return (
       <main className="min-h-dvh flex items-center justify-center">

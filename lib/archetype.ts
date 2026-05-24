@@ -75,7 +75,7 @@ const ARCHETYPES: ArchetypeDef[] = [
   {
     name: "The Strategist",
     tagline: "You see two moves ahead before most people see one.",
-    match: (s) => s.decision_style + s.structure + Math.max(0, s.drive / 2),
+    match: (s) => s.decision_style + s.structure + Math.max(0, -s.risk / 2),
     describe: () =>
       "You make decisions deliberately. You map the terrain before you walk it, and you trust structure to do the work plans alone can't. People come to you when something needs thinking through.",
   },

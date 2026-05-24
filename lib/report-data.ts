@@ -701,7 +701,7 @@ function buildParentLetter(args: {
   return {
     greeting: `To ${firstName}'s family,`,
     paragraphs: [
-      `Before anything else — ${firstName} sat through ~45 honest scenario-based questions to produce this. They didn't rate themselves on a 1-to-5 scale. They picked what they'd actually do. The reading you're holding is built on those answers.`,
+      `Before anything else — ${firstName} sat through ~45 honest reflective questions to produce this. They didn't rate themselves on a 1-to-5 scale. They picked what they'd actually do. The reading you're holding is built on those answers.`,
       `Across the responses, one pattern came through clearly: ${firstName} reads as ${archetype.name}. ${archetype.tagline} In day-to-day terms, that means ${archetype.description.toLowerCase()}`,
       top
         ? `The course that maps best onto this pattern is ${top.title} (${top.match}% alignment)${top2 ? `, with ${top2.title} (${top2.match}%) as a strong second look` : ""}. We didn't pick these from a brochure — they're the highest-scoring matches across our catalogue when run against the way ${firstName} actually responded.`

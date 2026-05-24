@@ -9,4 +9,4 @@ export function getClient(): Anthropic | null {
   return _client;
 }
 
-export const PROBE_MODEL = process.env.ANTHROPIC_PROBE_MODEL ?? "claude-sonnet-4-5";
+export const PROBE_MODEL = process.env.ANTHROPIC_PROBE_MODEL ?? "claude-3-5-haiku-20241022";

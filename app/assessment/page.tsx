@@ -153,8 +153,14 @@ export default function AssessmentPage() {
   const [loadingNext, setLoadingNext] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
 
-  const initialActiveSetRef =
-    useRef(false);
+  // Synchronously initialize activeId on the first render pass after hydration
+  if (hydrated && !activeId && trunkIds.length > 0) {
+    const firstUnanswered = trunkIds.find((id) => !answers[id]);
+    const initialId = firstUnanswered ?? trunkIds[trunkIds.length - 1];
+    if (initialId) {
+      setActiveId(initialId);
+    }
+  }
 
   useEffect(() => {
     if (!hydrated) return;
@@ -164,8 +170,6 @@ export default function AssessmentPage() {
       return;
     }
 
-    if (initialActiveSetRef.current) return;
-
     if (trunkIds.length === 0) {
       const ctxIds =
         anchorsForSection("context").map(
@@ -174,24 +178,13 @@ export default function AssessmentPage() {
 
       setTrunk(ctxIds);
       setActiveId(ctxIds[0]);
-    } else {
-      const firstUnanswered =
-        trunkIds.find((id) => !answers[id]);
-
-      setActiveId(
-        firstUnanswered ??
-        trunkIds[trunkIds.length - 1]
-      );
     }
-
-    initialActiveSetRef.current = true;
   }, [
     hydrated,
     profile,
     trunkIds,
     setTrunk,
     router,
-    answers,
   ]);
 
   const trunk: Question[] = useMemo(
@@ -321,6 +314,9 @@ export default function AssessmentPage() {
           })
           .slice(-3);
 
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 3500);
+
         const res = await fetch("/api/probe", {
           method: "POST",
           headers: {
@@ -333,7 +329,9 @@ export default function AssessmentPage() {
             discipline: profile.discipline,
             section: step.probeParent.section,
           }),
+          signal: controller.signal,
         });
+        clearTimeout(timeoutId);
 
         if (!res.ok) {
           throw new Error("Failed to fetch adaptive question");

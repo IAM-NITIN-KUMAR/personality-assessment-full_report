@@ -19,7 +19,6 @@ interface Props {
 }
 
 const AUTO_ADVANCE_DELAY = 420;
-const MULTI_ADVANCE_DELAY = 2200;
 
 export function QuestionCard({
   question,
@@ -31,7 +30,7 @@ export function QuestionCard({
   positionLabel,
 }: Props) {
   const canAdvance = isAnswered(question, answer);
-  const showManualNext = question.type === "short_text";
+  const showManualNext = question.type === "short_text" || question.type === "multi_choice";
 
   const advancedRef = useRef(false);
   const advanceTimeoutRef = useRef<number | null>(null);
@@ -49,21 +48,22 @@ export function QuestionCard({
       }, AUTO_ADVANCE_DELAY);
       return;
     }
+  };
 
-    if (question.type === "multi_choice") {
-      if (advanceTimeoutRef.current !== null) {
-        window.clearTimeout(advanceTimeoutRef.current);
-      }
-      advancedRef.current = false;
-      advanceTimeoutRef.current = window.setTimeout(() => {
-        onAutoAdvance();
-        advanceTimeoutRef.current = null;
-      }, MULTI_ADVANCE_DELAY);
+  const handleNextClick = () => {
+    if (advanceTimeoutRef.current !== null) {
+      window.clearTimeout(advanceTimeoutRef.current);
+      advanceTimeoutRef.current = null;
     }
+    onNext();
   };
 
   useEffect(() => {
     advancedRef.current = false;
+    if (advanceTimeoutRef.current !== null) {
+      window.clearTimeout(advanceTimeoutRef.current);
+      advanceTimeoutRef.current = null;
+    }
   }, [question.id]);
 
   return (
@@ -112,7 +112,7 @@ export function QuestionCard({
 
       {showManualNext && (
         <div className="flex items-center justify-end mt-5 sm:mt-8 pt-4 sm:pt-6 border-t border-line/70">
-          <Button variant="outline" onClick={onNext} disabled={!canAdvance || loadingNext}>
+          <Button variant="outline" onClick={handleNextClick} disabled={!canAdvance || loadingNext}>
             {loadingNext ? "…" : "Next"}
             <ArrowRight className="h-3.5 w-3.5" />
           </Button>

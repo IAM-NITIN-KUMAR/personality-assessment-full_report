@@ -219,9 +219,8 @@ function Hero() {
         A scientifically rigorous self-assessment that students actually finish.
       </h2>
       <p className="text-[16px] text-ink-500 leading-relaxed max-w-lg mb-8">
-        {ANCHORS_COUNT} short scenarios. Adaptive follow-ups. An honest engagement
-        check. At the end you walk away with a 20+ stat profile and a
-        downloadable report — not a horoscope.
+        Answer {ANCHORS_COUNT} reflective questions that adapt to your choices in real-time. 
+        Uncover an unfiltered, data-backed blueprint of your professional DNA—no generic advice, just future-ready direction.
       </p>
       <div className="flex items-center gap-4 flex-wrap">
         <Stat label="DURATION" value={`~${Math.ceil(ANCHORS_COUNT * 0.8)} MIN`} />
@@ -429,10 +428,10 @@ function Field({ label, required, children }: { label: string; required?: boolea
 
 function FeatureRow() {
   const items = [
-    { eyebrow: "01", title: "No boring sliders", body: "Scenario-driven questions that feel real and human." },
-    { eyebrow: "02", title: "Adaptive intelligence", body: "Questions evolve depending on your previous answers." },
+    { eyebrow: "01", title: "No boring sliders", body: "Reflective questions that feel real and human." },
+    { eyebrow: "02", title: "10 Reflective Questions", body: "Our engine custom-tailors subsequent questions in real-time based on your responses." },
     { eyebrow: "03", title: "Engagement detection", body: "We measure genuine interest instead of surface-level hype." },
-    { eyebrow: "04", title: "Detailed personality map", body: "Discover strengths, blind spots and work styles deeply." },
+    { eyebrow: "04", title: "Crystalline Blueprints", body: "Walk away with a precise map of your cognitive signatures, hidden blind spots, and ultimate career fit." },
   ];
   return (
     <div className="grid md:grid-cols-4 gap-4 mt-24">

@@ -2,29 +2,32 @@
 
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Plus, Trash, Save, RefreshCw, Layers, Sliders, CheckCircle2, AlertCircle } from "lucide-react";
+import { Plus, Trash, Save, RefreshCw, Layers, Sliders, CheckCircle2, AlertCircle, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
 import type { Question, Option, Dimension } from "@/lib/types";
 
 const DIMENSIONS: Array<{ key: Dimension; label: string }> = [
   { key: "decision_style", label: "Decision Style" },
-  { key: "energy",         label: "Energy & People" },
-  { key: "structure",      label: "Structure" },
-  { key: "risk",           label: "Risk Tolerance" },
-  { key: "social",         label: "Social Mode" },
-  { key: "drive",          label: "Drive" },
+  { key: "energy", label: "Energy & People" },
+  { key: "structure", label: "Structure" },
+  { key: "risk", label: "Risk Tolerance" },
+  { key: "social", label: "Social Mode" },
+  { key: "drive", label: "Drive" },
 ];
 
 const QUESTION_TYPES = [
   { value: "single_choice", label: "Single Choice" },
-  { value: "multi_choice",  label: "Multi Choice" },
-  { value: "short_text",    label: "Short Text" },
+  { value: "multi_choice", label: "Multi Choice" },
+  { value: "short_text", label: "Short Text" },
 ];
+
+const DEFAULT_USERNAME = process.env.NEXT_PUBLIC_ADMIN_USERNAME || "Nitin";
+const DEFAULT_PASSWORD = process.env.NEXT_PUBLIC_ADMIN_PASSWORD || "Ngtnitin007@";
 
 export default function AdminDashboard() {
   const [activeTab, setActiveTab] = useState<"context" | "roots" | "routes">("context");
-  
+
   // Local active states for questions
   const [contextQuestions, setContextQuestions] = useState<Question[]>([]);
   const [rootsQuestions, setRootsQuestions] = useState<Question[]>([]);
@@ -36,8 +39,20 @@ export default function AdminDashboard() {
   const [syncing, setSyncing] = useState(false);
   const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
+  // Authentication State
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [inputUsername, setInputUsername] = useState("");
+  const [inputPassword, setInputPassword] = useState("");
+  const [loginError, setLoginError] = useState("");
+
   useEffect(() => {
-    fetchQuestions();
+    const authorized = sessionStorage.getItem("admin_authorized") === "true";
+    if (authorized) {
+      setIsAuthorized(true);
+      fetchQuestions();
+    } else {
+      setLoading(false);
+    }
   }, []);
 
   const fetchQuestions = async () => {
@@ -60,6 +75,18 @@ export default function AdminDashboard() {
       showAlert("error", "Failed to retrieve local question banks.");
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (inputUsername === DEFAULT_USERNAME && inputPassword === DEFAULT_PASSWORD) {
+      sessionStorage.setItem("admin_authorized", "true");
+      setIsAuthorized(true);
+      setLoginError("");
+      fetchQuestions();
+    } else {
+      setLoginError("Invalid username or password.");
     }
   };
 
@@ -88,10 +115,10 @@ export default function AdminDashboard() {
       const combined = [...routesQuestions];
       if (routesEngagement) combined.push(routesEngagement);
       const updatedCombined = updater(combined);
-      
+
       const newRoutes = updatedCombined.filter((q) => q.id !== "rb_engagement");
       const newEngage = updatedCombined.find((q) => q.id === "rb_engagement") || null;
-      
+
       setRoutesQuestions(newRoutes);
       if (newEngage) setRoutesEngagement(newEngage);
     }
@@ -135,10 +162,10 @@ export default function AdminDashboard() {
     if (!activeQuestion?.options) return;
     const option = activeQuestion.options[optIndex];
     const newScores = { ...(option.scores || {}), [dimKey]: val };
-    
+
     // Remove if 0 to keep the typescript code clean
     if (val === 0) delete newScores[dimKey];
-    
+
     handleOptionChange(optIndex, "scores", newScores);
   };
 
@@ -166,7 +193,7 @@ export default function AdminDashboard() {
     const isContext = activeTab === "context";
     const prefix = isContext ? "ctx_" : activeTab === "roots" ? "rt_" : "rb_";
     const uniqueId = `${prefix}${Date.now().toString().slice(-4)}`;
-    
+
     const newQ: Question = {
       id: uniqueId,
       section: activeTab,
@@ -237,6 +264,92 @@ export default function AdminDashboard() {
     );
   }
 
+  if (!isAuthorized) {
+    return (
+      <main
+        className="min-h-dvh flex items-center justify-center relative px-6 overflow-hidden"
+        style={{
+          background: `
+            radial-gradient(circle at 15% 20%, rgba(244, 184, 212, 0.25), transparent 30%),
+            radial-gradient(circle at 80% 20%, rgba(196, 181, 253, 0.22), transparent 28%),
+            radial-gradient(circle at 50% 80%, rgba(186, 230, 253, 0.18), transparent 32%),
+            linear-gradient(135deg, #f8eef2 0%, #f1edf6 45%, #eef3f9 100%)
+          `,
+        }}
+      >
+        <div className="absolute top-[10%] left-[-5%] h-[400px] w-[400px] rounded-full bg-pink-300/18 blur-[120px] pointer-events-none" />
+        <div className="absolute bottom-[10%] right-[-5%] h-[400px] w-[400px] rounded-full bg-violet-300/16 blur-[120px] pointer-events-none" />
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full max-w-md relative rounded-[28px] p-8 md:p-10 border border-white/70 shadow-2xl backdrop-blur-xl bg-white/40"
+        >
+          <div className="flex flex-col items-center mb-8">
+            <Logo className="size-12 text-ink mb-3" />
+            <h1 className="font-mono text-[16px] font-bold tracking-widest uppercase text-ink">
+              Roots <span className="text-ink-300">/</span> Routes
+            </h1>
+            <p className="mono-eyebrow text-electric mt-1.5 uppercase">Admin Portal Login</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-5">
+            <div className="space-y-1.5">
+              <label className="mono-eyebrow text-ink-700 flex items-center gap-1.5">
+                <User className="h-3 w-3" /> Username
+              </label>
+              <input
+                type="text"
+                value={inputUsername}
+                onChange={(e) => setInputUsername(e.target.value)}
+                placeholder="Enter username"
+                className="w-full rounded-xl px-4 py-3 text-[14px] text-ink placeholder:text-ink-300 outline-none border border-line/60 bg-white/60 focus:bg-white focus:border-electric transition-all"
+                required
+              />
+            </div>
+
+            <div className="space-y-1.5">
+              <label className="mono-eyebrow text-ink-700 flex items-center gap-1.5">
+                <Lock className="h-3 w-3" /> Password
+              </label>
+              <input
+                type="password"
+                value={inputPassword}
+                onChange={(e) => setInputPassword(e.target.value)}
+                placeholder="Enter password"
+                className="w-full rounded-xl px-4 py-3 text-[14px] text-ink placeholder:text-ink-300 outline-none border border-line/60 bg-white/60 focus:bg-white focus:border-electric transition-all"
+                required
+              />
+            </div>
+
+            {loginError && (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.95 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="p-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-600 text-[12px] font-mono font-medium flex items-center gap-2"
+              >
+                <AlertCircle className="h-4 w-4 shrink-0" />
+                {loginError}
+              </motion.div>
+            )}
+
+            <button
+              type="submit"
+              className="w-full mt-2 py-3.5 rounded-xl text-white font-mono text-[12px] tracking-wider uppercase font-semibold flex items-center justify-center gap-2 transition-all hover:shadow-lg active:scale-[0.98]"
+              style={{
+                background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)",
+                boxShadow: "0 4px 12px -2px rgba(10,14,26,0.3)",
+              }}
+            >
+              Sign In
+            </button>
+          </form>
+        </motion.div>
+      </main>
+    );
+  }
+
   return (
     <main
       className="min-h-dvh overflow-hidden relative pb-16"
@@ -256,11 +369,10 @@ export default function AdminDashboard() {
             initial={{ opacity: 0, y: -40 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -40 }}
-            className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl flex items-center gap-3 shadow-xl backdrop-blur-md ${
-              alert.type === "success" 
-                ? "bg-green-500/10 border border-green-500/30 text-green-700" 
-                : "bg-red-500/10 border border-red-500/30 text-red-700"
-            }`}
+            className={`fixed top-6 left-1/2 -translate-x-1/2 z-50 px-6 py-4 rounded-2xl flex items-center gap-3 shadow-xl backdrop-blur-md ${alert.type === "success"
+              ? "bg-green-500/10 border border-green-500/30 text-green-700"
+              : "bg-red-500/10 border border-red-500/30 text-red-700"
+              }`}
           >
             {alert.type === "success" ? <CheckCircle2 className="h-5 w-5 shrink-0" /> : <AlertCircle className="h-5 w-5 shrink-0" />}
             <span className="font-mono text-[13px] font-semibold tracking-wide">{alert.message}</span>
@@ -293,6 +405,18 @@ export default function AdminDashboard() {
               <Save className="h-3.5 w-3.5" />
               {syncing ? "Writing TS Files…" : "Save Changes to Disk"}
             </Button>
+            <Button
+              variant="ghost"
+              onClick={() => {
+                sessionStorage.removeItem("admin_authorized");
+                setIsAuthorized(false);
+                setInputUsername("");
+                setInputPassword("");
+              }}
+              className="text-red-600 hover:text-red-700 hover:bg-red-50/50"
+            >
+              Log Out
+            </Button>
           </div>
         </div>
       </header>
@@ -305,11 +429,10 @@ export default function AdminDashboard() {
               <button
                 key={tab}
                 onClick={() => handleTabChange(tab)}
-                className={`flex-1 py-3 rounded-xl font-mono text-[11px] tracking-widest uppercase transition-all ${
-                  activeTab === tab 
-                    ? "bg-ink text-white font-bold shadow-sm" 
-                    : "text-ink-400 hover:bg-white/40"
-                }`}
+                className={`flex-1 py-3 rounded-xl font-mono text-[11px] tracking-widest uppercase transition-all ${activeTab === tab
+                  ? "bg-ink text-white font-bold shadow-sm"
+                  : "text-ink-400 hover:bg-white/40"
+                  }`}
               >
                 {tab}
               </button>
@@ -333,11 +456,10 @@ export default function AdminDashboard() {
                 <button
                   key={q.id}
                   onClick={() => setActiveId(q.id)}
-                  className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start justify-between gap-3 ${
-                    activeId === q.id 
-                      ? "bg-white border-ink shadow-sm" 
-                      : "bg-white/20 border-line hover:bg-white/50"
-                  }`}
+                  className={`w-full text-left p-3.5 rounded-xl border transition-all flex items-start justify-between gap-3 ${activeId === q.id
+                    ? "bg-white border-ink shadow-sm"
+                    : "bg-white/20 border-line hover:bg-white/50"
+                    }`}
                 >
                   <div className="min-w-0">
                     <div className="flex items-center gap-1.5 flex-wrap">
@@ -378,7 +500,7 @@ export default function AdminDashboard() {
                     </span>
                   </div>
                 </div>
-                
+
                 {activeQuestion.id !== "rb_engagement" && (
                   <div className="flex gap-4">
                     <div>

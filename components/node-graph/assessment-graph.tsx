@@ -72,16 +72,15 @@ export function AssessmentGraph({
     <AnimatePresence mode="wait" initial={false}>
       <motion.div
         key={active.id}
-        initial={{ opacity: 0, x: 32, filter: "blur(4px)" }}
-        animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-        exit={{ opacity: 0, x: -32, filter: "blur(4px)" }}
+        initial={{ opacity: 0, x: 32 }}
+        animate={{ opacity: 1, x: 0 }}
+        exit={{ opacity: 0, x: -32 }}
         transition={{
           type: "spring",
           stiffness: 220,
           damping: 28,
           mass: 0.8,
           opacity: { duration: 0.25 },
-          filter: { duration: 0.25 },
         }}
         className="w-full relative"
       >
