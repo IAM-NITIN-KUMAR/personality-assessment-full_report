@@ -135,17 +135,30 @@ export default function LandingPage() {
 
     setSubmitting(true);
 
-    const { error } = await supabase.from("students").insert({
-      name: name.trim(),
-      email: email.trim(),
-      discipline,
-      course_id: course ?? null,
-      photo_url: photo ?? null,
-    });
+    const { data, error } = await supabase
+      .from("students")
+      .insert({
+        name: name.trim(),
+        email: email.trim(),
+        discipline,
+        course_id: course ?? null,
+        photo_url: photo ?? null,
+      })
+      .select("id")
+      .single();
 
     if (error) console.error("Supabase insert error:", error);
 
-    setProfile({ name: name.trim(), email: email.trim(), discipline, course, photo });
+    const studentId = data?.id;
+
+    setProfile({
+      name: name.trim(),
+      email: email.trim(),
+      discipline,
+      course,
+      photo,
+      studentId: data?.id,
+    });
     setSubmitting(false);
     router.push("/assessment");
   };

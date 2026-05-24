@@ -96,6 +96,8 @@ export interface StudentProfile {
   course?: string;
   /** Optional avatar — stored as a data URL (JPEG, ~256x256, <60KB after compression). */
   photo?: string;
+  studentId?: string;  // ← add this line
+
 }
 
 export interface AssessmentState {
