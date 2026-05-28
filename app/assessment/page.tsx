@@ -64,18 +64,18 @@ function Cloud({ duration, delay, size, top, opacity, shape, direction }: CloudP
   const isLeft = direction === "left";
   return (
     <motion.div
-      initial={{ left: isLeft ? "-30%" : "120%" }}
-      animate={{ left: isLeft ? "120%" : "-30%" }}
+      initial={{ x: isLeft ? "-30vw" : "110vw" }}
+      animate={{ x: isLeft ? "110vw" : "-30vw" }}
       transition={{
         duration,
         delay,
         repeat: Infinity,
         ease: "linear",
       }}
-      className="absolute pointer-events-none select-none hidden md:block"
+      className="absolute pointer-events-none select-none scale-50 md:scale-100 opacity-50 md:opacity-100 origin-left"
       style={{
         top,
-        opacity,
+        left: 0,
         width: size,
       }}
     >
