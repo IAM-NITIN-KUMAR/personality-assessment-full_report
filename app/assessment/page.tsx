@@ -72,7 +72,7 @@ function Cloud({ duration, delay, size, top, opacity, shape, direction }: CloudP
         repeat: Infinity,
         ease: "linear",
       }}
-      className="absolute pointer-events-none select-none scale-50 md:scale-100 opacity-50 md:opacity-100 origin-left"
+      className="absolute pointer-events-none select-none hidden md:block"
       style={{
         top,
         left: 0,
