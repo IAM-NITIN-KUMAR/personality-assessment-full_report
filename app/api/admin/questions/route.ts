@@ -9,11 +9,13 @@ import type { Question } from "@/lib/types";
 // This is a local development helper. It reads/writes questions directly to/from files.
 export async function GET() {
   try {
+    const readOnly = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
     return NextResponse.json({
       context: CONTEXT_QUESTIONS,
       roots: ROOTS_ANCHORS,
       routes: ROUTES_BCA,
       routes_engagement: ROUTES_BCA_ENGAGEMENT,
+      readOnly,
     });
   } catch (err) {
     console.error("[admin:get] Failed to read questions:", err);
@@ -30,6 +32,14 @@ interface SaveRequest {
 
 export async function POST(req: NextRequest) {
   try {
+    const readOnly = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
+    if (readOnly) {
+      return NextResponse.json(
+        { error: "Disk sync is only supported in local development. In production, the question bank is read-only." },
+        { status: 400 }
+      );
+    }
+
     const body = (await req.json()) as SaveRequest;
     const projectRoot = process.cwd();
 
@@ -64,3 +74,4 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: err instanceof Error ? err.message : "Failed to write files to disk" }, { status: 500 });
   }
 }
+

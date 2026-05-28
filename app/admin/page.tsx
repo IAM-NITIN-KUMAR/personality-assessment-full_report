@@ -37,6 +37,7 @@ export default function AdminDashboard() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [syncing, setSyncing] = useState(false);
+  const [readOnly, setReadOnly] = useState(false);
   const [alert, setAlert] = useState<{ type: "success" | "error"; message: string } | null>(null);
 
   // Authentication State
@@ -64,6 +65,7 @@ export default function AdminDashboard() {
       setRootsQuestions(data.roots || []);
       setRoutesQuestions(data.routes || []);
       setRoutesEngagement(data.routes_engagement || null);
+      setReadOnly(!!data.readOnly);
 
       // Default active item
       const defArray = data[activeTab] || [];
@@ -388,7 +390,13 @@ export default function AdminDashboard() {
               <div className="font-mono text-[13px] font-semibold tracking-wide uppercase leading-none">
                 Roots <span className="text-ink-300">/</span> Routes
               </div>
-              <div className="mono-eyebrow text-electric mt-1.5">ADMIN PORTAL · CODE SYNC ACTIVE</div>
+              {readOnly ? (
+                <div className="mono-eyebrow text-amber-600 dark:text-amber-500 mt-1.5 flex items-center gap-1">
+                  <Lock className="h-3 w-3 shrink-0" /> ADMIN PORTAL · READ-ONLY (PRODUCTION)
+                </div>
+              ) : (
+                <div className="mono-eyebrow text-electric mt-1.5">ADMIN PORTAL · CODE SYNC ACTIVE</div>
+              )}
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -399,11 +407,11 @@ export default function AdminDashboard() {
             <Button
               variant="solid"
               onClick={saveToDisk}
-              disabled={syncing}
-              className="bg-gradient-to-br from-[#1a1a2e] to-[#0f3460] text-white flex items-center gap-2 border border-white/10 hover:shadow-lg"
+              disabled={syncing || readOnly}
+              className="bg-gradient-to-br from-[#1a1a2e] to-[#0f3460] text-white flex items-center gap-2 border border-white/10 hover:shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <Save className="h-3.5 w-3.5" />
-              {syncing ? "Writing TS Files…" : "Save Changes to Disk"}
+              {readOnly ? <Lock className="h-3.5 w-3.5" /> : <Save className="h-3.5 w-3.5" />}
+              {syncing ? "Writing TS Files…" : readOnly ? "Read-Only Mode" : "Save Changes to Disk"}
             </Button>
             <Button
               variant="ghost"
@@ -442,13 +450,15 @@ export default function AdminDashboard() {
           <div className="panel p-5 bg-white/40 backdrop-blur-md max-h-[64vh] flex flex-col">
             <div className="flex items-center justify-between gap-2 mb-4 shrink-0">
               <span className="mono-eyebrow text-ink-300">Questions ({activeList.length})</span>
-              <button
-                onClick={addNewQuestion}
-                className="size-7 rounded-lg bg-electric-tint text-electric flex items-center justify-center hover:bg-electric hover:text-white transition-all"
-                title="Add New Question"
-              >
-                <Plus className="h-4 w-4" />
-              </button>
+              {!readOnly && (
+                <button
+                  onClick={addNewQuestion}
+                  className="size-7 rounded-lg bg-electric-tint text-electric flex items-center justify-center hover:bg-electric hover:text-white transition-all"
+                  title="Add New Question"
+                >
+                  <Plus className="h-4 w-4" />
+                </button>
+              )}
             </div>
 
             <div className="overflow-y-auto space-y-2 pr-1 scrollbar-thin flex-1">
@@ -468,7 +478,7 @@ export default function AdminDashboard() {
                     </div>
                     <p className="text-[13px] text-ink font-medium truncate mt-1.5">{q.prompt}</p>
                   </div>
-                  {q.id !== "rb_engagement" && (
+                  {q.id !== "rb_engagement" && !readOnly && (
                     <button
                       onClick={(e) => {
                         e.stopPropagation();
@@ -508,7 +518,8 @@ export default function AdminDashboard() {
                       <select
                         value={activeQuestion.type}
                         onChange={(e) => handleFieldChange("type", e.target.value)}
-                        className="block mt-1 font-mono text-[12px] uppercase px-3 py-1.5 rounded-lg border border-line bg-white/50 focus:outline-none focus:border-electric cursor-pointer"
+                        disabled={readOnly}
+                        className="block mt-1 font-mono text-[12px] uppercase px-3 py-1.5 rounded-lg border border-line bg-white/50 focus:outline-none focus:border-electric cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                       >
                         {QUESTION_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
                       </select>
@@ -520,7 +531,8 @@ export default function AdminDashboard() {
                         <select
                           value={activeQuestion.dimension || ""}
                           onChange={(e) => handleFieldChange("dimension", e.target.value || undefined)}
-                          className="block mt-1 font-mono text-[12px] uppercase px-3 py-1.5 rounded-lg border border-line bg-white/50 focus:outline-none focus:border-electric cursor-pointer"
+                          disabled={readOnly}
+                          className="block mt-1 font-mono text-[12px] uppercase px-3 py-1.5 rounded-lg border border-line bg-white/50 focus:outline-none focus:border-electric cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
                         >
                           <option value="">— NONE —</option>
                           {DIMENSIONS.map((d) => <option key={d.key} value={d.key}>{d.label}</option>)}
@@ -540,8 +552,9 @@ export default function AdminDashboard() {
                       type="text"
                       value={activeQuestion.category}
                       onChange={(e) => handleFieldChange("category", e.target.value)}
+                      disabled={readOnly}
                       placeholder="e.g. Decision style"
-                      className="w-full mt-1.5 rounded-xl border border-line bg-white/40 px-4 py-2.5 text-[14px] text-ink focus:outline-none focus:border-electric transition-all"
+                      className="w-full mt-1.5 rounded-xl border border-line bg-white/40 px-4 py-2.5 text-[14px] text-ink focus:outline-none focus:border-electric transition-all disabled:opacity-75 disabled:cursor-not-allowed"
                     />
                   </label>
                 </div>
@@ -552,9 +565,10 @@ export default function AdminDashboard() {
                     <textarea
                       value={activeQuestion.prompt}
                       onChange={(e) => handleFieldChange("prompt", e.target.value)}
+                      disabled={readOnly}
                       placeholder="The question description..."
                       rows={3}
-                      className="w-full mt-1.5 rounded-xl border border-line bg-white/40 px-4 py-2.5 text-[14px] text-ink focus:outline-none focus:border-electric transition-all resize-none"
+                      className="w-full mt-1.5 rounded-xl border border-line bg-white/40 px-4 py-2.5 text-[14px] text-ink focus:outline-none focus:border-electric transition-all resize-none disabled:opacity-75 disabled:cursor-not-allowed"
                     />
                   </label>
                 </div>
@@ -566,8 +580,9 @@ export default function AdminDashboard() {
                       type="text"
                       value={activeQuestion.hint || ""}
                       onChange={(e) => handleFieldChange("hint", e.target.value || undefined)}
+                      disabled={readOnly}
                       placeholder="Additional instructions..."
-                      className="w-full mt-1.5 rounded-xl border border-line bg-white/40 px-4 py-2.5 text-[14px] text-ink focus:outline-none focus:border-electric transition-all"
+                      className="w-full mt-1.5 rounded-xl border border-line bg-white/40 px-4 py-2.5 text-[14px] text-ink focus:outline-none focus:border-electric transition-all disabled:opacity-75 disabled:cursor-not-allowed"
                     />
                   </label>
                 </div>
@@ -578,13 +593,15 @@ export default function AdminDashboard() {
                 <div className="border-t border-line pt-6 mt-6">
                   <div className="flex items-center justify-between mb-4">
                     <span className="mono-eyebrow text-ink-700">Options ({activeQuestion.options?.length || 0})</span>
-                    <button
-                      onClick={addOption}
-                      className="px-3 py-1.5 rounded-xl bg-electric-tint text-electric font-mono text-[10px] uppercase font-bold tracking-wider hover:bg-electric hover:text-white transition-all flex items-center gap-1"
-                    >
-                      <Plus className="h-3.5 w-3.5" />
-                      Add Option
-                    </button>
+                    {!readOnly && (
+                      <button
+                        onClick={addOption}
+                        className="px-3 py-1.5 rounded-xl bg-electric-tint text-electric font-mono text-[10px] uppercase font-bold tracking-wider hover:bg-electric hover:text-white transition-all flex items-center gap-1"
+                      >
+                        <Plus className="h-3.5 w-3.5" />
+                        Add Option
+                      </button>
+                    )}
                   </div>
 
                   <div className="space-y-4">
@@ -600,26 +617,30 @@ export default function AdminDashboard() {
                                 type="text"
                                 value={option.tag || ""}
                                 onChange={(e) => handleOptionChange(optIdx, "tag", e.target.value)}
+                                disabled={readOnly}
                                 placeholder="tag:value"
-                                className="font-mono text-[11px] px-2.5 py-1 rounded-lg border border-line bg-white/50 focus:outline-none focus:border-electric w-32"
+                                className="font-mono text-[11px] px-2.5 py-1 rounded-lg border border-line bg-white/50 focus:outline-none focus:border-electric w-32 disabled:opacity-75 disabled:cursor-not-allowed"
                               />
                             )}
                           </div>
-                          <button
-                            onClick={() => removeOption(optIdx)}
-                            className="text-ink-300 hover:text-red-500 transition-colors"
-                            title="Remove Option"
-                          >
-                            <Trash className="h-3.5 w-3.5" />
-                          </button>
+                          {!readOnly && (
+                            <button
+                              onClick={() => removeOption(optIdx)}
+                              className="text-ink-300 hover:text-red-500 transition-colors"
+                              title="Remove Option"
+                            >
+                              <Trash className="h-3.5 w-3.5" />
+                            </button>
+                          )}
                         </div>
 
                         <input
                           type="text"
                           value={option.label}
                           onChange={(e) => handleOptionChange(optIdx, "label", e.target.value)}
+                          disabled={readOnly}
                           placeholder="Option description label..."
-                          className="w-full rounded-xl border border-line bg-white/70 px-4 py-2.5 text-[14px] text-ink focus:outline-none focus:border-electric transition-all"
+                          className="w-full rounded-xl border border-line bg-white/70 px-4 py-2.5 text-[14px] text-ink focus:outline-none focus:border-electric transition-all disabled:opacity-75 disabled:cursor-not-allowed"
                         />
 
                         {/* Dimension weights config (Roots / Routes) */}
@@ -644,7 +665,8 @@ export default function AdminDashboard() {
                                       step={0.5}
                                       value={val}
                                       onChange={(e) => handleScoreChange(optIdx, d.key, parseFloat(e.target.value) || 0)}
-                                      className="w-12 text-center text-[12px] font-mono font-bold bg-white border border-line rounded px-1 py-0.5 focus:outline-none focus:border-electric"
+                                      disabled={readOnly}
+                                      className="w-12 text-center text-[12px] font-mono font-bold bg-white border border-line rounded px-1 py-0.5 focus:outline-none focus:border-electric disabled:opacity-75 disabled:cursor-not-allowed"
                                     />
                                   </div>
                                 );
