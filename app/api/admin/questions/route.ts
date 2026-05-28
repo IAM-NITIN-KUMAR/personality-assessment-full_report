@@ -9,7 +9,7 @@ import type { Question } from "@/lib/types";
 // This is a local development helper. It reads/writes questions directly to/from files.
 export async function GET() {
   try {
-    const readOnly = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
+    const readOnly = process.env.NODE_ENV === "production";
     return NextResponse.json({
       context: CONTEXT_QUESTIONS,
       roots: ROOTS_ANCHORS,
@@ -32,7 +32,7 @@ interface SaveRequest {
 
 export async function POST(req: NextRequest) {
   try {
-    const readOnly = process.env.NODE_ENV === "production" || process.env.VERCEL === "1";
+    const readOnly = process.env.NODE_ENV === "production";
     if (readOnly) {
       return NextResponse.json(
         { error: "Disk sync is only supported in local development. In production, the question bank is read-only." },
