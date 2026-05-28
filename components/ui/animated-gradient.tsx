@@ -4,7 +4,7 @@
 export function AnimatedGradient() {
   return (
     <div 
-      className="absolute inset-0 overflow-hidden pointer-events-none -z-10"
+      className="absolute inset-0 overflow-hidden pointer-events-none z-0"
       style={{
         background: "linear-gradient(135deg, #f7e8ee 0%, #efe7f4 42%, #edf2f9 100%)"
       }}
