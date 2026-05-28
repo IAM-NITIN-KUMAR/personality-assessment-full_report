@@ -7,7 +7,6 @@ import { ArrowRight, Clock } from "lucide-react";
 import { useAssessment } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import { PhotoUpload } from "@/components/ui/photo-upload";
 import {
   DISCIPLINES,
   coursesByDiscipline,
@@ -33,7 +32,7 @@ export default function LandingPage() {
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [photo, setPhoto] = useState<string | undefined>(undefined);
+  const [phone, setPhone] = useState("");
   const [discipline, setDiscipline] = useState<Discipline>("tech_cs");
   const [course, setCourse] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
@@ -42,7 +41,7 @@ export default function LandingPage() {
 
   const handleStart = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim()) return;
+    if (!name.trim() || !email.trim() || !phone.trim()) return;
     if (existingProfile) reset();
 
     setSubmitting(true);
@@ -52,9 +51,9 @@ export default function LandingPage() {
       .insert({
         name: name.trim(),
         email: email.trim(),
+        phone: phone.trim(),
         discipline,
         course_id: course ?? null,
-        photo_url: photo ?? null,
       })
       .select("id")
       .single();
@@ -66,9 +65,9 @@ export default function LandingPage() {
     setProfile({
       name: name.trim(),
       email: email.trim(),
+      phone: phone.trim(),
       discipline,
       course,
-      photo,
       studentId: data?.id,
     });
     setSubmitting(false);
@@ -85,7 +84,7 @@ export default function LandingPage() {
           <Form
             name={name} setName={setName}
             email={email} setEmail={setEmail}
-            photo={photo} setPhoto={setPhoto}
+            phone={phone} setPhone={setPhone}
             discipline={discipline}
             setDiscipline={(d) => { setDiscipline(d); setCourse(undefined); }}
             course={course} setCourse={setCourse}
@@ -155,7 +154,7 @@ function Stat({ label, value }: { label: string; value: string }) {
 function Form(props: {
   name: string; setName: (s: string) => void;
   email: string; setEmail: (s: string) => void;
-  photo: string | undefined; setPhoto: (p: string | undefined) => void;
+  phone: string; setPhone: (s: string) => void;
   discipline: Discipline; setDiscipline: (d: Discipline) => void;
   course: string | undefined; setCourse: (c: string | undefined) => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -191,7 +190,11 @@ function Form(props: {
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink placeholder:text-ink-300 outline-none transition-all"
               style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)} />
           </Field>
-          <PhotoUpload value={props.photo} onChange={props.setPhoto} />
+          <Field label="PHONE NUMBER" required>
+            <input type="tel" value={props.phone} onChange={(e) => props.setPhone(e.target.value)} placeholder="+91 99999 99999"
+              className="w-full rounded-xl px-4 py-3 text-[15px] text-ink placeholder:text-ink-300 outline-none transition-all"
+              style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)} />
+          </Field>
           <Field label="INTEREST AREA">
             <select value={props.discipline} onChange={(e) => props.setDiscipline(e.target.value as Discipline)}
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink outline-none transition-all appearance-none cursor-pointer"
@@ -210,7 +213,7 @@ function Form(props: {
         </div>
         <button
           type="submit"
-          disabled={!props.name.trim() || !props.email.trim() || props.submitting}
+          disabled={!props.name.trim() || !props.email.trim() || !props.phone.trim() || props.submitting}
           className="w-full mt-6 py-4 rounded-2xl text-white font-mono text-[13px] tracking-[0.12em] uppercase font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)", boxShadow: "0 4px 16px -4px rgba(10,14,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" }}
           onMouseEnter={(e) => { if (!e.currentTarget.disabled) { e.currentTarget.style.boxShadow = "0 8px 24px -4px rgba(10,14,26,0.5), inset 0 1px 0 rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(-1px)"; } }}

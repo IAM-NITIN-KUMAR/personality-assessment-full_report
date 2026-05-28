@@ -90,14 +90,14 @@ export type { Discipline };
 export interface StudentProfile {
   name: string;
   email: string;
+  phone?: string;
   /** Broad interest area (12 categories). Maps to question-bank routes. */
   discipline: Discipline;
   /** Optional specific course the student is considering. Catalog id. */
   course?: string;
   /** Optional avatar — stored as a data URL (JPEG, ~256x256, <60KB after compression). */
   photo?: string;
-  studentId?: string;  // ← add this line
-
+  studentId?: string;
 }
 
 export interface AssessmentState {
