@@ -140,13 +140,13 @@ function CircularProgress({ percentage, size = 96, strokeWidth = 7.5 }: { percen
           strokeLinecap="round"
         />
       </svg>
-      {/* Centered percentage text inside the circle */}
+      {/* Centered text inside the circle */}
       <div className="absolute flex flex-col items-center justify-center text-center">
-        <span className="font-mono text-[20px] font-black tracking-tight text-ink leading-none">
-          {percentage}%
+        <span className="font-mono text-[11px] font-black tracking-tight text-ink leading-none">
+          ALMOST
         </span>
         <span className="mono-eyebrow text-[7.5px] text-ink-400 mt-0.5 font-bold uppercase tracking-wider">
-          DONE
+          THERE
         </span>
       </div>
     </div>
@@ -263,7 +263,7 @@ export default function TeaserPage() {
                 {archetype.description}
               </p>
             </div>
-            <div className="flex flex-col items-center justify-center shrink-0">
+            <div className="flex flex-col items-start sm:items-center justify-center shrink-0">
               <CircularProgress percentage={50} size={96} strokeWidth={7.5} />
             </div>
           </div>
