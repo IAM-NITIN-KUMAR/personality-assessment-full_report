@@ -221,7 +221,7 @@ export default function TeaserPage() {
         <Cloud shape="A" direction="right" size={310} top="65%" duration={120} delay={-60} opacity={0.65} />
       </div>
 
-      <div className="relative z-10 max-w-3xl mx-auto px-6 py-20 md:py-28">
+      <div className="relative z-10 max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16 md:py-28">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
@@ -236,7 +236,7 @@ export default function TeaserPage() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.05 }}
-          className="display-xl text-[38px] sm:text-[54px] md:text-[76px] lg:text-[88px] text-ink leading-tight"
+          className="display-xl text-[28px] sm:text-[42px] md:text-[76px] lg:text-[88px] text-ink leading-tight"
         >
           {archetype.name.replace(/^The\s/, "").toUpperCase()}
         </motion.h1>
@@ -245,7 +245,7 @@ export default function TeaserPage() {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.2 }}
-          className="display-md text-[20px] md:text-[22px] text-ink-500 mt-3"
+          className="display-md text-[17px] sm:text-[20px] md:text-[22px] text-ink-500 mt-3"
         >
           {archetype.tagline}
         </motion.p>
@@ -254,12 +254,12 @@ export default function TeaserPage() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.35 }}
-          className="panel mt-12 p-7 md:p-9"
+          className="panel mt-8 sm:mt-12 p-5 sm:p-7 md:p-9"
         >
           <div className="mono-eyebrow text-ink-300 mb-5">CORE READING</div>
-          <div className="grid sm:grid-cols-[1fr,110px] gap-6 items-center">
+          <div className="grid grid-cols-1 sm:grid-cols-[1fr,110px] gap-4 sm:gap-6 items-center">
             <div>
-              <p className="text-[16px] leading-relaxed text-ink-500 text-balance">
+              <p className="text-[14px] sm:text-[16px] leading-relaxed text-ink-500 text-balance">
                 {archetype.description}
               </p>
             </div>
@@ -273,7 +273,7 @@ export default function TeaserPage() {
           initial={{ opacity: 0, y: 14 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, delay: 0.5 }}
-          className="panel mt-10 p-7 md:p-9"
+          className="panel mt-6 sm:mt-10 p-5 sm:p-7 md:p-9"
         >
           <div className="mono-eyebrow text-ink-300 mb-4">TOP DIMENSIONS</div>
           <div className="grid gap-3">
@@ -307,16 +307,16 @@ function DimensionRow({ dimension, value }: { dimension: Dimension; value: numbe
   const polarLabel = value >= 0 ? meta.high : meta.low;
   const intensity = Math.abs(value);
   return (
-    <div className="panel-subtle px-5 py-4 flex items-center justify-between gap-4">
-      <div>
-        <div className="mono-eyebrow text-ink-300">{meta.label.toUpperCase()}</div>
-        <div className="display-md text-[18px] text-ink mt-1">{polarLabel}</div>
+    <div className="panel-subtle px-4 sm:px-5 py-3 sm:py-4 flex items-center justify-between gap-3 sm:gap-4">
+      <div className="min-w-0 shrink">
+        <div className="mono-eyebrow text-ink-300 text-[10px] sm:text-[11px]">{meta.label.toUpperCase()}</div>
+        <div className="display-md text-[16px] sm:text-[18px] text-ink mt-0.5 sm:mt-1">{polarLabel}</div>
       </div>
-      <div className="flex items-center gap-3">
-        <div className="h-1 w-32 rounded-full bg-line overflow-hidden">
+      <div className="flex items-center gap-2 sm:gap-3 shrink-0">
+        <div className="h-1 w-16 sm:w-32 rounded-full bg-line overflow-hidden">
           <div className="h-full bg-electric" style={{ width: `${Math.min(100, intensity)}%` }} />
         </div>
-        <span className="font-mono text-[12px] text-ink-400 w-10 text-right">
+        <span className="font-mono text-[11px] sm:text-[12px] text-ink-400 w-8 sm:w-10 text-right">
           {value > 0 ? "+" : ""}{value}
         </span>
       </div>
