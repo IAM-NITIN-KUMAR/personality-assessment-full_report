@@ -99,7 +99,7 @@ export const ROUTES_BCA_ENGAGEMENT: Question = {
   "kind": "engagement",
   "type": "single_choice",
   "category": "Honest Check",
-  "prompt": "Outside of college/work, what are you naturally drawn toward?",
+  "prompt": "Outside of college/work, what are you naturally drawn towards?",
   "hint": "There's no right answer. We're trying to read your real connection to this field, not your resume.",
   "options": [
     {
