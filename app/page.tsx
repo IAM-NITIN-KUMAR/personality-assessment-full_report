@@ -110,7 +110,7 @@ function Header() {
             Roots <span className="text-ink-300">/</span> Routes
           </div>
         </div>
-        <div className="mono-eyebrow text-ink-400">SECURE STEPS · v0.1</div>
+        <div className="mono-eyebrow text-ink-400">A smarter way to know you</div>
       </div>
     </header>
   );
