@@ -1,0 +1,75 @@
+=== PAGE 1 ===
+ASSESSMENT MATHEMATICS
+Psychometric & Archetype Match Formulas
+SECURE STEPS ASSESSMENT PLATFORM - TECHNICAL MANUAL
+DOCUMENT PURPOSE:
+Reference guide for scoring metrics & calibration values.
+DATE GENERATED:
+May 24, 2026
+=== PAGE 2 ===
+SecureSteps - Assessment Mathematics & Archetype Formulas
+1. Core Psychometric Dimensions & Normalization
+The SecureSteps assessment engine evaluates students across 6 bipolar personality dimensions. Each
+option selected in the assessment contributes a pre-defined positive or negative weight vector to one or
+more dimensions. Because the test length is dynamic (incorporating adaptive follow-up slots), raw scores
+are normalized relative to the maximum possible absolute capacity of the path taken.
+decision_style: Intuitive (negative) vs. Deliberate / Analytical (positive)
+energy: Introverted / Reflective (negative) vs. Extroverted / Expressive (positive)
+structure: Open-ended / Spontaneous (negative) vs. Organized / Structured (positive)
+risk: Cautious / Risk-averse (negative) vs. Bold / Risk-tolerant (positive)
+social: Independent / Solo (negative) vs. Collaborative / Networked (positive)
+drive: Reactive / Standard (negative) vs. Proactive / Build-first (positive)
+Normalization Formulas:
+Let Q be the set of answered questions. For each question q in Q, the student selects an option o_q.
+1. Raw Score calculation: Raw_dim = Sum_{q in Q} (o_q.scores.dim)
+2. Maximum Absolute Capacity: Max_dim = Sum_{q in Q} (max_{o in q.options} |o.scores.dim|)
+3. Normalized Dimension Score: Normalized_dim = round((Raw_dim / Max_dim) * 100)
+This maps every dimension onto a clean [-100, 100] scale, ensuring that unanswered or skipped adaptive
+questions do not deflate or inflate the final metrics.
+Page 2
+=== PAGE 3 ===
+SecureSteps - Assessment Mathematics & Archetype Formulas
+2. Archetype Match Formulas & Calibration
+The system maps the normalized dimension scores into compatibility match ratings for 6 distinct user
+archetypes. The archetype with the highest match score is assigned as the student's primary archetype.
+The Builder Match = drive + risk + max(0, -structure)
+Action-oriented; values building fast over rigid rules.
+The Strategist Match = decision_style + structure + max(0, -risk / 2)
+Deliberate and organized; values cautious planning. (Calibrated)
+The Connector Match = social + energy + max(0, -decision_style / 2)
+People-centric; values collaboration and networking.
+The Maverick Match = risk + max(0, -structure) + max(0, drive / 2)
+Risk-tolerant lone wolf; comfortable with high ambiguity.
+The Anchor Match = structure + max(0, -risk) + max(0, -energy / 2)
+Orderly and calm under pressure; resists noisy trends.
+The Explorer Match = max(0, -structure) + drive + max(0, energy / 2)
+Curious polymath; prefers breadth of interest over narrow focus.
+Calibration Release Notes (May 24, 2026):
+Problem: In testing, a large percentage of students were classified as 'The Strategist'. This occurred because its
+old formula 'decision_style + structure + max(0, drive / 2)' added a drive boost that was frequently positive (+25 pt
+average boost on balanced profiles), creating a strong mathematical bias.
+Solution: Replaced the drive boost with a cautiousness boost 'max(0, -risk / 2)'. This reflects the psychology of a
+Strategist (risk-averse/deliberate) and balances the scoring. Balanced positive profiles now tie evenly at 100
+points across Builder, Strategist, Connector, and Explorer, eliminating default bias.
+Page 3
+=== PAGE 4 ===
+SecureSteps - Assessment Mathematics & Archetype Formulas
+3. Match Confidence Score (matchScore)
+The report surfaces a final match confidence score (between 70% and 99%) on the cover page. This
+represents how distinct the user's primary archetype signature is from their overall baseline.
+Step-by-Step Match Confidence Algorithm:
+1. Absolute Ranking:
+   Sort the absolute values of the 6 normalized dimension scores in descending order:
+   S = sort([ |Normalized_ds|, |Normalized_en|, |Normalized_st|, ... ])
+2. Spread Derivation:
+   Calculate the spread between the strongest defining indicator and the median indicator:
+   Spread = max(0, S[0] - S[3])
+3. Base Confidence Score:
+   Base = 78 + min(18, Spread * 0.25)  [Yields a baseline range between 78 and 96]
+4. Engagement Adjustment:
+   Incorporate the user's interaction bandwidth (speed and emoji reactions):
+   EngBoost = (Score_engagement - 1.5) * 1.5  [Yields adjustments between -2.25 and +2.25]
+5. Clamping:
+   Final Match Score = clamp(70, 99, round(Base + EngBoost))
+CONFIDENTIAL - SECURE STEPS PSYCHOMETRIC MANUAL v0.2
+Page 4

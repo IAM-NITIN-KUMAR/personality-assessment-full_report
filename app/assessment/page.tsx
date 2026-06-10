@@ -172,7 +172,7 @@ export default function AssessmentPage() {
 
     if (trunkIds.length === 0) {
       const ctxIds =
-        anchorsForSection("context").map(
+        anchorsForSection("main_character").map(
           (q) => q.id
         );
 
@@ -238,12 +238,26 @@ export default function AssessmentPage() {
         setSection(nextAnchor.section);
       }
     } else {
-      const endSection = parent.section === "roots" ? "teaser" : "report";
-      if (endSection === "teaser") {
+      const SECTIONS: Section[] = [
+        "main_character",
+        "dream_big",
+        "passport_era",
+        "skill_check",
+        "reality_check"
+      ];
+      const secIdx = SECTIONS.indexOf(parent.section);
+      if (secIdx !== -1 && secIdx < SECTIONS.length - 1) {
+        const nextSec = SECTIONS[secIdx + 1];
+        const nextAnchors = anchorsForSection(nextSec);
+        if (nextAnchors[0]) {
+          if (!trunkIds.includes(nextAnchors[0].id)) {
+            setTrunk([...trunkIds, nextAnchors[0].id]);
+          }
+          setActiveId(nextAnchors[0].id);
+          setSection(nextSec);
+        }
+      } else {
         computeArchetype();
-        setSection("teaser");
-        router.push("/teaser");
-      } else if (endSection === "report") {
         setSection("report");
         router.push("/report");
       }
@@ -360,13 +374,8 @@ export default function AssessmentPage() {
       step.kind === "transition" &&
       step.nextSection
     ) {
-      if (step.nextSection === "teaser") {
-        computeArchetype();
-        setSection("teaser");
-        router.push("/teaser");
-      }
-
       if (step.nextSection === "report") {
+        computeArchetype();
         setSection("report");
         router.push("/report");
       }
@@ -485,10 +494,11 @@ const SECTION_HEADER: Record<
   Section,
   string
 > = {
-  context: "Context",
-  roots: "Roots",
-  teaser: "Archetype",
-  routes: "Routes",
+  main_character: "Main Character Energy",
+  dream_big: "Dream Big, No Cap",
+  passport_era: "Passport Era",
+  skill_check: "Skill Check",
+  reality_check: "Reality Check",
   report: "Report",
 };
 

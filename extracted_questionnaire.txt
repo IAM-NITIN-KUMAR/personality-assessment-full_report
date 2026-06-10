@@ -1,0 +1,170 @@
+=== PARAGRAPHS ===
+P0: SECTION 1 / 5
+P1: Main Character Energy 💅
+P2: Personality & self-awareness — who are you when nobody’s watching?
+P3: Q1.  New room, full of strangers. You’re…
+P4: 🎞 GIF asset:  q01.gif   ·   concept: walking into a new room
+P5: A.  Working the whole room, hi bestie 👋    —  social : extrovert
+P6: B.  Making a couple new friends, easy    —  social : ambivert
+P7: C.  Sticking with who I came with 🫂    —  social : selective
+P8: D.  Finding the nearest wall 🧍    —  social : introvert
+P9: Q2.  You actually learn stuff best by…
+P10: 🎞 GIF asset:  q02.gif   ·   concept: brain loading
+P11: A.  Just letting me DO it    —  learn : kinesthetic
+P12: B.  Watching vids till it clicks    —  learn : visual
+P13: C.  Reading + notes lowkey    —  learn : reading
+P14: D.  Explaining it / group study    —  learn : social
+P15: Q3.  Plans change last minute. You…
+P16: 🎞 GIF asset:  q03.gif   ·   concept: plot twist
+P17: A.  Change is fun, let’s go 🌊    —  adapt : high
+P18: B.  Quick reset, then I’m good    —  adapt : mid
+P19: C.  Stresses me but I cope    —  adapt : low
+P20: D.  Ugh, I needed that plan 😤    —  adapt : vlow
+P21: Q4.  You + deadlines = ?
+P22: 🎞 GIF asset:  q04.gif   ·   concept: deadline o’clock
+P23: A.  Done way early, built different    —  time : proactive
+P24: B.  Right on time, every time    —  time : ontime
+P25: C.  Cutting it close but I deliver    —  time : late
+P26: D.  3am the night before 💀    —  time : procrastinator
+P27: Q5.  What hypes you up the MOST?
+P28: 🎞 GIF asset:  q05.gif   ·   concept: hype
+P29: A.  People seeing my W’s 🏆    —  drive : recognition
+P30: B.  The bag 💰    —  drive : money
+P31: C.  Actually changing things 🌍    —  drive : impact
+P32: D.  Freedom to do me ✌️    —  drive : freedom
+P34: SECTION 2 / 5
+P35: Dream Big, No Cap 🚀
+P36: Goals & career direction — where is future you headed?
+P37: Q6.  Your future job vibe is…
+P38: 🎞 GIF asset:  q06.gif   ·   concept: future job
+P39: A.  Building / coding / science-y 🔬    —  field : stem
+P40: B.  Money, business, startups 📈    —  field : business
+P41: C.  Art, design, content, media 🎨    —  field : creative
+P42: D.  Helping / health / teaching 🩺    —  field : care
+P43: Q7.  5 years from now you wanna be…
+P44: 🎞 GIF asset:  q07.gif   ·   concept: 5 years later
+P45: A.  Deep in a degree, studying 🎓    —  orient : study
+P46: B.  Working a solid job 💼    —  orient : work
+P47: C.  Running my own thing 🚀    —  orient : entrepreneur
+P48: D.  Honestly? No clue yet 🤷    —  orient : undecided
+P49: Q8.  Subject that makes your brain go brrr?
+P50: 🎞 GIF asset:  q08.gif   ·   concept: brain go brr
+P51: A.  Tech / Math / Engineering    —  field : stem
+P52: B.  Business / Econ    —  field : business
+P53: C.  Arts / Humanities / Design    —  field : creative
+P54: D.  Bio / Health / Social    —  field : care
+P55: Q9.  Your dream life is more…
+P56: 🎞 GIF asset:  q09.gif   ·   concept: dream life
+P57: A.  Stable & secure 🏡    —  value : stability
+P58: B.  Adventure & new places 🌎    —  value : adventure
+P59: C.  Making an impact 💡    —  value : impact
+P60: D.  Rich & successful 💎    —  value : wealth
+P61: Q10.  How clear is your career plan rn?
+P62: 🎞 GIF asset:  q10.gif   ·   concept: the plan?
+P63: A.  Crystal clear, locked in 🔒    —  clarity : high
+P64: B.  Solid direction, some gaps    —  clarity : mid
+P65: C.  Vibes only, very blurry    —  clarity : low
+P66: D.  What plan 😭    —  clarity : vlow
+P68: SECTION 3 / 5
+P69: Passport Era ✈️
+P70: Study-abroad readiness — how ready are you really?
+P71: Q11.  Why study abroad though?
+P72: 🎞 GIF asset:  q11.gif   ·   concept: why abroad
+P73: A.  Top-tier education 🎓    —  abroad_why : education
+P74: B.  The whole experience 🌍    —  abroad_why : experience
+P75: C.  Better career + $$ after    —  abroad_why : career
+P76: D.  New start / change of scene    —  abroad_why : reset
+P77: Q12.  Which part of the world is calling?
+P78: 🎞 GIF asset:  q12.gif   ·   concept: where to
+P79: A.  US / Canada 🍁    —  region : northamerica
+P80: B.  UK / Europe 🇪🇺    —  region : europe
+P81: C.  Australia / NZ 🦘    —  region : oceania
+P82: D.  Asia / somewhere else 🌏    —  region : asia
+P83: Q13.  Real talk — your funding plan?
+P84: 🎞 GIF asset:  q13.gif   ·   concept: the funds
+P85: A.  Fully sorted: savings/scholarship 💪    —  finance : ready
+P86: B.  Mostly planned, few gaps    —  finance : partial
+P87: C.  Just started looking into it    —  finance : exploring
+P88: D.  No idea how I’m paying 😬    —  finance : unsure
+P89: Q14.  Living solo in a new country, you feel…
+P90: 🎞 GIF asset:  q14.gif   ·   concept: solo life
+P91: A.  Bring it on, I got me 🔥    —  independence : high
+P92: B.  A little nervous but ready    —  independence : mid
+P93: C.  Gonna be a learning curve    —  independence : low
+P94: D.  I’ve never done laundry 🧺    —  independence : vlow
+P95: Q15.  Language game for a non-English country?
+P96: 🎞 GIF asset:  q15.gif   ·   concept: languages
+P97: A.  Multilingual royalty 👑    —  language : strong
+P98: B.  Decent + I learn fast    —  language : ok
+P99: C.  Basics only, would struggle    —  language : low
+P100: D.  English only, send help 🆘    —  language : weak
+P102: SECTION 4 / 5
+P103: Skill Check ✅
+P104: Strengths & skills — your superpowers and your kryptonite.
+P105: Q16.  Your actual superpower is…
+P106: 🎞 GIF asset:  q16.gif   ·   concept: superpower
+P107: A.  Big ideas + creativity 🎨    —  skill : creative
+P108: B.  Puzzles + logic 🧩    —  skill : analytical
+P109: C.  Leading / talking to people 🗣️    —  skill : people
+P110: D.  Hands-on / tech / building 🛠️    —  skill : technical
+P111: Q17.  Group project — your role?
+P112: 🎞 GIF asset:  q17.gif   ·   concept: group project
+P113: A.  The leader, I run it 👑    —  team : leader
+P114: B.  The brain, I do the work 🧠    —  team : doer
+P115: C.  The vibe + glue 🤝    —  team : connector
+P116: D.  I disappear ngl 👻    —  team : passive
+P117: Q18.  Tech & digital comfort?
+P118: 🎞 GIF asset:  q18.gif   ·   concept: tech check
+P119: A.  Basically the IT person 💻    —  tech : high
+P120: B.  Comfortable with most things    —  tech : mid
+P121: C.  I get by, slowly    —  tech : low
+P122: D.  Tech kinda scares me 😅    —  tech : vlow
+P123: Q19.  When you fail at something, you…
+P124: 🎞 GIF asset:  q19.gif   ·   concept: when you fail
+P125: A.  Lesson learned, run it back 💪    —  resilience : high
+P126: B.  Bounce back after a beat    —  resilience : mid
+P127: C.  Takes me a while to recover    —  resilience : low
+P128: D.  Spiral for a long time 🌀    —  resilience : vlow
+P129: Q20.  Task you’d happily do ALL day?
+P130: 🎞 GIF asset:  q20.gif   ·   concept: all-day task
+P131: A.  Designing / creating stuff    —  skill : creative
+P132: B.  Analyzing data / strategy    —  skill : analytical
+P133: C.  Meeting + helping people    —  skill : people
+P134: D.  Building / fixing / coding    —  skill : technical
+P136: SECTION 5 / 5
+P137: Reality Check 🔍
+P138: Decisions, support & timeline — the real talk round.
+P139: Q21.  Big decisions — how do you make ’em?
+P140: 🎞 GIF asset:  q21.gif   ·   concept: big decisions
+P141: A.  Gut feeling, I just know ✨    —  decide : gut
+P142: B.  Research everything first 🔎    —  decide : research
+P143: C.  Ask everyone for advice 📞    —  decide : advice
+P144: D.  Avoid it till I have to 😬    —  decide : avoid
+P145: Q22.  Who’s in your corner for this?
+P146: 🎞 GIF asset:  q22.gif   ·   concept: your corner
+P147: A.  Family’s fully backing me 👨‍👩‍👧    —  support : family
+P148: B.  Friends hype me up 🙌    —  support : peers
+P149: C.  A mentor/teacher’s guiding me    —  support : mentor
+P150: D.  Figuring it out solo 🧍    —  support : solo
+P151: Q23.  Biggest worry about going abroad?
+P152: 🎞 GIF asset:  q23.gif   ·   concept: the worry
+P153: A.  The money 💸    —  concern : money
+P154: B.  Missing home/people 🏠    —  concern : homesick
+P155: C.  Safety / being alone 🛡️    —  concern : safety
+P156: D.  Keeping up academically 📚    —  concern : academics
+P157: Q24.  When do you wanna make your move?
+P158: 🎞 GIF asset:  q24.gif   ·   concept: the timeline
+P159: A.  ASAP, this year ⚡    —  timeline : now
+P160: B.  Next year for sure    —  timeline : soon
+P161: C.  In 2–3 years    —  timeline : planning
+P162: D.  It’s a someday dream 🌙    —  timeline : later
+P163: Q25.  How much guidance do you want rn?
+P164: 🎞 GIF asset:  q25.gif   ·   concept: guidance
+P165: A.  A lot — guide me step by step 🙏    —  guidance : high
+P166: B.  A fair bit, check in often    —  guidance : mid
+P167: C.  Just point me the right way    —  guidance : low
+P168: D.  Just exploring for now 👀    —  guidance : vlow
+P169: Scoring note
+P170: Scale questions (clarity, finance, independence, language, resilience, tech, adaptability, timeline) use a 4-point scale: high/strong/ready/now = 3, mid/ok/partial/soon = 2, low/exploring/planning = 1, vlow/weak/unsure/later = 0. These feed the overall Readiness Score (0–100). All other questions are categorical tags used for profiling and segmentation.
+
+=== TABLES ===

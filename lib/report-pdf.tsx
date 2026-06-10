@@ -617,6 +617,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
     const raw = 7.8 + (val / 100) * 1.4; // maps range roughly between 6.4 and 9.2
     return Math.round(raw * 10) / 10;
   };
+
   const scores = {
     analytical: scale(dimMap.decision_style ?? 0),
     entrepreneurial: scale(dimMap.risk ?? 0),
@@ -625,6 +626,29 @@ export function ReportDocument({ data }: { data: ReportData }) {
     peopleSkills: scale(dimMap.social ?? 0),
     creative: scale(dimMap.energy ?? 0),
   };
+
+  const topEnvironments = [...data.environmentFit]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 3)
+    .map((env, idx) => {
+      const colors = ["#10b981", "#6e6ef0", "#0ea5e9"];
+      return {
+        label: env.key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+        score: env.score,
+        color: colors[idx % colors.length]
+      };
+    });
+
+
+  const careerChartData = data.commonCareerPaths.map((path, idx) => {
+    const colors = ["#6e6ef0", "#f3a6d9", "#3b82f6", "#10b981"];
+    return {
+      label: path.role,
+      percentage: path.percentage,
+      color: colors[idx % colors.length]
+    };
+  });
+
 
   const initials = data.profile.name
     .split(" ")
@@ -677,24 +701,28 @@ export function ReportDocument({ data }: { data: ReportData }) {
     });
   }
 
+  const renderHeader = () => (
+    <View style={pdfStyles.header}>
+      <View style={pdfStyles.logoSection}>
+        <PdfLogo size={22} />
+        <Text style={pdfStyles.brandText}>SecureSteps</Text>
+      </View>
+      <View style={pdfStyles.headerMeta}>
+        <Text style={pdfStyles.headerMetaTitle}>Your SecureSteps Report</Text>
+        <Text style={pdfStyles.headerMetaSub}>Generated on: {todayStr}</Text>
+      </View>
+    </View>
+  );
+
   return (
     <Document
       title={`Roots & Routes — ${data.profile.name}`}
       author="Secure Steps"
       subject="Personality & career-fit assessment report"
     >
+      {/* PAGE 1: Personal Assessment */}
       <Page size="A4" style={pdfStyles.page}>
-        {/* Header Block */}
-        <View style={pdfStyles.header}>
-          <View style={pdfStyles.logoSection}>
-            <PdfLogo size={22} />
-            <Text style={pdfStyles.brandText}>SecureSteps</Text>
-          </View>
-          <View style={pdfStyles.headerMeta}>
-            <Text style={pdfStyles.headerMetaTitle}>Your SecureSteps Report</Text>
-            <Text style={pdfStyles.headerMetaSub}>Generated on: {todayStr}</Text>
-          </View>
-        </View>
+        {renderHeader()}
 
         {/* Pathway Insight Title & Profile Card Grid */}
         <View style={pdfStyles.insightSection}>
@@ -798,6 +826,67 @@ export function ReportDocument({ data }: { data: ReportData }) {
           </View>
         </View>
 
+        {/* Key Drivers */}
+        <View style={pdfStyles.matchesSection}>
+          <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+            <Text style={pdfStyles.sectionTitleText}>KEY DRIVERS</Text>
+          </View>
+          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
+            {data.drivers.map((driver, idx) => (
+              <View key={idx} style={{ width: "48%", backgroundColor: "#fbfaff", borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", borderRadius: 8, padding: 10, marginBottom: 8 }}>
+                <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted, textTransform: "uppercase", marginBottom: 2 }}>{driver.category}</Text>
+                <Text style={{ fontFamily: SANS_BOLD, fontSize: 10, color: COLORS.electric, marginBottom: 4 }}>{driver.label}</Text>
+                <Text style={{ fontFamily: SANS, fontSize: 8.5, color: COLORS.ink, lineHeight: 1.4 }}>{driver.description}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Work Preferences & Aptitudes */}
+        <View style={pdfStyles.bottomGrid}>
+          <View style={pdfStyles.bottomColumn}>
+            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+              <Text style={pdfStyles.sectionTitleText}>TOP PREFERENCES</Text>
+            </View>
+            {[...data.workPreferences].sort((a,b) => b.score - a.score).slice(0,3).map((pref, idx) => (
+              <View key={idx} style={{ marginBottom: 6 }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 2 }}>
+                  <Text style={{ fontFamily: SANS_BOLD, fontSize: 9, color: COLORS.ink }}>{pref.label}</Text>
+                  <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{pref.level}</Text>
+                </View>
+                <View style={{ height: 4, backgroundColor: COLORS.line, borderRadius: 2, marginBottom: 2, overflow: "hidden" }}>
+                  <View style={{ height: "100%", width: `${pref.score}%`, backgroundColor: COLORS.electric, borderRadius: 2 }} />
+                </View>
+                <Text style={{ fontFamily: SANS, fontSize: 8, color: COLORS.ink, lineHeight: 1.3 }}>{pref.detail}</Text>
+              </View>
+            ))}
+          </View>
+
+          <View style={pdfStyles.bottomColumn}>
+            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+              <Text style={pdfStyles.sectionTitleText}>TOP APTITUDES</Text>
+            </View>
+            {[...data.workAptitudes].sort((a,b) => b.score - a.score).slice(0,3).map((apt, idx) => (
+              <View key={idx} style={{ marginBottom: 6 }}>
+                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 2 }}>
+                  <Text style={{ fontFamily: SANS_BOLD, fontSize: 9, color: COLORS.ink }}>{apt.label}</Text>
+                  <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{apt.score}/100</Text>
+                </View>
+                <View style={{ height: 4, backgroundColor: COLORS.line, borderRadius: 2, marginBottom: 2, overflow: "hidden" }}>
+                  <View style={{ height: "100%", width: `${apt.score}%`, backgroundColor: COLORS.electric, borderRadius: 2 }} />
+                </View>
+                <Text style={{ fontFamily: SANS, fontSize: 8, color: COLORS.ink, lineHeight: 1.3 }}>{apt.detail}</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
+      </Page>
+
+      {/* PAGE 2: Future Plans */}
+      <Page size="A4" style={pdfStyles.page}>
+        {renderHeader()}
+
         {/* Best Matches */}
         <View style={pdfStyles.matchesSection}>
           <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
@@ -819,6 +908,91 @@ export function ReportDocument({ data }: { data: ReportData }) {
                   <Text style={pdfStyles.matchTitle}>{match.title}</Text>
                   <Text style={pdfStyles.matchWhy}>{match.why}</Text>
                 </View>
+              </View>
+            ))}
+          </View>
+        </View>
+
+        {/* Alternative Paths */}
+        {data.alternativeDegrees.length > 0 && (
+          <View style={[pdfStyles.matchesSection, { marginTop: 16 }]}>
+            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+              <Text style={pdfStyles.sectionTitleText}>ALTERNATIVE PATHWAYS</Text>
+            </View>
+            <View style={pdfStyles.matchesGrid}>
+              {data.alternativeDegrees.map((match, idx) => (
+                <View key={idx} style={pdfStyles.matchCard}>
+                  <View style={pdfStyles.matchCardHeader}>
+                    <Text style={[pdfStyles.matchBadge, { backgroundColor: COLORS.line, color: COLORS.inkMuted }]}>{match.match}% FIT</Text>
+                  </View>
+                  <View>
+                    <Text style={pdfStyles.matchTitle}>{match.title}</Text>
+                    <Text style={pdfStyles.matchWhy}>{match.why}</Text>
+                  </View>
+                </View>
+              ))}
+            </View>
+          </View>
+        )}
+
+        {/* Environment & Career Distribution */}
+        <View style={[pdfStyles.bottomGrid, { marginTop: 16 }]}>
+          <View style={pdfStyles.bottomColumn}>
+            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+              <Text style={pdfStyles.sectionTitleText}>IDEAL ENVIRONMENT</Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: "#fbfaff" }}>
+              <PdfConcentricRings items={topEnvironments} />
+              <View style={{ flex: 1, gap: 5 }}>
+                {topEnvironments.slice().reverse().map((item, idx) => (
+                  <View key={idx} style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                    <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: item.color }} />
+                    <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+                      <Text style={{ fontFamily: SANS_BOLD, fontSize: 7, color: COLORS.inkSoft, maxWidth: 80 }}>{item.label}</Text>
+                      <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{item.score}%</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+
+          <View style={pdfStyles.bottomColumn}>
+            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+              <Text style={pdfStyles.sectionTitleText}>CAREER DISTRIBUTION</Text>
+            </View>
+            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: "#fbfaff" }}>
+              <PdfDonut items={careerChartData} />
+              <View style={{ flex: 1, gap: 5 }}>
+                {careerChartData.map((item, idx) => (
+                  <View key={idx} style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                    <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: item.color }} />
+                    <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+                      <Text style={{ fontFamily: SANS_BOLD, fontSize: 7, color: COLORS.inkSoft, maxWidth: 80 }}>{item.label}</Text>
+                      <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{item.percentage}%</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
+        </View>
+
+      </Page>
+
+      {/* PAGE 3: NEXT Secure Step */}
+      <Page size="A4" style={pdfStyles.page}>
+        {renderHeader()}
+
+        {/* Shared Interests */}
+        <View style={[pdfStyles.matchesSection, { paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: COLORS.line, borderBottomStyle: "solid" }]}>
+          <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+            <Text style={pdfStyles.sectionTitleText}>SHARED INTERESTS</Text>
+          </View>
+          <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+            {data.sharedInterests.map((interest, idx) => (
+              <View key={idx} style={{ backgroundColor: "#f8f7fd", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", marginRight: 6, marginBottom: 6 }}>
+                <Text style={{ fontFamily: SANS_BOLD, fontSize: 8, color: COLORS.ink }}>{interest}</Text>
               </View>
             ))}
           </View>
@@ -882,6 +1056,49 @@ export function ReportDocument({ data }: { data: ReportData }) {
           <Text style={pdfStyles.quoteText}>
             "You don't need to have it all figured out. You just need the right direction."
           </Text>
+        </View>
+
+        {/* Footer */}
+        <View style={pdfStyles.footer}>
+          <View style={pdfStyles.footerBrand}>
+            <PdfLogo size={14} />
+            <Text style={pdfStyles.footerBrandText}>SecureSteps</Text>
+          </View>
+          <Text style={pdfStyles.footerLink}>
+            If you want more info, visit https://www.securesteps.co.in/
+          </Text>
+        </View>
+      </Page>
+
+      {/* PAGE 4: Letter to Parents */}
+      <Page size="A4" style={pdfStyles.page}>
+        {renderHeader()}
+        
+        <View style={{ marginTop: 16 }}>
+          <View style={[pdfStyles.sectionHeading, { marginBottom: 10 }]}>
+            <Text style={pdfStyles.sectionTitleText}>A SHORT NOTE FOR YOUR FAMILY</Text>
+          </View>
+        </View>
+
+        <View style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, backgroundColor: "#f8f7fd", padding: 20, marginTop: 10 }}>
+          <Text style={[styles.h3, { marginBottom: 12, color: COLORS.ink }]}>
+            {data.parentLetter.greeting}
+          </Text>
+          {data.parentLetter.paragraphs.map((p, i) => (
+            <Text
+              key={i}
+              style={[styles.body, { color: COLORS.inkSoft, marginBottom: 10, lineHeight: 1.6 }]}
+            >
+              {p}
+            </Text>
+          ))}
+          <View style={{ marginTop: 14, paddingTop: 12, borderTopWidth: 0.5, borderTopColor: COLORS.line, borderStyle: "solid" }}>
+            {data.parentLetter.signoff.split("\n").map((line, i) => (
+              <Text key={i} style={[styles.body, { color: COLORS.inkMuted }]}>
+                {line}
+              </Text>
+            ))}
+          </View>
         </View>
 
         {/* Footer */}
@@ -1258,3 +1475,98 @@ function PrefTierBar({
     </View>
   );
 }
+
+function PdfConcentricRings({
+  items
+}: {
+  items: Array<{ label: string; score: number; color: string }>
+}) {
+  const size = 100;
+  const cx = size / 2;
+  const cy = size / 2;
+  const strokeWidth = 6;
+  const gap = 3;
+  
+  return (
+    <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {items.map((item, idx) => {
+        const r = 20 + idx * (strokeWidth + gap);
+        const circumference = 2 * Math.PI * r;
+        const fillFraction = Math.max(0, Math.min(1, item.score / 100));
+        const dashLen = circumference * fillFraction;
+        const restLen = circumference - dashLen;
+        
+        return (
+          <G key={idx}>
+            {/* Background track */}
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={r}
+              fill="none"
+              stroke="#E5E7EB"
+              strokeWidth={strokeWidth}
+              strokeOpacity={0.4}
+            />
+            {/* Filled track */}
+            <Circle
+              cx={cx}
+              cy={cy}
+              r={r}
+              fill="none"
+              stroke={item.color}
+              strokeWidth={strokeWidth}
+              strokeLinecap="round"
+              strokeDasharray={`${dashLen.toFixed(1)} ${restLen.toFixed(1)}`}
+              transform={`rotate(-90 ${cx} ${cy})`}
+            />
+          </G>
+        );
+      })}
+    </Svg>
+  );
+}
+
+function PdfDonut({
+  items
+}: {
+  items: Array<{ label: string; percentage: number; color: string }>
+}) {
+  const size = 100;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 32;
+  const strokeWidth = 9;
+  const circumference = 2 * Math.PI * r;
+  
+  let accumPercentage = 0;
+  
+  return (
+    <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
+      {items.map((item, idx) => {
+        const fraction = item.percentage / 100;
+        const dashLen = circumference * fraction;
+        const restLen = circumference - dashLen;
+        const rotation = -90 + accumPercentage * 360;
+        accumPercentage += fraction;
+        
+        return (
+          <Circle
+            key={idx}
+            cx={cx}
+            cy={cy}
+            r={r}
+            fill="none"
+            stroke={item.color}
+            strokeWidth={strokeWidth}
+            strokeDasharray={`${dashLen.toFixed(1)} ${restLen.toFixed(1)}`}
+            transform={`rotate(${rotation.toFixed(1)} ${cx} ${cy})`}
+          />
+        );
+      })}
+      <Circle cx={cx} cy={cy} r={r - strokeWidth / 2} fill="#FFFFFF" />
+    </Svg>
+  );
+}
+
+

@@ -88,6 +88,7 @@ export interface EnvironmentFit {
   key: string;
   description: string;
   fit: EnvFit;
+  score: number;
 }
 
 export interface CareerTrait {
@@ -238,7 +239,7 @@ export function buildReport(args: {
   const alternativeDegrees = buildAlternativeDegrees({ profile, dimMap, archetype });
   const commonCareerPaths = buildCommonCareerPaths(archetype, profile);
   const sharedInterests = buildSharedInterests(archetype, context);
-  const parentLetter = buildParentLetter({ profile, archetype, topDegrees });
+  const parentLetter = buildParentLetter({ profile, archetype, topDegrees, context });
 
   // Total distinct measurements surfaced to the student.
   // 6 dim + stats + niches + clusters + 15 prefs + 8 aptitudes + 18 env-fit
@@ -688,25 +689,75 @@ function buildParentLetter(args: {
   profile: StudentProfile;
   archetype: Archetype;
   topDegrees: DegreeRecommendation[];
+  context: ContextSummary;
 }): ParentLetter {
-  const { profile, archetype, topDegrees } = args;
+  const { profile, archetype, topDegrees, context } = args;
   const firstName = profile.name.split(" ")[0];
   const top = topDegrees[0];
   const top2 = topDegrees[1];
 
-  // Re-written end-to-end so no phrasing maps to the kind of generic
-  // "we are delighted to inform you" parent-letter people write. Direct,
-  // specific, low on adjectives. Names what the test actually measured and
-  // names the concrete next step.
+  // Geographies mapping
+  const regions = context.geographies.map(g => {
+    if (g.includes("northamerica")) return "US / Canada";
+    if (g.includes("europe")) return "UK / Europe";
+    if (g.includes("oceania")) return "Australia / New Zealand";
+    if (g.includes("asia")) return "Asia";
+    return g.replace("region:", "");
+  }).filter(Boolean);
+  const regionText = regions.length > 0 ? `target regions like ${regions.join(" or ")}` : "your target study destinations";
+
+  // Budget mapping
+  let budgetText = "your funding plan";
+  if (context.budgetTag.includes("ready")) {
+    budgetText = "within your fully-sorted funding plans";
+  } else if (context.budgetTag.includes("partial")) {
+    budgetText = "aligning with your mostly-planned budget range";
+  } else if (context.budgetTag.includes("exploring")) {
+    budgetText = "assisting as you start exploring funding options";
+  } else if (context.budgetTag.includes("unsure")) {
+    budgetText = "navigating early-stage budget and financial planning";
+  } else if (context.budget && context.budget !== "—") {
+    budgetText = `working with your budget details (${context.budget})`;
+  }
+
+  // Family dynamic mapping
+  let familyParagraph = "";
+  if (context.familyTag.includes("free")) {
+    familyParagraph = `Since ${firstName} has the family's full support and backing, they have a strong, supportive foundation to take these next steps.`;
+  } else if (context.familyTag.includes("opinions")) {
+    familyParagraph = `Since ${firstName} values peer feedback and discussion, we want to help channel that social energy into validating their decisions with objective data.`;
+  } else if (context.familyTag.includes("specific")) {
+    familyParagraph = `As ${firstName} navigates this transition with guidance from mentors or teachers, we will work to align their personal goals with structured academic pathways.`;
+  } else if (context.familyTag.includes("locked")) {
+    familyParagraph = `Since ${firstName} is currently figuring this out solo, they will benefit greatly from your family's active support and guidance as we begin to narrow down their options.`;
+  } else {
+    familyParagraph = `A Secure Steps counsellor will sit with the three of you — student, family, us — to translate this report into a real shortlist of colleges.`;
+  }
+
+  // Timeline comment
+  let timelineComment = "";
+  if (context.timelineTag === "tl:now") {
+    timelineComment = ` Because they are looking to make their move ASAP this year, we will focus on high-priority applications and shortlists.`;
+  } else if (context.timelineTag === "tl:1y") {
+    timelineComment = ` Since they have a 1-year timeline, we have the space to be surgical in our selection.`;
+  } else if (context.timelineTag === "tl:2y") {
+    timelineComment = ` With a comfortable 2-year runway, we'll focus on building their profile and projects first.`;
+  } else if (context.timelineTag === "tl:open") {
+    timelineComment = ` Since this is currently a longer-term plan, we will focus on exploration and initial alignment.`;
+  }
+
+  // Connect to alumni text
+  const alumniText = `If it would help, we'll also connect ${firstName} with an alumnus or alumna already a year or two into one of these paths, so the picture isn't just data.`;
+
   return {
     greeting: `To ${firstName}'s family,`,
     paragraphs: [
-      `Before anything else — ${firstName} sat through ~45 honest reflective questions to produce this. They didn't rate themselves on a 1-to-5 scale. They picked what they'd actually do. The reading you're holding is built on those answers.`,
-      `Across the responses, one pattern came through clearly: ${firstName} reads as ${archetype.name}. ${archetype.tagline} In day-to-day terms, that means ${archetype.description.toLowerCase()}`,
+      `Before anything else — ${firstName} sat through 25 honest reflective questions to produce this. They didn't rate themselves on a 1-to-5 scale. They picked what they'd actually do. The reading you're holding is built on those answers.`,
+      `Across the responses, one pattern came through clearly: ${firstName} reads as ${archetype.name}. ${archetype.tagline} In day-to-day terms, that means ${archetype.description.toLowerCase()}${context.dream && context.dream.trim().length > 6 ? ` This aligns well with their stated goal: "${context.dream.trim()}".` : ""}`,
       top
-        ? `The course that maps best onto this pattern is ${top.title} (${top.match}% alignment)${top2 ? `, with ${top2.title} (${top2.match}%) as a strong second look` : ""}. We didn't pick these from a brochure — they're the highest-scoring matches across our catalogue when run against the way ${firstName} actually responded.`
+        ? `The course that maps best onto this pattern is ${top.title} (${top.match}% alignment)${top2 ? `, with ${top2.title} (${top2.match}%) as a strong second look` : ""}. These options have been mapped to their preferences for ${regionText}, keeping in mind ${budgetText}. We didn't pick these from a brochure — they're the highest-scoring matches across our catalogue when run against the way ${firstName} actually responded.`
         : `Several courses align well; we'll walk you through them in the conversation that follows.`,
-      `What happens next is the part that matters most. A Secure Steps counsellor will sit with the three of you — student, family, us — to translate this report into a real shortlist of colleges that respect your budget, your location preferences, and your timeline. If it would help, we'll also connect ${firstName} with an alumnus or alumna already a year or two into one of these paths, so the picture isn't just data.`,
+      `${familyParagraph}${timelineComment} ${alumniText}`,
       `Two things to keep in mind. First: ${firstName} isn't undecided. The pattern is real. Second: the highest-scoring degree on paper is rarely the right one for every family — fit is multi-axis, and that's what the next conversation is for.`,
     ],
     signoff: "With care,\nThe Secure Steps team",
@@ -927,7 +978,12 @@ function buildEnvironmentFit(s: Record<Dimension, number>): EnvironmentFit[] {
     { key: "helping_others", description: "Direct opportunity to help other people — individually or in small groups — and develop close relationships.", raw: s.social + s.energy / 4 },
     { key: "competitive_winlose", description: "Need to be challenging, forceful, ambitious and tough-minded — clear win-and-lose outcomes.", raw: s.drive + s.risk / 2 - s.social / 3 },
   ];
-  return items.map((it) => ({ key: it.key, description: it.description, fit: fitOf(it.raw) }));
+  return items.map((it) => ({ 
+    key: it.key, 
+    description: it.description, 
+    fit: fitOf(it.raw),
+    score: clamp01_100(50 + it.raw * 1.25)
+  }));
 }
 
 // ── Career Development Traits (26 across 6 groups) ─────────────────────────
@@ -939,33 +995,23 @@ function buildCareerTraits(s: Record<Dimension, number>): CareerTraitGroup[] {
       category: "People Skills",
       traits: [
         { key: "teamworking", label: "Teamworking", lowLabel: "Formal and reserved, prefers to work alone without interruptions.", highLabel: "Prefers work that involves social interaction; likes supporting others and getting them involved.", raw: s.social + s.energy / 3 },
-        { key: "recognition", label: "Recognition", lowLabel: "Avoids the spotlight; reserved; uncomfortable with strangers.", highLabel: "Strong need to be noticed and popular; friendly and communicative; dislikes rejection.", raw: s.energy + s.social / 3 },
         { key: "concern_for_others", label: "Concern for others", lowLabel: "Less aware of others' feelings; reluctant to engage with emotional issues.", highLabel: "Caring and understanding; shows empathy; sympathetic and approachable.", raw: s.social + s.energy / 4 - s.decision_style / 4 },
-        { key: "consensus_seeking", label: "Consensus seeking", lowLabel: "Makes decisions independently; rarely seeks advice or opinions.", highLabel: "Makes decisions by consensus; actively seeks others' views and involvement.", raw: s.social - s.decision_style / 2 },
         { key: "social_skills", label: "Social skills", lowLabel: "Quiet and guarded; prefers small groups; avoids the limelight.", highLabel: "Talkative, optimistic, expressive and lively; enjoys meeting new people.", raw: s.energy + s.social / 2 },
-        { key: "people_focus", label: "People focus", lowLabel: "Less responsive to others; controls own emotions; values results over harmony.", highLabel: "Responsive and relationship-focused; unafraid to discuss feelings openly.", raw: s.social + s.energy / 3 - s.drive / 4 },
-        { key: "stability", label: "Stability", lowLabel: "Competitive and tough-minded; unafraid to risk unpopularity for results.", highLabel: "Strong need for harmony; prefers a predictable, secure environment.", raw: s.structure - s.risk - s.drive / 4 },
       ],
     },
     {
       category: "Drive for Results",
       traits: [
         { key: "initiative", label: "Initiative", lowLabel: "Prefers things stable; takes new work after consultation or when told.", highLabel: "Self-motivated; seizes opportunities; identifies and takes on challenges.", raw: s.drive + s.risk / 2 },
-        { key: "energy_level", label: "Energy level", lowLabel: "Likes working at a steady pace; dislikes being rushed.", highLabel: "Very dynamic; works well under pressure; juggles many activities.", raw: s.drive + s.energy / 3 + s.risk / 4 },
         { key: "ambition", label: "Ambition", lowLabel: "Easy-going, non-competitive; focuses on achievable, undemanding targets.", highLabel: "Enjoys tough goals; high aspirations; competitive and driven to succeed.", raw: s.drive + s.risk / 3 - s.social / 4 },
-        { key: "control", label: "Control", lowLabel: "Dislikes taking tough decisions; happy to let others lead.", highLabel: "Takes control; dominant, decisive and forceful; needs bottom-line ownership.", raw: s.decision_style + s.drive / 2 - s.social / 4 },
-        { key: "adaptability", label: "Adaptability", lowLabel: "Likes order and predictability; adapts what's tried and tested.", highLabel: "Prefers variety and novelty; adapts quickly; easily bored by routine.", raw: s.risk - s.structure / 2 + s.drive / 4 },
         { key: "risk_taking", label: "Risk taking", lowLabel: "Slower-paced; checks facts; complies with rules; avoids errors.", highLabel: "Fast-paced; impatient for results; willing to break rules to succeed.", raw: s.risk + s.drive / 4 - s.structure / 3 },
-        { key: "task_focus", label: "Task focus", lowLabel: "Relationship-focused; enjoys creating an open, harmonious environment.", highLabel: "Self-sufficient; deals with tasks more than people-issues; less comfortable with feelings.", raw: s.drive + s.decision_style / 3 - s.social / 2 },
       ],
     },
     {
       category: "Conscientiousness",
       traits: [
         { key: "attention_to_detail", label: "Attention to detail", lowLabel: "Big-picture; not preoccupied with detail; easily distracted on follow-through.", highLabel: "Thorough, methodical; enjoys detailed work; follows commitments through.", raw: s.structure + s.decision_style / 3 },
-        { key: "compliance", label: "Compliance", lowLabel: "Not constrained by rules; prefers general guidelines; values personal freedom.", highLabel: "Follows rules closely even when inconvenient; high value on being precise and right.", raw: s.structure - s.risk },
         { key: "dependability", label: "Dependability", lowLabel: "Easily distracted from deadlines; casual about commitments.", highLabel: "Dependable, reliable, consistent; meets obligations with minimal supervision.", raw: s.structure + s.drive / 2 },
-        { key: "determination", label: "Determination", lowLabel: "Prefers work that completes quickly; dislikes long sustained focus.", highLabel: "Enjoys overcoming obstacles; very committed; works until it's truly finished.", raw: s.drive + s.structure / 3 },
       ],
     },
     {
@@ -986,9 +1032,7 @@ function buildCareerTraits(s: Record<Dimension, number>): CareerTraitGroup[] {
       category: "Ideal Environment",
       traits: [
         { key: "need_social_interaction", label: "Need for social interaction", lowLabel: "Needs little social interaction beyond close friends; values quiet space to reflect.", highLabel: "Needs constant face-to-face interaction; thrives on building relationships and gaining acceptance.", raw: s.energy + s.social / 2 },
-        { key: "need_stability", label: "Need for stability", lowLabel: "Values commitment, efficiency, recognition and status more than harmony.", highLabel: "Needs predictable, steady-paced, harmonious environment; opportunities to help others.", raw: s.structure - s.risk - s.drive / 4 },
         { key: "need_to_achieve", label: "Need to achieve", lowLabel: "Needs an environment focused on relationships; tough decisions and tight deadlines unimportant.", highLabel: "Needs an environment of self-motivation, responsibility and demanding targets.", raw: s.drive + s.risk / 3 },
-        { key: "need_to_be_right", label: "Need to be right", lowLabel: "Needs flexibility and spontaneity; little need for detail or rules.", highLabel: "Needs high accuracy and strict rules; little need for social interaction.", raw: s.structure + s.decision_style / 2 - s.energy / 4 },
       ],
     },
   ];
@@ -1027,16 +1071,16 @@ function extractContext(qs: Question[], answers: Record<string, Answer>): Contex
   const tagFor = (id: string): string => tagsFor(id)[0] ?? "";
 
   return {
-    budget: labelFor("ctx_budget"),
-    budgetTag: tagFor("ctx_budget"),
-    geographies: tagsFor("ctx_geo"),
-    family: labelFor("ctx_family"),
-    familyTag: tagFor("ctx_family"),
-    tier: labelFor("ctx_tier"),
-    tierTag: tagFor("ctx_tier"),
-    timeline: labelFor("ctx_timeline"),
-    timelineTag: tagFor("ctx_timeline"),
-    dream: answers["ctx_dream"]?.text ?? "",
+    budget: labelFor("q13"),
+    budgetTag: tagFor("q13"),
+    geographies: tagsFor("q12"),
+    family: labelFor("q22"),
+    familyTag: tagFor("q22"),
+    tier: labelFor("q07"),
+    tierTag: tagFor("q07"),
+    timeline: labelFor("q24"),
+    timelineTag: tagFor("q24"),
+    dream: answers["q09"]?.text ?? labelFor("q09") ?? "",
   };
 }
 
@@ -1136,17 +1180,49 @@ function extractNiches(
 // ─── Engagement ──────────────────────────────────────────────────────────────
 
 function extractEngagement(qs: Question[], answers: Record<string, Answer>): EngagementReadout | null {
-  const eng = qs.find((q) => q.kind === "engagement");
-  if (!eng?.options) return null;
-  const a = answers[eng.id];
-  if (!a?.optionIds?.length) return null;
-  const opt = eng.options.find((o) => a.optionIds!.includes(o.id));
-  const tag = opt?.tag ?? "engagement:0";
-  const score = parseInt(tag.split(":")[1] ?? "0", 10);
-  if (score >= 3) return { score, level: "High", message: "You're already doing the thing — outside class, off the syllabus. The single best predictor of fit. Pick a college that lets you keep going." };
-  if (score === 2) return { score, level: "Real but quiet", message: "There's a flicker. You've poked at it, even if you haven't sustained it. The question to sit with: what's been getting in the way?" };
-  if (score === 1) return { score, level: "Surface-level", message: "You like the idea more than the practice. Worth noticing now. A 4-week low-stakes experiment before you commit irreversibly." };
-  return { score, level: "Disconnected", message: "Honest answer, and we appreciate it. The mismatch between stated path and lived interest is the most valuable signal in this report." };
+  const scaleIds = ["q03", "q10", "q13", "q14", "q15", "q18", "q19", "q24"];
+  let total = 0;
+  let count = 0;
+  for (const id of scaleIds) {
+    const q = qs.find((x) => x.id === id);
+    const a = answers[id];
+    if (q && a?.optionIds?.length) {
+      const opt = q.options?.find((o) => a.optionIds!.includes(o.id));
+      if (opt) {
+        const char = opt.id.slice(-1).toLowerCase();
+        const score = char === "a" ? 3 : char === "b" ? 2 : char === "c" ? 1 : 0;
+        total += score;
+        count++;
+      }
+    }
+  }
+  if (count === 0) return null;
+
+  const score3 = total / count; // 0 to 3
+  const score100 = Math.round((total / (count * 3)) * 100);
+
+  let level: "High" | "Real but quiet" | "Surface-level" | "Disconnected" = "Surface-level";
+  let message = "";
+
+  if (score100 >= 75) {
+    level = "High";
+    message = "You're showing strong readiness across study-abroad indicators: funding, language, digital comfort, and timeline are aligned. You're ready to make your move.";
+  } else if (score100 >= 50) {
+    level = "Real but quiet";
+    message = "You have a solid foundation but some areas need planning. Your timeline or funding might need alignment before final applications.";
+  } else if (score100 >= 25) {
+    level = "Surface-level";
+    message = "You are in the early stages of preparation. Living solo or funding is a work-in-progress, but the direction is right.";
+  } else {
+    level = "Disconnected";
+    message = "Your study-abroad plans are in the very early planning stages. Focus on building language comfort, independence, or clarifying your budget.";
+  }
+
+  return {
+    score: score3,
+    level,
+    message
+  };
 }
 
 // ─── 20+ Stat builder ────────────────────────────────────────────────────────

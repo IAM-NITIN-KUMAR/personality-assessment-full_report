@@ -1,0 +1,142 @@
+=== PAGE 1 ===
+ROOTS & ROUTES
+Technical & Design Analysis
+SECURE STEPS ASSESSMENT PLATFORM - v0.1
+PREPARED FOR:
+Secure Steps Development Team
+DATE GENERATED:
+May 23, 2026
+=== PAGE 2 ===
+Roots & Routes - Project Analysis & Technical Documentation
+Executive Summary
+Roots & Routes is a next-generation psychometric personality and career-fit assessment web application
+engineered to replace legacy in-funnel tools (like PRISM) in the Secure Steps flow. Built on a strict, modern
+tech stack including Next.js 15.5, React 19, Zustand, Framer Motion, and client-side PDF rendering, the
+application captures a deep profile of 16-24 year-old students. Through scenario-based anchors and
+AI-driven adaptive probing, it produces a highly detailed, personalized ~20-page interactive report and
+identical PDF. This document provides a robust, high-fidelity technical review of the platform's architecture,
+psychometric dimensions, derivation engines, design tokens, and future roadmap.
+Table of Contents
+1. Executive Summary ......................... Page 2
+2. Technology Stack & Client-Side Architecture ......................... Page 3
+3. Core Assessment Flow & Dynamic Routing ......................... Page 4
+4. Psychometric Model & Core Dimensions ......................... Page 5
+5. Deep Derivation & Reporting Engines ......................... Page 6
+6. Design System & Next-Phase Recommendations ......................... Page 7
+Page 2
+=== PAGE 3 ===
+Roots & Routes - Project Analysis & Technical Documentation
+1. Technology Stack & Client-Side Architecture
+The Roots & Routes codebase utilizes a zero-database, performance-driven client-first architecture
+deployed on Vercel. It is built using the following stack:
+- Frontend Framework: Next.js 15.5 (App Router) + React 19 Core
+- Language: TypeScript (strictly configured typing)
+- Styling: Tailwind CSS 3 + custom micro-utility class framework
+- State Management: Zustand 5 with localStorage persistence middleware
+- Animation: Framer Motion 11 for card, radar and dial transition mechanics
+- PDF Generation: @react-pdf/renderer 4 for pure client-side PDF compiles
+- AI Integration: @anthropic-ai/sdk 0.39 for API route probing (/api/probe)
+- UI Components: Radix UI primitives for dialog, progress and overlays
+Architecture Insights:
+Zustand State Store (lib/store.ts): The entire state of the assessment lives in a single store, persisted under
+the localStorage key 'roots-and-routes-assessment'. This eliminates the need for a database in v0.1,
+making the application highly robust against page reloads. The schema is highly compatible with standard
+relational mapping, allowing a seamless transition to a Supabase persistence layer (estimated at ~30 lines
+of store.ts code modification).
+Client-Side PDF Compiler (lib/report-pdf.tsx): Rather than running heavy serverless functions with headless
+browsers to export reports, the application compiles the entire ~20-page document inside the client's
+browser using @react-pdf/renderer. This ensures lightning-fast downloads and zero server billing overhead,
+regardless of concurrent user spikes.
+Page 3
+=== PAGE 4 ===
+Roots & Routes - Project Analysis & Technical Documentation
+2. Core Assessment Flow & Dynamic Routing
+The Roots & Routes assessment avoids typical boring questionnaire models, using a dynamic progressive
+node-graph layout. The assessment flows as follows:
+Step 1: Context (10 Questions)
+Front-loads practical constraints (budget, geography, family, ambition, timeline, and 5-year dream). It filters
+academic choices before personality matches are calculated.
+Step 2: Roots (20 Anchors + 5 Probes)
+Calculates core psychometric scores across 6 baseline dimensions. Features 5 adaptive slots (indices 2, 6,
+10, 14, 18) where the system dynamically queries the LLM route for personal follow-up cards.
+Step 3: Teaser Screen (Halftime)
+Locks the Roots answers, runs archetype calculations, and displays a premium transition reveal screen
+showing the computed Archetype (e.g. Builder, Strategist, etc.).
+Step 4: Routes (8 Anchors + 3 Probes)
+Focuses on the chosen field of study (CS/Tech, Business, BCom, etc.). Currently, tech_cs (BCA/BTech) is
+the active anchor module, with others gracefully falling back to it.
+Step 5: Dynamic Report Section
+Builds massive parallel layouts for screen (Tailwind glassmorphic panels) and PDF (A4 printable canvas).
+Page 4
+=== PAGE 5 ===
+Roots & Routes - Project Analysis & Technical Documentation
+3. Psychometric Model & Core Dimensions
+The psychometric engine measures 6 bipolar dimensions mapped on a -100 to +100 normalized scale.
+Dimensions are mapped through scenario options, each contributing a weighted -2 to +2 score vector. The
+normalized dimensions are:
+Decision Style  (Intuitive (low) <-> Deliberate (high))
+Measures method of choice selection and planning.
+Energy  (Introvert (low) <-> Extrovert (high))
+Measures source of motivation and interpersonal energy.
+Structure  (Open-ended (low) <-> Structured (high))
+Measures comfort with schedules, standards and routines.
+Risk Tolerance  (Cautious (low) <-> Bold (high))
+Measures comfort with uncertainty, failure and speed.
+Social Mode  (Independent (low) <-> Collaborative (high))
+Measures preference for individual work vs networks.
+Drive  (Reactive (low) <-> Proactive (high))
+Measures bias for proactive building vs reactive responses.
+Adaptive LLM Layer (/api/probe/route.ts):
+Integrated with Claude, this serverless route handles dynamic questions. When a slot is triggered, the
+frontend sends the student's context, history, and current choices. Claude responds with a highly
+customized JSON follow-up scenario ('deeper' mode) tailored to their choice.
+Additionally, the platform features a five-emoji Reaction Bar (fire, think, bored, etc.). Positive reactions tell
+Claude to write a deeper follow-up, while negative ones (meh, bored) trigger 'rephrase' mode, rewriting the
+scenario on-the-fly to keep the student engaged while retaining the psychometric weights.
+Page 5
+=== PAGE 6 ===
+Roots & Routes - Project Analysis & Technical Documentation
+4. Deep Derivation & Reporting Engines
+The heart of Roots & Routes is the Derivation Engine (lib/report-data.ts), which translates dimensional
+matrices into deep analytics matching PRISM's comprehensive structure:
+Work Preferences (15 Categories)
+Calculates continuous comfort scores using cross-dimension coordinates. Formulas such as consensus
+building, imaginative concepting, consensus, and adaptability are evaluated on a 0-100 comfort spectrum.
+Work Aptitudes (8 Core Areas)
+Identifies areas of frictionless performance (Analytical, Creative, Outgoing, Orderly, Competitive, etc.)
+mapped directly onto SVG radar charts.
+Environment Fit (18 Fit Markers)
+Predicts compatibility with specific environments (startup, corporate, remote, flat-org, stable stack, etc.) as
+Enhanced, Neutral, or Inhibited based on boundary coordinates.
+Career Development Analysis (26 Continuum Traits)
+Plots sliding indicator bars showing behavior poles across 6 groups (People Skills, Conscientiousness,
+Thinking Skills, Ideal Environment, Drive, and Resilience).
+Personalized Narrative & Family Letter
+Generates a vivid Future Day narrative (Typical day in 5 years in their chosen field) and a professional
+letter for the student's parents, framing the results in Secure Steps voice.
+Page 6
+=== PAGE 7 ===
+Roots & Routes - Project Analysis & Technical Documentation
+5. Design System & Roadmap Recommendations
+The Roots & Routes design system builds a gorgeous visual impression tailored to teenagers, designed to
+maximize complete rates:
+Interactive Canvas Backdrop: The landing page mounts an HTML5 <canvas> simulating 6 responsive,
+glowing ambient orbs using custom mouse vector equations. The layout shifts organically, responding to
+cursor movements and viewport resizes.
+Tactile Micro-interactions: Cards use heavy glassmorphism filters (blur(28px)), pure-white surfaces,
+near-black ink, and pink electric highlights. Option buttons react instantly with spring physics, creating a
+satisfying, game-like tactile experience.
+Phase 2 Recommendations:
+1. Per-Discipline Routes Expansion
+Construct and build specialized question blocks for the remaining 12 disciplines in the course catalog
+(Business, Commerce, Law, Design, Humanities, etc.).
+2. Standardize Psychometrics
+Evolve the back-of-envelope summation weights into formal Confirmatory Factor Analysis (CFA) or Item
+Response Theory (IRT) algorithms as assessment data grows.
+3. Supabase Persistence Layer
+Swap Zustand's local storage persistence to a Supabase relational database, allowing counsellors and
+administrators to review reports in real-time dashboards.
+4. Edge PDF Pre-computation
+Pre-generate PDF assets at the Vercel Edge level to improve mobile download speeds and viewport
+scaling.
+Page 7

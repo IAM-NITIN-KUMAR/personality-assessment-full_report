@@ -15,7 +15,13 @@ export const DIMENSION_LABELS: Record<Dimension, { low: string; high: string; la
   drive:          { label: "Drive",          low: "Reactive",  high: "Proactive"  },
 };
 
-export type Section = "context" | "roots" | "teaser" | "routes" | "report";
+export type Section =
+  | "main_character"
+  | "dream_big"
+  | "passport_era"
+  | "skill_check"
+  | "reality_check"
+  | "report";
 
 export type QuestionKind = "anchor" | "adaptive" | "context" | "engagement";
 

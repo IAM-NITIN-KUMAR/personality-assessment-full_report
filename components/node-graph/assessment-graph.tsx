@@ -20,11 +20,12 @@ interface Props {
 }
 
 const SECTION_META: Record<Section, { label: string; index: number }> = {
-  context: { label: "CONTEXT", index: 1 },
-  roots: { label: "ROOTS", index: 2 },
-  teaser: { label: "ARCHETYPE", index: 3 },
-  routes: { label: "ROUTES", index: 4 },
-  report: { label: "REPORT", index: 5 },
+  main_character: { label: "PERSONALITY", index: 1 },
+  dream_big: { label: "DREAMS & GOALS", index: 2 },
+  passport_era: { label: "PASSPORT ERA", index: 3 },
+  skill_check: { label: "SKILL CHECK", index: 4 },
+  reality_check: { label: "REALITY CHECK", index: 5 },
+  report: { label: "REPORT", index: 6 },
 };
 
 export function AssessmentGraph({
@@ -165,7 +166,7 @@ function SectionPin({ section }: { section: Section }) {
       <span
         className={cn(
           "mono-eyebrow text-[13px] sm:text-[14px] font-bold flex items-center gap-2",
-          section === "context" || section === "roots" ? "text-ink" : "text-electric",
+          section === "main_character" || section === "dream_big" || section === "passport_era" ? "text-ink" : "text-electric",
         )}
       >
         <span className="active-dot size-2" />

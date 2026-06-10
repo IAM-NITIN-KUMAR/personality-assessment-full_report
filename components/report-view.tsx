@@ -161,6 +161,26 @@ export function ReportView({ data }: { data: ReportData }) {
     return list.slice(0, 4);
   }, [data.topDegrees, data.alternativeDegrees]);
 
+  const topEnvironments = useMemo(() => {
+    const sorted = [...data.environmentFit].sort((a, b) => b.score - a.score).slice(0, 3);
+    const colors = ["#10b981", "#6e6ef0", "#0ea5e9"]; // green, brand-purple, cyan
+    return sorted.map((env, idx) => ({
+      label: env.key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
+      score: env.score,
+      color: colors[idx % colors.length]
+    }));
+  }, [data.environmentFit]);
+
+  const careerChartData = useMemo(() => {
+    const colors = ["#6e6ef0", "#f3a6d9", "#3b82f6", "#10b981"]; // brand purple, brand pink, blue, green
+    return data.commonCareerPaths.map((path, idx) => ({
+      label: path.role,
+      percentage: path.percentage,
+      color: colors[idx % colors.length]
+    }));
+  }, [data.commonCareerPaths]);
+
+
   // Fetch Core Strengths items from real assessment stats
   const strengths = useMemo(() => {
     const list: Array<{ title: string; desc: string; icon: "bulb" | "rocket" | "group" | "compass" }> = [];
@@ -203,14 +223,17 @@ export function ReportView({ data }: { data: ReportData }) {
   }, []);
 
   return (
-    <article className="max-w-4xl mx-auto px-3 sm:px-6 pb-20 mt-4 sm:mt-8">
-      {/* Printable Sheet Card Container */}
+    <article className="max-w-4xl mx-auto px-3 sm:px-6 pb-20 mt-4 sm:mt-8 space-y-8">
+      {/* PAGE 1: Personal Assessment */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-        className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink"
+        className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
       >
+        <div className="absolute top-0 right-0 bg-[#f3f0fc] text-[#6e6ef0] font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
+          PAGE 1 OF 3
+        </div>
         {/* Header Block */}
         <header className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-line">
           <div className="flex items-center gap-2.5">
@@ -392,8 +415,127 @@ export function ReportView({ data }: { data: ReportData }) {
           </div>
         </section>
 
-        {/* Best Path Matches Section */}
+        {/* Key Drivers */}
+        <section className="py-6 border-t border-line/50 space-y-6 mt-6">
+          <div className="flex items-center gap-2.5">
+            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+              <Compass className="size-3.5" strokeWidth={3} />
+            </div>
+            <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
+              KEY DRIVERS
+            </h2>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-4">
+            {data.drivers.map((driver, idx) => (
+              <div key={idx} className="rounded-[14px] p-4 border border-line bg-[#fbfaff]/60 shadow-sm space-y-2">
+                <div className="text-[10px] font-bold text-ink-400 font-mono uppercase">{driver.category}</div>
+                <h4 className="text-[14px] font-extrabold text-[#6e6ef0]">{driver.label}</h4>
+                <p className="text-[12px] text-ink-600 leading-relaxed">{driver.description}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Work Preferences & Aptitudes */}
+        <section className="grid md:grid-cols-2 gap-10 py-6 border-t border-line/50 mt-2">
+          <div className="space-y-6">
+             <div className="flex items-center gap-2.5">
+               <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+                 <Briefcase className="size-3.5" strokeWidth={3} />
+               </div>
+               <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">TOP PREFERENCES</h2>
+             </div>
+             <div className="space-y-4">
+               {[...data.workPreferences].sort((a,b) => b.score - a.score).slice(0,3).map((pref, idx) => (
+                 <div key={idx} className="space-y-1.5">
+                   <div className="flex justify-between text-[13px] font-bold text-ink-700">
+                     <span>{pref.label}</span>
+                     <span className="text-ink-400 font-mono text-[11px]">{pref.level}</span>
+                   </div>
+                   <div className="h-1.5 w-full bg-line/50 rounded-full overflow-hidden">
+                     <div className="h-full bg-[#6e6ef0] rounded-full" style={{ width: `${pref.score}%` }} />
+                   </div>
+                   <p className="text-[11.5px] text-ink-500">{pref.detail}</p>
+                 </div>
+               ))}
+             </div>
+          </div>
+          <div className="space-y-6">
+             <div className="flex items-center gap-2.5">
+               <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+                 <Star className="size-3.5" strokeWidth={3} />
+               </div>
+               <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">TOP APTITUDES</h2>
+             </div>
+             <div className="space-y-4">
+               {[...data.workAptitudes].sort((a,b) => b.score - a.score).slice(0,3).map((apt, idx) => (
+                 <div key={idx} className="space-y-1.5">
+                   <div className="flex justify-between text-[13px] font-bold text-ink-700">
+                     <span>{apt.label}</span>
+                     <span className="text-ink-400 font-mono text-[11px]">{apt.score}/100</span>
+                   </div>
+                   <div className="h-1.5 w-full bg-line/50 rounded-full overflow-hidden">
+                     <div className="h-full bg-[#6e6ef0] rounded-full" style={{ width: `${apt.score}%` }} />
+                   </div>
+                   <p className="text-[11.5px] text-ink-500">{apt.detail}</p>
+                 </div>
+               ))}
+             </div>
+          </div>
+        </section>
+
+        {/* Career Traits (Deep Dive Bi-Directional Scales) */}
         <section className="py-6 border-t border-line/50 space-y-6">
+          <div className="flex items-center gap-2.5 mb-6">
+            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+              <LineChart className="size-3.5" strokeWidth={3} />
+            </div>
+            <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
+              CAREER TRAITS ANALYSIS
+            </h2>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-x-12 gap-y-10">
+            {data.careerTraits.map((group, gIdx) => (
+              <div key={gIdx} className="space-y-4">
+                <h3 className="text-[11px] font-black tracking-widest text-ink-400 uppercase border-b border-line pb-2">{group.category}</h3>
+                <div className="space-y-3">
+                  {group.traits.map((trait, tIdx) => (
+                    <div
+                      key={tIdx}
+                      className="p-3.5 rounded-xl border border-line/50 bg-[#fbfaff]/50 hover:bg-[#fbfaff] transition-all flex flex-col gap-1.5"
+                    >
+                      <div className="flex justify-between items-center">
+                        <span className="text-[13px] font-bold text-ink-700">
+                          {trait.label}
+                        </span>
+                      </div>
+                      <p className="text-[12px] text-ink-500 leading-relaxed">
+                        {trait.score > 50 ? trait.highLabel : trait.lowLabel}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </section>
+      </motion.div>
+
+      {/* PAGE 2: Future Plans */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 bg-[#f3f0fc] text-[#6e6ef0] font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
+          PAGE 2 OF 3
+        </div>
+
+        {/* Best Path Matches Section */}
+        <section className="py-6 space-y-6">
           <div className="flex items-center gap-2.5">
             <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
               <Award className="size-3.5" strokeWidth={3} />
@@ -442,8 +584,103 @@ export function ReportView({ data }: { data: ReportData }) {
           </div>
         </section>
 
-        {/* Growth Tips & Next Steps */}
+        {/* Alternative Paths */}
+        {data.alternativeDegrees.length > 0 && (
+          <section className="py-6 border-t border-line/50 space-y-6">
+            <div className="flex items-center gap-2.5">
+              <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+                <Globe className="size-3.5" strokeWidth={3} />
+              </div>
+              <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
+                ALTERNATIVE PATHWAYS
+              </h2>
+            </div>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {data.alternativeDegrees.map((match, idx) => {
+                const MatchIcon = getMatchIcon(match.title);
+                return (
+                  <div key={idx} className="rounded-[16px] p-5 border border-line bg-[#f8f7fd]/30 hover:bg-[#f8f7fd]/60 transition-all space-y-3">
+                    <div className="flex items-center justify-between">
+                      <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-[#6e6ef0] shadow-sm">
+                        <MatchIcon className="size-4" />
+                      </div>
+                      <span className="text-[9px] font-mono font-black text-ink-500 bg-line/50 px-2 py-0.5 rounded-md">
+                        {match.match}% FIT
+                      </span>
+                    </div>
+                    <div>
+                      <h4 className="text-[13.5px] font-extrabold text-ink-700 leading-snug">{match.title}</h4>
+                      <p className="text-[11.5px] text-ink-500 leading-relaxed mt-1.5">{match.why}</p>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
+
+        {/* Environment & Career Distribution */}
         <section className="grid md:grid-cols-2 gap-10 py-6 border-t border-line/50">
+          <div className="space-y-6">
+            <div className="flex items-center gap-2.5">
+              <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+                <Settings className="size-3.5" strokeWidth={3} />
+              </div>
+              <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">IDEAL ENVIRONMENT</h2>
+            </div>
+            <div className="space-y-4">
+              <p className="text-[12px] text-ink-500 mb-2">Concentric rings showing your top environment fits:</p>
+              <ConcentricRingsChart items={topEnvironments} />
+            </div>
+          </div>
+          <div className="space-y-6">
+            <div className="flex items-center gap-2.5">
+              <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+                <Users className="size-3.5" strokeWidth={3} />
+              </div>
+              <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">CAREER DISTRIBUTION</h2>
+            </div>
+            <div className="space-y-4">
+              <p className="text-[12px] text-ink-500 mb-2">Role breakdown for {data.archetype.name}s in this field:</p>
+              <DonutChart items={careerChartData} />
+            </div>
+          </div>
+        </section>
+      </motion.div>
+
+      {/* PAGE 3: NEXT Secure Step */}
+      <motion.div
+        initial={{ opacity: 0, y: 15 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true, margin: "-100px" }}
+        transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+        className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
+      >
+        <div className="absolute top-0 right-0 bg-[#f3f0fc] text-[#6e6ef0] font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
+          PAGE 3 OF 3
+        </div>
+
+        {/* Shared Interests */}
+        <section className="py-6 border-b border-line/50 space-y-4 mb-6">
+          <div className="flex items-center gap-2.5">
+            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+              <Lightbulb className="size-3.5" strokeWidth={3} />
+            </div>
+            <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
+              SHARED INTERESTS
+            </h2>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {data.sharedInterests.map((interest, idx) => (
+              <div key={idx} className="px-3 py-1.5 bg-[#f8f7fd] border border-line/60 rounded-lg text-[12px] font-medium text-ink-600">
+                {interest}
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Growth Tips & Next Steps */}
+        <section className="grid md:grid-cols-2 gap-10 py-6">
           {/* Left: Growth Tips */}
           <div className="space-y-5">
             <div className="flex items-center gap-2.5">
@@ -513,6 +750,33 @@ export function ReportView({ data }: { data: ReportData }) {
                   Build your roadmap and start early.
                 </p>
               </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Parent Letter */}
+        <section className="py-6 border-t border-line/50 space-y-5 mt-6">
+          <div className="flex items-center gap-2.5">
+            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+              <Quote className="size-3.5" strokeWidth={3} />
+            </div>
+            <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
+              A NOTE FOR YOUR FAMILY
+            </h2>
+          </div>
+          <div className="rounded-[18px] p-6 sm:p-8 border border-line bg-[#f8f7fd]/40 space-y-4 max-w-3xl mx-auto">
+            <h3 className="text-[16px] font-bold text-ink-800 border-b border-line/50 pb-2">
+              {data.parentLetter.greeting}
+            </h3>
+            {data.parentLetter.paragraphs.map((para, idx) => (
+              <p key={idx} className="text-[13.5px] leading-relaxed text-[#3a3d48]">
+                {para}
+              </p>
+            ))}
+            <div className="pt-4 border-t border-line/50 text-[12px] text-ink-400 font-mono leading-relaxed">
+              {data.parentLetter.signoff.split("\n").map((line, idx) => (
+                <div key={idx}>{line}</div>
+              ))}
             </div>
           </div>
         </section>
@@ -667,3 +931,134 @@ function DashboardRadarChart({
     </svg>
   );
 }
+
+// Concentric progress rings for Ideal Environment
+function ConcentricRingsChart({
+  items
+}: {
+  items: Array<{ label: string; score: number; color: string }>
+}) {
+  const size = 160;
+  const cx = size / 2;
+  const cy = size / 2;
+  const strokeWidth = 8;
+  const gap = 5;
+
+  return (
+    <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl border border-line bg-[#fbfaff]/50 w-full">
+      <svg viewBox={`0 0 ${size} ${size}`} className="w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] shrink-0">
+        {items.map((item, idx) => {
+          const r = 25 + idx * (strokeWidth + gap);
+          const circumference = 2 * Math.PI * r;
+          const strokeDashoffset = circumference * (1 - item.score / 100);
+          return (
+            <g key={idx}>
+              {/* Background ring */}
+              <circle
+                cx={cx}
+                cy={cy}
+                r={r}
+                fill="none"
+                stroke="rgba(229, 231, 235, 0.4)"
+                strokeWidth={strokeWidth}
+              />
+              {/* Filled ring */}
+              <circle
+                cx={cx}
+                cy={cy}
+                r={r}
+                fill="none"
+                stroke={item.color}
+                strokeWidth={strokeWidth}
+                strokeLinecap="round"
+                strokeDasharray={circumference}
+                strokeDashoffset={strokeDashoffset}
+                transform={`rotate(-90 ${cx} ${cy})`}
+                style={{ transition: "stroke-dashoffset 0.8s ease-out" }}
+              />
+            </g>
+          );
+        })}
+      </svg>
+      <div className="flex-1 space-y-2.5 w-full min-w-0">
+        {items.slice().reverse().map((item, idx) => (
+          <div key={idx} className="space-y-1 min-w-0">
+            <div className="flex items-center gap-2 text-[12px] min-w-0">
+              <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+              <div className="flex-1 flex justify-between font-bold text-ink-700 min-w-0">
+                <span className="truncate pr-2">{item.label}</span>
+                <span className="font-mono text-ink-400 pl-1 shrink-0">{item.score}%</span>
+              </div>
+            </div>
+            {/* Tiny progress line to make it look even more interesting */}
+            <div className="h-1 w-full bg-line/30 rounded-full overflow-hidden">
+              <div className="h-full rounded-full" style={{ width: `${item.score}%`, backgroundColor: item.color }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+// Donut chart for Career Distribution
+function DonutChart({
+  items
+}: {
+  items: Array<{ label: string; percentage: number; color: string }>
+}) {
+  const size = 160;
+  const cx = size / 2;
+  const cy = size / 2;
+  const r = 48;
+  const strokeWidth = 14;
+  const circumference = 2 * Math.PI * r;
+
+  let accumPercentage = 0;
+
+  return (
+    <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl border border-line bg-[#fbfaff]/50 w-full">
+      <svg viewBox={`0 0 ${size} ${size}`} className="w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] shrink-0">
+        {items.map((item, idx) => {
+          const fraction = item.percentage / 100;
+          const strokeDasharray = `${circumference * fraction} ${circumference * (1 - fraction)}`;
+          const strokeDashoffset = circumference * -accumPercentage;
+          accumPercentage += fraction;
+
+          return (
+            <circle
+              key={idx}
+              cx={cx}
+              cy={cy}
+              r={r}
+              fill="none"
+              stroke={item.color}
+              strokeWidth={strokeWidth}
+              strokeDasharray={strokeDasharray}
+              strokeDashoffset={strokeDashoffset}
+              transform={`rotate(-90 ${cx} ${cy})`}
+            />
+          );
+        })}
+        <circle cx={cx} cy={cy} r={r - strokeWidth / 2} fill="white" />
+      </svg>
+      <div className="flex-1 space-y-2.5 w-full min-w-0">
+        {items.map((item, idx) => (
+          <div key={idx} className="space-y-1 min-w-0">
+            <div className="flex items-center gap-2 text-[12px] min-w-0">
+              <span className="size-2.5 rounded-full shrink-0" style={{ backgroundColor: item.color }} />
+              <div className="flex-1 flex justify-between font-bold text-ink-700 min-w-0">
+                <span className="truncate pr-2">{item.label}</span>
+                <span className="font-mono text-ink-400 pl-1 shrink-0">{item.percentage}%</span>
+              </div>
+            </div>
+            <div className="h-1 w-full bg-line/30 rounded-full overflow-hidden">
+              <div className="h-full rounded-full" style={{ width: `${item.percentage}%`, backgroundColor: item.color }} />
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+

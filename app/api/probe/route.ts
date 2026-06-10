@@ -8,7 +8,7 @@ interface ProbeRequest {
   parentAnswer: { label: string; reaction?: string };
   recentTrail: Array<{ prompt: string; answer: string }>;
   discipline: string;
-  section: "roots" | "routes";
+  section: any;
   /** "deeper" — generate a NEW follow-up scenario as a separate card.
    *  "rephrase" — rewrite the SAME question in place, preserving option ids and
    *    scoring intent. The `tone` field controls the rewrite voice:

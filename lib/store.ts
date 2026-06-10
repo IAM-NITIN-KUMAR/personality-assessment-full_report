@@ -54,10 +54,10 @@ const ALL_BANK = [
 const initial: AssessmentState = {
   profile: null,
   answers: {},
-  trunk: CONTEXT_QUESTIONS.map((q) => q.id),
+  trunk: ROOTS_ANCHORS.slice(0, 5).map((q) => q.id),
   adaptiveQuestions: {},
   rewrites: {},
-  section: "context",
+  section: "main_character",
 };
 
 export const useAssessment = create<Store>()(
@@ -122,7 +122,7 @@ export const useAssessment = create<Store>()(
       setSection: (section) => set({ section }),
 
       computeArchetype: () => {
-        const all = get().allQuestions().filter((q) => q.section === "roots");
+        const all = get().allQuestions().filter((q) => q.section === "main_character" || q.section === "skill_check");
         const scores = computeDimensionScores(all, get().answers);
         const archetype = pickArchetype(scores);
         set({ archetype });

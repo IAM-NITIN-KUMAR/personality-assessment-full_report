@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Plus, Trash, Save, RefreshCw, Layers, Sliders, CheckCircle2, AlertCircle, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
-import type { Question, Option, Dimension } from "@/lib/types";
+import type { Question, Option, Dimension, Section } from "@/lib/types";
 
 const DIMENSIONS: Array<{ key: Dimension; label: string }> = [
   { key: "decision_style", label: "Decision Style" },
@@ -198,7 +198,11 @@ export default function AdminDashboard() {
 
     const newQ: Question = {
       id: uniqueId,
-      section: activeTab,
+      section: (activeTab === "context"
+        ? "dream_big"
+        : activeTab === "roots"
+        ? "main_character"
+        : "reality_check") as Section,
       kind: isContext ? "context" : "anchor",
       type: "single_choice",
       category: isContext ? "New Category" : "Psychometrics",

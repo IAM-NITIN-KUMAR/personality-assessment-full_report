@@ -186,7 +186,7 @@ export default function TeaserPage() {
       merged.push(firstRouteId);
     }
     setTrunk(merged);
-    setSection("routes");
+    setSection("reality_check");
     router.push("/assessment");
   };
 
