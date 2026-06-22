@@ -1125,8 +1125,8 @@ function MatchDisc({ score }: { score: number }) {
   const r = size * 0.36;
   const circumference = 2 * Math.PI * r;
   const fillFraction = Math.max(0, Math.min(1, score / 100));
-  const dashLen = circumference * fillFraction;
-  const restLen = circumference - dashLen;
+  const dashLen = Math.max(0.1, circumference * fillFraction);
+  const restLen = Math.max(0.1, circumference - dashLen);
 
   return (
     <View style={{ width: size, height: size }}>
@@ -1493,8 +1493,8 @@ function PdfConcentricRings({
         const r = 20 + idx * (strokeWidth + gap);
         const circumference = 2 * Math.PI * r;
         const fillFraction = Math.max(0, Math.min(1, item.score / 100));
-        const dashLen = circumference * fillFraction;
-        const restLen = circumference - dashLen;
+        const dashLen = Math.max(0.1, circumference * fillFraction);
+        const restLen = Math.max(0.1, circumference - dashLen);
         
         return (
           <G key={idx}>
@@ -1545,8 +1545,8 @@ function PdfDonut({
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
       {items.map((item, idx) => {
         const fraction = item.percentage / 100;
-        const dashLen = circumference * fraction;
-        const restLen = circumference - dashLen;
+        const dashLen = Math.max(0.1, circumference * fraction);
+        const restLen = Math.max(0.1, circumference - dashLen);
         const rotation = -90 + accumPercentage * 360;
         accumPercentage += fraction;
         
