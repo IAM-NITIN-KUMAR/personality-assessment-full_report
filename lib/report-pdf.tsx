@@ -20,45 +20,45 @@ import {
 import { ReportData, Stat } from "./report-data";
 import { DIMENSION_LABELS, Dimension } from "./types";
 
-// Register premium custom fonts from Fontsource jsDelivr CDN
+// Register premium custom fonts from local public directory
 Font.register({
   family: "Outfit",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/outfit@latest/latin-400-normal.ttf",
+  src: "/fonts/Outfit-Regular.ttf",
 });
 
 Font.register({
   family: "Outfit-Bold",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/outfit@latest/latin-700-normal.ttf",
+  src: "/fonts/Outfit-Bold.ttf",
 });
 
 Font.register({
   family: "Outfit-ExtraBold",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/outfit@latest/latin-800-normal.ttf",
+  src: "/fonts/Outfit-ExtraBold.ttf",
 });
 
 Font.register({
   family: "PlusJakartaSans",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-400-normal.ttf",
+  src: "/fonts/PlusJakartaSans-Regular.ttf",
 });
 
 Font.register({
   family: "PlusJakartaSans-Bold",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-700-normal.ttf",
+  src: "/fonts/PlusJakartaSans-Bold.ttf",
 });
 
 Font.register({
   family: "PlusJakartaSans-Italic",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/plus-jakarta-sans@latest/latin-400-italic.ttf",
+  src: "/fonts/PlusJakartaSans-Italic.ttf",
 });
 
 Font.register({
   family: "JetBrainsMono",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-400-normal.ttf",
+  src: "/fonts/JetBrainsMono-Regular.ttf",
 });
 
 Font.register({
   family: "JetBrainsMono-Bold",
-  src: "https://cdn.jsdelivr.net/fontsource/fonts/jetbrains-mono@latest/latin-700-normal.ttf",
+  src: "/fonts/JetBrainsMono-Bold.ttf",
 });
 
 const SERIF_BOLD = "PlusJakartaSans-Bold";

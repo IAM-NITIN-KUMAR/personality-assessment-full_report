@@ -195,7 +195,7 @@ function Form(props: {
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink placeholder:text-ink-300 outline-none transition-all"
               style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)} />
           </Field>
-          <Field label="INTEREST AREA">
+          <Field label="CURRENTLY ENROLLED STREAM">
             <select value={props.discipline} onChange={(e) => props.setDiscipline(e.target.value as Discipline)}
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink outline-none transition-all appearance-none cursor-pointer"
               style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)}>

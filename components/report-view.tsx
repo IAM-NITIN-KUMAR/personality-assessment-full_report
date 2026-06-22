@@ -453,7 +453,13 @@ export function ReportView({ data }: { data: ReportData }) {
                      <span className="text-ink-400 font-mono text-[11px]">{pref.level}</span>
                    </div>
                    <div className="h-1.5 w-full bg-line/50 rounded-full overflow-hidden">
-                     <div className="h-full bg-[#6e6ef0] rounded-full" style={{ width: `${pref.score}%` }} />
+                     <motion.div 
+                       initial={{ width: 0 }}
+                       whileInView={{ width: `${pref.score}%` }}
+                       viewport={{ once: true }}
+                       transition={{ duration: 1, delay: 0.1 * idx, ease: "easeOut" }}
+                       className="h-full bg-[#6e6ef0] rounded-full" 
+                     />
                    </div>
                    <p className="text-[11.5px] text-ink-500">{pref.detail}</p>
                  </div>
@@ -475,7 +481,13 @@ export function ReportView({ data }: { data: ReportData }) {
                      <span className="text-ink-400 font-mono text-[11px]">{apt.score}/100</span>
                    </div>
                    <div className="h-1.5 w-full bg-line/50 rounded-full overflow-hidden">
-                     <div className="h-full bg-[#6e6ef0] rounded-full" style={{ width: `${apt.score}%` }} />
+                     <motion.div 
+                       initial={{ width: 0 }}
+                       whileInView={{ width: `${apt.score}%` }}
+                       viewport={{ once: true }}
+                       transition={{ duration: 1, delay: 0.1 * idx, ease: "easeOut" }}
+                       className="h-full bg-[#6e6ef0] rounded-full" 
+                     />
                    </div>
                    <p className="text-[11.5px] text-ink-500">{apt.detail}</p>
                  </div>
