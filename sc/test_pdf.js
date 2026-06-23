@@ -140,10 +140,10 @@ const { ReportDocument } = require('../lib/report-pdf');
 async function test() {
   try {
     const doc = React.createElement(ReportDocument, { data: mockData });
-    const outputPath = path.join(__dirname, 'output.pdf');
+    const outputPath = 'C:\\Users\\Nitin Kumar\\Downloads\\roots-and-routes-report.pdf';
     console.log(`Rendering PDF to ${outputPath}...`);
     await renderToFile(doc, outputPath);
-    console.log('PDF rendered and written to file successfully!');
+    console.log('PDF rendered and written to Downloads successfully!');
   } catch (error) {
     console.error('Error generating PDF:', error);
   }

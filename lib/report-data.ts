@@ -982,7 +982,7 @@ function buildEnvironmentFit(s: Record<Dimension, number>): EnvironmentFit[] {
     key: it.key, 
     description: it.description, 
     fit: fitOf(it.raw),
-    score: clamp01_100(50 + it.raw * 1.25)
+    score: clamp01_100(50 + it.raw * 0.35)
   }));
 }
 

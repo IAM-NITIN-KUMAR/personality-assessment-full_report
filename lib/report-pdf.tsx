@@ -254,8 +254,8 @@ function PdfBulletIcon({ index }: { index: number }) {
 const pdfStyles = StyleSheet.create({
   page: {
     paddingHorizontal: 30,
-    paddingTop: 30,
-    paddingBottom: 30,
+    paddingTop: 55,
+    paddingBottom: 50,
     backgroundColor: "#FFFFFF",
     color: "#0A0E1A",
     fontFamily: SANS,
@@ -263,13 +263,16 @@ const pdfStyles = StyleSheet.create({
     lineHeight: 1.35,
   },
   header: {
+    position: "absolute",
+    top: 20,
+    left: 30,
+    right: 30,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
     borderBottomColor: "#E5E7EB",
     paddingBottom: 6,
-    marginBottom: 12,
   },
   logoSection: {
     flexDirection: "row",
@@ -582,6 +585,10 @@ const pdfStyles = StyleSheet.create({
     maxWidth: 300,
   },
   footer: {
+    position: "absolute",
+    bottom: 20,
+    left: 30,
+    right: 30,
     borderTopWidth: 1,
     borderTopColor: "#E5E7EB",
     paddingTop: 6,
@@ -597,6 +604,11 @@ const pdfStyles = StyleSheet.create({
   footerBrandText: {
     fontFamily: SANS_BOLD,
     fontSize: 8.5,
+    color: "#6B6F78",
+  },
+  footerPageNum: {
+    fontFamily: MONO_BOLD,
+    fontSize: 7,
     color: "#6B6F78",
   },
   footerLink: {
@@ -702,7 +714,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
   }
 
   const renderHeader = () => (
-    <View style={pdfStyles.header}>
+    <View style={pdfStyles.header} fixed>
       <View style={pdfStyles.logoSection}>
         <PdfLogo size={22} />
         <Text style={pdfStyles.brandText}>SecureSteps</Text>
@@ -714,49 +726,63 @@ export function ReportDocument({ data }: { data: ReportData }) {
     </View>
   );
 
+  const renderFooter = () => (
+    <View style={pdfStyles.footer} fixed>
+      <View style={pdfStyles.footerBrand}>
+        <PdfLogo size={14} />
+        <Text style={pdfStyles.footerBrandText}>SecureSteps</Text>
+      </View>
+      <Text style={pdfStyles.footerPageNum} render={({ pageNumber, totalPages }) => `PAGE ${pageNumber} OF ${totalPages}`} />
+      <Text style={pdfStyles.footerLink}>
+        If you want more info, visit https://www.securesteps.co.in/
+      </Text>
+    </View>
+  );
+
   return (
     <Document
       title={`Roots & Routes — ${data.profile.name}`}
       author="Secure Steps"
       subject="Personality & career-fit assessment report"
     >
-      {/* PAGE 1: Personal Assessment */}
-      <Page size="A4" style={pdfStyles.page}>
+      <Page size="A4" style={pdfStyles.page} wrap>
         {renderHeader()}
 
-        {/* Pathway Insight Title & Profile Card Grid */}
-        <View style={pdfStyles.insightSection}>
-          <View style={pdfStyles.insightText}>
-            <Text style={pdfStyles.insightTitle}>YOUR PERSONAL PATHWAY INSIGHT</Text>
-            <Text style={pdfStyles.insightArchetype}>ARCHETYPE: {data.archetype.name.toUpperCase()}</Text>
-            <Text style={pdfStyles.insightDesc}>
-              This is you — decoded. Your answers reveal your natural strengths, what drives you, and the paths that will help you thrive.
-            </Text>
-          </View>
-
-          {/* User Profile Card */}
-          <View style={pdfStyles.profileCard}>
-            <View style={pdfStyles.avatar}>
-              <Text>{initials}</Text>
+        {/* SECTION 1: Personal Assessment & Strengths */}
+        <View wrap={false} style={{ marginBottom: 10 }}>
+          {/* Pathway Insight Title & Profile Card Grid */}
+          <View style={pdfStyles.insightSection}>
+            <View style={pdfStyles.insightText}>
+              <Text style={pdfStyles.insightTitle}>YOUR PERSONAL PATHWAY INSIGHT</Text>
+              <Text style={pdfStyles.insightArchetype}>ARCHETYPE: {data.archetype.name.toUpperCase()}</Text>
+              <Text style={pdfStyles.insightDesc}>
+                This is you — decoded. Your answers reveal your natural strengths, what drives you, and the paths that will help you thrive.
+              </Text>
             </View>
-            <View style={pdfStyles.profileInfo}>
-              <Text style={pdfStyles.profileName}>{data.profile.name}</Text>
-              <Text style={pdfStyles.profileMeta}>Profile ID: {profileId}</Text>
-              <Text style={pdfStyles.profileMeta}>Assessment: SecureSteps Discovery</Text>
+
+            {/* User Profile Card */}
+            <View style={pdfStyles.profileCard}>
+              <View style={pdfStyles.avatar}>
+                <Text>{initials}</Text>
+              </View>
+              <View style={pdfStyles.profileInfo}>
+                <Text style={pdfStyles.profileName}>{data.profile.name}</Text>
+                <Text style={pdfStyles.profileMeta}>Profile ID: {profileId}</Text>
+                <Text style={pdfStyles.profileMeta}>Assessment: SecureSteps Discovery</Text>
+              </View>
             </View>
           </View>
         </View>
 
-        {/* Main Grid: Strengths & Radar Chart */}
-        <View style={pdfStyles.mainGrid}>
-          {/* Core Strengths */}
-          <View style={pdfStyles.strengthsColumn}>
-            <View style={pdfStyles.sectionHeading}>
-              <Text style={pdfStyles.sectionTitleText}>YOUR CORE STRENGTHS</Text>
-            </View>
+        {/* SECTION 2: Core Strengths */}
+        <View style={{ marginBottom: 10 }}>
+          <View style={[pdfStyles.sectionHeading, { marginBottom: 10 }]} wrap={false}>
+            <Text style={pdfStyles.sectionTitleText}>YOUR CORE STRENGTHS</Text>
+          </View>
 
+          <View style={{ gap: 8 }}>
             {strengths.map((str, idx) => (
-              <View key={idx} style={pdfStyles.strengthCard}>
+              <View key={idx} style={[pdfStyles.strengthCard, { padding: 8 }]} wrap={false}>
                 <View style={pdfStyles.strengthIconContainer}>
                   <PdfBulletIcon index={idx} />
                 </View>
@@ -767,163 +793,238 @@ export function ReportDocument({ data }: { data: ReportData }) {
               </View>
             ))}
           </View>
+        </View>
 
-          {/* Radar Chart */}
-          <View style={pdfStyles.radarColumn}>
-            <View style={[pdfStyles.sectionHeading, { alignSelf: "flex-start", marginBottom: 12 }]}>
-              <Text style={pdfStyles.sectionTitleText}>YOUR PATH FIT SCORE</Text>
+        {/* SECTION 3: Path Fit Score */}
+        <View wrap={false} style={{ marginBottom: 10, alignItems: "center" }}>
+          <View style={[pdfStyles.sectionHeading, { marginBottom: 4, alignSelf: "flex-start" }]}>
+            <Text style={pdfStyles.sectionTitleText}>YOUR PATH FIT SCORE</Text>
+          </View>
+          <Text style={[pdfStyles.sectionSubtitleText, { marginBottom: 6, alignSelf: "flex-start" }]}>
+            {data.archetype.name.toUpperCase()} PATHWAY
+          </Text>
+
+          {/* Radar Chart Container */}
+          <View style={{ position: "relative", width: 200, height: 200, justifyContent: "center", alignItems: "center", marginTop: 6, alignSelf: "center" }}>
+            <PdfRadar
+              axes={[
+                { key: "analytical", label: "Analytical", value: scores.analytical * 10 },
+                { key: "creative", label: "Creative", value: scores.creative * 10 },
+                { key: "leadership", label: "Leadership", value: scores.leadership * 10 },
+                { key: "peopleSkills", label: "People Skills", value: scores.peopleSkills * 10 },
+                { key: "practical", label: "Practical", value: scores.practical * 10 },
+                { key: "entrepreneurial", label: "Entrepreneurial", value: scores.entrepreneurial * 10 },
+              ]}
+              size={140}
+            />
+
+            {/* Absolute labels */}
+            <View style={[pdfStyles.radarLabelContainer, { top: 6, left: 0, right: 0 }]}>
+              <Text style={pdfStyles.radarLabelText}>Analytical</Text>
+              <Text style={pdfStyles.radarLabelScore}>{scores.analytical.toFixed(1)}/10</Text>
             </View>
-            <Text style={[pdfStyles.sectionSubtitleText, { alignSelf: "flex-start", marginBottom: 12 }]}>
-              {data.archetype.name.toUpperCase()} PATHWAY
-            </Text>
-
-            {/* Radar Chart Container with relative positioning */}
-            <View style={{ position: "relative", width: 140, height: 140, justifyContent: "center", alignItems: "center", marginTop: 8, alignSelf: "center" }}>
-              <PdfRadar
-                axes={[
-                  { key: "analytical", label: "Analytical", value: scores.analytical * 10 },
-                  { key: "creative", label: "Creative", value: scores.creative * 10 },
-                  { key: "leadership", label: "Leadership", value: scores.leadership * 10 },
-                  { key: "peopleSkills", label: "People Skills", value: scores.peopleSkills * 10 },
-                  { key: "practical", label: "Practical", value: scores.practical * 10 },
-                  { key: "entrepreneurial", label: "Entrepreneurial", value: scores.entrepreneurial * 10 },
-                ]}
-                size={95}
-              />
-
-              {/* Absolute labels placed relative to this 140x140 container */}
-              {/* Top Center: Analytical */}
-              <View style={[pdfStyles.radarLabelContainer, { top: -4, left: 0, right: 0 }]}>
-                <Text style={pdfStyles.radarLabelText}>Analytical</Text>
-                <Text style={pdfStyles.radarLabelScore}>{scores.analytical.toFixed(1)}/10</Text>
-              </View>
-              {/* Top Right: Creative */}
-              <View style={[pdfStyles.radarLabelContainer, { top: 28, right: -4, alignItems: "flex-start" }]}>
-                <Text style={pdfStyles.radarLabelText}>Creative</Text>
-                <Text style={pdfStyles.radarLabelScore}>{scores.creative.toFixed(1)}/10</Text>
-              </View>
-              {/* Bottom Right: Leadership */}
-              <View style={[pdfStyles.radarLabelContainer, { bottom: 28, right: -4, alignItems: "flex-start" }]}>
-                <Text style={pdfStyles.radarLabelText}>Leadership</Text>
-                <Text style={pdfStyles.radarLabelScore}>{scores.leadership.toFixed(1)}/10</Text>
-              </View>
-              {/* Bottom Center: People Skills */}
-              <View style={[pdfStyles.radarLabelContainer, { bottom: -4, left: 0, right: 0 }]}>
-                <Text style={pdfStyles.radarLabelText}>People Skills</Text>
-                <Text style={pdfStyles.radarLabelScore}>{scores.peopleSkills.toFixed(1)}/10</Text>
-              </View>
-              {/* Bottom Left: Practical */}
-              <View style={[pdfStyles.radarLabelContainer, { bottom: 28, left: -4, alignItems: "flex-end" }]}>
-                <Text style={pdfStyles.radarLabelText}>Practical</Text>
-                <Text style={pdfStyles.radarLabelScore}>{scores.practical.toFixed(1)}/10</Text>
-              </View>
-              {/* Top Left: Entrepreneurial */}
-              <View style={[pdfStyles.radarLabelContainer, { top: 28, left: -4, alignItems: "flex-end" }]}>
-                <Text style={pdfStyles.radarLabelText}>Entrepreneurial</Text>
-                <Text style={pdfStyles.radarLabelScore}>{scores.entrepreneurial.toFixed(1)}/10</Text>
-              </View>
+            <View style={[pdfStyles.radarLabelContainer, { top: 48, right: 0, alignItems: "flex-start" }]}>
+              <Text style={pdfStyles.radarLabelText}>Creative</Text>
+              <Text style={pdfStyles.radarLabelScore}>{scores.creative.toFixed(1)}/10</Text>
             </View>
+            <View style={[pdfStyles.radarLabelContainer, { bottom: 48, right: 0, alignItems: "flex-start" }]}>
+              <Text style={pdfStyles.radarLabelText}>Leadership</Text>
+              <Text style={pdfStyles.radarLabelScore}>{scores.leadership.toFixed(1)}/10</Text>
+            </View>
+            <View style={[pdfStyles.radarLabelContainer, { bottom: 6, left: 0, right: 0 }]}>
+              <Text style={pdfStyles.radarLabelText}>People Skills</Text>
+              <Text style={pdfStyles.radarLabelScore}>{scores.peopleSkills.toFixed(1)}/10</Text>
+            </View>
+            <View style={[pdfStyles.radarLabelContainer, { bottom: 48, left: 0, alignItems: "flex-end" }]}>
+              <Text style={pdfStyles.radarLabelText}>Practical</Text>
+              <Text style={pdfStyles.radarLabelScore}>{scores.practical.toFixed(1)}/10</Text>
+            </View>
+            <View style={[pdfStyles.radarLabelContainer, { top: 48, left: 0, alignItems: "flex-end" }]}>
+              <Text style={pdfStyles.radarLabelText}>Entrepreneurial</Text>
+              <Text style={pdfStyles.radarLabelScore}>{scores.entrepreneurial.toFixed(1)}/10</Text>
+            </View>
+          </View>
+
+          <Text style={{ fontFamily: SANS, fontSize: 7, color: COLORS.inkSoft, textAlign: "center", marginTop: 8, maxWidth: 360, lineHeight: 1.35 }}>
+            This radar chart maps your personality footprint across six core dimensions. Larger shaded spreads indicate strong, active alignment with the behavioral expectations and tasks of the {data.archetype.name.toUpperCase()} pathway.
+          </Text>
+
+          {/* Detailed Dimension Insights */}
+          <View style={{ width: "100%", marginTop: 8, flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", gap: 6 }}>
+            {data.rootsReadout.map((item, idx) => {
+              // Map database dimension to radar label
+              let radarLabel = "";
+              let scoreVal = 0;
+              if (item.dimension === "decision_style") { radarLabel = "Analytical"; scoreVal = scores.analytical; }
+              else if (item.dimension === "energy") { radarLabel = "Creative"; scoreVal = scores.creative; }
+              else if (item.dimension === "structure") { radarLabel = "Practical"; scoreVal = scores.practical; }
+              else if (item.dimension === "risk") { radarLabel = "Entrepreneurial"; scoreVal = scores.entrepreneurial; }
+              else if (item.dimension === "social") { radarLabel = "People Skills"; scoreVal = scores.peopleSkills; }
+              else if (item.dimension === "drive") { radarLabel = "Leadership"; scoreVal = scores.leadership; }
+
+              return (
+                <View key={idx} style={{ width: "48%", backgroundColor: "#fbfaff", borderWidth: 0.5, borderColor: COLORS.line, borderRadius: 6, padding: 5, marginBottom: 2 }}>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 1 }}>
+                    <Text style={{ fontFamily: SANS_BOLD, fontSize: 7.5, color: COLORS.ink }}>{radarLabel}</Text>
+                    <Text style={{ fontFamily: MONO_BOLD, fontSize: 6.5, color: COLORS.inkMuted }}>{scoreVal.toFixed(1)}/10</Text>
+                  </View>
+                  <Text style={{ fontFamily: SANS, fontSize: 6.5, color: COLORS.inkSoft, lineHeight: 1.2 }}>{item.sentence}</Text>
+                </View>
+              );
+            })}
           </View>
         </View>
 
-        {/* Key Drivers */}
-        <View style={pdfStyles.matchesSection}>
-          <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+        {/* SECTION 4: Key Drivers */}
+        <View break wrap={false} style={{ marginBottom: 10 }}>
+          <View style={[pdfStyles.sectionHeading, { marginBottom: 8 }]} wrap={false}>
             <Text style={pdfStyles.sectionTitleText}>KEY DRIVERS</Text>
           </View>
           <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
             {data.drivers.map((driver, idx) => (
-              <View key={idx} style={{ width: "48%", backgroundColor: "#fbfaff", borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", borderRadius: 8, padding: 10, marginBottom: 8 }}>
+              <View key={idx} style={{ width: "48%", backgroundColor: "#fbfaff", borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", borderRadius: 8, padding: 10, marginBottom: 8 }} wrap={false}>
                 <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted, textTransform: "uppercase", marginBottom: 2 }}>{driver.category}</Text>
-                <Text style={{ fontFamily: SANS_BOLD, fontSize: 10, color: COLORS.electric, marginBottom: 4 }}>{driver.label}</Text>
+                <Text style={{ fontFamily: SANS_BOLD, fontSize: 9.5, color: COLORS.electric, marginBottom: 4 }}>{driver.label}</Text>
                 <Text style={{ fontFamily: SANS, fontSize: 8.5, color: COLORS.ink, lineHeight: 1.4 }}>{driver.description}</Text>
               </View>
             ))}
           </View>
         </View>
 
-        {/* Work Preferences & Aptitudes */}
-        <View style={pdfStyles.bottomGrid}>
-          <View style={pdfStyles.bottomColumn}>
-            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-              <Text style={pdfStyles.sectionTitleText}>TOP PREFERENCES</Text>
-            </View>
-            {[...data.workPreferences].sort((a,b) => b.score - a.score).slice(0,3).map((pref, idx) => (
-              <View key={idx} style={{ marginBottom: 6 }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 2 }}>
-                  <Text style={{ fontFamily: SANS_BOLD, fontSize: 9, color: COLORS.ink }}>{pref.label}</Text>
-                  <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{pref.level}</Text>
-                </View>
-                <View style={{ height: 4, backgroundColor: COLORS.line, borderRadius: 2, marginBottom: 2, overflow: "hidden" }}>
-                  <View style={{ height: "100%", width: `${pref.score}%`, backgroundColor: COLORS.electric, borderRadius: 2 }} />
-                </View>
-                <Text style={{ fontFamily: SANS, fontSize: 8, color: COLORS.ink, lineHeight: 1.3 }}>{pref.detail}</Text>
+        {/* SECTION 5: Work Preferences & Aptitudes */}
+        <View wrap={false} style={{ marginBottom: 10 }}>
+          <View style={pdfStyles.bottomGrid}>
+            <View style={pdfStyles.bottomColumn}>
+              <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+                <Text style={pdfStyles.sectionTitleText}>TOP PREFERENCES</Text>
               </View>
-            ))}
-          </View>
-
-          <View style={pdfStyles.bottomColumn}>
-            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-              <Text style={pdfStyles.sectionTitleText}>TOP APTITUDES</Text>
-            </View>
-            {[...data.workAptitudes].sort((a,b) => b.score - a.score).slice(0,3).map((apt, idx) => (
-              <View key={idx} style={{ marginBottom: 6 }}>
-                <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 2 }}>
-                  <Text style={{ fontFamily: SANS_BOLD, fontSize: 9, color: COLORS.ink }}>{apt.label}</Text>
-                  <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{apt.score}/100</Text>
-                </View>
-                <View style={{ height: 4, backgroundColor: COLORS.line, borderRadius: 2, marginBottom: 2, overflow: "hidden" }}>
-                  <View style={{ height: "100%", width: `${apt.score}%`, backgroundColor: COLORS.electric, borderRadius: 2 }} />
-                </View>
-                <Text style={{ fontFamily: SANS, fontSize: 8, color: COLORS.ink, lineHeight: 1.3 }}>{apt.detail}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
-      </Page>
-
-      {/* PAGE 2: Future Plans */}
-      <Page size="A4" style={pdfStyles.page}>
-        {renderHeader()}
-
-        {/* Best Matches */}
-        <View style={pdfStyles.matchesSection}>
-          <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-            <Text style={pdfStyles.sectionTitleText}>BEST PATH MATCHES FOR YOU</Text>
-          </View>
-
-          <View style={pdfStyles.matchesGrid}>
-            {bestMatches.map((match, idx) => (
-              <View key={idx} style={pdfStyles.matchCard}>
-                <View style={pdfStyles.matchCardHeader}>
-                  <View style={pdfStyles.matchCardIndexContainer}>
-                    <Text style={pdfStyles.matchCardIndexText}>{idx + 1}</Text>
+              {[...data.workPreferences].sort((a,b) => b.score - a.score).slice(0,3).map((pref, idx) => (
+                <View key={idx} style={{ marginBottom: 6 }}>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 2 }}>
+                    <Text style={{ fontFamily: SANS_BOLD, fontSize: 9, color: COLORS.ink }}>{pref.label}</Text>
+                    <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{pref.level}</Text>
                   </View>
-                  {match.match && (
-                    <Text style={pdfStyles.matchBadge}>{match.match}% FIT</Text>
-                  )}
+                  <View style={{ height: 4, backgroundColor: COLORS.line, borderRadius: 2, marginBottom: 2, overflow: "hidden" }}>
+                    <View style={{ height: "100%", width: `${pref.score}%`, backgroundColor: COLORS.electric, borderRadius: 2 }} />
+                  </View>
+                  <Text style={{ fontFamily: SANS, fontSize: 8, color: COLORS.ink, lineHeight: 1.3 }}>{pref.detail}</Text>
                 </View>
-                <View>
-                  <Text style={pdfStyles.matchTitle}>{match.title}</Text>
-                  <Text style={pdfStyles.matchWhy}>{match.why}</Text>
+              ))}
+            </View>
+
+            <View style={pdfStyles.bottomColumn}>
+              <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+                <Text style={pdfStyles.sectionTitleText}>TOP APTITUDES</Text>
+              </View>
+              {[...data.workAptitudes].sort((a,b) => b.score - a.score).slice(0,3).map((apt, idx) => (
+                <View key={idx} style={{ marginBottom: 6 }}>
+                  <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 2 }}>
+                    <Text style={{ fontFamily: SANS_BOLD, fontSize: 9, color: COLORS.ink }}>{apt.label}</Text>
+                    <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{apt.score}/100</Text>
+                  </View>
+                  <View style={{ height: 4, backgroundColor: COLORS.line, borderRadius: 2, marginBottom: 2, overflow: "hidden" }}>
+                    <View style={{ height: "100%", width: `${apt.score}%`, backgroundColor: COLORS.electric, borderRadius: 2 }} />
+                  </View>
+                  <Text style={{ fontFamily: SANS, fontSize: 8, color: COLORS.ink, lineHeight: 1.3 }}>{apt.detail}</Text>
                 </View>
+              ))}
+            </View>
+          </View>
+        </View>
+
+        {/* SECTION 6: Environment & Career Distribution */}
+        <View wrap={false} style={{ marginBottom: 10 }}>
+          <View style={pdfStyles.bottomGrid}>
+            <View style={pdfStyles.bottomColumn}>
+              <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+                <Text style={pdfStyles.sectionTitleText}>IDEAL ENVIRONMENT</Text>
+              </View>
+              <View style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: "#fbfaff", gap: 6 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                  <PdfConcentricRings items={topEnvironments} />
+                  <View style={{ flex: 1, gap: 5 }}>
+                    {topEnvironments.slice().reverse().map((item, idx) => (
+                      <View key={idx} style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                        <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: item.color }} />
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+                          <Text style={{ fontFamily: SANS_BOLD, fontSize: 7, color: COLORS.inkSoft, maxWidth: 80 }}>{item.label}</Text>
+                          <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{item.score}%</Text>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+                <Text style={{ fontFamily: SANS, fontSize: 6.5, color: COLORS.inkMuted, marginTop: 4, lineHeight: 1.25 }}>
+                  These concentric rings map your alignment with distinct organizational cultures, workplace pace, and team dynamics where you will perform most naturally.
+                </Text>
+              </View>
+            </View>
+
+            <View style={pdfStyles.bottomColumn}>
+              <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+                <Text style={pdfStyles.sectionTitleText}>CAREER DISTRIBUTION</Text>
+              </View>
+              <View style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: "#fbfaff", gap: 6 }}>
+                <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
+                  <PdfDonut items={careerChartData} />
+                  <View style={{ flex: 1, gap: 5 }}>
+                    {careerChartData.map((item, idx) => (
+                      <View key={idx} style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
+                        <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: item.color }} />
+                        <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
+                          <Text style={{ fontFamily: SANS_BOLD, fontSize: 7, color: COLORS.inkSoft, maxWidth: 80 }}>{item.label}</Text>
+                          <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{item.percentage}%</Text>
+                        </View>
+                      </View>
+                    ))}
+                  </View>
+                </View>
+                <Text style={{ fontFamily: SANS, fontSize: 6.5, color: COLORS.inkMuted, marginTop: 4, lineHeight: 1.25 }}>
+                  This donut breakdown represents the typical distribution of specific career pathways and opening roles pursued by professionals of your archetype.
+                </Text>
+              </View>
+            </View>
+          </View>
+        </View>
+
+        {/* SECTION 7: Career Traits Analysis */}
+        <View wrap={false} style={{ marginBottom: 10 }}>
+          <View style={[pdfStyles.sectionHeading, { marginBottom: 8 }]} wrap={false}>
+            <Text style={pdfStyles.sectionTitleText}>CAREER TRAITS ANALYSIS</Text>
+          </View>
+
+          <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", marginTop: 8 }}>
+            {data.careerTraits.map((group, gIdx) => (
+              <View key={gIdx} style={{ width: "48%", marginBottom: 12 }} wrap={false}>
+                <Text style={{ fontFamily: SANS_BOLD, fontSize: 8.5, color: "#6e6ef0", borderBottomWidth: 0.5, borderBottomColor: COLORS.line, paddingBottom: 3, marginBottom: 6, textTransform: "uppercase" }}>{group.category}</Text>
+                {group.traits.map((trait, tIdx) => (
+                  <View key={tIdx} style={{ backgroundColor: "#fbfaff", borderWidth: 0.5, borderColor: COLORS.line, borderRadius: 6, padding: 6, marginBottom: 5 }}>
+                    <Text style={{ fontFamily: SANS_BOLD, fontSize: 8, color: COLORS.ink, marginBottom: 2 }}>{trait.label}</Text>
+                    <Text style={{ fontFamily: SANS, fontSize: 7, color: COLORS.inkMuted, lineHeight: 1.25 }}>{trait.score > 50 ? trait.highLabel : trait.lowLabel}</Text>
+                  </View>
+                ))}
               </View>
             ))}
           </View>
         </View>
 
-        {/* Alternative Paths */}
-        {data.alternativeDegrees.length > 0 && (
-          <View style={[pdfStyles.matchesSection, { marginTop: 16 }]}>
+        {/* SECTION 8: Best Matches */}
+        <View wrap={false} style={{ marginBottom: 10 }}>
+          <View style={pdfStyles.matchesSection}>
             <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-              <Text style={pdfStyles.sectionTitleText}>ALTERNATIVE PATHWAYS</Text>
+              <Text style={pdfStyles.sectionTitleText}>BEST PATH MATCHES FOR YOU</Text>
             </View>
+
             <View style={pdfStyles.matchesGrid}>
-              {data.alternativeDegrees.map((match, idx) => (
+              {bestMatches.map((match, idx) => (
                 <View key={idx} style={pdfStyles.matchCard}>
                   <View style={pdfStyles.matchCardHeader}>
-                    <Text style={[pdfStyles.matchBadge, { backgroundColor: COLORS.line, color: COLORS.inkMuted }]}>{match.match}% FIT</Text>
+                    <View style={pdfStyles.matchCardIndexContainer}>
+                      <Text style={pdfStyles.matchCardIndexText}>{idx + 1}</Text>
+                    </View>
+                    {match.match && (
+                      <Text style={pdfStyles.matchBadge}>{match.match}% FIT</Text>
+                    )}
                   </View>
                   <View>
                     <Text style={pdfStyles.matchTitle}>{match.title}</Text>
@@ -933,184 +1034,135 @@ export function ReportDocument({ data }: { data: ReportData }) {
               ))}
             </View>
           </View>
+        </View>
+
+        {/* SECTION 9: Alternative Paths */}
+        {data.alternativeDegrees.length > 0 && (
+          <View wrap={false} style={{ marginBottom: 10 }}>
+            <View style={[pdfStyles.matchesSection]}>
+              <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+                <Text style={pdfStyles.sectionTitleText}>ALTERNATIVE PATHWAYS</Text>
+              </View>
+              <View style={pdfStyles.matchesGrid}>
+                {data.alternativeDegrees.map((match, idx) => (
+                  <View key={idx} style={pdfStyles.matchCard}>
+                    <View style={pdfStyles.matchCardHeader}>
+                      <Text style={[pdfStyles.matchBadge, { backgroundColor: COLORS.line, color: COLORS.inkMuted }]}>{match.match}% FIT</Text>
+                    </View>
+                    <View>
+                      <Text style={pdfStyles.matchTitle}>{match.title}</Text>
+                      <Text style={pdfStyles.matchWhy}>{match.why}</Text>
+                    </View>
+                  </View>
+                ))}
+              </View>
+            </View>
+          </View>
         )}
 
-        {/* Environment & Career Distribution */}
-        <View style={[pdfStyles.bottomGrid, { marginTop: 16 }]}>
-          <View style={pdfStyles.bottomColumn}>
+        {/* SECTION 10: Shared Interests */}
+        <View wrap={false} style={{ marginBottom: 10 }}>
+          <View style={[pdfStyles.matchesSection, { paddingBottom: 10, borderBottomWidth: 1, borderBottomColor: COLORS.line, borderBottomStyle: "solid" }]}>
             <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-              <Text style={pdfStyles.sectionTitleText}>IDEAL ENVIRONMENT</Text>
+              <Text style={pdfStyles.sectionTitleText}>SHARED INTERESTS</Text>
             </View>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: "#fbfaff" }}>
-              <PdfConcentricRings items={topEnvironments} />
-              <View style={{ flex: 1, gap: 5 }}>
-                {topEnvironments.slice().reverse().map((item, idx) => (
-                  <View key={idx} style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                    <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: item.color }} />
-                    <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontFamily: SANS_BOLD, fontSize: 7, color: COLORS.inkSoft, maxWidth: 80 }}>{item.label}</Text>
-                      <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{item.score}%</Text>
-                    </View>
-                  </View>
-                ))}
-              </View>
+            <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
+              {data.sharedInterests.map((interest, idx) => (
+                <View key={idx} style={{ backgroundColor: "#f8f7fd", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", marginRight: 6, marginBottom: 6 }}>
+                  <Text style={{ fontFamily: SANS_BOLD, fontSize: 8, color: COLORS.ink }}>{interest}</Text>
+                </View>
+              ))}
             </View>
           </View>
+        </View>
 
-          <View style={pdfStyles.bottomColumn}>
-            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-              <Text style={pdfStyles.sectionTitleText}>CAREER DISTRIBUTION</Text>
+        {/* SECTION 11: Growth Tips & Next Steps */}
+        <View wrap={false} style={{ marginBottom: 10 }}>
+          <View style={[pdfStyles.bottomGrid, { marginBottom: 15 }]}>
+            {/* Growth Tips */}
+            <View style={pdfStyles.bottomColumn}>
+              <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+                <Text style={pdfStyles.sectionTitleText}>GROWTH TIPS FOR YOU</Text>
+              </View>
+              <View style={pdfStyles.checkrow}>
+                <Text style={pdfStyles.checkIcon}>✓</Text>
+                <Text style={pdfStyles.checkText}>
+                  <Text style={{ fontFamily: SANS_BOLD }}>Focus Your Energy:</Text> Pick a direction and go deep. Consistency &gt; perfection.
+                </Text>
+              </View>
+              <View style={pdfStyles.checkrow}>
+                <Text style={pdfStyles.checkIcon}>✓</Text>
+                <Text style={pdfStyles.checkText}>
+                  <Text style={{ fontFamily: SANS_BOLD }}>Build Real-World Skills:</Text> Projects, internships and exposure will set you apart.
+                </Text>
+              </View>
+              <View style={pdfStyles.checkrow}>
+                <Text style={pdfStyles.checkIcon}>✓</Text>
+                <Text style={pdfStyles.checkText}>
+                  <Text style={{ fontFamily: SANS_BOLD }}>Trust Your Voice:</Text> You have strong ideas. Share them more and lead with confidence.
+                </Text>
+              </View>
             </View>
-            <View style={{ flexDirection: "row", alignItems: "center", gap: 10, borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: "#fbfaff" }}>
-              <PdfDonut items={careerChartData} />
-              <View style={{ flex: 1, gap: 5 }}>
-                {careerChartData.map((item, idx) => (
-                  <View key={idx} style={{ flexDirection: "row", alignItems: "center", gap: 4 }}>
-                    <View style={{ width: 6, height: 6, borderRadius: 3, backgroundColor: item.color }} />
-                    <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-                      <Text style={{ fontFamily: SANS_BOLD, fontSize: 7, color: COLORS.inkSoft, maxWidth: 80 }}>{item.label}</Text>
-                      <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted }}>{item.percentage}%</Text>
-                    </View>
-                  </View>
-                ))}
+
+            {/* Next Steps */}
+            <View style={pdfStyles.bottomColumn}>
+              <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
+                <Text style={pdfStyles.sectionTitleText}>YOUR NEXT STEPS</Text>
+              </View>
+              <View style={pdfStyles.checkrow}>
+                <View style={pdfStyles.stepNumContainer}>
+                  <Text style={pdfStyles.stepNumText}>1</Text>
+                </View>
+                <Text style={pdfStyles.stepText}>Explore these paths in detail with our 1:1 counselling.</Text>
+              </View>
+              <View style={pdfStyles.checkrow}>
+                <View style={pdfStyles.stepNumContainer}>
+                  <Text style={pdfStyles.stepNumText}>2</Text>
+                </View>
+                <Text style={pdfStyles.stepText}>Shortlist colleges & courses that fit your profile.</Text>
+              </View>
+              <View style={pdfStyles.checkrow}>
+                <View style={pdfStyles.stepNumContainer}>
+                  <Text style={pdfStyles.stepNumText}>3</Text>
+                </View>
+                <Text style={pdfStyles.stepText}>Build your roadmap and start early.</Text>
               </View>
             </View>
           </View>
         </View>
 
-      </Page>
-
-      {/* PAGE 3: NEXT Secure Step */}
-      <Page size="A4" style={pdfStyles.page}>
-        {renderHeader()}
-
-        {/* Shared Interests */}
-        <View style={[pdfStyles.matchesSection, { paddingBottom: 12, borderBottomWidth: 1, borderBottomColor: COLORS.line, borderBottomStyle: "solid" }]}>
-          <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-            <Text style={pdfStyles.sectionTitleText}>SHARED INTERESTS</Text>
-          </View>
-          <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
-            {data.sharedInterests.map((interest, idx) => (
-              <View key={idx} style={{ backgroundColor: "#f8f7fd", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", marginRight: 6, marginBottom: 6 }}>
-                <Text style={{ fontFamily: SANS_BOLD, fontSize: 8, color: COLORS.ink }}>{interest}</Text>
-              </View>
-            ))}
-          </View>
-        </View>
-
-        {/* Growth Tips & Next Steps */}
-        <View style={pdfStyles.bottomGrid}>
-          {/* Growth Tips */}
-          <View style={pdfStyles.bottomColumn}>
-            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-              <Text style={pdfStyles.sectionTitleText}>GROWTH TIPS FOR YOU</Text>
-            </View>
-            <View style={pdfStyles.checkrow}>
-              <Text style={pdfStyles.checkIcon}>✓</Text>
-              <Text style={pdfStyles.checkText}>
-                <Text style={{ fontFamily: SANS_BOLD }}>Focus Your Energy:</Text> Pick a direction and go deep. Consistency &gt; perfection.
-              </Text>
-            </View>
-            <View style={pdfStyles.checkrow}>
-              <Text style={pdfStyles.checkIcon}>✓</Text>
-              <Text style={pdfStyles.checkText}>
-                <Text style={{ fontFamily: SANS_BOLD }}>Build Real-World Skills:</Text> Projects, internships and exposure will set you apart.
-              </Text>
-            </View>
-            <View style={pdfStyles.checkrow}>
-              <Text style={pdfStyles.checkIcon}>✓</Text>
-              <Text style={pdfStyles.checkText}>
-                <Text style={{ fontFamily: SANS_BOLD }}>Trust Your Voice:</Text> You have strong ideas. Share them more and lead with confidence.
-              </Text>
-            </View>
-          </View>
-
-          {/* Next Steps */}
-          <View style={pdfStyles.bottomColumn}>
-            <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
-              <Text style={pdfStyles.sectionTitleText}>YOUR NEXT STEPS</Text>
-            </View>
-            <View style={pdfStyles.checkrow}>
-              <View style={pdfStyles.stepNumContainer}>
-                <Text style={pdfStyles.stepNumText}>1</Text>
-              </View>
-              <Text style={pdfStyles.stepText}>Explore these paths in detail with our 1:1 counselling.</Text>
-            </View>
-            <View style={pdfStyles.checkrow}>
-              <View style={pdfStyles.stepNumContainer}>
-                <Text style={pdfStyles.stepNumText}>2</Text>
-              </View>
-              <Text style={pdfStyles.stepText}>Shortlist colleges & courses that fit your profile.</Text>
-            </View>
-            <View style={pdfStyles.checkrow}>
-              <View style={pdfStyles.stepNumContainer}>
-                <Text style={pdfStyles.stepNumText}>3</Text>
-              </View>
-              <Text style={pdfStyles.stepText}>Build your roadmap and start early.</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Quote Block */}
-        <View style={pdfStyles.quoteSection}>
-          <Text style={pdfStyles.quoteText}>
-            "You don't need to have it all figured out. You just need the right direction."
-          </Text>
-        </View>
-
-        {/* Footer */}
-        <View style={pdfStyles.footer}>
-          <View style={pdfStyles.footerBrand}>
-            <PdfLogo size={14} />
-            <Text style={pdfStyles.footerBrandText}>SecureSteps</Text>
-          </View>
-          <Text style={pdfStyles.footerLink}>
-            If you want more info, visit https://www.securesteps.co.in/
-          </Text>
-        </View>
-      </Page>
-
-      {/* PAGE 4: Letter to Parents */}
-      <Page size="A4" style={pdfStyles.page}>
-        {renderHeader()}
-        
-        <View style={{ marginTop: 16 }}>
-          <View style={[pdfStyles.sectionHeading, { marginBottom: 10 }]}>
-            <Text style={pdfStyles.sectionTitleText}>A SHORT NOTE FOR YOUR FAMILY</Text>
-          </View>
-        </View>
-
-        <View style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, backgroundColor: "#f8f7fd", padding: 20, marginTop: 10 }}>
-          <Text style={[styles.h3, { marginBottom: 12, color: COLORS.ink }]}>
-            {data.parentLetter.greeting}
-          </Text>
-          {data.parentLetter.paragraphs.map((p, i) => (
-            <Text
-              key={i}
-              style={[styles.body, { color: COLORS.inkSoft, marginBottom: 10, lineHeight: 1.6 }]}
-            >
-              {p}
+        {/* SECTION 12: Note to Parents & Quote */}
+        <View style={{ marginBottom: 10 }}>
+          <View wrap={false} style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, backgroundColor: "#f8f7fd", padding: 12, marginTop: 5 }}>
+            <Text style={[styles.h4, { marginBottom: 8, color: COLORS.ink }]}>
+              {data.parentLetter.greeting}
             </Text>
-          ))}
-          <View style={{ marginTop: 14, paddingTop: 12, borderTopWidth: 0.5, borderTopColor: COLORS.line, borderStyle: "solid" }}>
-            {data.parentLetter.signoff.split("\n").map((line, i) => (
-              <Text key={i} style={[styles.body, { color: COLORS.inkMuted }]}>
-                {line}
+            {data.parentLetter.paragraphs.map((p, i) => (
+              <Text
+                key={i}
+                style={[styles.body, { color: COLORS.inkSoft, marginBottom: 6, lineHeight: 1.4, fontSize: 8.5 }]}
+              >
+                {p}
               </Text>
             ))}
+            <View style={{ marginTop: 8, paddingTop: 6, borderTopWidth: 0.5, borderTopColor: COLORS.line, borderStyle: "solid" }}>
+              {data.parentLetter.signoff.split("\n").map((line, i) => (
+                <Text key={i} style={[styles.body, { color: COLORS.inkMuted, fontSize: 8.5 }]}>
+                  {line}
+                </Text>
+              ))}
+            </View>
+          </View>
+
+          {/* Quote Block */}
+          <View wrap={false} style={[pdfStyles.quoteSection, { marginTop: 10 }]}>
+            <Text style={pdfStyles.quoteText}>
+              "You don't need to have it all figured out. You just need the right direction."
+            </Text>
           </View>
         </View>
 
-        {/* Footer */}
-        <View style={pdfStyles.footer}>
-          <View style={pdfStyles.footerBrand}>
-            <PdfLogo size={14} />
-            <Text style={pdfStyles.footerBrandText}>SecureSteps</Text>
-          </View>
-          <Text style={pdfStyles.footerLink}>
-            If you want more info, visit https://www.securesteps.co.in/
-          </Text>
-        </View>
+        {renderFooter()}
       </Page>
     </Document>
   );
@@ -1481,11 +1533,11 @@ function PdfConcentricRings({
 }: {
   items: Array<{ label: string; score: number; color: string }>
 }) {
-  const size = 100;
+  const size = 120;
   const cx = size / 2;
   const cy = size / 2;
-  const strokeWidth = 6;
-  const gap = 3;
+  const strokeWidth = 8;
+  const gap = 4;
   
   return (
     <Svg width={size} height={size} viewBox={`0 0 ${size} ${size}`}>
