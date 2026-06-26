@@ -550,7 +550,16 @@ function buildTopDegrees(args: {
   engagement: EngagementReadout | null;
 }): DegreeRecommendation[] {
   const { profile, dimMap: s, engagement } = args;
-  const inDiscipline = coursesByDiscipline(profile.discipline);
+  
+  // Detect preferred level (Bachelors vs Masters) based on explicitly chosen course
+  const explicit = courseById(profile.course);
+  const preferredLevel = explicit?.level || "bachelors";
+
+  // If the user's stream is schooling, they can study bachelors courses from any discipline
+  const inDiscipline = profile.discipline === "schooling"
+    ? COURSES.filter((c) => (c.level || "bachelors") === preferredLevel)
+    : coursesByDiscipline(profile.discipline);
+
   if (!inDiscipline.length) {
     return [
       {
@@ -561,15 +570,20 @@ function buildTopDegrees(args: {
       },
     ];
   }
-  const ranked = inDiscipline
+
+  // Filter courses by the preferred level (Bachelors vs Masters)
+  const levelFiltered = inDiscipline.filter(
+    (c) => (c.level || "bachelors") === preferredLevel
+  );
+
+  const ranked = levelFiltered
     .map((c) => ({ course: c, match: scoreCourse(c, s, engagement) }))
     .sort((a, b) => b.match - a.match);
 
   // If the student already picked a specific course, surface it first
   // (regardless of match), then top alternatives within the same area.
-  const explicit = courseById(profile.course);
   const picks: typeof ranked = [];
-  if (explicit && explicit.discipline === profile.discipline) {
+  if (explicit && (profile.discipline === "schooling" || explicit.discipline === profile.discipline)) {
     const explicitScore = scoreCourse(explicit, s, engagement);
     picks.push({ course: explicit, match: explicitScore });
   }
@@ -597,6 +611,7 @@ const ADJACENT: Record<Discipline, Discipline[]> = {
   design_arch: ["tech_cs", "media", "humanities"],
   education:   ["humanities", "psychology", "media"],
   hospitality: ["business", "media", "design_arch"],
+  schooling:   ["tech_cs", "business", "humanities"],
 };
 
 function buildAlternativeDegrees(args: {
@@ -608,12 +623,20 @@ function buildAlternativeDegrees(args: {
   const adjacent = ADJACENT[profile.discipline] ?? [];
   if (!adjacent.length) return [];
 
-  // Best one course from each adjacent discipline.
+  // Detect preferred level (Bachelors vs Masters) based on explicitly chosen course
+  const explicit = courseById(profile.course);
+  const preferredLevel = explicit?.level || "bachelors";
+
+  // Best one course from each adjacent discipline matching the preferred level.
   const picks = adjacent
     .map((d) => {
       const candidates = coursesByDiscipline(d);
       if (!candidates.length) return null;
-      const ranked = candidates
+      const levelFiltered = candidates.filter(
+        (c) => (c.level || "bachelors") === preferredLevel
+      );
+      if (!levelFiltered.length) return null;
+      const ranked = levelFiltered
         .map((c) => ({ course: c, match: scoreCourse(c, s, null) }))
         .sort((a, b) => b.match - a.match);
       return ranked[0];

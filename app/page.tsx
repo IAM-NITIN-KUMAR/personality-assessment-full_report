@@ -162,6 +162,8 @@ function Form(props: {
   submitting: boolean;
 }) {
   const courses = coursesByDiscipline(props.discipline);
+  const bachelorsCourses = courses.filter((c) => c.level !== "masters");
+  const mastersCourses = courses.filter((c) => c.level === "masters");
   const inputStyle = { background: "rgba(255,255,255,0.7)", border: "1px solid rgba(200,190,220,0.4)", boxShadow: "inset 0 1px 3px rgba(180,140,200,0.08)" };
   const focusStyle = { background: "rgba(255,255,255,0.95)", border: "1px solid rgba(180,140,220,0.6)", boxShadow: "0 0 0 3px rgba(196,181,253,0.2), inset 0 1px 3px rgba(180,140,200,0.08)" };
   const blurStyle = inputStyle;
@@ -202,12 +204,26 @@ function Form(props: {
               {DISCIPLINES.map((d) => <option key={d.id} value={d.id}>{d.label}</option>)}
             </select>
           </Field>
-          <Field label={`SPECIFIC COURSE · OPTIONAL · ${courses.length} OPTIONS`}>
-            <select value={props.course ?? ""} onChange={(e) => props.setCourse(e.target.value || undefined)}
-              className="w-full rounded-xl px-4 py-3 text-[15px] text-ink outline-none transition-all appearance-none cursor-pointer"
+          <Field label={props.discipline === "schooling" ? "SPECIFIC COURSE · NOT APPLICABLE" : `SPECIFIC COURSE · OPTIONAL · ${courses.length} OPTIONS`}>
+            <select 
+              disabled={props.discipline === "schooling"}
+              value={props.course ?? ""} 
+              onChange={(e) => props.setCourse(e.target.value || undefined)}
+              className="w-full rounded-xl px-4 py-3 text-[15px] text-ink outline-none transition-all appearance-none cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
               style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)}>
-              <option value="">— I'm not sure yet, recommend for me —</option>
-              {courses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+              <option value="">
+                {props.discipline === "schooling" ? "— Not applicable for Schooling —" : "— I'm not sure yet, recommend for me —"}
+              </option>
+              {props.discipline !== "schooling" && bachelorsCourses.length > 0 && (
+                <optgroup label="Bachelors Programs">
+                  {bachelorsCourses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                </optgroup>
+              )}
+              {props.discipline !== "schooling" && mastersCourses.length > 0 && (
+                <optgroup label="Masters Programs">
+                  {mastersCourses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
+                </optgroup>
+              )}
             </select>
           </Field>
         </div>

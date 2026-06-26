@@ -31,6 +31,7 @@ import {
 import { Logo } from "@/components/ui/logo";
 import { ReportData } from "@/lib/report-data";
 import { Dimension } from "@/lib/types";
+import { DISCIPLINES, courseById } from "@/lib/course-catalog";
 
 // Dynamic Core Strengths definitions mapped to user Archetypes
 const ARCHETYPE_STRENGTHS: Record<string, Array<{ title: string; desc: string; icon: "bulb" | "rocket" | "group" | "compass" }>> = {
@@ -140,6 +141,39 @@ export function ReportView({ data }: { data: ReportData }) {
     const suffix = Math.abs(hash % 9000) + 1000;
     return `SS-052025-${suffix}`;
   }, [data.profile.name]);
+
+  const disciplineLabel = useMemo(() => {
+    const disc = DISCIPLINES.find((d) => d.id === data.profile.discipline);
+    return disc ? disc.label : data.profile.discipline;
+  }, [data.profile.discipline]);
+
+  const chosenCourse = useMemo(() => {
+    return courseById(data.profile.course);
+  }, [data.profile.course]);
+
+  const introMessage = useMemo(() => {
+    if (data.profile.discipline === "schooling") {
+      return (
+        <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-[#f3f0fc] text-[#6e6ef0] rounded-xl px-4 py-2.5 border border-[#6e6ef0]/15 shadow-sm">
+          👋 It's wonderful to know you are currently in <strong>Schooling</strong>! This is a unique phase of pure potential where you can build strong foundations. We'll help you pinpoint the best undergraduate routes matching your style.
+        </span>
+      );
+    }
+
+    if (chosenCourse) {
+      return (
+        <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-[#f3f0fc] text-[#6e6ef0] rounded-xl px-4 py-2.5 border border-[#6e6ef0]/15 shadow-sm">
+          🎯 It's fantastic to know you are focusing on the <strong>{disciplineLabel}</strong> stream, with your sights set on <strong>{chosenCourse.title}</strong>! Let's explore how this matches your cognitive DNA and what similar pathways might expand your horizon.
+        </span>
+      );
+    }
+
+    return (
+      <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-[#f3f0fc] text-[#6e6ef0] rounded-xl px-4 py-2.5 border border-[#6e6ef0]/15 shadow-sm">
+        ✨ It's great to know you are focusing on the <strong>{disciplineLabel}</strong> stream! Let's explore the best matching specializations and pathways that align with your unique archetype.
+      </span>
+    );
+  }, [data.profile.discipline, disciplineLabel, chosenCourse]);
 
   // Generate dynamic 4 matches from degree shortlists
   const bestMatches = useMemo(() => {
@@ -266,6 +300,7 @@ export function ReportView({ data }: { data: ReportData }) {
             <p className="text-[14px] sm:text-[15px] leading-relaxed text-ink-500 max-w-md">
               This is you — decoded. Your answers reveal your natural strengths, what drives you, and the paths that will help you thrive.
             </p>
+            {introMessage}
           </div>
 
           {/* User Profile Card */}

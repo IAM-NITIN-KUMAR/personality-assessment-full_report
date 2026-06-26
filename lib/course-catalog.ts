@@ -25,7 +25,8 @@ export type Discipline =
   | "law"
   | "design_arch"
   | "education"
-  | "hospitality";
+  | "hospitality"
+  | "schooling";
 
 export interface DisciplineMeta {
   id: Discipline;
@@ -50,6 +51,7 @@ export const DISCIPLINES: DisciplineMeta[] = [
   { id: "design_arch",  label: "Design & Architecture",         blurb: "Architecture, UI/UX, Product, Communication Design",                routesReady: false },
   { id: "education",    label: "Education (BEd)",               blurb: "Teaching, school leadership, EdTech, curriculum",                    routesReady: false },
   { id: "hospitality",  label: "Hotel Management",              blurb: "BHM, F&B, Revenue, Luxury Hospitality",                              routesReady: false },
+  { id: "schooling",    label: "Schooling (High School / K-12)", blurb: "Currently in high school / completing K-12 education",              routesReady: false },
 ];
 
 export interface CourseCareer {
@@ -61,6 +63,7 @@ export interface Course {
   id: string;
   title: string;
   discipline: Discipline;
+  level?: "bachelors" | "masters";
   description: string;
   careers: CourseCareer[];
   /**
@@ -883,6 +886,317 @@ export const COURSES: Course[] = [
       { role: "Luxury Brand Manager",    salaryIndia: "₹7–18 LPA" },
     ],
     weights: { social: 0.2, energy: 0.15 },
+  },
+
+  // ── MASTERS DEGREES ──────────────────────────────────────────────────
+  // Technology & Computer Science
+  {
+    id: "ms_cs",
+    title: "MS in Computer Science",
+    discipline: "tech_cs",
+    level: "masters",
+    description: "Advanced study of computer systems, networks, algorithms, and computational theory. Prepares for deep engineering and architectural roles.",
+    careers: [
+      { role: "Software Architect / Principal Engineer", salaryIndia: "₹18–45 LPA" },
+      { role: "Research & Development Engineer",        salaryIndia: "₹15–38 LPA" },
+      { role: "Systems Programmer",                    salaryIndia: "₹12–30 LPA" },
+    ],
+    weights: { decision_style: 0.25, structure: 0.2, drive: 0.1 },
+  },
+  {
+    id: "ms_aiml",
+    title: "MS in Artificial Intelligence / Machine Learning",
+    discipline: "tech_cs",
+    level: "masters",
+    description: "Deep study of neural networks, reinforcement learning, statistical models, and modern AI architectures.",
+    careers: [
+      { role: "Machine Learning Engineer",    salaryIndia: "₹20–50 LPA" },
+      { role: "AI Research Scientist",        salaryIndia: "₹22–55 LPA" },
+      { role: "Computer Vision Specialist",    salaryIndia: "₹18–45 LPA" },
+    ],
+    weights: { drive: 0.3, decision_style: 0.25, risk: 0.15 },
+  },
+  {
+    id: "ms_cyber",
+    title: "MS in Cybersecurity",
+    discipline: "tech_cs",
+    level: "masters",
+    description: "Advanced network defense, penetration testing, cryptography, incident response, and cybersecurity policy.",
+    careers: [
+      { role: "Security Architect",          salaryIndia: "₹15–38 LPA" },
+      { role: "Principal Penetration Tester", salaryIndia: "₹14–35 LPA" },
+      { role: "CISO / Director of Security",  salaryIndia: "₹25–65 LPA" },
+    ],
+    weights: { structure: 0.3, decision_style: 0.25, risk: 0.1 },
+  },
+  {
+    id: "ms_software_engg",
+    title: "MS in Software Engineering",
+    discipline: "tech_cs",
+    level: "masters",
+    description: "Enterprise software design, design patterns, lifecycle management, cloud architectures, and agile engineering practices.",
+    careers: [
+      { role: "Lead Software Architect",   salaryIndia: "₹16–42 LPA" },
+      { role: "Engineering Manager",        salaryIndia: "₹18–40 LPA" },
+      { role: "DevOps Solutions Lead",      salaryIndia: "₹15–35 LPA" },
+    ],
+    weights: { structure: 0.25, decision_style: 0.2, drive: 0.15 },
+  },
+
+  // Engineering (non-CS)
+  {
+    id: "ms_mech",
+    title: "MS in Mechanical Engineering",
+    discipline: "tech_engg",
+    level: "masters",
+    description: "Advanced thermal systems, fluid dynamics, manufacturing design, automation, and computer-aided engineering.",
+    careers: [
+      { role: "R&D Mechanical Engineer",   salaryIndia: "₹10–25 LPA" },
+      { role: "Materials / Structural Lead", salaryIndia: "₹8–22 LPA" },
+      { role: "Aerodynamics Consultant",    salaryIndia: "₹12–28 LPA" },
+    ],
+    weights: { structure: 0.25, drive: 0.15 },
+  },
+  {
+    id: "ms_eee",
+    title: "MS in Electrical & Electronics Engineering",
+    discipline: "tech_engg",
+    level: "masters",
+    description: "Advanced power systems, signal processing, control systems, power electronics, and semi-conductor engineering.",
+    careers: [
+      { role: "Semi-conductor Designer",    salaryIndia: "₹12–30 LPA" },
+      { role: "Control Systems Architect",   salaryIndia: "₹10–25 LPA" },
+      { role: "Power Grid Solutions Engineer", salaryIndia: "₹8–22 LPA" },
+    ],
+    weights: { structure: 0.25, decision_style: 0.2 },
+  },
+  {
+    id: "ms_robotics",
+    title: "MS in Robotics",
+    discipline: "tech_engg",
+    level: "masters",
+    description: "Interdisciplinary robotics systems, kinematics, path planning, autonomous machinery, and robotic manipulation.",
+    careers: [
+      { role: "Robotics R&D Specialist",    salaryIndia: "₹14–35 LPA" },
+      { role: "Autonomous Systems Lead",    salaryIndia: "₹15–40 LPA" },
+      { role: "Automation Architect",       salaryIndia: "₹12–30 LPA" },
+    ],
+    weights: { drive: 0.25, structure: 0.2, risk: 0.15 },
+  },
+
+  // Business & Management
+  {
+    id: "mba",
+    title: "MBA (General / Specializations)",
+    discipline: "business",
+    level: "masters",
+    description: "Two-year flagship MBA. Core strategies, global finance, corporate leadership, and organization scaling.",
+    careers: [
+      { role: "Management Consultant",    salaryIndia: "₹15–35 LPA" },
+      { role: "Investment Banking Associate", salaryIndia: "₹18–45 LPA" },
+      { role: "Strategy Director",         salaryIndia: "₹20–50 LPA" },
+    ],
+    weights: { social: 0.25, drive: 0.25, decision_style: 0.15 },
+  },
+  {
+    id: "ms_biz_analytics",
+    title: "MS in Business Analytics",
+    discipline: "business",
+    level: "masters",
+    description: "Advanced data sciences, forecasting models, predictive operations, and data-backed business optimization.",
+    careers: [
+      { role: "Business Analytics Lead",  salaryIndia: "₹12–30 LPA" },
+      { role: "Product Manager (Data)",    salaryIndia: "₹15–35 LPA" },
+      { role: "Operations Strategy Lead",  salaryIndia: "₹14–32 LPA" },
+    ],
+    weights: { decision_style: 0.25, structure: 0.2 },
+  },
+  {
+    id: "ms_finance",
+    title: "MS in Finance",
+    discipline: "commerce",
+    level: "masters",
+    description: "Advanced corporate finance, asset pricing, quantitative options, risk management, and capital markets.",
+    careers: [
+      { role: "Investment Banker",       salaryIndia: "₹16–42 LPA" },
+      { role: "Financial Risk Manager",   salaryIndia: "₹12–30 LPA" },
+      { role: "Portfolio Manager",       salaryIndia: "₹15–40 LPA" },
+    ],
+    weights: { decision_style: 0.25, drive: 0.2 },
+  },
+  {
+    id: "ms_fintech",
+    title: "MS in FinTech",
+    discipline: "commerce",
+    level: "masters",
+    description: "Algorithmic trading, block-chain protocols, digital banking platforms, and financial analytics software.",
+    careers: [
+      { role: "FinTech Product Manager",   salaryIndia: "₹15–38 LPA" },
+      { role: "Quantitative Trader",       salaryIndia: "₹20–60 LPA" },
+      { role: "Blockchain Solutions Lead",  salaryIndia: "₹16–40 LPA" },
+    ],
+    weights: { drive: 0.2, decision_style: 0.2, risk: 0.15 },
+  },
+
+  // Pure & Applied Sciences
+  {
+    id: "ms_biotech",
+    title: "MS in Biotechnology",
+    discipline: "science",
+    level: "masters",
+    description: "Advanced gene therapy, bioprocess kinetics, bioinformatics models, and molecular science R&D.",
+    careers: [
+      { role: "Bio-pharma Lead Scientist",  salaryIndia: "₹10–28 LPA" },
+      { role: "Bioinformatics Architect",   salaryIndia: "₹12–32 LPA" },
+      { role: "R&D Innovations Lead",       salaryIndia: "₹12–30 LPA" },
+    ],
+    weights: { structure: 0.25, decision_style: 0.2 },
+  },
+  {
+    id: "ms_public_health",
+    title: "MS in Public Health (MPH)",
+    discipline: "science",
+    level: "masters",
+    description: "Epidemiological studies, public policy systems, disease prevention programs, and community health management.",
+    careers: [
+      { role: "Epidemiologist",             salaryIndia: "₹8–22 LPA" },
+      { role: "Public Health Director",     salaryIndia: "₹10–25 LPA" },
+      { role: "Healthcare Policy Consultant", salaryIndia: "₹9–24 LPA" },
+    ],
+    weights: { social: 0.25, structure: 0.2 },
+  },
+
+  // Economics
+  {
+    id: "ms_econ",
+    title: "MS in Quantitative Economics",
+    discipline: "economics",
+    level: "masters",
+    description: "Deeps mathematical modelling, economic forecasting, corporate financial theory, and econometrics.",
+    careers: [
+      { role: "Quantitative Economist", salaryIndia: "₹12–32 LPA" },
+      { role: "Policy Advisor (Economic)", salaryIndia: "₹10–26 LPA" },
+      { role: "Data Science Consultant",  salaryIndia: "₹12–30 LPA" },
+    ],
+    weights: { decision_style: 0.3, structure: 0.25 },
+  },
+
+  // Psychology
+  {
+    id: "ms_clinical_psych",
+    title: "MS in Clinical Psychology",
+    discipline: "psychology",
+    level: "masters",
+    description: "Advanced diagnostics, psychotherapies, clinical assessments, and patient consulting.",
+    careers: [
+      { role: "Clinical Psychologist",     salaryIndia: "₹8–24 LPA" },
+      { role: "Therapy Practice Lead",     salaryIndia: "₹6–20 LPA" },
+      { role: "Rehabilitation Consultant", salaryIndia: "₹7–22 LPA" },
+    ],
+    weights: { social: 0.25, decision_style: 0.15 },
+  },
+
+  // Humanities
+  {
+    id: "ms_public_policy",
+    title: "MS in Public Policy",
+    discipline: "humanities",
+    level: "masters",
+    description: "Geopolitical research, legislative analysis, civic management strategy, and policy testing models.",
+    careers: [
+      { role: "Public Policy Consultant", salaryIndia: "₹9–26 LPA" },
+      { role: "Legislative Analyst",      salaryIndia: "₹8–22 LPA" },
+      { role: "Non-Profit Executive",     salaryIndia: "₹7–20 LPA" },
+    ],
+    weights: { decision_style: 0.2, social: 0.15 },
+  },
+
+  // Media
+  {
+    id: "ms_journalism",
+    title: "MS in Communications / Journalism",
+    discipline: "media",
+    level: "masters",
+    description: "Digital storytelling, broadcast journalism models, public relations, and content scaling strategies.",
+    careers: [
+      { role: "Editorial Director",        salaryIndia: "₹10–28 LPA" },
+      { role: "Communications Strategist", salaryIndia: "₹8–24 LPA" },
+      { role: "Digital Media Producer",     salaryIndia: "₹7–22 LPA" },
+    ],
+    weights: { risk: 0.15, social: 0.1 },
+  },
+
+  // Law
+  {
+    id: "llm",
+    title: "LL.M. (Master of Laws)",
+    discipline: "law",
+    level: "masters",
+    description: "Advanced corporate compliance, intellectual property frameworks, international arbitration, and comparative law.",
+    careers: [
+      { role: "Corporate Legal Counsel", salaryIndia: "₹15–38 LPA" },
+      { role: "Arbitration Specialist",   salaryIndia: "₹12–30 LPA" },
+      { role: "Legal Consultant",         salaryIndia: "₹10–25 LPA" },
+    ],
+    weights: { decision_style: 0.25, structure: 0.2 },
+  },
+
+  // Design & Architecture
+  {
+    id: "ms_uiux",
+    title: "MS in UX/UI Design",
+    discipline: "design_arch",
+    level: "masters",
+    description: "User research, cognitive human-computer interaction, advanced wireframing, and design system engineering.",
+    careers: [
+      { role: "Principal Interaction Designer", salaryIndia: "₹18–42 LPA" },
+      { role: "UX Design Architect",           salaryIndia: "₹14–35 LPA" },
+      { role: "Digital Product Director",       salaryIndia: "₹22–50 LPA" },
+    ],
+    weights: { risk: 0.2, drive: 0.2 },
+  },
+  {
+    id: "ms_architecture",
+    title: "MS in Architecture",
+    discipline: "design_arch",
+    level: "masters",
+    description: "Advanced spatial theory, computational design, green building metrics, and urban structural engineering.",
+    careers: [
+      { role: "Senior Design Architect",    salaryIndia: "₹12–30 LPA" },
+      { role: "Urban Infrastructure Lead",  salaryIndia: "₹14–32 LPA" },
+      { role: "Sustainability Architect",   salaryIndia: "₹10–25 LPA" },
+    ],
+    weights: { risk: 0.15, structure: 0.25 },
+  },
+
+  // Education
+  {
+    id: "ms_education",
+    title: "MS in Education & Learning Design",
+    discipline: "education",
+    level: "masters",
+    description: "Pedagogy analytics, digital curriculum building, learning management systems, and academic leadership.",
+    careers: [
+      { role: "Learning Experience Designer", salaryIndia: "₹8–22 LPA" },
+      { role: "Curriculum Lead",              salaryIndia: "₹8–20 LPA" },
+      { role: "EdTech Program Architect",     salaryIndia: "₹10–25 LPA" },
+    ],
+    weights: { social: 0.25 },
+  },
+
+  // Hospitality
+  {
+    id: "ms_hospitality",
+    title: "MS in Hospitality & Tourism Management",
+    discipline: "hospitality",
+    level: "masters",
+    description: "Global luxury brand strategies, complex hotel operations, financial yields, and tourism analytics.",
+    careers: [
+      { role: "General Manager (Operations)", salaryIndia: "₹15–35 LPA" },
+      { role: "Hospitality Analytics Director", salaryIndia: "₹12–28 LPA" },
+      { role: "Yield Management Lead",         salaryIndia: "₹10–25 LPA" },
+    ],
+    weights: { social: 0.25, energy: 0.15 },
   },
 ];
 

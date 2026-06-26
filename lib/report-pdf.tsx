@@ -19,6 +19,7 @@ import {
 } from "@react-pdf/renderer";
 import { ReportData, Stat } from "./report-data";
 import { DIMENSION_LABELS, Dimension } from "./types";
+import { DISCIPLINES, courseById } from "./course-catalog";
 
 // Register premium custom fonts from local public directory
 Font.register({
@@ -329,6 +330,20 @@ const pdfStyles = StyleSheet.create({
     fontSize: 8.5,
     color: "#6B6F78",
     lineHeight: 1.4,
+  },
+  pdfIntroBox: {
+    marginTop: 6,
+    padding: 6,
+    borderRadius: 6,
+    backgroundColor: "#F3F0FC",
+    borderWidth: 0.5,
+    borderColor: "#E5DDF5",
+  },
+  pdfIntroText: {
+    fontFamily: SANS_BOLD,
+    fontSize: 7.5,
+    color: "#6e6ef0",
+    lineHeight: 1.3,
   },
   profileCard: {
     flex: 0.9,
@@ -677,6 +692,19 @@ export function ReportDocument({ data }: { data: ReportData }) {
   const suffix = Math.abs(hash % 9000) + 1000;
   const profileId = `SS-052025-${suffix}`;
 
+  const disc = DISCIPLINES.find((d) => d.id === data.profile.discipline);
+  const disciplineLabel = disc ? disc.label : data.profile.discipline;
+  const chosenCourse = courseById(data.profile.course);
+
+  let pdfIntro = "";
+  if (data.profile.discipline === "schooling") {
+    pdfIntro = "👋 It's wonderful to know you are currently in Schooling! This is a unique phase of pure potential where you can build strong foundations. We'll help you pinpoint the best undergraduate routes matching your style.";
+  } else if (chosenCourse) {
+    pdfIntro = `🎯 It's fantastic to know you are focusing on the ${disciplineLabel} stream, with your sights set on ${chosenCourse.title}! Let's explore how this matches your cognitive DNA and what similar pathways might expand your horizon.`;
+  } else {
+    pdfIntro = `✨ It's great to know you are focusing on the ${disciplineLabel} stream! Let's explore the best matching specializations and pathways that align with your unique archetype.`;
+  }
+
   const todayStr = today();
 
   // Strengths
@@ -758,6 +786,9 @@ export function ReportDocument({ data }: { data: ReportData }) {
               <Text style={pdfStyles.insightDesc}>
                 This is you — decoded. Your answers reveal your natural strengths, what drives you, and the paths that will help you thrive.
               </Text>
+              <View style={pdfStyles.pdfIntroBox}>
+                <Text style={pdfStyles.pdfIntroText}>{pdfIntro}</Text>
+              </View>
             </View>
 
             {/* User Profile Card */}
