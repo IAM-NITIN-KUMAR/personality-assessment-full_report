@@ -97,6 +97,7 @@ export interface StudentProfile {
   name: string;
   email: string;
   phone?: string;
+  educationLevel?: "10th_12th" | "college";
   /** Broad interest area (12 categories). Maps to question-bank routes. */
   discipline: Discipline;
   /** Optional specific course the student is considering. Catalog id. */

@@ -1,19 +1,246 @@
-import { Question, Section, StudentProfile } from "./types";
-import { CONTEXT_QUESTIONS } from "./question-bank/context";
-import { ROOTS_ANCHORS } from "./question-bank/roots";
-import { ROUTES_BCA, ROUTES_BCA_ENGAGEMENT } from "./question-bank/routes-bca";
+import { Question, Section, StudentProfile, Answer, Dimension } from "./types";
+import schoolQuestionSet from "../10th_12th_question_set.json";
+import ugQuestionSet from "../ug_question_set.json";
+
+const SCHOOL_SCORES: Record<string, Record<string, Partial<Record<Dimension, number>>>> = {
+  Q1: {
+    a: { drive: 2, structure: 1 },
+    b: { social: 2, energy: 1 },
+    c: { structure: 2, decision_style: 1 },
+    d: { energy: 2, risk: 1 },
+  },
+  Q2: {
+    a: { decision_style: 2, structure: 1 },
+    b: { energy: 2, risk: 1 },
+    c: { social: 2, energy: 1 },
+    d: { drive: 2, structure: 1 },
+  },
+  Q3: {
+    a: { structure: 2, decision_style: 1 },
+    b: { risk: 2, structure: -2 },
+    c: { social: 2, energy: 1 },
+    d: { decision_style: 2, structure: 1 },
+  },
+  Q4: {
+    a: { structure: 2, decision_style: 1 },
+    b: { structure: 1, decision_style: 1 },
+    c: { social: 2, energy: 1 },
+    d: { energy: 2, risk: 1 },
+  },
+  Q5: {
+    a: { structure: 2, decision_style: 1 },
+    b: { drive: 1, energy: -1 },
+    c: { social: 2 },
+    d: { risk: 2, structure: -1 },
+  },
+  Q6: {
+    a: { structure: 1, drive: 1 },
+    b: { social: 2, energy: 1 },
+    c: { drive: 2, energy: 1 },
+    d: { social: -1, energy: -1 },
+  },
+  Q7: {
+    a: { social: 2, energy: 2 },
+    b: { social: -2, energy: -2 },
+    c: { drive: 2, structure: 1 },
+    d: { risk: 2, energy: 1 },
+  },
+  Q15: {
+    a: { structure: 2 },
+    b: { structure: -2 },
+    c: { structure: 0 },
+  },
+  Q16: {
+    a: { social: -1, structure: 1 },
+    b: { energy: 1 },
+    c: { social: -2, energy: -1 },
+    d: { risk: 2, structure: -1 },
+  },
+  Q17: {
+    a: { risk: -2, structure: 1 },
+    b: { risk: 1, decision_style: 1 },
+    c: { risk: 2, structure: -1 },
+  },
+  Q18: {
+    a: { social: -2, energy: -1 },
+    b: { social: 2, energy: 1 },
+    c: { structure: 2, drive: -1 },
+    d: { drive: 2, social: 1 },
+  },
+  Q19: {
+    a: { energy: -2, social: -1 },
+    b: { energy: 2, social: 1 },
+    c: { structure: 1 },
+    d: { structure: -1, drive: 1 },
+  },
+};
+
+const UG_SCORES: Record<string, Record<string, Partial<Record<Dimension, number>>>> = {
+  Q1: {
+    a: { drive: 2, social: 1 },
+    b: { structure: 2, drive: 1 },
+    c: { energy: 2, risk: 1 },
+    d: { social: 2, energy: 1 },
+  },
+  Q2: {
+    a: { structure: 2, decision_style: 1 },
+    b: { energy: 2, risk: 1 },
+    c: { social: 2, energy: 1 },
+    d: { decision_style: 2, structure: 1 },
+  },
+  Q3: {
+    a: { decision_style: 2, structure: 1 },
+    b: { drive: 2, energy: 1 },
+    c: { social: 2, drive: 1 },
+    d: { risk: -2, structure: 1 },
+  },
+  Q4: {
+    a: { drive: 2, structure: -1 },
+    b: { structure: 2, decision_style: 1 },
+    c: { risk: -1, structure: 2 },
+    d: { risk: 2, structure: -2 },
+  },
+  Q5: {
+    a: { decision_style: 2, structure: 1 },
+    b: { risk: 2, energy: 1 },
+    c: { social: 2 },
+    d: { social: -1, energy: -1 },
+  },
+  Q6: {
+    a: { decision_style: 2, structure: 1 },
+    b: { drive: 2, energy: 1 },
+    c: { energy: 2, risk: 1 },
+    d: { structure: 2, social: 1 },
+  },
+  Q7: {
+    a: { drive: 2, structure: 1 },
+    b: { social: 2, energy: 2 },
+    c: { social: -2, energy: -2 },
+    d: { structure: 2, drive: 1 },
+  },
+  Q15: {
+    a: { structure: 2, risk: -1 },
+    b: { risk: 2, structure: -2 },
+    c: { decision_style: 2, structure: 1 },
+    d: { social: -2, energy: -1 },
+  },
+  Q16: {
+    a: { social: -2, energy: -1 },
+    b: { social: 2, energy: 1 },
+    c: { drive: 2, social: 1 },
+    d: { social: 0 },
+  },
+  Q17: {
+    a: { risk: 2 },
+    b: { risk: 1 },
+    c: { risk: -2 },
+    d: { social: -1 },
+  },
+  Q18: {
+    a: { drive: 2, risk: 1 },
+    b: { social: 2, energy: 1 },
+    c: { drive: 1, structure: -1 },
+    d: { social: 1 },
+  },
+  Q19: {
+    a: { drive: 1, risk: 1 },
+    b: { structure: 1 },
+    c: { structure: 2, risk: -1 },
+    d: { drive: 1 },
+  },
+};
+
+function parseJsonQuestionSet(json: any): Question[] {
+  const list: Question[] = [];
+  
+  for (const s of json.sections) {
+    let section: Section = "main_character";
+    if (s.section_id === "personality") section = "main_character";
+    else if (s.section_id === "career_specific") section = "dream_big";
+    else if (s.section_id === "work_environment") section = "skill_check";
+    else if (s.section_id === "abroad_element") section = "passport_era";
+    
+    const category = s.section_title;
+    
+    if (s.questions) {
+      for (const q of s.questions) {
+        const isMulti = !!q.multi_select;
+        list.push({
+          id: q.id,
+          section,
+          kind: "anchor",
+          type: isMulti ? "multi_choice" : "single_choice",
+          category,
+          prompt: q.text,
+          options: q.options.map((o: any) => ({
+            id: o.key,
+            label: o.text,
+          })),
+        });
+      }
+    }
+    
+    if (s.gating_question) {
+      const g = s.gating_question;
+      list.push({
+        id: g.id,
+        section,
+        kind: "anchor",
+        type: "single_choice",
+        category,
+        prompt: g.text,
+        options: g.options.map((o: any) => ({
+          id: o.key,
+          label: o.text,
+        })),
+      });
+      
+      for (const q of s.conditional_questions.questions) {
+        const isMulti = !!q.multi_select;
+        list.push({
+          id: q.id,
+          section,
+          kind: "anchor",
+          type: isMulti ? "multi_choice" : "single_choice",
+          category,
+          prompt: q.text,
+          options: q.options.map((o: any) => ({
+            id: o.key,
+            label: o.text,
+          })),
+        });
+      }
+    }
+  }
+  
+  return list;
+}
+
+export function getQuestionBank(educationLevel?: "10th_12th" | "college"): Question[] {
+  const isSchool = educationLevel === "10th_12th";
+  const json = isSchool ? schoolQuestionSet : ugQuestionSet;
+  const questions = parseJsonQuestionSet(json);
+  const scoreMap = isSchool ? SCHOOL_SCORES : UG_SCORES;
+  
+  for (const q of questions) {
+    const qScores = scoreMap[q.id];
+    if (qScores && q.options) {
+      for (const o of q.options) {
+        o.scores = qScores[o.id];
+      }
+    }
+  }
+  
+  return questions;
+}
 
 export function anchorsForSection(
   section: Section,
+  educationLevel: StudentProfile["educationLevel"] = "college",
   discipline: StudentProfile["discipline"] = "tech_cs",
 ): Question[] {
   void discipline;
-  const all = [
-    ...CONTEXT_QUESTIONS,
-    ...ROOTS_ANCHORS,
-    ...ROUTES_BCA,
-    ROUTES_BCA_ENGAGEMENT,
-  ];
+  const all = getQuestionBank(educationLevel);
   return all.filter((q) => q.section === section);
 }
 
@@ -28,16 +255,32 @@ export function planNext(args: {
   current: Question;
   trunk: Question[];
   discipline: StudentProfile["discipline"];
+  educationLevel?: StudentProfile["educationLevel"];
+  answers?: Record<string, Answer>;
 }): NextStep {
-  const { current } = args;
+  const { current, educationLevel } = args;
   const section = current.section;
+
+  // Gating check: continue only for options 'a' (study further) and 'c' (undecided)
+  console.log("planNext Gating Check:", {
+    currentId: current.id,
+    q20Answer: args.answers?.["Q20"],
+    allAnswers: args.answers ? Object.keys(args.answers) : []
+  });
+  if (current.section === "abroad_element" && args.answers) {
+    const ans = args.answers["Q20"];
+    const shouldContinue = ans?.optionIds?.includes("a") || ans?.optionIds?.includes("c");
+    console.log("Q20 Gating decision (section based):", { shouldContinue, ans });
+    if (!shouldContinue) {
+      return { kind: "transition", nextSection: "report" };
+    }
+  }
 
   const SECTIONS: Section[] = [
     "main_character",
     "dream_big",
     "passport_era",
     "skill_check",
-    "reality_check",
   ];
 
   const sectionIndex = SECTIONS.indexOf(section);
@@ -45,7 +288,7 @@ export function planNext(args: {
     return { kind: "complete" };
   }
 
-  const anchors = anchorsForSection(section);
+  const anchors = anchorsForSection(section, educationLevel);
   const idx = anchors.findIndex((a) => a.id === current.id);
 
   if (idx >= 0 && idx < anchors.length - 1) {
@@ -55,7 +298,7 @@ export function planNext(args: {
   const nextSectionIndex = sectionIndex + 1;
   if (nextSectionIndex < SECTIONS.length) {
     const nextSec = SECTIONS[nextSectionIndex];
-    const nextAnchors = anchorsForSection(nextSec);
+    const nextAnchors = anchorsForSection(nextSec, educationLevel);
     return {
       kind: "anchor",
       anchor: nextAnchors[0],
@@ -68,7 +311,14 @@ export function planNext(args: {
 
 export function totalQuestionCountFor(
   discipline: StudentProfile["discipline"],
+  educationLevel?: StudentProfile["educationLevel"],
+  answers?: Record<string, Answer>,
 ): number {
   void discipline;
+  void educationLevel;
+  if (answers && answers["Q20"]) {
+    const shouldContinue = answers["Q20"]?.optionIds?.includes("a") || answers["Q20"]?.optionIds?.includes("c");
+    return shouldContinue ? 25 : 20;
+  }
   return 25;
 }

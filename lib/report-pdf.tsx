@@ -692,13 +692,20 @@ export function ReportDocument({ data }: { data: ReportData }) {
   const suffix = Math.abs(hash % 9000) + 1000;
   const profileId = `SS-052025-${suffix}`;
 
-  const disc = DISCIPLINES.find((d) => d.id === data.profile.discipline);
-  const disciplineLabel = disc ? disc.label : data.profile.discipline;
+  const disciplineLabel = (() => {
+    if (data.profile.educationLevel === "10th_12th") {
+      if (data.profile.discipline === "science") return "Science";
+      if (data.profile.discipline === "commerce") return "Commerce";
+    }
+    const disc = DISCIPLINES.find((d) => d.id === data.profile.discipline);
+    return disc ? disc.label : data.profile.discipline;
+  })();
   const chosenCourse = courseById(data.profile.course);
 
   let pdfIntro = "";
-  if (data.profile.discipline === "schooling") {
-    pdfIntro = "👋 It's wonderful to know you are currently in Schooling! This is a unique phase of pure potential where you can build strong foundations. We'll help you pinpoint the best undergraduate routes matching your style.";
+  if (data.profile.educationLevel === "10th_12th" || data.profile.discipline === "schooling") {
+    const streamText = data.profile.educationLevel === "10th_12th" ? ` (${disciplineLabel})` : "";
+    pdfIntro = `👋 It's wonderful to know you are currently in Schooling${streamText}! This is a unique phase of pure potential where you can build strong foundations. We'll help you pinpoint the best undergraduate routes matching your style.`;
   } else if (chosenCourse) {
     pdfIntro = `🎯 It's fantastic to know you are focusing on the ${disciplineLabel} stream, with your sights set on ${chosenCourse.title}! Let's explore how this matches your cognitive DNA and what similar pathways might expand your horizon.`;
   } else {

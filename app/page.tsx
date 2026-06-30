@@ -33,6 +33,7 @@ export default function LandingPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [educationLevel, setEducationLevel] = useState<"10th_12th" | "college">("college");
   const [discipline, setDiscipline] = useState<Discipline>("tech_cs");
   const [course, setCourse] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
@@ -66,6 +67,7 @@ export default function LandingPage() {
       name: name.trim(),
       email: email.trim(),
       phone: phone.trim(),
+      educationLevel,
       discipline,
       course,
       studentId: data?.id,
@@ -85,6 +87,16 @@ export default function LandingPage() {
             name={name} setName={setName}
             email={email} setEmail={setEmail}
             phone={phone} setPhone={setPhone}
+            educationLevel={educationLevel}
+            setEducationLevel={(lvl) => {
+              setEducationLevel(lvl);
+              if (lvl === "10th_12th") {
+                setDiscipline("science");
+              } else {
+                setDiscipline("tech_cs");
+              }
+              setCourse(undefined);
+            }}
             discipline={discipline}
             setDiscipline={(d) => { setDiscipline(d); setCourse(undefined); }}
             course={course} setCourse={setCourse}
@@ -155,6 +167,7 @@ function Form(props: {
   name: string; setName: (s: string) => void;
   email: string; setEmail: (s: string) => void;
   phone: string; setPhone: (s: string) => void;
+  educationLevel: "10th_12th" | "college"; setEducationLevel: (lvl: "10th_12th" | "college") => void;
   discipline: Discipline; setDiscipline: (d: Discipline) => void;
   course: string | undefined; setCourse: (c: string | undefined) => void;
   onSubmit: (e: React.FormEvent) => void;
@@ -162,7 +175,21 @@ function Form(props: {
   submitting: boolean;
 }) {
   const courses = coursesByDiscipline(props.discipline);
-  const bachelorsCourses = courses.filter((c) => c.level !== "masters");
+  const bachelorsCourses = props.educationLevel === "10th_12th"
+    ? props.discipline === "science"
+      ? [
+          ...coursesByDiscipline("science").filter((c) => c.level !== "masters"),
+          ...coursesByDiscipline("tech_cs").filter((c) => c.level !== "masters"),
+          ...coursesByDiscipline("tech_engg").filter((c) => c.level !== "masters"),
+        ]
+      : props.discipline === "commerce"
+      ? [
+          ...coursesByDiscipline("commerce").filter((c) => c.level !== "masters"),
+          ...coursesByDiscipline("business").filter((c) => c.level !== "masters"),
+          ...coursesByDiscipline("economics").filter((c) => c.level !== "masters"),
+        ]
+      : []
+    : courses.filter((c) => c.level !== "masters");
   const mastersCourses = courses.filter((c) => c.level === "masters");
   const inputStyle = { background: "rgba(255,255,255,0.7)", border: "1px solid rgba(200,190,220,0.4)", boxShadow: "inset 0 1px 3px rgba(180,140,200,0.08)" };
   const focusStyle = { background: "rgba(255,255,255,0.95)", border: "1px solid rgba(180,140,220,0.6)", boxShadow: "0 0 0 3px rgba(196,181,253,0.2), inset 0 1px 3px rgba(180,140,200,0.08)" };
@@ -197,14 +224,37 @@ function Form(props: {
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink placeholder:text-ink-300 outline-none transition-all"
               style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)} />
           </Field>
+          <Field label="CURRENT EDUCATION LEVEL">
+            <select value={props.educationLevel} onChange={(e) => props.setEducationLevel(e.target.value as "10th_12th" | "college")}
+              className="w-full rounded-xl px-4 py-3 text-[15px] text-ink outline-none transition-all appearance-none cursor-pointer"
+              style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)}>
+              <option value="college">College / University</option>
+              <option value="10th_12th">10th / 12th Grade</option>
+            </select>
+          </Field>
           <Field label="CURRENTLY ENROLLED STREAM">
             <select value={props.discipline} onChange={(e) => props.setDiscipline(e.target.value as Discipline)}
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink outline-none transition-all appearance-none cursor-pointer"
               style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)}>
-              {DISCIPLINES.map((d) => <option key={d.id} value={d.id}>{d.label}</option>)}
+              {props.educationLevel === "10th_12th" ? (
+                <>
+                  <option value="science">Science</option>
+                  <option value="commerce">Commerce</option>
+                </>
+              ) : (
+                DISCIPLINES.filter((d) => d.id !== "schooling").map((d) => <option key={d.id} value={d.id}>{d.label}</option>)
+              )}
             </select>
           </Field>
-          <Field label={props.discipline === "schooling" ? "SPECIFIC COURSE · NOT APPLICABLE" : `SPECIFIC COURSE · OPTIONAL · ${courses.length} OPTIONS`}>
+          <Field
+            label={
+              props.educationLevel === "10th_12th"
+                ? `DESIRED COURSE IN MIND · OPTIONAL · ${bachelorsCourses.length} OPTIONS`
+                : props.discipline === "schooling"
+                ? "DESIRED COURSE · NOT APPLICABLE"
+                : `DESIRED COURSE · OPTIONAL · ${courses.length} OPTIONS`
+            }
+          >
             <select 
               disabled={props.discipline === "schooling"}
               value={props.course ?? ""} 
@@ -219,7 +269,7 @@ function Form(props: {
                   {bachelorsCourses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
                 </optgroup>
               )}
-              {props.discipline !== "schooling" && mastersCourses.length > 0 && (
+              {props.discipline !== "schooling" && props.educationLevel !== "10th_12th" && mastersCourses.length > 0 && (
                 <optgroup label="Masters Programs">
                   {mastersCourses.map((c) => <option key={c.id} value={c.id}>{c.title}</option>)}
                 </optgroup>

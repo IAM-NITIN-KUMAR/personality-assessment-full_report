@@ -1,0 +1,603 @@
+{
+  "question_set_id": "ug_career_assessment",
+  "title": "Career Assessment — UG (Undergraduate) Students",
+  "total_questions_max": 25,
+  "total_questions_min": 20,
+  "flow_order": [
+    "personality",
+    "career_specific",
+    "work_environment",
+    "abroad_element"
+  ],
+  "sections": [
+    {
+      "section_id": "personality",
+      "section_title": "Personality",
+      "questions": [
+        {
+          "id": "Q1",
+          "text": "In a team setting, you're most likely to:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Take charge and delegate"
+            },
+            {
+              "key": "b",
+              "text": "Be the reliable executor who gets things done"
+            },
+            {
+              "key": "c",
+              "text": "Bring creative/innovative ideas"
+            },
+            {
+              "key": "d",
+              "text": "Mediate and keep the group aligned"
+            }
+          ]
+        },
+        {
+          "id": "Q2",
+          "text": "When given a complex problem, your instinct is to:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Break it into smaller, structured steps"
+            },
+            {
+              "key": "b",
+              "text": "Brainstorm multiple creative solutions"
+            },
+            {
+              "key": "c",
+              "text": "Discuss it with others to get perspectives"
+            },
+            {
+              "key": "d",
+              "text": "Research extensively before acting"
+            }
+          ]
+        },
+        {
+          "id": "Q3",
+          "text": "What drives you most in your work/studies?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Mastery and expertise in a subject"
+            },
+            {
+              "key": "b",
+              "text": "Recognition and career growth"
+            },
+            {
+              "key": "c",
+              "text": "Making an impact on people/society"
+            },
+            {
+              "key": "d",
+              "text": "Financial independence and stability"
+            }
+          ]
+        },
+        {
+          "id": "Q4",
+          "text": "How do you handle ambiguity or unclear instructions?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I create my own structure and move forward"
+            },
+            {
+              "key": "b",
+              "text": "I seek clarification before proceeding"
+            },
+            {
+              "key": "c",
+              "text": "I get uncomfortable and need more direction"
+            },
+            {
+              "key": "d",
+              "text": "I see it as an opportunity to be creative"
+            }
+          ]
+        },
+        {
+          "id": "Q5",
+          "text": "How do you typically respond to failure or setbacks?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Analyze what went wrong and fix it systematically"
+            },
+            {
+              "key": "b",
+              "text": "Bounce back quickly and try a new approach"
+            },
+            {
+              "key": "c",
+              "text": "Lean on others for support and perspective"
+            },
+            {
+              "key": "d",
+              "text": "Take it personally and need time to recover"
+            }
+          ]
+        },
+        {
+          "id": "Q6",
+          "text": "What kind of recognition matters most to you professionally?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Being known as a domain expert"
+            },
+            {
+              "key": "b",
+              "text": "Being seen as a strong leader"
+            },
+            {
+              "key": "c",
+              "text": "Being known for creativity/innovation"
+            },
+            {
+              "key": "d",
+              "text": "Being known as dependable and consistent"
+            }
+          ]
+        },
+        {
+          "id": "Q7",
+          "text": "On a free weekend, you're most likely to:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Work on a personal project or upskill"
+            },
+            {
+              "key": "b",
+              "text": "Network or catch up with friends/peers"
+            },
+            {
+              "key": "c",
+              "text": "Relax and pursue a hobby"
+            },
+            {
+              "key": "d",
+              "text": "Plan/organize something for the future"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "career_specific",
+      "section_title": "Career-Specific",
+      "questions": [
+        {
+          "id": "Q8",
+          "text": "What's your current field of study?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Engineering/Technology"
+            },
+            {
+              "key": "b",
+              "text": "Commerce/Business"
+            },
+            {
+              "key": "c",
+              "text": "Science"
+            },
+            {
+              "key": "d",
+              "text": "Arts/Humanities/Design"
+            },
+            {
+              "key": "e",
+              "text": "Other"
+            }
+          ]
+        },
+        {
+          "id": "Q9",
+          "text": "What kind of role appeals to you most after graduation?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Technical/specialist role (coding, engineering, research)"
+            },
+            {
+              "key": "b",
+              "text": "Managerial/leadership role"
+            },
+            {
+              "key": "c",
+              "text": "Creative role (design, content, media)"
+            },
+            {
+              "key": "d",
+              "text": "Client-facing/sales/business development role"
+            }
+          ]
+        },
+        {
+          "id": "Q10",
+          "text": "Which matters more to you in your career?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Climbing the corporate ladder quickly"
+            },
+            {
+              "key": "b",
+              "text": "Building deep expertise in one domain"
+            },
+            {
+              "key": "c",
+              "text": "Starting my own venture eventually"
+            },
+            {
+              "key": "d",
+              "text": "Work-life balance over fast growth"
+            }
+          ]
+        },
+        {
+          "id": "Q11",
+          "text": "Are you more drawn to:",
+          "options": [
+            {
+              "key": "a",
+              "text": "A core/technical job in your field of study"
+            },
+            {
+              "key": "b",
+              "text": "A cross-functional role (management, consulting, business)"
+            },
+            {
+              "key": "c",
+              "text": "Further specialization through higher studies"
+            },
+            {
+              "key": "d",
+              "text": "Still exploring, not sure yet"
+            }
+          ]
+        },
+        {
+          "id": "Q12",
+          "text": "How important is upskilling (certifications, courses) to your career plan?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Very important — I actively pursue it"
+            },
+            {
+              "key": "b",
+              "text": "Somewhat important — I'll do it if required"
+            },
+            {
+              "key": "c",
+              "text": "Not a priority right now"
+            }
+          ]
+        },
+        {
+          "id": "Q13",
+          "text": "Which best describes your career motivation right now?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Solving real-world problems through innovation"
+            },
+            {
+              "key": "b",
+              "text": "Building a stable, well-paying career"
+            },
+            {
+              "key": "c",
+              "text": "Expressing myself and being creative"
+            },
+            {
+              "key": "d",
+              "text": "Helping or serving others/society"
+            }
+          ]
+        },
+        {
+          "id": "Q14",
+          "text": "How do you feel about your current degree's job prospects?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Confident — clear path ahead"
+            },
+            {
+              "key": "b",
+              "text": "Cautiously optimistic — exploring options"
+            },
+            {
+              "key": "c",
+              "text": "Uncertain — considering a pivot"
+            },
+            {
+              "key": "d",
+              "text": "Planning to pursue a different field entirely"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "work_environment",
+      "section_title": "Work Environment",
+      "questions": [
+        {
+          "id": "Q15",
+          "text": "Your ideal work environment is:",
+          "options": [
+            {
+              "key": "a",
+              "text": "A structured corporate environment"
+            },
+            {
+              "key": "b",
+              "text": "A fast-paced startup"
+            },
+            {
+              "key": "c",
+              "text": "An academic/research setting"
+            },
+            {
+              "key": "d",
+              "text": "Freelance/independent work"
+            }
+          ]
+        },
+        {
+          "id": "Q16",
+          "text": "Do you prefer:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Working independently on focused tasks"
+            },
+            {
+              "key": "b",
+              "text": "Collaborating closely with a team"
+            },
+            {
+              "key": "c",
+              "text": "Leading and managing others"
+            },
+            {
+              "key": "d",
+              "text": "A mix depending on the project"
+            }
+          ]
+        },
+        {
+          "id": "Q17",
+          "text": "How do you feel about relocating for work?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Very open to relocating, even internationally"
+            },
+            {
+              "key": "b",
+              "text": "Open to relocating within India"
+            },
+            {
+              "key": "c",
+              "text": "Prefer staying close to home"
+            },
+            {
+              "key": "d",
+              "text": "Open to remote work instead of relocating"
+            }
+          ]
+        },
+        {
+          "id": "Q18",
+          "text": "What work culture appeals to you most?",
+          "options": [
+            {
+              "key": "a",
+              "text": "High-performance, competitive culture"
+            },
+            {
+              "key": "b",
+              "text": "Collaborative, supportive culture"
+            },
+            {
+              "key": "c",
+              "text": "Flexible, autonomous culture"
+            },
+            {
+              "key": "d",
+              "text": "Mission-driven, purpose-led culture"
+            }
+          ]
+        },
+        {
+          "id": "Q19",
+          "text": "How do you feel about work-related travel or irregular hours?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Comfortable — it comes with growth"
+            },
+            {
+              "key": "b",
+              "text": "Fine occasionally, not as a norm"
+            },
+            {
+              "key": "c",
+              "text": "Prefer predictable hours and minimal travel"
+            },
+            {
+              "key": "d",
+              "text": "Depends entirely on the role/pay"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "abroad_element",
+      "section_title": "Abroad Element",
+      "gating_question": {
+        "id": "Q20",
+        "text": "Do you have plans of studying further, or do you see yourself moving into a corporate job/workforce after this?",
+        "options": [
+          {
+            "key": "a",
+            "text": "I plan to study further (Masters/higher studies)"
+          },
+          {
+            "key": "b",
+            "text": "I plan to work in a corporate job/start working soon"
+          },
+          {
+            "key": "c",
+            "text": "Not decided / No clear answer yet"
+          }
+        ],
+        "branching_logic": {
+          "continue_to_abroad_questions_if": [
+            "a",
+            "c"
+          ],
+          "end_test_if": [
+            "b",
+            "no_selection",
+            "invalid_or_unanswered"
+          ],
+          "on_end_test": {
+            "action": "terminate_assessment_immediately",
+            "report_instruction": "Generate final report using only personality, career_specific, and work_environment sections. Do NOT include any abroad-related section, scoring, or content in the report."
+          }
+        }
+      },
+      "conditional_questions": {
+        "shown_only_if_gating_answer": "a_or_c",
+        "questions": [
+          {
+            "id": "Q21",
+            "text": "Are you considering studying abroad for your higher studies, or do you prefer India?",
+            "options": [
+              {
+                "key": "a",
+                "text": "Definitely interested in studying abroad"
+              },
+              {
+                "key": "b",
+                "text": "Open to it but undecided"
+              },
+              {
+                "key": "c",
+                "text": "Prefer India, exploring options"
+              }
+            ]
+          },
+          {
+            "id": "Q22",
+            "text": "What's the primary reason you're considering studying abroad?",
+            "options": [
+              {
+                "key": "a",
+                "text": "Better quality of education and global exposure"
+              },
+              {
+                "key": "b",
+                "text": "Better career/job opportunities post-study"
+              },
+              {
+                "key": "c",
+                "text": "Higher earning potential"
+              },
+              {
+                "key": "d",
+                "text": "Immigration/PR pathway"
+              }
+            ]
+          },
+          {
+            "id": "Q23",
+            "text": "Which countries are you considering?",
+            "multi_select": true,
+            "options": [
+              {
+                "key": "a",
+                "text": "USA"
+              },
+              {
+                "key": "b",
+                "text": "UK"
+              },
+              {
+                "key": "c",
+                "text": "Canada"
+              },
+              {
+                "key": "d",
+                "text": "Australia"
+              },
+              {
+                "key": "e",
+                "text": "Germany"
+              },
+              {
+                "key": "f",
+                "text": "Other/Not decided"
+              }
+            ]
+          },
+          {
+            "id": "Q24",
+            "text": "What's your target intake/timeline?",
+            "options": [
+              {
+                "key": "a",
+                "text": "Within the next 6–12 months"
+              },
+              {
+                "key": "b",
+                "text": "1–2 years from now"
+              },
+              {
+                "key": "c",
+                "text": "Still exploring, no fixed timeline"
+              }
+            ]
+          },
+          {
+            "id": "Q25",
+            "text": "How would you fund your education abroad?",
+            "options": [
+              {
+                "key": "a",
+                "text": "Self-funded/family funding"
+              },
+              {
+                "key": "b",
+                "text": "Education loan"
+              },
+              {
+                "key": "c",
+                "text": "Scholarships/grants"
+              },
+              {
+                "key": "d",
+                "text": "Not yet planned"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

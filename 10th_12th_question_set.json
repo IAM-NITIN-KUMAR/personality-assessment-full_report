@@ -1,0 +1,599 @@
+{
+  "question_set_id": "10th_12th_career_assessment",
+  "title": "Career Assessment — 10th / 12th Students",
+  "total_questions_max": 25,
+  "total_questions_min": 20,
+  "flow_order": [
+    "personality",
+    "career_specific",
+    "work_environment",
+    "abroad_element"
+  ],
+  "sections": [
+    {
+      "section_id": "personality",
+      "section_title": "Personality",
+      "questions": [
+        {
+          "id": "Q1",
+          "text": "When working on a group project, you naturally tend to:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Take the lead and organize tasks"
+            },
+            {
+              "key": "b",
+              "text": "Support others and keep the team motivated"
+            },
+            {
+              "key": "c",
+              "text": "Focus on details and quality of work"
+            },
+            {
+              "key": "d",
+              "text": "Generate ideas and think outside the box"
+            }
+          ]
+        },
+        {
+          "id": "Q2",
+          "text": "Which of these excites you the most?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Solving a tricky math or logic puzzle"
+            },
+            {
+              "key": "b",
+              "text": "Creating something artistic (drawing, writing, music)"
+            },
+            {
+              "key": "c",
+              "text": "Helping a friend solve a personal problem"
+            },
+            {
+              "key": "d",
+              "text": "Organizing an event or activity"
+            }
+          ]
+        },
+        {
+          "id": "Q3",
+          "text": "When faced with a new challenge, you usually:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Plan carefully before acting"
+            },
+            {
+              "key": "b",
+              "text": "Jump in and learn as you go"
+            },
+            {
+              "key": "c",
+              "text": "Ask others for advice first"
+            },
+            {
+              "key": "d",
+              "text": "Research thoroughly before deciding"
+            }
+          ]
+        },
+        {
+          "id": "Q4",
+          "text": "What kind of subjects do you enjoy most in school?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Maths/Physics (logic, numbers)"
+            },
+            {
+              "key": "b",
+              "text": "Biology/Chemistry (life sciences)"
+            },
+            {
+              "key": "c",
+              "text": "Languages/Social Studies (people, communication)"
+            },
+            {
+              "key": "d",
+              "text": "Computers/Arts (creativity, design)"
+            }
+          ]
+        },
+        {
+          "id": "Q5",
+          "text": "How do you usually react under pressure (exams, deadlines)?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I stay calm and work through it systematically"
+            },
+            {
+              "key": "b",
+              "text": "I get anxious but push through anyway"
+            },
+            {
+              "key": "c",
+              "text": "I seek help/support from others"
+            },
+            {
+              "key": "d",
+              "text": "I thrive — pressure motivates me"
+            }
+          ]
+        },
+        {
+          "id": "Q6",
+          "text": "What kind of recognition matters most to you?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Academic excellence/top marks"
+            },
+            {
+              "key": "b",
+              "text": "Being known as creative/talented"
+            },
+            {
+              "key": "c",
+              "text": "Being seen as helpful/dependable"
+            },
+            {
+              "key": "d",
+              "text": "Being seen as a leader/organizer"
+            }
+          ]
+        },
+        {
+          "id": "Q7",
+          "text": "If you had a free day with no obligations, you'd most likely:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Read, study, or learn something new"
+            },
+            {
+              "key": "b",
+              "text": "Work on a creative hobby"
+            },
+            {
+              "key": "c",
+              "text": "Spend time with friends/family"
+            },
+            {
+              "key": "d",
+              "text": "Plan or organize something (an event, a trip, a project)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "career_specific",
+      "section_title": "Career-Specific",
+      "questions": [
+        {
+          "id": "Q8",
+          "text": "After 12th, which stream/path excites you most?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Engineering/Technology"
+            },
+            {
+              "key": "b",
+              "text": "Medicine/Healthcare"
+            },
+            {
+              "key": "c",
+              "text": "Commerce/Business/Finance"
+            },
+            {
+              "key": "d",
+              "text": "Arts/Design/Humanities"
+            },
+            {
+              "key": "e",
+              "text": "Not sure yet"
+            }
+          ]
+        },
+        {
+          "id": "Q9",
+          "text": "If you had to pick a career today, what matters most to you?",
+          "options": [
+            {
+              "key": "a",
+              "text": "High earning potential"
+            },
+            {
+              "key": "b",
+              "text": "Job stability/security"
+            },
+            {
+              "key": "c",
+              "text": "Creative freedom"
+            },
+            {
+              "key": "d",
+              "text": "Making a social impact"
+            }
+          ]
+        },
+        {
+          "id": "Q10",
+          "text": "Do you see yourself as someone who prefers:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Working with numbers and data"
+            },
+            {
+              "key": "b",
+              "text": "Working with people directly"
+            },
+            {
+              "key": "c",
+              "text": "Working with technology and machines"
+            },
+            {
+              "key": "d",
+              "text": "Working with ideas and creativity"
+            }
+          ]
+        },
+        {
+          "id": "Q11",
+          "text": "Which activity sounds most appealing to you as a future job?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Building/fixing things"
+            },
+            {
+              "key": "b",
+              "text": "Treating/helping patients"
+            },
+            {
+              "key": "c",
+              "text": "Managing a business or team"
+            },
+            {
+              "key": "d",
+              "text": "Designing or creating content"
+            }
+          ]
+        },
+        {
+          "id": "Q12",
+          "text": "Which of these best describes your career motivation?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Solving real-world problems through innovation"
+            },
+            {
+              "key": "b",
+              "text": "Building a stable, well-paying career"
+            },
+            {
+              "key": "c",
+              "text": "Expressing myself and being creative"
+            },
+            {
+              "key": "d",
+              "text": "Helping or serving others directly"
+            }
+          ]
+        },
+        {
+          "id": "Q13",
+          "text": "How do you feel about competitive entrance exams (JEE, NEET, CLAT, etc.)?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I'm already preparing/confident about it"
+            },
+            {
+              "key": "b",
+              "text": "I'm open to it but undecided"
+            },
+            {
+              "key": "c",
+              "text": "I'd rather avoid that path"
+            },
+            {
+              "key": "d",
+              "text": "Not applicable to my chosen field"
+            }
+          ]
+        },
+        {
+          "id": "Q14",
+          "text": "Which best describes your ideal long-term career outcome?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Becoming a specialist/expert in a technical field"
+            },
+            {
+              "key": "b",
+              "text": "Running my own business/startup"
+            },
+            {
+              "key": "c",
+              "text": "Working in a respected, stable profession"
+            },
+            {
+              "key": "d",
+              "text": "Making a creative or social impact"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "work_environment",
+      "section_title": "Work Environment",
+      "questions": [
+        {
+          "id": "Q15",
+          "text": "Your ideal daily routine looks like:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Structured and predictable"
+            },
+            {
+              "key": "b",
+              "text": "Flexible and ever-changing"
+            },
+            {
+              "key": "c",
+              "text": "A mix of both"
+            }
+          ]
+        },
+        {
+          "id": "Q16",
+          "text": "Would you rather work:",
+          "options": [
+            {
+              "key": "a",
+              "text": "In an office/lab setting"
+            },
+            {
+              "key": "b",
+              "text": "Outdoors or on-site (hospitals, sites, studios)"
+            },
+            {
+              "key": "c",
+              "text": "From home/remotely"
+            },
+            {
+              "key": "d",
+              "text": "Traveling frequently"
+            }
+          ]
+        },
+        {
+          "id": "Q17",
+          "text": "How do you feel about taking risks?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I prefer safe, secure choices"
+            },
+            {
+              "key": "b",
+              "text": "I enjoy taking calculated risks"
+            },
+            {
+              "key": "c",
+              "text": "I love high-risk, high-reward situations"
+            }
+          ]
+        },
+        {
+          "id": "Q18",
+          "text": "Do you prefer working:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Independently, at your own pace"
+            },
+            {
+              "key": "b",
+              "text": "As part of a close-knit team"
+            },
+            {
+              "key": "c",
+              "text": "Under clear guidance/supervision"
+            },
+            {
+              "key": "d",
+              "text": "Leading and directing others"
+            }
+          ]
+        },
+        {
+          "id": "Q19",
+          "text": "What kind of environment helps you perform your best?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Quiet, focused, low-distraction settings"
+            },
+            {
+              "key": "b",
+              "text": "Energetic, collaborative, busy settings"
+            },
+            {
+              "key": "c",
+              "text": "Outdoor or hands-on, physical settings"
+            },
+            {
+              "key": "d",
+              "text": "Flexible settings where I set my own pace"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "abroad_element",
+      "section_title": "Abroad Element",
+      "gating_question": {
+        "id": "Q20",
+        "text": "Do you have plans of studying further (after 12th, abroad or in India), or do you see yourself entering the workforce/family business soon?",
+        "options": [
+          {
+            "key": "a",
+            "text": "I plan to study further"
+          },
+          {
+            "key": "b",
+            "text": "I plan to work / join the family business"
+          },
+          {
+            "key": "c",
+            "text": "Not decided / No clear answer yet"
+          }
+        ],
+        "branching_logic": {
+          "continue_to_abroad_questions_if": [
+            "a",
+            "c"
+          ],
+          "end_test_if": [
+            "b",
+            "no_selection",
+            "invalid_or_unanswered"
+          ],
+          "on_end_test": {
+            "action": "terminate_assessment_immediately",
+            "report_instruction": "Generate final report using only personality, career_specific, and work_environment sections. Do NOT include any abroad-related section, scoring, or content in the report."
+          }
+        }
+      },
+      "conditional_questions": {
+        "shown_only_if_gating_answer": "a_or_c",
+        "questions": [
+          {
+            "id": "Q21",
+            "text": "Are you considering studying abroad, or do you prefer staying in India for higher education?",
+            "options": [
+              {
+                "key": "a",
+                "text": "Definitely interested in studying abroad"
+              },
+              {
+                "key": "b",
+                "text": "Open to it but not decided"
+              },
+              {
+                "key": "c",
+                "text": "Prefer India, just exploring options"
+              }
+            ]
+          },
+          {
+            "id": "Q22",
+            "text": "If studying abroad, which factor matters most to you?",
+            "options": [
+              {
+                "key": "a",
+                "text": "Quality of education/university ranking"
+              },
+              {
+                "key": "b",
+                "text": "Cost of education and scholarships"
+              },
+              {
+                "key": "c",
+                "text": "Post-study work opportunities/PR pathway"
+              },
+              {
+                "key": "d",
+                "text": "Cultural exposure and lifestyle"
+              }
+            ]
+          },
+          {
+            "id": "Q23",
+            "text": "Which countries have you thought about, if any?",
+            "multi_select": true,
+            "options": [
+              {
+                "key": "a",
+                "text": "USA"
+              },
+              {
+                "key": "b",
+                "text": "UK"
+              },
+              {
+                "key": "c",
+                "text": "Canada"
+              },
+              {
+                "key": "d",
+                "text": "Australia"
+              },
+              {
+                "key": "e",
+                "text": "Germany"
+              },
+              {
+                "key": "f",
+                "text": "Other/Not decided"
+              }
+            ]
+          },
+          {
+            "id": "Q24",
+            "text": "How prepared do you feel for an abroad application process (exams, finances, documentation)?",
+            "options": [
+              {
+                "key": "a",
+                "text": "Already researching/preparing"
+              },
+              {
+                "key": "b",
+                "text": "Have a rough idea, need guidance"
+              },
+              {
+                "key": "c",
+                "text": "Have no idea, just starting to think about it"
+              }
+            ]
+          },
+          {
+            "id": "Q25",
+            "text": "What's your biggest concern about studying abroad?",
+            "options": [
+              {
+                "key": "a",
+                "text": "Financial cost"
+              },
+              {
+                "key": "b",
+                "text": "Being away from family"
+              },
+              {
+                "key": "c",
+                "text": "Visa/admission process complexity"
+              },
+              {
+                "key": "d",
+                "text": "Not sure if it's the right fit for me"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -143,19 +143,24 @@ export function ReportView({ data }: { data: ReportData }) {
   }, [data.profile.name]);
 
   const disciplineLabel = useMemo(() => {
+    if (data.profile.educationLevel === "10th_12th") {
+      if (data.profile.discipline === "science") return "Science";
+      if (data.profile.discipline === "commerce") return "Commerce";
+    }
     const disc = DISCIPLINES.find((d) => d.id === data.profile.discipline);
     return disc ? disc.label : data.profile.discipline;
-  }, [data.profile.discipline]);
+  }, [data.profile.discipline, data.profile.educationLevel]);
 
   const chosenCourse = useMemo(() => {
     return courseById(data.profile.course);
   }, [data.profile.course]);
 
   const introMessage = useMemo(() => {
-    if (data.profile.discipline === "schooling") {
+    if (data.profile.educationLevel === "10th_12th" || data.profile.discipline === "schooling") {
+      const streamText = data.profile.educationLevel === "10th_12th" ? ` (${disciplineLabel})` : "";
       return (
         <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-[#f3f0fc] text-[#6e6ef0] rounded-xl px-4 py-2.5 border border-[#6e6ef0]/15 shadow-sm">
-          👋 It's wonderful to know you are currently in <strong>Schooling</strong>! This is a unique phase of pure potential where you can build strong foundations. We'll help you pinpoint the best undergraduate routes matching your style.
+          👋 It's wonderful to know you are currently in <strong>Schooling{streamText}</strong>! This is a unique phase of pure potential where you can build strong foundations. We'll help you pinpoint the best undergraduate routes matching your style.
         </span>
       );
     }
@@ -173,7 +178,7 @@ export function ReportView({ data }: { data: ReportData }) {
         ✨ It's great to know you are focusing on the <strong>{disciplineLabel}</strong> stream! Let's explore the best matching specializations and pathways that align with your unique archetype.
       </span>
     );
-  }, [data.profile.discipline, disciplineLabel, chosenCourse]);
+  }, [data.profile.discipline, data.profile.educationLevel, disciplineLabel, chosenCourse]);
 
   // Generate dynamic 4 matches from degree shortlists
   const bestMatches = useMemo(() => {

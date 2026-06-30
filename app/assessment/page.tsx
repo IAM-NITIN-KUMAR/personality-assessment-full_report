@@ -172,7 +172,7 @@ export default function AssessmentPage() {
 
     if (trunkIds.length === 0) {
       const ctxIds =
-        anchorsForSection("main_character").map(
+        anchorsForSection("main_character", profile.educationLevel, profile.discipline).map(
           (q) => q.id
         );
 
@@ -225,7 +225,7 @@ export default function AssessmentPage() {
   };
 
   const advanceToNextAnchor = (parent: Question) => {
-    const anchors = anchorsForSection(parent.section, profile.discipline);
+    const anchors = anchorsForSection(parent.section, profile.educationLevel, profile.discipline);
     const idx = anchors.findIndex((a) => a.id === parent.id);
     const nextAnchor = anchors[idx + 1];
 
@@ -243,12 +243,11 @@ export default function AssessmentPage() {
         "dream_big",
         "passport_era",
         "skill_check",
-        "reality_check"
       ];
       const secIdx = SECTIONS.indexOf(parent.section);
       if (secIdx !== -1 && secIdx < SECTIONS.length - 1) {
         const nextSec = SECTIONS[secIdx + 1];
-        const nextAnchors = anchorsForSection(nextSec);
+        const nextAnchors = anchorsForSection(nextSec, profile.educationLevel, profile.discipline);
         if (nextAnchors[0]) {
           if (!trunkIds.includes(nextAnchors[0].id)) {
             setTrunk([...trunkIds, nextAnchors[0].id]);
@@ -269,6 +268,8 @@ export default function AssessmentPage() {
       current,
       trunk,
       discipline: profile.discipline,
+      educationLevel: profile.educationLevel,
+      answers,
     });
 
     if (step.kind === "anchor" && step.anchor) {

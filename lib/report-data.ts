@@ -236,7 +236,12 @@ export function buildReport(args: {
   const drivers = buildDrivers({ archetype, dimMap, context, profile });
   const futureDay = buildFutureDay({ profile, archetype, context, coreThemes });
   const topDegrees = buildTopDegrees({ profile, dimMap, archetype, engagement });
-  const alternativeDegrees = buildAlternativeDegrees({ profile, dimMap, archetype });
+  const alternativeDegrees = buildAlternativeDegrees({
+    profile,
+    dimMap,
+    archetype,
+    excludeTitles: topDegrees.map((d) => d.title),
+  });
   const commonCareerPaths = buildCommonCareerPaths(archetype, profile);
   const sharedInterests = buildSharedInterests(archetype, context);
   const parentLetter = buildParentLetter({ profile, archetype, topDegrees, context });
@@ -555,10 +560,27 @@ function buildTopDegrees(args: {
   const explicit = courseById(profile.course);
   const preferredLevel = explicit?.level || "bachelors";
 
-  // If the user's stream is schooling, they can study bachelors courses from any discipline
-  const inDiscipline = profile.discipline === "schooling"
-    ? COURSES.filter((c) => (c.level || "bachelors") === preferredLevel)
-    : coursesByDiscipline(profile.discipline);
+  // Determine search space based on education level and stream
+  let inDiscipline: Course[] = [];
+  if (profile.educationLevel === "10th_12th") {
+    if (profile.discipline === "science") {
+      inDiscipline = [
+        ...coursesByDiscipline("science"),
+        ...coursesByDiscipline("tech_cs"),
+        ...coursesByDiscipline("tech_engg"),
+      ];
+    } else if (profile.discipline === "commerce") {
+      inDiscipline = [
+        ...coursesByDiscipline("commerce"),
+        ...coursesByDiscipline("business"),
+        ...coursesByDiscipline("economics"),
+      ];
+    }
+  } else if (profile.discipline === "schooling") {
+    inDiscipline = COURSES.filter((c) => (c.level || "bachelors") === preferredLevel);
+  } else {
+    inDiscipline = coursesByDiscipline(profile.discipline);
+  }
 
   if (!inDiscipline.length) {
     return [
@@ -580,10 +602,21 @@ function buildTopDegrees(args: {
     .map((c) => ({ course: c, match: scoreCourse(c, s, engagement) }))
     .sort((a, b) => b.match - a.match);
 
-  // If the student already picked a specific course, surface it first
-  // (regardless of match), then top alternatives within the same area.
+  // Check if explicit course is within allowed streams
+  const isAllowedDiscipline = (() => {
+    if (profile.educationLevel === "10th_12th") {
+      if (profile.discipline === "science") {
+        return ["science", "tech_cs", "tech_engg"].includes(explicit?.discipline || "");
+      }
+      if (profile.discipline === "commerce") {
+        return ["commerce", "business", "economics"].includes(explicit?.discipline || "");
+      }
+    }
+    return explicit?.discipline === profile.discipline;
+  })();
+
   const picks: typeof ranked = [];
-  if (explicit && (profile.discipline === "schooling" || explicit.discipline === profile.discipline)) {
+  if (explicit && (profile.discipline === "schooling" || isAllowedDiscipline)) {
     const explicitScore = scoreCourse(explicit, s, engagement);
     picks.push({ course: explicit, match: explicitScore });
   }
@@ -618,8 +651,9 @@ function buildAlternativeDegrees(args: {
   profile: StudentProfile;
   dimMap: Record<Dimension, number>;
   archetype: Archetype;
+  excludeTitles?: string[];
 }): DegreeRecommendation[] {
-  const { profile, dimMap: s } = args;
+  const { profile, dimMap: s, excludeTitles } = args;
   const adjacent = ADJACENT[profile.discipline] ?? [];
   if (!adjacent.length) return [];
 
@@ -633,7 +667,7 @@ function buildAlternativeDegrees(args: {
       const candidates = coursesByDiscipline(d);
       if (!candidates.length) return null;
       const levelFiltered = candidates.filter(
-        (c) => (c.level || "bachelors") === preferredLevel
+        (c) => (c.level || "bachelors") === preferredLevel && !(excludeTitles ?? []).includes(c.title)
       );
       if (!levelFiltered.length) return null;
       const ranked = levelFiltered
@@ -1093,6 +1127,26 @@ function extractContext(qs: Question[], answers: Record<string, Answer>): Contex
   };
   const tagFor = (id: string): string => tagsFor(id)[0] ?? "";
 
+  const isNewSet = qs.some(q => q.id.startsWith("Q"));
+
+  if (isNewSet) {
+    const dreamVal = answers["Q14"]?.text ?? labelFor("Q14") ?? labelFor("Q3") ?? "";
+    const geos = tagsFor("Q23").length > 0 ? tagsFor("Q23") : (labelFor("Q21").includes("India") ? ["India"] : ["Open"]);
+    
+    return {
+      budget: labelFor("Q25") !== "—" ? labelFor("Q25") : "Scholarship / Loan",
+      budgetTag: tagFor("Q25") || "budget:exploring",
+      geographies: geos,
+      family: "Backing whatever I pick",
+      familyTag: "family:supportive",
+      tier: "Strong match",
+      tierTag: "tier:strong",
+      timeline: labelFor("Q24") !== "—" ? labelFor("Q24") : "Next cycle",
+      timelineTag: tagFor("Q24") || "timeline:exploring",
+      dream: dreamVal || "Exploring career fits",
+    };
+  }
+
   return {
     budget: labelFor("q13"),
     budgetTag: tagFor("q13"),
@@ -1203,7 +1257,10 @@ function extractNiches(
 // ─── Engagement ──────────────────────────────────────────────────────────────
 
 function extractEngagement(qs: Question[], answers: Record<string, Answer>): EngagementReadout | null {
-  const scaleIds = ["q03", "q10", "q13", "q14", "q15", "q18", "q19", "q24"];
+  const isNewSet = qs.some(q => q.id.startsWith("Q"));
+  const scaleIds = isNewSet
+    ? ["Q5", "Q13", "Q17", "Q21", "Q24", "Q25"]
+    : ["q03", "q10", "q13", "q14", "q15", "q18", "q19", "q24"];
   let total = 0;
   let count = 0;
   for (const id of scaleIds) {

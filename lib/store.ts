@@ -11,9 +11,7 @@ import {
   StudentProfile,
   Archetype,
 } from "./types";
-import { CONTEXT_QUESTIONS } from "./question-bank/context";
-import { ROOTS_ANCHORS } from "./question-bank/roots";
-import { ROUTES_BCA, ROUTES_BCA_ENGAGEMENT } from "./question-bank/routes-bca";
+import { getQuestionBank } from "./flow";
 import { computeDimensionScores, pickArchetype } from "./archetype";
 import { supabase } from "./supabase";
 
@@ -44,17 +42,10 @@ interface Store extends AssessmentState {
   allQuestions: () => Question[];
 }
 
-const ALL_BANK = [
-  ...CONTEXT_QUESTIONS,
-  ...ROOTS_ANCHORS,
-  ...ROUTES_BCA,
-  ROUTES_BCA_ENGAGEMENT,
-];
-
 const initial: AssessmentState = {
   profile: null,
   answers: {},
-  trunk: ROOTS_ANCHORS.slice(0, 5).map((q) => q.id),
+  trunk: [],
   adaptiveQuestions: {},
   rewrites: {},
   section: "main_character",
@@ -136,13 +127,15 @@ export const useAssessment = create<Store>()(
         if (rewrites[id]) return rewrites[id];
         const adaptive = get().adaptiveQuestions[id];
         if (adaptive) return adaptive;
-        return ALL_BANK.find((q) => q.id === id);
+        const level = get().profile?.educationLevel;
+        return getQuestionBank(level).find((q) => q.id === id);
       },
 
       allQuestions: () => {
         const rewrites = get().rewrites;
+        const level = get().profile?.educationLevel;
         return [
-          ...ALL_BANK.map((q) => rewrites[q.id] ?? q),
+          ...getQuestionBank(level).map((q) => rewrites[q.id] ?? q),
           ...Object.values(get().adaptiveQuestions).map((q) => rewrites[q.id] ?? q),
         ];
       },
