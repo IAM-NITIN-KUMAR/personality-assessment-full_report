@@ -686,47 +686,360 @@ function buildAlternativeDegrees(args: {
 
 function buildCommonCareerPaths(arch: Archetype, profile: StudentProfile): CareerPath[] {
   // Distribution among same-archetype peers — illustrative, not measured.
-  if (profile.discipline !== "tech_cs") return [];
-  if (arch.name.includes("Builder"))
+  const disc = profile.discipline;
+  const isBuilder = arch.name.includes("Builder");
+  const isStrategist = arch.name.includes("Strategist");
+  const isConnector = arch.name.includes("Connector");
+  const isMaverick = arch.name.includes("Maverick");
+  const isAnchor = arch.name.includes("Anchor");
+
+  // 1. Tech & Engineering
+  if (disc === "tech_cs" || disc === "tech_engg") {
+    if (isBuilder) {
+      return [
+        { role: "Product Engineer / R&D Developer", percentage: 34 },
+        { role: "Founding Engineer (early-stage)", percentage: 27 },
+        { role: "Indie / solo product builder", percentage: 22 },
+        { role: "Engineering / Project Manager", percentage: 17 },
+      ];
+    }
+    if (isStrategist) {
+      return [
+        { role: "Systems / Backend Architect", percentage: 32 },
+        { role: "Tech consultancy / advisory", percentage: 25 },
+        { role: "Engineering team lead", percentage: 23 },
+        { role: "Research / hard-problem track", percentage: 20 },
+      ];
+    }
+    if (isConnector) {
+      return [
+        { role: "Developer Advocate / DevRel", percentage: 30 },
+        { role: "Solutions / Forward-deployed", percentage: 28 },
+        { role: "Product Manager", percentage: 24 },
+        { role: "Founder, B2B SaaS", percentage: 18 },
+      ];
+    }
+    if (isMaverick) {
+      return [
+        { role: "Solo / indie product founder", percentage: 35 },
+        { role: "Founding Engineer at deeptech", percentage: 28 },
+        { role: "Research engineer in frontier domain", percentage: 22 },
+        { role: "Creative-technical hybrid", percentage: 15 },
+      ];
+    }
+    if (isAnchor) {
+      return [
+        { role: "Platform / Infra Engineer", percentage: 33 },
+        { role: "Site Reliability Engineer", percentage: 28 },
+        { role: "Security / hard-systems", percentage: 22 },
+        { role: "Engineering team lead", percentage: 17 },
+      ];
+    }
+    // Explorer / Fallback
     return [
-      { role: "Product Engineer at scale-up",  percentage: 34 },
-      { role: "Founding Engineer / early-stage", percentage: 27 },
-      { role: "Indie / solo product builder",  percentage: 22 },
-      { role: "Engineering Manager (5–10 yrs)", percentage: 17 },
+      { role: "Generalist Software Engineer", percentage: 32 },
+      { role: "Product Engineer", percentage: 26 },
+      { role: "Designer-engineer hybrid", percentage: 22 },
+      { role: "Founder track", percentage: 20 },
     ];
-  if (arch.name.includes("Strategist"))
+  }
+
+  // 2. Business, Commerce, Economics & Hospitality
+  if (disc === "business" || disc === "commerce" || disc === "economics" || disc === "hospitality") {
+    if (isBuilder) {
+      return [
+        { role: "Operations & Operations Lead", percentage: 34 },
+        { role: "Business Development Manager", percentage: 27 },
+        { role: "Operations Consultant / Analyst", percentage: 22 },
+        { role: "Project / Venture Manager", percentage: 17 },
+      ];
+    }
+    if (isStrategist) {
+      return [
+        { role: "Financial / Investment Analyst", percentage: 32 },
+        { role: "Management Consultant", percentage: 25 },
+        { role: "Corporate Strategist", percentage: 23 },
+        { role: "Quantitative / Risk Analyst", percentage: 20 },
+      ];
+    }
+    if (isConnector) {
+      return [
+        { role: "Brand & Marketing Manager", percentage: 30 },
+        { role: "Key Accounts / Relationship Manager", percentage: 28 },
+        { role: "HR & Talent Partner", percentage: 24 },
+        { role: "Sales & Client Director", percentage: 18 },
+      ];
+    }
+    if (isMaverick) {
+      return [
+        { role: "Venture Builder / Founder", percentage: 35 },
+        { role: "Growth Hacker / Product Owner", percentage: 28 },
+        { role: "Alternative Investments Trader", percentage: 22 },
+        { role: "Innovation Consultant", percentage: 15 },
+      ];
+    }
+    if (isAnchor) {
+      return [
+        { role: "Corporate Auditor / Accountant", percentage: 33 },
+        { role: "Risk & Compliance Specialist", percentage: 28 },
+        { role: "Portfolio / Fund Administrator", percentage: 22 },
+        { role: "Treasury Operations Analyst", percentage: 17 },
+      ];
+    }
     return [
-      { role: "Systems / Backend Architect",   percentage: 32 },
-      { role: "Tech consultancy / advisory",   percentage: 25 },
-      { role: "Engineering team lead",         percentage: 23 },
-      { role: "Research / hard-problem track", percentage: 20 },
+      { role: "General Manager / Associate", percentage: 32 },
+      { role: "Market Researcher", percentage: 26 },
+      { role: "Business Operations Coordinator", percentage: 22 },
+      { role: "Strategy & Ventures Assistant", percentage: 20 },
     ];
-  if (arch.name.includes("Connector"))
+  }
+
+  // 3. Pure & Applied Sciences
+  if (disc === "science") {
+    if (isBuilder) {
+      return [
+        { role: "Applied Lab Scientist", percentage: 34 },
+        { role: "Biotech / R&D Specialist", percentage: 27 },
+        { role: "Scientific Instrumentation Lead", percentage: 22 },
+        { role: "Clinical Trial Coordinator", percentage: 17 },
+      ];
+    }
+    if (isStrategist) {
+      return [
+        { role: "Principal Investigator / Researcher", percentage: 32 },
+        { role: "Scientific Advisor / Consultant", percentage: 25 },
+        { role: "Data & Systems Biologist", percentage: 23 },
+        { role: "Environmental Modeler", percentage: 20 },
+      ];
+    }
+    if (isConnector) {
+      return [
+        { role: "Science Communicator / Journalist", percentage: 30 },
+        { role: "Medical Liaison / Representative", percentage: 28 },
+        { role: "Tech Transfer Liaison", percentage: 24 },
+        { role: "Public Health Project Lead", percentage: 18 },
+      ];
+    }
+    if (isMaverick) {
+      return [
+        { role: "Deeptech / Biotech Founder", percentage: 35 },
+        { role: "Alternative Energy Entrepreneur", percentage: 28 },
+        { role: "Cross-disciplinary Inventor", percentage: 22 },
+        { role: "Science Innovation Consultant", percentage: 15 },
+      ];
+    }
+    if (isAnchor) {
+      return [
+        { role: "Quality Control / Lab Manager", percentage: 33 },
+        { role: "Clinical Data Manager", percentage: 28 },
+        { role: "Lab Safety & Compliance Director", percentage: 22 },
+        { role: "Regulatory Affairs Officer", percentage: 17 },
+      ];
+    }
     return [
-      { role: "Developer Advocate / DevRel",  percentage: 30 },
-      { role: "Solutions / Forward-deployed", percentage: 28 },
-      { role: "Product Manager",              percentage: 24 },
-      { role: "Founder, B2B SaaS",            percentage: 18 },
+      { role: "Research Associate", percentage: 32 },
+      { role: "Environmental Consultant", percentage: 26 },
+      { role: "Technical Writer (Science)", percentage: 22 },
+      { role: "Scientific Policy Advisor", percentage: 20 },
     ];
-  if (arch.name.includes("Maverick"))
+  }
+
+  // 4. Humanities, Psychology & Education
+  if (disc === "humanities" || disc === "psychology" || disc === "education") {
+    if (isBuilder) {
+      return [
+        { role: "Curriculum / Instructional Designer", percentage: 34 },
+        { role: "Social Program Builder", percentage: 27 },
+        { role: "EdTech Content Developer", percentage: 22 },
+        { role: "Community Director", percentage: 17 },
+      ];
+    }
+    if (isStrategist) {
+      return [
+        { role: "Policy Analyst / Researcher", percentage: 32 },
+        { role: "Educational Consultant", percentage: 25 },
+        { role: "Clinical Psychologist (Private Practice)", percentage: 23 },
+        { role: "Industrial / Organisational Consultant", percentage: 20 },
+      ];
+    }
+    if (isConnector) {
+      return [
+        { role: "School Counselor / Therapist", percentage: 30 },
+        { role: "Public Relations Specialist", percentage: 28 },
+        { role: "HR Talent Advisor", percentage: 24 },
+        { role: "NGO Partnership Manager", percentage: 18 },
+      ];
+    }
+    if (isMaverick) {
+      return [
+        { role: "Educational Entrepreneur / Founder", percentage: 35 },
+        { role: "Social Enterprise Builder", percentage: 28 },
+        { role: "Independent Writer & Creator", percentage: 22 },
+        { role: "Creative / Arts Producer", percentage: 15 },
+      ];
+    }
+    if (isAnchor) {
+      return [
+        { role: "Academic Administrator", percentage: 33 },
+        { role: "School Principal / Registrar", percentage: 28 },
+        { role: "Institutional Compliance Officer", percentage: 22 },
+        { role: "Archivist / Museum Curator", percentage: 17 },
+      ];
+    }
     return [
-      { role: "Solo / indie product founder", percentage: 35 },
-      { role: "Founding Engineer at deeptech", percentage: 28 },
-      { role: "Research engineer in frontier domain", percentage: 22 },
-      { role: "Creative-technical hybrid",    percentage: 15 },
+      { role: "Corporate Coach / Facilitator", percentage: 32 },
+      { role: "Social Work Associate", percentage: 26 },
+      { role: "Writer / Editor", percentage: 22 },
+      { role: "Student Success Counselor", percentage: 20 },
     ];
-  if (arch.name.includes("Anchor"))
+  }
+
+  // 5. Law
+  if (disc === "law") {
+    if (isBuilder) {
+      return [
+        { role: "Corporate Counsel / Drafter", percentage: 34 },
+        { role: "In-House Legal Manager", percentage: 27 },
+        { role: "Legal Operations Specialist", percentage: 22 },
+        { role: "Legal Tech Consultant", percentage: 17 },
+      ];
+    }
+    if (isStrategist) {
+      return [
+        { role: "Litigation Strategist / Lead", percentage: 32 },
+        { role: "Public Policy Architect", percentage: 25 },
+        { role: "Constitutional Law Scholar", percentage: 23 },
+        { role: "Arbitration Specialist", percentage: 20 },
+      ];
+    }
+    if (isConnector) {
+      return [
+        { role: "Client Relations Legal Counsel", percentage: 30 },
+        { role: "Public Interest Advocate", percentage: 28 },
+        { role: "Legal Recruitment Partner", percentage: 24 },
+        { role: "Legal Business Development Director", percentage: 18 },
+      ];
+    }
+    if (isMaverick) {
+      return [
+        { role: "Legal Tech Founder", percentage: 35 },
+        { role: "Human Rights Reformer", percentage: 28 },
+        { role: "IP Strategy Advisory Lead", percentage: 22 },
+        { role: "Alternative Dispute Designer", percentage: 15 },
+      ];
+    }
+    if (isAnchor) {
+      return [
+        { role: "Compliance & Regulatory Counsel", percentage: 33 },
+        { role: "Judicial Law Clerk", percentage: 28 },
+        { role: "Legal Risk Auditor", percentage: 22 },
+        { role: "Contract Compliance Officer", percentage: 17 },
+      ];
+    }
     return [
-      { role: "Platform / Infra Engineer",    percentage: 33 },
-      { role: "Site Reliability Engineer",    percentage: 28 },
-      { role: "Security / hard-systems",       percentage: 22 },
-      { role: "Engineering team lead",         percentage: 17 },
+      { role: "Corporate Legal Associate", percentage: 32 },
+      { role: "General Counsel Consultant", percentage: 26 },
+      { role: "Legal Journalist", percentage: 22 },
+      { role: "Legal Policy Researcher", percentage: 20 },
     ];
+  }
+
+  // 6. Media, Design & Architecture
+  if (disc === "media" || disc === "design_arch") {
+    if (isBuilder) {
+      return [
+        { role: "UI/UX / Interaction Designer", percentage: 34 },
+        { role: "Multimedia Content Builder", percentage: 27 },
+        { role: "Architectural Project Lead", percentage: 22 },
+        { role: "Design Systems Creator", percentage: 17 },
+      ];
+    }
+    if (isStrategist) {
+      return [
+        { role: "UX Researcher / Design Planner", percentage: 32 },
+        { role: "Creative Strategist", percentage: 25 },
+        { role: "Urban / Architectural Planner", percentage: 23 },
+        { role: "Brand Identity Consultant", percentage: 20 },
+      ];
+    }
+    if (isConnector) {
+      return [
+        { role: "Art Director / Creative Lead", percentage: 30 },
+        { role: "Design Agency Manager", percentage: 28 },
+        { role: "PR & Event Director", percentage: 24 },
+        { role: "Client Accounts Liaison", percentage: 18 },
+      ];
+    }
+    if (isMaverick) {
+      return [
+        { role: "Design Studio Founder", percentage: 35 },
+        { role: "Bespoke / Experimental Architect", percentage: 28 },
+        { role: "Independent Creative Director", percentage: 22 },
+        { role: "Alternative Media Producer", percentage: 15 },
+      ];
+    }
+    if (isAnchor) {
+      return [
+        { role: "Brand Guidelines Manager", percentage: 33 },
+        { role: "Production Editor / Director", percentage: 28 },
+        { role: "Specifications Architect", percentage: 22 },
+        { role: "Digital Asset Librarian", percentage: 17 },
+      ];
+    }
+    return [
+      { role: "Multi-disciplinary Designer", percentage: 32 },
+      { role: "Content Creator / Copywriter", percentage: 26 },
+      { role: "Freelance Creative", percentage: 22 },
+      { role: "Design Coordinator", percentage: 20 },
+    ];
+  }
+
+  // 7. General/Schooling (Fallback)
+  if (isBuilder) {
+    return [
+      { role: "Project / Product Builder", percentage: 34 },
+      { role: "R&D Prototype Developer", percentage: 27 },
+      { role: "Indie / Maker Entrepreneur", percentage: 22 },
+      { role: "Project / Team Operations Lead", percentage: 17 },
+    ];
+  }
+  if (isStrategist) {
+    return [
+      { role: "Systems / Analytics Planner", percentage: 32 },
+      { role: "Management Consultant", percentage: 25 },
+      { role: "Research Analyst", percentage: 23 },
+      { role: "Planning & Policy Advisor", percentage: 20 },
+    ];
+  }
+  if (isConnector) {
+    return [
+      { role: "Public Relations / DevRel Partner", percentage: 30 },
+      { role: "Client Relationship Manager", percentage: 28 },
+      { role: "Product Manager", percentage: 24 },
+      { role: "Venture Sales Specialist", percentage: 18 },
+    ];
+  }
+  if (isMaverick) {
+    return [
+      { role: "Startup Founder / Innovator", percentage: 35 },
+      { role: "Growth Marketer / Creator", percentage: 28 },
+      { role: "Alternative Strategy Designer", percentage: 22 },
+      { role: "Creative Arts Director", percentage: 15 },
+    ];
+  }
+  if (isAnchor) {
+    return [
+      { role: "Risk & Compliance Specialist", percentage: 33 },
+      { role: "Safety / Operations Coordinator", percentage: 28 },
+      { role: "Quality Assurance Lead", percentage: 22 },
+      { role: "Administrative Director", percentage: 17 },
+    ];
+  }
   return [
-    { role: "Generalist Software Engineer",   percentage: 32 },
-    { role: "Product Engineer",                percentage: 26 },
-    { role: "Designer-engineer hybrid",        percentage: 22 },
-    { role: "Founder track",                   percentage: 20 },
+    { role: "General Management Associate", percentage: 32 },
+    { role: "Operations Analyst", percentage: 26 },
+    { role: "Communications Specialist", percentage: 22 },
+    { role: "Academic Coordinator", percentage: 20 },
   ];
 }
 

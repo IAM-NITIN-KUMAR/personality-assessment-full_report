@@ -267,7 +267,7 @@ export function planNext(args: {
     q20Answer: args.answers?.["Q20"],
     allAnswers: args.answers ? Object.keys(args.answers) : []
   });
-  if (current.section === "abroad_element" && args.answers) {
+  if (current.section === "passport_era" && args.answers) {
     const ans = args.answers["Q20"];
     const shouldContinue = ans?.optionIds?.includes("a") || ans?.optionIds?.includes("c");
     console.log("Q20 Gating decision (section based):", { shouldContinue, ans });
@@ -276,11 +276,20 @@ export function planNext(args: {
     }
   }
 
+  if (current.id === "Q21" && args.answers) {
+    const ans = args.answers["Q21"];
+    const shouldEnd = ans?.optionIds?.includes("c");
+    console.log("Q21 gating decision:", { shouldEnd, ans });
+    if (shouldEnd) {
+      return { kind: "transition", nextSection: "report" };
+    }
+  }
+
   const SECTIONS: Section[] = [
     "main_character",
     "dream_big",
-    "passport_era",
     "skill_check",
+    "passport_era",
   ];
 
   const sectionIndex = SECTIONS.indexOf(section);
@@ -316,9 +325,14 @@ export function totalQuestionCountFor(
 ): number {
   void discipline;
   void educationLevel;
-  if (answers && answers["Q20"]) {
-    const shouldContinue = answers["Q20"]?.optionIds?.includes("a") || answers["Q20"]?.optionIds?.includes("c");
-    return shouldContinue ? 25 : 20;
+  if (answers) {
+    if (answers["Q21"]?.optionIds?.includes("c")) {
+      return 21;
+    }
+    if (answers["Q20"]) {
+      const shouldContinue = answers["Q20"]?.optionIds?.includes("a") || answers["Q20"]?.optionIds?.includes("c");
+      return shouldContinue ? 25 : 20;
+    }
   }
   return 25;
 }

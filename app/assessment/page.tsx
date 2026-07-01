@@ -241,8 +241,8 @@ export default function AssessmentPage() {
       const SECTIONS: Section[] = [
         "main_character",
         "dream_big",
-        "passport_era",
         "skill_check",
+        "passport_era",
       ];
       const secIdx = SECTIONS.indexOf(parent.section);
       if (secIdx !== -1 && secIdx < SECTIONS.length - 1) {
@@ -264,12 +264,13 @@ export default function AssessmentPage() {
   };
 
   const handleNext = async () => {
+    const latestAnswers = useAssessment.getState().answers;
     const step = planNext({
       current,
       trunk,
       discipline: profile.discipline,
       educationLevel: profile.educationLevel,
-      answers,
+      answers: latestAnswers,
     });
 
     if (step.kind === "anchor" && step.anchor) {
@@ -385,21 +386,51 @@ export default function AssessmentPage() {
 
   const handleNextOrAdvance =
     async () => {
+      const latestAnswers = useAssessment.getState().answers;
+      const step = planNext({
+        current,
+        trunk,
+        discipline: profile.discipline,
+        educationLevel: profile.educationLevel,
+        answers: latestAnswers,
+      });
+
+
+
+      if (step.kind === "transition" && step.nextSection === "report") {
+        computeArchetype();
+        setSection("report");
+        router.push("/report");
+        return;
+      }
+
       const isAtEnd =
         currentIndex === trunk.length - 1;
 
       if (isAtEnd) {
         await handleNext();
       } else {
-        setActiveId(
-          trunk[currentIndex + 1].id
-        );
+        if (step.kind === "anchor" && step.anchor && step.anchor.id !== trunk[currentIndex + 1]?.id) {
+          const newTrunkIds = trunkIds.slice(0, currentIndex + 1);
+          newTrunkIds.push(step.anchor.id);
+          setTrunk(newTrunkIds);
+          setActiveId(step.anchor.id);
+          if (current.section !== step.anchor.section) {
+            setSection(step.anchor.section);
+          }
+        } else {
+          setActiveId(
+            trunk[currentIndex + 1].id
+          );
+        }
       }
     };
 
   const totalQs =
     totalQuestionCountFor(
-      profile.discipline
+      profile.discipline,
+      profile.educationLevel,
+      answers
     );
 
   const positionLabel = `${currentIndex + 1} of ${totalQs}`;
