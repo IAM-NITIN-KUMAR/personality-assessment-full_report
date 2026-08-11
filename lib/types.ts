@@ -17,6 +17,7 @@ export const DIMENSION_LABELS: Record<Dimension, { low: string; high: string; la
 
 export type Section =
   | "main_character"
+  | "cognitive"
   | "dream_big"
   | "passport_era"
   | "skill_check"

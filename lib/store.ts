@@ -113,7 +113,7 @@ export const useAssessment = create<Store>()(
       setSection: (section) => set({ section }),
 
       computeArchetype: () => {
-        const all = get().allQuestions().filter((q) => q.section === "main_character" || q.section === "skill_check");
+        const all = get().allQuestions().filter((q) => q.section === "main_character" || q.section === "cognitive" || q.section === "skill_check");
         const scores = computeDimensionScores(all, get().answers);
         const archetype = pickArchetype(scores);
         set({ archetype });

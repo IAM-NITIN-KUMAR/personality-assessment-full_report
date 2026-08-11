@@ -46,32 +46,34 @@ const SCHOOL_SCORES: Record<string, Record<string, Partial<Record<Dimension, num
     d: { risk: 2, energy: 1 },
   },
   Q15: {
-    a: { structure: 2 },
-    b: { structure: -2 },
-    c: { structure: 0 },
+    a: { structure: 2, decision_style: 1 },
+    b: { structure: 1 },
+    c: { structure: -1 },
+    d: { structure: -2, decision_style: -1 },
   },
   Q16: {
-    a: { social: -1, structure: 1 },
+    a: { energy: 2 },
     b: { energy: 1 },
-    c: { social: -2, energy: -1 },
-    d: { risk: 2, structure: -1 },
+    c: { energy: -1 },
+    d: { energy: -2, social: -1 },
   },
   Q17: {
-    a: { risk: -2, structure: 1 },
+    a: { risk: 2, drive: 1 },
     b: { risk: 1, decision_style: 1 },
-    c: { risk: 2, structure: -1 },
+    c: { risk: -1 },
+    d: { risk: -2, structure: 1 },
   },
   Q18: {
-    a: { social: -2, energy: -1 },
-    b: { social: 2, energy: 1 },
-    c: { structure: 2, drive: -1 },
-    d: { drive: 2, social: 1 },
+    a: { social: -2 },
+    b: { social: -1 },
+    c: { social: 1 },
+    d: { social: 2, energy: 1 },
   },
   Q19: {
-    a: { energy: -2, social: -1 },
-    b: { energy: 2, social: 1 },
-    c: { structure: 1 },
-    d: { structure: -1, drive: 1 },
+    a: { drive: 2 },
+    b: { drive: 1, structure: 1 },
+    c: { drive: -1 },
+    d: { drive: -2, structure: -1 },
   },
 };
 
@@ -119,34 +121,34 @@ const UG_SCORES: Record<string, Record<string, Partial<Record<Dimension, number>
     d: { structure: 2, drive: 1 },
   },
   Q15: {
-    a: { structure: 2, risk: -1 },
-    b: { risk: 2, structure: -2 },
-    c: { decision_style: 2, structure: 1 },
-    d: { social: -2, energy: -1 },
+    a: { structure: 2 },
+    b: { structure: 1 },
+    c: { structure: -1 },
+    d: { structure: -2, drive: 1 },
   },
   Q16: {
-    a: { social: -2, energy: -1 },
-    b: { social: 2, energy: 1 },
-    c: { drive: 2, social: 1 },
-    d: { social: 0 },
+    a: { social: -2, energy: -2 },
+    b: { social: -1, energy: -1 },
+    c: { social: 1, energy: 1 },
+    d: { social: 2, energy: 2 },
   },
   Q17: {
-    a: { risk: 2 },
+    a: { risk: 2, drive: 1 },
     b: { risk: 1 },
-    c: { risk: -2 },
-    d: { social: -1 },
+    c: { risk: -1 },
+    d: { risk: -2 },
   },
   Q18: {
-    a: { drive: 2, risk: 1 },
-    b: { social: 2, energy: 1 },
-    c: { drive: 1, structure: -1 },
-    d: { social: 1 },
+    a: { drive: 2, structure: -1 },
+    b: { drive: 1 },
+    c: { drive: -1, structure: 1 },
+    d: { drive: -2, structure: 1 },
   },
   Q19: {
-    a: { drive: 1, risk: 1 },
-    b: { structure: 1 },
-    c: { structure: 2, risk: -1 },
-    d: { drive: 1 },
+    a: { decision_style: 2 },
+    b: { decision_style: 1 },
+    c: { decision_style: -1 },
+    d: { decision_style: -2, risk: 1 },
   },
 };
 
@@ -156,6 +158,7 @@ function parseJsonQuestionSet(json: any): Question[] {
   for (const s of json.sections) {
     let section: Section = "main_character";
     if (s.section_id === "personality") section = "main_character";
+    else if (s.section_id === "cognitive") section = "cognitive";
     else if (s.section_id === "career_specific") section = "dream_big";
     else if (s.section_id === "work_environment") section = "skill_check";
     else if (s.section_id === "abroad_element") section = "passport_era";
@@ -287,8 +290,9 @@ export function planNext(args: {
 
   const SECTIONS: Section[] = [
     "main_character",
-    "dream_big",
+    "cognitive",
     "skill_check",
+    "dream_big",
     "passport_era",
   ];
 

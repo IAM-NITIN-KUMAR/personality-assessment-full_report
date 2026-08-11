@@ -240,8 +240,9 @@ export default function AssessmentPage() {
     } else {
       const SECTIONS: Section[] = [
         "main_character",
-        "dream_big",
+        "cognitive",
         "skill_check",
+        "dream_big",
         "passport_era",
       ];
       const secIdx = SECTIONS.indexOf(parent.section);
@@ -526,10 +527,11 @@ const SECTION_HEADER: Record<
   Section,
   string
 > = {
-  main_character: "Main Character Energy",
-  dream_big: "Dream Big, No Cap",
-  passport_era: "Passport Era",
-  skill_check: "Skill Check",
+  main_character: "Personality",
+  cognitive: "Cognitive",
+  dream_big: "Career",
+  passport_era: "Career",
+  skill_check: "Work Environment",
   reality_check: "Reality Check",
   report: "Report",
 };

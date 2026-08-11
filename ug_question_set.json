@@ -5,8 +5,9 @@
   "total_questions_min": 20,
   "flow_order": [
     "personality",
-    "career_specific",
+    "cognitive",
     "work_environment",
+    "career_specific",
     "abroad_element"
   ],
   "sections": [
@@ -37,28 +38,6 @@
           ]
         },
         {
-          "id": "Q2",
-          "text": "When given a complex problem, your instinct is to:",
-          "options": [
-            {
-              "key": "a",
-              "text": "Break it into smaller, structured steps"
-            },
-            {
-              "key": "b",
-              "text": "Brainstorm multiple creative solutions"
-            },
-            {
-              "key": "c",
-              "text": "Discuss it with others to get perspectives"
-            },
-            {
-              "key": "d",
-              "text": "Research extensively before acting"
-            }
-          ]
-        },
-        {
           "id": "Q3",
           "text": "What drives you most in your work/studies?",
           "options": [
@@ -77,50 +56,6 @@
             {
               "key": "d",
               "text": "Financial independence and stability"
-            }
-          ]
-        },
-        {
-          "id": "Q4",
-          "text": "How do you handle ambiguity or unclear instructions?",
-          "options": [
-            {
-              "key": "a",
-              "text": "I create my own structure and move forward"
-            },
-            {
-              "key": "b",
-              "text": "I seek clarification before proceeding"
-            },
-            {
-              "key": "c",
-              "text": "I get uncomfortable and need more direction"
-            },
-            {
-              "key": "d",
-              "text": "I see it as an opportunity to be creative"
-            }
-          ]
-        },
-        {
-          "id": "Q5",
-          "text": "How do you typically respond to failure or setbacks?",
-          "options": [
-            {
-              "key": "a",
-              "text": "Analyze what went wrong and fix it systematically"
-            },
-            {
-              "key": "b",
-              "text": "Bounce back quickly and try a new approach"
-            },
-            {
-              "key": "c",
-              "text": "Lean on others for support and perspective"
-            },
-            {
-              "key": "d",
-              "text": "Take it personally and need time to recover"
             }
           ]
         },
@@ -171,8 +106,196 @@
       ]
     },
     {
+      "section_id": "cognitive",
+      "section_title": "Cognitive",
+      "questions": [
+        {
+          "id": "Q2",
+          "text": "When given a complex problem, your instinct is to:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Break it into smaller, structured steps"
+            },
+            {
+              "key": "b",
+              "text": "Brainstorm multiple creative solutions"
+            },
+            {
+              "key": "c",
+              "text": "Discuss it with others to get perspectives"
+            },
+            {
+              "key": "d",
+              "text": "Research extensively before acting"
+            }
+          ]
+        },
+        {
+          "id": "Q4",
+          "text": "How do you handle ambiguity or unclear instructions?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I create my own structure and move forward"
+            },
+            {
+              "key": "b",
+              "text": "I seek clarification before proceeding"
+            },
+            {
+              "key": "c",
+              "text": "I get uncomfortable and need more direction"
+            },
+            {
+              "key": "d",
+              "text": "I see it as an opportunity to be creative"
+            }
+          ]
+        },
+        {
+          "id": "Q5",
+          "text": "How do you typically respond to failure or setbacks?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Analyze what went wrong and fix it systematically"
+            },
+            {
+              "key": "b",
+              "text": "Bounce back quickly and try a new approach"
+            },
+            {
+              "key": "c",
+              "text": "Lean on others for support and perspective"
+            },
+            {
+              "key": "d",
+              "text": "Take it personally and need time to recover"
+            }
+          ]
+        },
+        {
+          "id": "Q19",
+          "text": "When a big career decision is in front of you — an offer, a course, a city — how do you actually decide?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I research thoroughly, compare the options side by side, and take my time"
+            },
+            {
+              "key": "b",
+              "text": "I gather the key facts, run a quick structured comparison, and decide"
+            },
+            {
+              "key": "c",
+              "text": "I form an early sense of the right answer and refine it as I go"
+            },
+            {
+              "key": "d",
+              "text": "I trust my instinct and commit quickly"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "work_environment",
+      "section_title": "Work Environment",
+      "questions": [
+        {
+          "id": "Q15",
+          "text": "Which way of working would bring out your best?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Clear processes, defined targets, and a predictable routine"
+            },
+            {
+              "key": "b",
+              "text": "Mostly defined responsibilities, with some room to shape my approach"
+            },
+            {
+              "key": "c",
+              "text": "Broad goals, with the freedom to decide how I get there"
+            },
+            {
+              "key": "d",
+              "text": "An open canvas where I define the problems worth solving"
+            }
+          ]
+        },
+        {
+          "id": "Q16",
+          "text": "Picture a genuinely productive workday. How are you spending most of it?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Heads-down on deep, focused work with minimal interruptions"
+            },
+            {
+              "key": "b",
+              "text": "Mostly working alone, with a short check-in or two"
+            },
+            {
+              "key": "c",
+              "text": "Working through problems together with a small team"
+            },
+            {
+              "key": "d",
+              "text": "In constant interaction — meetings, clients, and group discussions"
+            }
+          ]
+        },
+        {
+          "id": "Q17",
+          "text": "If the right opportunity required you to move, how would you respond?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I would relocate anywhere in the world for it"
+            },
+            {
+              "key": "b",
+              "text": "I would relocate anywhere within India"
+            },
+            {
+              "key": "c",
+              "text": "I would consider moving only for an exceptional offer"
+            },
+            {
+              "key": "d",
+              "text": "I would rather find an opportunity where I already live"
+            }
+          ]
+        },
+        {
+          "id": "Q18",
+          "text": "In your first job, how would you prefer to be managed?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Give me the goal and let me figure out how to get there"
+            },
+            {
+              "key": "b",
+              "text": "Regular check-ins, with freedom to work my own way in between"
+            },
+            {
+              "key": "c",
+              "text": "Clear guidance and frequent feedback while I learn"
+            },
+            {
+              "key": "d",
+              "text": "A structured training programme with a defined growth path"
+            }
+          ]
+        }
+      ]
+    },
+    {
       "section_id": "career_specific",
-      "section_title": "Career-Specific",
+      "section_title": "Career",
       "questions": [
         {
           "id": "Q8",
@@ -246,201 +369,93 @@
         },
         {
           "id": "Q11",
-          "text": "Are you more drawn to:",
+          "text": "How clearly can you picture the role you want in your first job?",
           "options": [
             {
               "key": "a",
-              "text": "A core/technical job in your field of study"
+              "text": "Very clearly — I know the specific role and the kind of organisations I am targeting"
             },
             {
               "key": "b",
-              "text": "A cross-functional role (management, consulting, business)"
+              "text": "Fairly clearly — I know the field I want, but not the exact role within it"
             },
             {
               "key": "c",
-              "text": "Further specialization through higher studies"
+              "text": "Broadly — I am still weighing two or three quite different directions"
             },
             {
               "key": "d",
-              "text": "Still exploring, not sure yet"
+              "text": "Not yet — I am still exploring what would suit me"
             }
           ]
         },
         {
           "id": "Q12",
-          "text": "How important is upskilling (certifications, courses) to your career plan?",
+          "text": "How much hands-on exposure have you had to the kind of work you are considering?",
           "options": [
             {
               "key": "a",
-              "text": "Very important — I actively pursue it"
+              "text": "Substantial — an internship or real industry/client work in the field"
             },
             {
               "key": "b",
-              "text": "Somewhat important — I'll do it if required"
+              "text": "Moderate — academic projects, competitions, or volunteering related to it"
             },
             {
               "key": "c",
-              "text": "Not a priority right now"
+              "text": "Limited — online courses or self-study only"
+            },
+            {
+              "key": "d",
+              "text": "None yet — I have not had the chance to try it"
             }
           ]
         },
         {
           "id": "Q13",
-          "text": "Which best describes your career motivation right now?",
+          "text": "How much groundwork have you done for your next step after graduation?",
           "options": [
             {
               "key": "a",
-              "text": "Solving real-world problems through innovation"
+              "text": "A lot — my resume or profile is ready and I have begun applications or test preparation"
             },
             {
               "key": "b",
-              "text": "Building a stable, well-paying career"
+              "text": "A fair amount — I have researched specific roles, exams, or universities in detail"
             },
             {
               "key": "c",
-              "text": "Expressing myself and being creative"
+              "text": "A little — occasional reading and conversations, nothing concrete yet"
             },
             {
               "key": "d",
-              "text": "Helping or serving others/society"
+              "text": "None so far — I have not started preparing"
             }
           ]
         },
         {
           "id": "Q14",
-          "text": "How do you feel about your current degree's job prospects?",
+          "text": "Ten years from now, which of these comes closest to the professional life you dream of?",
           "options": [
             {
               "key": "a",
-              "text": "Confident — clear path ahead"
+              "text": "Becoming a recognised expert whose work shapes my field"
             },
             {
               "key": "b",
-              "text": "Cautiously optimistic — exploring options"
+              "text": "Leading a large team or organisation at a senior level"
             },
             {
               "key": "c",
-              "text": "Uncertain — considering a pivot"
+              "text": "Building a successful venture or product of my own"
             },
             {
               "key": "d",
-              "text": "Planning to pursue a different field entirely"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": "work_environment",
-      "section_title": "Work Environment",
-      "questions": [
-        {
-          "id": "Q15",
-          "text": "Your ideal work environment is:",
-          "options": [
-            {
-              "key": "a",
-              "text": "A structured corporate environment"
+              "text": "Doing work that visibly improves people's lives"
             },
             {
-              "key": "b",
-              "text": "A fast-paced startup"
-            },
-            {
-              "key": "c",
-              "text": "An academic/research setting"
-            },
-            {
-              "key": "d",
-              "text": "Freelance/independent work"
-            }
-          ]
-        },
-        {
-          "id": "Q16",
-          "text": "Do you prefer:",
-          "options": [
-            {
-              "key": "a",
-              "text": "Working independently on focused tasks"
-            },
-            {
-              "key": "b",
-              "text": "Collaborating closely with a team"
-            },
-            {
-              "key": "c",
-              "text": "Leading and managing others"
-            },
-            {
-              "key": "d",
-              "text": "A mix depending on the project"
-            }
-          ]
-        },
-        {
-          "id": "Q17",
-          "text": "How do you feel about relocating for work?",
-          "options": [
-            {
-              "key": "a",
-              "text": "Very open to relocating, even internationally"
-            },
-            {
-              "key": "b",
-              "text": "Open to relocating within India"
-            },
-            {
-              "key": "c",
-              "text": "Prefer staying close to home"
-            },
-            {
-              "key": "d",
-              "text": "Open to remote work instead of relocating"
-            }
-          ]
-        },
-        {
-          "id": "Q18",
-          "text": "What work culture appeals to you most?",
-          "options": [
-            {
-              "key": "a",
-              "text": "High-performance, competitive culture"
-            },
-            {
-              "key": "b",
-              "text": "Collaborative, supportive culture"
-            },
-            {
-              "key": "c",
-              "text": "Flexible, autonomous culture"
-            },
-            {
-              "key": "d",
-              "text": "Mission-driven, purpose-led culture"
-            }
-          ]
-        },
-        {
-          "id": "Q19",
-          "text": "How do you feel about work-related travel or irregular hours?",
-          "options": [
-            {
-              "key": "a",
-              "text": "Comfortable — it comes with growth"
-            },
-            {
-              "key": "b",
-              "text": "Fine occasionally, not as a norm"
-            },
-            {
-              "key": "c",
-              "text": "Prefer predictable hours and minimal travel"
-            },
-            {
-              "key": "d",
-              "text": "Depends entirely on the role/pay"
+              "key": "e",
+              "text": "Achieving financial independence and the freedom to work on my own terms"
             }
           ]
         }
@@ -448,22 +463,22 @@
     },
     {
       "section_id": "abroad_element",
-      "section_title": "Abroad Element",
+      "section_title": "Career",
       "gating_question": {
         "id": "Q20",
-        "text": "Do you have plans of studying further, or do you see yourself moving into a corporate job/workforce after this?",
+        "text": "Looking at your immediate next step after graduation, which direction are you leaning towards?",
         "options": [
           {
             "key": "a",
-            "text": "I plan to study further (Masters/higher studies)"
+            "text": "Higher studies — a Masters or further specialisation"
           },
           {
             "key": "b",
-            "text": "I plan to work in a corporate job/start working soon"
+            "text": "Starting work — a corporate job or full-time role"
           },
           {
             "key": "c",
-            "text": "Not decided / No clear answer yet"
+            "text": "Not decided yet — still weighing my options"
           }
         ],
         "branching_logic": {
@@ -487,7 +502,7 @@
         "questions": [
           {
             "id": "Q21",
-            "text": "Are you considering studying abroad for your higher studies, or do you prefer India?",
+            "text": "For your higher studies, are you considering universities abroad or in India?",
             "options": [
               {
                 "key": "a",
@@ -495,39 +510,39 @@
               },
               {
                 "key": "b",
-                "text": "Open to it but undecided"
+                "text": "Open to studying abroad, but still undecided"
               },
               {
                 "key": "c",
-                "text": "Prefer India, exploring options"
+                "text": "I would prefer to study in India"
               }
             ]
           },
           {
             "id": "Q22",
-            "text": "What's the primary reason you're considering studying abroad?",
+            "text": "What would be your primary reason for choosing to study abroad?",
             "options": [
               {
                 "key": "a",
-                "text": "Better quality of education and global exposure"
+                "text": "The quality of education and global exposure"
               },
               {
                 "key": "b",
-                "text": "Better career/job opportunities post-study"
+                "text": "Stronger career opportunities after graduating"
               },
               {
                 "key": "c",
-                "text": "Higher earning potential"
+                "text": "Higher long-term earning potential"
               },
               {
                 "key": "d",
-                "text": "Immigration/PR pathway"
+                "text": "A pathway to long-term settlement (PR) abroad"
               }
             ]
           },
           {
             "id": "Q23",
-            "text": "Which countries are you considering?",
+            "text": "Which countries are you currently considering for your studies? Select all that apply.",
             "multi_select": true,
             "options": [
               {
@@ -552,47 +567,51 @@
               },
               {
                 "key": "f",
-                "text": "Other/Not decided"
+                "text": "Other / Not decided yet"
               }
             ]
           },
           {
             "id": "Q24",
-            "text": "What's your target intake/timeline?",
+            "text": "When do you aim to begin your programme abroad?",
             "options": [
               {
                 "key": "a",
-                "text": "Within the next 6–12 months"
+                "text": "Within the next 12 months"
               },
               {
                 "key": "b",
-                "text": "1–2 years from now"
+                "text": "In 1–2 years"
               },
               {
                 "key": "c",
-                "text": "Still exploring, no fixed timeline"
+                "text": "In 2–3 years"
+              },
+              {
+                "key": "d",
+                "text": "No fixed timeline yet"
               }
             ]
           },
           {
             "id": "Q25",
-            "text": "How would you fund your education abroad?",
+            "text": "How do you plan to fund your studies abroad?",
             "options": [
               {
                 "key": "a",
-                "text": "Self-funded/family funding"
+                "text": "Self or family funded — resources largely in place"
               },
               {
                 "key": "b",
-                "text": "Education loan"
+                "text": "Education loan, with family support for the rest"
               },
               {
                 "key": "c",
-                "text": "Scholarships/grants"
+                "text": "Dependent on scholarships or assistantships"
               },
               {
                 "key": "d",
-                "text": "Not yet planned"
+                "text": "Funding not planned yet"
               }
             ]
           }

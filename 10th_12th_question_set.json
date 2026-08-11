@@ -5,8 +5,9 @@
   "total_questions_min": 20,
   "flow_order": [
     "personality",
-    "career_specific",
+    "cognitive",
     "work_environment",
+    "career_specific",
     "abroad_element"
   ],
   "sections": [
@@ -58,6 +59,56 @@
             }
           ]
         },
+        {
+          "id": "Q6",
+          "text": "What kind of recognition matters most to you?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Academic excellence/top marks"
+            },
+            {
+              "key": "b",
+              "text": "Being known as creative/talented"
+            },
+            {
+              "key": "c",
+              "text": "Being seen as helpful/dependable"
+            },
+            {
+              "key": "d",
+              "text": "Being seen as a leader/organizer"
+            }
+          ]
+        },
+        {
+          "id": "Q7",
+          "text": "If you had a free day with no obligations, you'd most likely:",
+          "options": [
+            {
+              "key": "a",
+              "text": "Read, study, or learn something new"
+            },
+            {
+              "key": "b",
+              "text": "Work on a creative hobby"
+            },
+            {
+              "key": "c",
+              "text": "Spend time with friends/family"
+            },
+            {
+              "key": "d",
+              "text": "Plan or organize something (an event, a trip, a project)"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "section_id": "cognitive",
+      "section_title": "Cognitive",
+      "questions": [
         {
           "id": "Q3",
           "text": "When faced with a new challenge, you usually:",
@@ -123,48 +174,120 @@
               "text": "I thrive — pressure motivates me"
             }
           ]
-        },
+        }
+      ]
+    },
+    {
+      "section_id": "work_environment",
+      "section_title": "Work Environment",
+      "questions": [
         {
-          "id": "Q6",
-          "text": "What kind of recognition matters most to you?",
+          "id": "Q15",
+          "text": "Imagine your ideal study or work day. Which description comes closest?",
           "options": [
             {
               "key": "a",
-              "text": "Academic excellence/top marks"
+              "text": "A fixed schedule where I know exactly what happens and when"
             },
             {
               "key": "b",
-              "text": "Being known as creative/talented"
+              "text": "A planned day with some room to move things around"
             },
             {
               "key": "c",
-              "text": "Being seen as helpful/dependable"
+              "text": "A loose outline that I adjust as the day unfolds"
             },
             {
               "key": "d",
-              "text": "Being seen as a leader/organizer"
+              "text": "An open day where I decide what to do as I go"
             }
           ]
         },
         {
-          "id": "Q7",
-          "text": "If you had a free day with no obligations, you'd most likely:",
+          "id": "Q16",
+          "text": "After a full day of group activities — classes, team practice, events — how do you usually feel?",
           "options": [
             {
               "key": "a",
-              "text": "Read, study, or learn something new"
+              "text": "Energised — I would happily continue with more people time"
             },
             {
               "key": "b",
-              "text": "Work on a creative hobby"
+              "text": "Positive — I enjoy people, balanced with some quiet time"
             },
             {
               "key": "c",
-              "text": "Spend time with friends/family"
+              "text": "A little tired — I need some quiet time before doing more"
             },
             {
               "key": "d",
-              "text": "Plan or organize something (an event, a trip, a project)"
+              "text": "Drained — I recharge best completely on my own"
+            }
+          ]
+        },
+        {
+          "id": "Q17",
+          "text": "Suppose you had two career options — one secure and predictable, the other uncertain but with a much bigger upside. Which way would you lean?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I would take the bold option — a big opportunity is worth the uncertainty"
+            },
+            {
+              "key": "b",
+              "text": "I would take a calculated chance after weighing what could go wrong"
+            },
+            {
+              "key": "c",
+              "text": "I would lean towards the secure option unless the upside was very convincing"
+            },
+            {
+              "key": "d",
+              "text": "I would choose the secure path — stability matters most to me"
+            }
+          ]
+        },
+        {
+          "id": "Q18",
+          "text": "Think about the work you are most proud of. How was it usually done?",
+          "options": [
+            {
+              "key": "a",
+              "text": "Alone, from start to finish"
+            },
+            {
+              "key": "b",
+              "text": "Mostly alone, checking in with others at key points"
+            },
+            {
+              "key": "c",
+              "text": "Shared with one or two close partners"
+            },
+            {
+              "key": "d",
+              "text": "Within a full team where everyone contributed throughout"
+            }
+          ]
+        },
+        {
+          "id": "Q19",
+          "text": "A long-term project has no fixed deadline. What actually happens?",
+          "options": [
+            {
+              "key": "a",
+              "text": "I set my own milestones and start well before I need to"
+            },
+            {
+              "key": "b",
+              "text": "I make a clear plan first, then work through it steadily"
+            },
+            {
+              "key": "c",
+              "text": "I get moving once a reminder or a date appears on the horizon"
+            },
+            {
+              "key": "d",
+              "text": "I do my best work only when the pressure is truly on"
             }
           ]
         }
@@ -172,7 +295,7 @@
     },
     {
       "section_id": "career_specific",
-      "section_title": "Career-Specific",
+      "section_title": "Career",
       "questions": [
         {
           "id": "Q8",
@@ -246,197 +369,89 @@
         },
         {
           "id": "Q11",
-          "text": "Which activity sounds most appealing to you as a future job?",
+          "text": "How much real-world exploration have you done of the career you are considering?",
           "options": [
             {
               "key": "a",
-              "text": "Building/fixing things"
+              "text": "I have spoken to people working in the field or attended related programmes"
             },
             {
               "key": "b",
-              "text": "Treating/helping patients"
+              "text": "I have researched courses, colleges, and career paths on my own"
             },
             {
               "key": "c",
-              "text": "Managing a business or team"
+              "text": "I have mainly discussed it with family, friends, or teachers"
             },
             {
               "key": "d",
-              "text": "Designing or creating content"
+              "text": "I have not really begun exploring yet"
             }
           ]
         },
         {
           "id": "Q12",
-          "text": "Which of these best describes your career motivation?",
+          "text": "How aligned are you and your family on your career direction?",
           "options": [
             {
               "key": "a",
-              "text": "Solving real-world problems through innovation"
+              "text": "We agree — my family supports the path I want"
             },
             {
               "key": "b",
-              "text": "Building a stable, well-paying career"
+              "text": "We see it differently, but we are discussing it openly"
             },
             {
               "key": "c",
-              "text": "Expressing myself and being creative"
+              "text": "My family has a set path in mind that I am expected to follow"
             },
             {
               "key": "d",
-              "text": "Helping or serving others directly"
+              "text": "We have not seriously discussed it yet"
             }
           ]
         },
         {
           "id": "Q13",
-          "text": "How do you feel about competitive entrance exams (JEE, NEET, CLAT, etc.)?",
+          "text": "Where do you currently stand on competitive entrance exams such as JEE, NEET, or CLAT?",
           "options": [
             {
               "key": "a",
-              "text": "I'm already preparing/confident about it"
+              "text": "I have started preparing and have a clear target exam"
             },
             {
               "key": "b",
-              "text": "I'm open to it but undecided"
+              "text": "I intend to attempt one but have not started preparing yet"
             },
             {
               "key": "c",
-              "text": "I'd rather avoid that path"
+              "text": "I am unsure whether these exams are the right route for me"
             },
             {
               "key": "d",
-              "text": "Not applicable to my chosen field"
+              "text": "My intended path does not require these exams"
             }
           ]
         },
         {
           "id": "Q14",
-          "text": "Which best describes your ideal long-term career outcome?",
+          "text": "Looking ten to fifteen years ahead, which of these comes closest to your long-term dream?",
           "options": [
             {
               "key": "a",
-              "text": "Becoming a specialist/expert in a technical field"
+              "text": "Becoming a recognised expert in a specialised professional field"
             },
             {
               "key": "b",
-              "text": "Running my own business/startup"
+              "text": "Building and leading a successful business of my own"
             },
             {
               "key": "c",
-              "text": "Working in a respected, stable profession"
+              "text": "Serving people through medicine, law, or public service"
             },
             {
               "key": "d",
-              "text": "Making a creative or social impact"
-            }
-          ]
-        }
-      ]
-    },
-    {
-      "section_id": "work_environment",
-      "section_title": "Work Environment",
-      "questions": [
-        {
-          "id": "Q15",
-          "text": "Your ideal daily routine looks like:",
-          "options": [
-            {
-              "key": "a",
-              "text": "Structured and predictable"
-            },
-            {
-              "key": "b",
-              "text": "Flexible and ever-changing"
-            },
-            {
-              "key": "c",
-              "text": "A mix of both"
-            }
-          ]
-        },
-        {
-          "id": "Q16",
-          "text": "Would you rather work:",
-          "options": [
-            {
-              "key": "a",
-              "text": "In an office/lab setting"
-            },
-            {
-              "key": "b",
-              "text": "Outdoors or on-site (hospitals, sites, studios)"
-            },
-            {
-              "key": "c",
-              "text": "From home/remotely"
-            },
-            {
-              "key": "d",
-              "text": "Traveling frequently"
-            }
-          ]
-        },
-        {
-          "id": "Q17",
-          "text": "How do you feel about taking risks?",
-          "options": [
-            {
-              "key": "a",
-              "text": "I prefer safe, secure choices"
-            },
-            {
-              "key": "b",
-              "text": "I enjoy taking calculated risks"
-            },
-            {
-              "key": "c",
-              "text": "I love high-risk, high-reward situations"
-            }
-          ]
-        },
-        {
-          "id": "Q18",
-          "text": "Do you prefer working:",
-          "options": [
-            {
-              "key": "a",
-              "text": "Independently, at your own pace"
-            },
-            {
-              "key": "b",
-              "text": "As part of a close-knit team"
-            },
-            {
-              "key": "c",
-              "text": "Under clear guidance/supervision"
-            },
-            {
-              "key": "d",
-              "text": "Leading and directing others"
-            }
-          ]
-        },
-        {
-          "id": "Q19",
-          "text": "What kind of environment helps you perform your best?",
-          "options": [
-            {
-              "key": "a",
-              "text": "Quiet, focused, low-distraction settings"
-            },
-            {
-              "key": "b",
-              "text": "Energetic, collaborative, busy settings"
-            },
-            {
-              "key": "c",
-              "text": "Outdoor or hands-on, physical settings"
-            },
-            {
-              "key": "d",
-              "text": "Flexible settings where I set my own pace"
+              "text": "Creating original work in design, media, or the arts"
             }
           ]
         }
@@ -444,22 +459,22 @@
     },
     {
       "section_id": "abroad_element",
-      "section_title": "Abroad Element",
+      "section_title": "Career",
       "gating_question": {
         "id": "Q20",
-        "text": "Do you have plans of studying further (after 12th, abroad or in India), or do you see yourself entering the workforce/family business soon?",
+        "text": "Looking beyond Class 12, which path do you currently see for yourself?",
         "options": [
           {
             "key": "a",
-            "text": "I plan to study further"
+            "text": "I plan to study further — a degree or professional course, in India or abroad"
           },
           {
             "key": "b",
-            "text": "I plan to work / join the family business"
+            "text": "I plan to start working or join my family's business"
           },
           {
             "key": "c",
-            "text": "Not decided / No clear answer yet"
+            "text": "I have not decided yet"
           }
         ],
         "branching_logic": {
@@ -483,47 +498,47 @@
         "questions": [
           {
             "id": "Q21",
-            "text": "Are you considering studying abroad, or do you prefer staying in India for higher education?",
+            "text": "Have you thought about where you would like to pursue your higher education?",
             "options": [
               {
                 "key": "a",
-                "text": "Definitely interested in studying abroad"
+                "text": "I am definitely interested in studying abroad"
               },
               {
                 "key": "b",
-                "text": "Open to it but not decided"
+                "text": "I am open to studying abroad, but I have not decided"
               },
               {
                 "key": "c",
-                "text": "Prefer India, just exploring options"
+                "text": "I would prefer to study in India"
               }
             ]
           },
           {
             "id": "Q22",
-            "text": "If studying abroad, which factor matters most to you?",
+            "text": "If you did study abroad, what would matter most in choosing where to go?",
             "options": [
               {
                 "key": "a",
-                "text": "Quality of education/university ranking"
+                "text": "Quality of education and university reputation"
               },
               {
                 "key": "b",
-                "text": "Cost of education and scholarships"
+                "text": "Affordability — tuition costs and scholarship availability"
               },
               {
                 "key": "c",
-                "text": "Post-study work opportunities/PR pathway"
+                "text": "Post-study work rights and long-term settlement options"
               },
               {
                 "key": "d",
-                "text": "Cultural exposure and lifestyle"
+                "text": "International exposure, culture, and life experience"
               }
             ]
           },
           {
             "id": "Q23",
-            "text": "Which countries have you thought about, if any?",
+            "text": "Which study destinations are on your mind, even loosely? Select all that apply.",
             "multi_select": true,
             "options": [
               {
@@ -554,41 +569,45 @@
           },
           {
             "id": "Q24",
-            "text": "How prepared do you feel for an abroad application process (exams, finances, documentation)?",
+            "text": "When would you realistically want to begin studying abroad?",
             "options": [
               {
                 "key": "a",
-                "text": "Already researching/preparing"
+                "text": "Within the next 12 months"
               },
               {
                 "key": "b",
-                "text": "Have a rough idea, need guidance"
+                "text": "In 1 to 2 years — right after Class 12"
               },
               {
                 "key": "c",
-                "text": "Have no idea, just starting to think about it"
+                "text": "In 2 to 3 years — possibly after starting a degree in India"
+              },
+              {
+                "key": "d",
+                "text": "No fixed timeline yet — still exploring"
               }
             ]
           },
           {
             "id": "Q25",
-            "text": "What's your biggest concern about studying abroad?",
+            "text": "How would your education abroad most likely be funded?",
             "options": [
               {
                 "key": "a",
-                "text": "Financial cost"
+                "text": "Fully family-funded — finances are already planned"
               },
               {
                 "key": "b",
-                "text": "Being away from family"
+                "text": "Part family funding, part scholarship or education loan"
               },
               {
                 "key": "c",
-                "text": "Visa/admission process complexity"
+                "text": "Mainly dependent on scholarships or education loans"
               },
               {
                 "key": "d",
-                "text": "Not sure if it's the right fit for me"
+                "text": "Budget not yet discussed with family"
               }
             ]
           }

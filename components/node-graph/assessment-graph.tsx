@@ -21,9 +21,10 @@ interface Props {
 
 const SECTION_META: Record<Section, { label: string; index: number }> = {
   main_character: { label: "PERSONALITY", index: 1 },
-  dream_big: { label: "DREAMS & GOALS", index: 2 },
-  skill_check: { label: "SKILL CHECK", index: 3 },
-  passport_era: { label: "PASSPORT ERA", index: 4 },
+  cognitive: { label: "COGNITIVE", index: 2 },
+  skill_check: { label: "WORK ENVIRONMENT", index: 3 },
+  dream_big: { label: "CAREER", index: 4 },
+  passport_era: { label: "CAREER", index: 4 },
   reality_check: { label: "REALITY CHECK", index: 5 },
   report: { label: "REPORT", index: 6 },
 };
