@@ -1,0 +1,1151 @@
+
+===== PAGE 1 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 1
+ SECURE STEPS
+ Roots & Routes
+ Master Build Specification
+ The complete instrument for the UG assessment: every question, the animal and archetype system,
+ the full scoring and report logic, the career engine, and the exact changes to make in code.
+1
+One test, every degree: how the same questions read a CS and a BBA student
+2
+The four metrics and exactly how each is measured
+3
+The full question set with all options (29 screens)
+4
+Scoring logic, step by step
+5
+The animal system
+6
+The archetype grid (15 types + 2 honest fallbacks)
+7
+Fit % formula and the career card engine (60-career catalog)
+8
+The verdict sentence bank
+9
+Flags and growth tips
+10
+Abroad gating logic
+11
+The report, section by section, with generation rules
+12
+A complete sample report
+13
+Developer change list
+ Version 2.0 · August 2026 · Internal build document
+
+
+===== PAGE 2 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 2
+ 1
+One test, every degree
+The same 29 screens are shown to every UG student, whether they study computer science, BBA, biotech or
+English. This is a design decision, not a shortcut, and it works because of what the questions measure.
+The engine questions never test knowledge. They test reaction. Every scenario is built from universal student
+raw material: money, teams, messages, ideas, broken processes, people struggling. “Sales are up 22%, profit
+is down 8%, and nobody knows why” requires zero commerce knowledge. A CS student reads it as a
+debugging problem. A BBA student reads it as a margin problem. Both readings produce the same honest
+signal: did this mind lean in, or did its energy drop?
+Degree enters the system at exactly three points, and nowhere else:
+Touchpoint
+What the degree does
+What it never does
+Q0 (intake,
+unscored)
+Sets the default domain card shown in C1
+Never adds or removes score
+C1 menu
+One of the four cards is the degree-adjacent
+domain, so the expected path is always visible and
+choosing it is informative
+Never hides a domain from the student
+Career cards
+The next-step line adapts for feasibility (a non-CS
+student sees conversion masters and analyst
+routes instead of core software roles)
+Never changes the fit %
+Worked example. A CS student and a BBA student give identical answers. Their radar is identical, their animal is
+identical, their archetype is identical. Three things differ:
+1. In C1, the CS student sees Technology & Data as the default card; the BBA student sees Business & Management.
+If either picks their default while their reactions pointed elsewhere, the default-path flag fires for that student and
+their report says so.
+2. On the career cards, the same Data role renders as “Data Scientist, MSc Data Science” for the CS student and
+“Data Analyst or Business Intelligence Analyst, MSc Business Analytics, open to non-CS backgrounds” for the BBA
+student. Same fit %, different door.
+3. The report's next-steps block cites their own degree when it recommends exposure: a project, an internship, one
+conversation in the field.
+Why not degree-specific questions? Three reasons. Comparability: one item bank means every student's
+Hawk 10 means the same thing, which is what lets you norm the test later. Maintenance: one bank to fix,
+translate and improve. Honesty: degree-flavoured questions leak expectations, and students answer as the
+engineer or manager they think they should be, which is exactly the self-image trap this redesign removes.
+
+
+===== PAGE 3 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 3
+ 2
+The four metrics, defined and measured
+Every question in the test exists to feed one of four metrics, and every metric surfaces as a named block in the
+report. Nothing is asked that is not shown; nothing is shown that was not measured.
+Metric 1: Personality. Who this student is when nobody is grading them. Measured by the seven slider items (A1
+to A7), read in pairs, plus the primary animal. We never ask “are you a leader” or “what drives you”. We ask what
+they actually did and let the pattern speak. Output: four strength sliders (Energy, Decision, Structure, Mobility)
+each banded Clearly / Lean / Balanced, plus the animal pair and archetype.
+Metric 2: Cognitive, reported as Approach. We do not run ability testing, so the report must never claim IQ or
+aptitude. What we can measure honestly is thinking style: how this mind meets a problem. Sources: the
+reaction pattern across B1 to B6 (instant solving vs wanting the answer vs energy drop), the Decision slider (A3,
+A4), and resilience under the confirmation costs (D1, D2). Output: the Deliberate / Instinctive band, the
+solve-first vs curious-passive pattern, and the honesty of the fit score itself.
+Metric 3: Work Environment. The conditions under which this student does their best work. Sources: A5
+(structure), A6 (drive without deadlines), A2 (solo vs team peak work), A7 (mobility), plus which role costs they
+accepted in D1. Output: the environment paragraph in the report, phrased as “you will do your best work
+where...”, and the mobility line that quietly gates the abroad module.
+Metric 4: Career. The direction, the role inside it, and how ready they are. Sources: the six pull probes (B1 to B6)
+building the radar, the domain choice (C1), the role resolution (C2 to C5), the confirmation pair (D1, D2), and the
+reality items (F1 to F3). Output: the radar, the four career cards with fit %, and the next-steps block.
+Metric
+Fed by
+Report block
+Personality
+A1 to A7 pairs; animal pairing
+Core Strengths sliders; Your Type (animal + archetype)
+Approach
+B-option pattern; A3, A4; D1, D2
+Approach paragraph; Deliberate/Instinctive line;
+romanticism flag
+Work Environment
+A2, A5, A6, A7; accepted costs in D
+Ideal Environment paragraph; mobility line
+Career
+B1-B6; C1-C5; D1-D2; F1-F3
+Path Fit radar; 4 career cards; Next Steps
+The one-way rule. Questions flow into metrics, metrics flow into report blocks, never the reverse. The student
+must never be able to answer a question that directly writes its own report line. That is the flaw in the previous
+set (asking “what role appeals to you” and reporting “we feel you should be a leader”), and it is the reason
+verdicts now come only from combinations of three or more answers across different sections.
+
+
+===== PAGE 4 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 4
+ 3
+The full question set
+29 screens. Sections A to F. Every option is livable; every option scores toward something. The reaction frame
+in Section B repeats on purpose: a fixed scale is what makes the six scenarios comparable, and by the third
+probe students stop reading options and just react, which is the honest signal.
+INTAKE (unscored)
+ROUTING ONLY · sets the C1 default card and career-card feasibility · never scored
+Q0. What are you studying right now?
+a) Engineering / Technology
+b) Commerce / Business
+c) Science
+d) Arts / Humanities / Design
+e) Other
+SECTION A · STRENGTH SLIDERS (7 items)
+ENERGY slider · a/d lean Outgoing · c leans Reflective · b neutral
+A1. A packed day ends, and your floor is planning something loud tonight.
+a) I'm in, that's how I recharge
+b) Go for a bit, leave early
+c) Skip it, I recharge alone
+d) Only if I'm the one running it
+ENERGY slider + environment · a leans Reflective · c/d lean Outgoing · b neutral
+A2. Your best work this year happened:
+a) Alone, headphones on
+b) With one or two people
+c) In a full team
+d) While teaching or helping someone
+DECISION slider · a/d lean Deliberate · b leans Instinctive · c neutral
+A3. Electives close tomorrow. You:
+a) Compare options on a sheet
+b) Go with gut
+c) Ask seniors
+d) Pick whatever opens the most doors
+DECISION slider · a/d lean Deliberate · b leans Instinctive · c neutral
+A4. A great opportunity, but half the details are missing. You:
+a) Wait for clarity before committing
+b) Say yes, figure it out
+c) Yes, if someone I trust is in
+d) Research fast, then decide
+STRUCTURE slider · a leans Structured · b leans Open-ended · c/d neutral
+A5. Two internships. A: clear tasks, daily check-ins. B: “here's the goal, do it your way.”
+a) Team A
+b) Team B
+c) Team B, with a mentor
+d) Whichever team I click with
+
+
+===== PAGE 5 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 5
+STRUCTURE slider · a/b lean Structured · c/d lean Open-ended
+A6. A project has no deadline. What actually happens?
+a) I set my own milestones early
+b) Plan first, then steady work
+c) I start when a date appears
+d) Best work only under pressure
+MOBILITY slider · quiet gate for the abroad module · a = global, b = national, c = conditional, d = rooted
+A7. If the right opportunity required you to move, you would:
+a) Relocate anywhere in the world for it
+b) Relocate anywhere within India
+c) Move only for an exceptional offer
+d) Rather find something where I already live
+SECTION B · PULL PROBES (6 items) build the radar
+Every scenario is followed by the identical reaction question:
+Be honest about what just happened in your head.
+a) I started solving it before I finished reading +3
+b) I want the answer, but I don't want to be the one figuring it out +1
+c) Nothing much either way 0
+d) I felt my energy drop -2
+Item
+Scenario (shown alone on screen)
+Radar dimension
+B1
+Sales are up 22%, profit is down 8%, and nobody knows why.
+Analytical
+B2
+Two teammates have gone silent and the deadline is Friday.
+People Skills
+B3
+A message that says exactly the right thing, and nobody reads it.
+Creative
+B4
+Rs 20,000 and 30 days to find out if an idea works.
+Entrepreneurial
+B5
+The same mistake happens every month and everyone just works around it.
+Practical
+B6
+Someone capable is quietly falling behind and won't say why.
+Leadership
+
+
+===== PAGE 6 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 6
+SECTION C · MENU + DEPTH (5 items)
+BRANCH SELECT · picking the degree default when it is outside the seeded top 2 fires the default-path flag
+C1. Based on how you reacted, which of these worlds do you want to look inside?
+Four cards shown: the two highest radar-seeded domains, the degree-default domain, and one wildcard.
+Domains: Finance & Capital · Business & Management · Entrepreneurship & Product · Technology & Data · People &
+Society
+Branch: Finance & Capital (roles: Markets, Deals, Risk, Advisory)
+C2. Four rooms, one morning. Pick yours.
+a) The number nobody can explain Mk3 Rk2
+b) The negotiation deciding the price De3 Ad1
+c) The review that catches the miss Rk3 Mk1
+d) Someone deciding their money's future Ad3 De1
+C3. Something fails at 9pm. Which stings most?
+a) Right call, wrong size Mk3
+b) Deal closed, they won De3
+c) Your sign-off had a hole Rk3
+d) Client followed you and lost Ad3
+C4. You get to be definitely right about one thing:
+a) Where the price goes Mk3
+b) What the business is worth De3
+c) What breaks, and how badly Rk3
+d) What this person should do next Ad3
+C5. Which would you least want said about your work?
+a) “Safe, never called it early” Mk3
+b) “Good analyst, couldn't close” De3
+c) “Fast, missed things” Rk3
+d) “Smart, nobody trusted them” Ad3
+Branch: Business & Management (Operations, Strategy, Growth, People & HR)
+C2. Four meetings, one morning. Pick yours.
+a) Why the same delay keeps happening Op3
+b) Which of three markets to enter St3
+c) Why people click but don't buy Gr3
+d) Why good people keep leaving Pe3
+C3. Which failure stings most?
+a) It worked, but couldn't scale Op3
+b) Right call, two years late St3
+c) Good product, nobody heard of it Gr3
+d) Hit the numbers, lost the team Pe3
+C4. Definitely right about one thing:
+a) How the work actually gets done Op3 St1
+b) Where the industry is going St3
+c) What makes someone choose us Gr3 St1
+d) Who to hire, who to let go Pe3
+C5. Least want said:
+a) “Great ideas, nothing shipped” Op3
+b) “Efficient, no bigger picture” St3
+c) “Solid, nothing ever landed” Gr3
+d) “Delivered numbers, burned people” Pe3
+
+
+===== PAGE 7 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 7
+Branch: Entrepreneurship & Product (Founder, Product, Sales, Operator)
+C2. Your idea has one problem. Which would you rather have?
+a) Nobody knows if anyone wants it Fo3
+b) People want it, it's confusing to use Pr3
+c) It's good, nobody's heard of it Sa3
+d) It works, but breaks when it grows Opr3
+C3. Which morning would you enjoy?
+a) Ten stranger conversations to test the idea Fo3 Sa1
+b) Watching five people use it, noting hesitations Pr3
+c) Six no's, going back a seventh time Sa3
+d) Fixing last week's break so it never repeats Opr3
+C4. You can only have one:
+a) The nerve to start before it's ready Fo3
+b) The instinct for what to build next Pr3 Fo1
+c) Getting almost anyone to yes Sa3
+d) Making anything run without you Opr3
+C5. Least want said:
+a) “Waited until it was safe” Fo3
+b) “Built what they liked, not what was needed” Pr3
+c) “Great product, no customers” Sa3
+d) “Grew fast, fell over” Opr3
+Branch: Technology & Data (Build, Data, Product-Tech, Infrastructure)
+C2. Pick your room.
+a) The thing due Friday that doesn't exist yet Bu3
+b) The number that changed and nobody knows why Da3
+c) The argument over what to build at all PT3
+d) The alert that went off at 3am In3
+C3. Which failure stings most?
+a) It works, the code's a mess nobody can touch Bu3
+b) Clean analysis, wrong conclusion Da3
+c) Built exactly what was asked, nobody used it PT3
+d) Ran perfectly until the one day it didn't In3
+C4. Definitely right about one thing:
+a) How to make it work Bu3
+b) What the data actually says Da3
+c) What's worth building PT3 Da1
+d) Where it breaks under load In3 Bu1
+C5. Least want said:
+a) “Clever code, took three times as long” Bu3
+b) “Impressive chart, wrong question” Da3
+c) “Shipped a lot, none of it mattered” PT3
+d) “Fast, and it went down twice” In3
+Branch: People & Society (Psychology, Education, Policy, Community)
+C2. Pick your room.
+a) One person, one hour, something never said aloud Ps3
+b) Thirty people who'll get it by the end Ed3
+c) A badly written rule affecting a lakh people Po3
+d) A service that exists, a community that won't use it Co3
+
+
+===== PAGE 8 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 8
+C3. Which failure stings most?
+a) They trusted you, you missed what was wrong Ps3
+b) You explained well, they still couldn't do it Ed3
+c) Right policy, never implemented Po3
+d) The programme worked, the funding stopped Co3
+C4. Definitely right about one thing:
+a) What's really going on with this person Ps3
+b) How someone learns best Ed3 Ps1
+c) What the system should change Po3
+d) What this community actually needs Co3 Po1
+C5. Least want said:
+a) “Kind, never went deep” Ps3
+b) “Knew it, couldn't teach it” Ed3
+c) “Good intentions, no evidence” Po3
+d) “Great report, changed nothing” Co3
+
+
+===== PAGE 9 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 9
+SECTION D · CONFIRMATION (2 items)
+The statement swaps by winning role. The options never change. These items exist to be failable: a d) answer
+here is valid data, caps the fit score, and produces the most useful line in the report.
+D1. [Role cost statement from the table below]
+a) I'd take that over the alternative +2
+b) Livable, once I see why +1
+c) Hard, but I'd build the tolerance 0
+d) I'd resent it -3
+D2. [Role grind statement from the table below] Would you actually do that?
+a) Yes, gladly +2
+b) Yes, if it compounds +1
+c) I'd try 0
+d) No -3
+Cost and grind statements, all 20 roles
+Role
+D1 cost
+D2 grind
+Markets
+Being wrong in public, with a number attached,
+monthly
+Five years reading dry material to spot the one line
+that matters
+Deals
+Weeks of 80% waiting, 20% panic at 11pm
+Five years building models seniors present
+Risk
+Being the person who slows things down, and
+unpopular for it
+Five years of rules that change yearly, right in ways
+nobody thanks you for
+Advisory
+Sitting with someone's money fear, promising
+nothing
+Five years of trust built one person at a time
+Operations
+Fix it well and nobody notices it was broken
+Five years of small improvements that only
+compound if you stay
+Strategy
+Months of work someone else decides on
+Five years of being new to every industry
+Growth
+Most experiments fail, measurably
+Five years of public failures judged on the last
+number
+People & HR
+Holding secrets you cannot repeat
+Five years of results that show up as things that did
+not happen
+Founder
+Long stretches where nobody knows if it's
+working
+Five years of income and status dipping in front of
+batchmates
+Product
+Responsible for outcomes, authority over nothing
+Five years of watching people misuse what you built
+Sales
+Rejection as a daily, counted fact
+Five years starting every month at zero
+Operator
+Cleaning up decisions you did not make
+Five years of being essential and invisible
+Build
+Beginner again every eighteen months
+Five years of bugs that turn out to be one character
+Data
+Mostly cleaning, rarely the insight
+Five years of saying “the data cannot tell us that”
+Product-Tech
+Saying no to people you like, repeatedly
+Five years of shipped things getting killed
+Infrastructure
+Visible only when something breaks
+Five years of preventing problems nobody knows
+about
+Psychology
+Carrying distress you cannot discuss at dinner
+Five to seven years of training before independent
+practice
+Education
+The same explanation, hundredth time, like the
+first
+Five years of rarely knowing if it made a difference
+Policy
+Watching evidence lose to politics
+Five years for one change to move, if it moves
+Community
+Less money and fewer people than the problem
+needs
+Five years of programmes ending when funding ends
+
+
+===== PAGE 10 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 10
+SECTION E · ROOTS (3 items)
+FORCED CHOICE · single select · protected anchor
+E1. Protect one, the rest take a hit:
+Meaning · Mastery · Freedom · Relationships · Health · Money
+KEYSTONE · feeds constraint-conflict flag and next-steps shaping
+E2. Losing which one makes even a dream job not worth it?
+Same six options · single select
+FAMILY · c or d fires the family flag; d also softens the abroad gate
+E3. Career decisions in your family are actually:
+a) I decide, then tell them
+b) We decide together
+c) Their approval matters to my call
+d) I'd choose differently if it were only mine
+SECTION F · REALITY + PATH (5 items)
+READINESS
+F1. Real exposure to your top field so far:
+None · One project or internship · A few · Ongoing
+READINESS · No fires the conversation-gap flag
+F2. Spoken to anyone actually doing the job?
+No · Once · A few times · Regularly
+PATH · never terminates the test; everyone gets a full report
+F3. After graduation:
+Higher studies · Work · Undecided
+GATED · quotes the student's own A7 answer back to them; see Section 10
+F4. (shown only if the abroad gate passes) You said you would move anywhere in the world for the right
+opportunity. Would that include studying abroad?
+Definitely · Open to it · I'd rather study in India
+ABROAD MODULE · three sub-screens · feeds counselling routing only
+F5. (shown only if F4 is Definitely or Open) Country, timeline and funding:
+Countries considering (multi-select): USA · UK · Canada · Australia · Germany · Other / not decided
+Start window: within 12 months · 1 to 2 years · 2 to 3 years · no fixed timeline
+Funding: family funded · loan plus family · scholarship dependent · not planned yet
+
+
+===== PAGE 11 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 11
+ 4
+Scoring logic, step by step
+Step 1. Radar. Each B item scores its own dimension: a = +3, b = +1, c = 0, d = -2. Convert to a 10-point scale:
+dimension_score = (raw + 2) * 2 # a=10, b=6, c=4, d=0
+This is what gives the radar real peaks and valleys. Delete any normalisation currently squeezing scores into the
+7-to-8 band.
+Step 2. Sliders. Each slider reads two items (Mobility reads one). Both answers on the same side = Clearly. One
+= Lean. Split or both neutral = Balanced.
+Slider
+Items
+Side A
+Side B
+Energy
+A1, A2
+Outgoing (A1 a/d, A2 c/d)
+Reflective (A1 c, A2 a)
+Decision
+A3, A4
+Deliberate (a/d on both)
+Instinctive (b on both)
+Structure
+A5, A6
+Structured (A5 a; A6 a/b)
+Open-ended (A5 b; A6 c/d)
+Mobility
+A7
+Global (a) / National (b)
+Conditional (c) / Rooted (d)
+Step 3. Domain seeds for C1.
+Finance = B1 + B4 Business = B2 + B5 Entrepreneurship = B4 + B3 Technology = B5 + B1 People & Society
+= B6 + B2
+Show four cards: seeded rank 1, seeded rank 2, the Q0 degree default, and the highest remaining. If the default
+is already in the top two, the fourth card is the lowest-seeded domain as a wildcard. Set default_path_flag
+when the student picks the default and it was outside the seeded top two.
+Step 4. Role resolution. Sum role points across C2 to C5 using the weights printed with each option. Highest
+total wins. If the top two are within 1 point, both go to the report as co-candidates and D1/D2 run on the higher
+one.
+Step 5. Confirmation. conf_total = D1 + D2, range -6 to +4. At +3 or more the role is confirmed. +1 to +2
+provisional. 0 or less, the report leads with the mismatch, never the role.
+Step 6. Fit %. See Section 7. Sort cards descending before render, always.
+Step 7. Archetype. See Section 6. Thin-signal check first, flat check second, then pair the top two dimensions.
+Deterministic: same answers, same archetype, every run.
+Step 8. Flags. Evaluate all eight flags (Section 9). Growth tips render only from fired flags.
+Step 9. Gate. Evaluate the abroad gate (Section 10) before rendering F4.
+
+
+===== PAGE 12 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 12
+ 5
+The animal system
+Six animals, one per radar dimension. Chosen for the Indian context: every one of these is a compliment here.
+The owl is deliberately excluded (ullu is an insult in most Indian languages), as are the fox and the snake. Animals
+are shareable in a way colour systems are not, and PRISM already owns colours in this market.
+Dimension
+Animal
+Character line
+Analytical
+Hawk
+Sees the detail from a distance that others miss. Baaz ki nazar.
+Practical
+Elephant
+Steady, remembers everything, carries what others can't. Never rushed, never late.
+Leadership
+Lion
+Doesn't chase the room's approval. The room organises around it.
+People Skills
+Dolphin
+Reads the group, moves with it, lifts it. Intelligence that works through connection.
+Creative
+Peacock
+Makes the thing nobody asked for and everybody remembers.
+Entrepreneurial
+Tiger
+Hunts alone, picks its moment, commits fully. The opportunist, in the best sense.
+The pair mechanic. The student's type is their top two radar dimensions. The higher dimension gives the
+primary animal, the identity, rendered big and shareable. The second gives the modifier line. The archetype
+name from Section 6 becomes the subtitle. Example header block:
+YOUR TYPE: THE HAWK
+with an Elephant's discipline
+The Auditor. You see the hole in the plan before anyone else does, and you have the patience to fix the process that
+caused it. Careful is not slow. Careful is your edge.
+Rules. Primary = higher score; tie broken by C-branch alignment, then by the fixed priority Analytical, Practical,
+People, Creative, Entrepreneurial, Leadership. No animal is ever awarded from thin data: an unearned Tiger
+devalues every earned one. The two fallback states in Section 6 render without an animal headline.
+
+
+===== PAGE 13 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 13
+ 6
+The archetype grid
+Assignment order: (1) thin-signal check: max dimension 6 or below, or three or more zeros, means no
+archetype, route to More Signal Needed. (2) flat check: all six within 4 points and all at 4 or above means The
+Explorer. (3) otherwise pair the top two dimensions. Tie for second place breaks by C1 domain alignment, then
+the fixed priority order.
+Domain chosen in C1
+Tie-break favours
+Finance & Capital
+Analytical, Practical
+Business & Management
+Leadership, Practical
+Entrepreneurship & Product
+Entrepreneurial, Creative
+Technology & Data
+Analytical, Creative
+People & Society
+People, Leadership
+Pair
+Archetype
+Animal rendering
+Strapline
+An + Pr
+The Auditor
+Hawk with an Elephant's discipline
+You see the hole in the plan before anyone else does.
+An + Cr
+The Architect
+Hawk with a Peacock's eye
+You don't just solve it. You design the solution.
+An + Le
+The Strategist
+Hawk with a Lion's nerve
+You play the long game while everyone plays the loud
+one.
+An + Pe
+The Advisor
+Hawk with a Dolphin's warmth
+People bring you their hardest questions for a reason.
+An + En
+The Prospector
+Hawk with a Tiger's hunger
+You find the opportunity hiding inside the numbers.
+Cr + Le
+The Visionary
+Peacock with a Lion's voice
+You see what it could be, and you make others see it
+too.
+Cr + Pe
+The Storyteller
+Peacock with a Dolphin's ear
+You make people feel what they'd otherwise scroll
+past.
+Cr + Pr
+The Maker
+Peacock with an Elephant's hands
+You'd rather build the thing than talk about the thing.
+Cr + En
+The Creator
+Peacock with a Tiger's timing
+You start things. That's the whole sentence.
+Le + Pe
+The Captain
+Lion with a Dolphin's read
+Teams don't follow your title. They follow you.
+Le + Pr
+The Operator
+Lion with an Elephant's patience
+You're why the plan actually happens.
+Le + En
+The Pioneer
+Lion with a Tiger's appetite
+First in, and comfortable there.
+Pe + Pr
+The Anchor
+Dolphin with an Elephant's calm
+Everything holds because you hold it.
+Pe + En
+The Connector
+Dolphin with a Tiger's reach
+You know someone for everything, and everyone
+knows you.
+Pr + En
+The Builder
+Elephant with a Tiger's pace
+Less talk. More done.
+Fallback 1, The Explorer (genuinely flat: all dimensions at 4 or above, spread of 4 or less). Copy: “Your pull is real
+in several directions at once, and none of them is fake. This usually means one of two things: you are a genuine
+bridge profile who will thrive in roles that translate between specialist worlds, or you haven't yet met the work
+that takes over. The fastest way to find out is exposure, not another test. Your next 90 days matter more than
+your result today.”
+Fallback 2, More Signal Needed (max at 6 or below, or three or more zeros). Copy: “We're not going to pretend.
+Your answers didn't give us enough to name your type honestly, and a made-up label would waste your time.
+This happens for about one student in five, and it usually means the questions met you before the experiences
+did.” No archetype, no fit percentages, straight to the single highest-value exposure action and the
+counselling route. This state is the proof that every 84% elsewhere is earned.
+
+
+===== PAGE 14 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 14
+ 7
+Fit % and the career card engine
+The formula (replaces whatever produced unsorted 73/86/80/68):
+fit = role_component + radar_component + conf_component role_component = (role_score / 12) * 40 #
+0..40 radar_component = (avg of the 2 radar dims mapped to this career / 10) * 30 # 0..30
+conf_component = (conf_total + 6) * 3 # 0..30 if conf_total <= -2: cap fit at 55 and attach the
+honesty line clamp 5..95, never render 100. SORT DESCENDING BEFORE RENDER.
+The four cards. Card 1: top career of the winning role at full fit. Card 2: second career of the winning role, or the
+co-candidate's top career after a tie, at fit minus 4 to 8. Card 3: the cross-branch card, built from the student's
+highest radar dimension pulled from a branch they did not choose; this is the card that makes the report feel
+like it knows them. Card 4: the honest low card, the career the student probably expected (degree default),
+shown at its true fit with one line on why, sorted into place like every other card.
+Card copy pattern: role name, fit %, one line of what the work is, one next-step line adapted to Q0 feasibility. If
+conf_total is -2 or lower, card 1 carries: “The pull is real. The daily cost is the problem, and you told us so
+yourself.”
+The career catalog (static table, 20 roles, 3 careers each, next-step line per career; the next-step
+adapts to Q0 as shown in Section 1):
+Role
+Careers (one card each)
+Typical next step
+Markets
+Equity Research Analyst · Trader · Quant
+Analyst
+MSc Finance UK/Ireland or CFA L1 · prop desk + NISM certs ·
+MSc Quant Finance (strong maths)
+Deals
+IB Analyst · M&A Associate · Corporate
+Development
+MSc Finance or CA/CFA · MSc Corporate Finance, MBA later ·
+MSc Strategy/Finance
+Risk
+Risk Analyst · Compliance Officer · Internal
+Auditor
+MSc Risk Mgmt or FRM with work · ICA certs or MSc
+Regulation · CA/CIA or MSc Accounting
+Advisory
+Wealth Manager · Financial Planner · Private
+Client Advisor
+MSc Wealth Mgmt + CFP · CFP India route · MSc Banking
+Operations
+Operations Manager · Supply Chain Analyst ·
+Project Coordinator
+MSc Operations/SCM · MSc SCM + Six Sigma · PMP later or
+MSc Project Mgmt
+Strategy
+Strategy Analyst · Consulting BA · Market
+Intelligence Analyst
+MSc Management/Strategy · case prep now, MBA later · MSc
+Business Analytics
+Growth
+Digital Marketing Manager · Growth Analyst ·
+Brand Manager
+MSc Digital Marketing · MSc Marketing Analytics · MBA
+Marketing or MSc Brand Mgmt
+People & HR
+HR Business Partner · Talent Acquisition ·
+L&D Associate
+MSc HRM or IO Psychology · MSc HRM · MSc Org Psychology
+or Education
+Founder
+Startup Founder · Early-stage Operator ·
+Venture Analyst
+Build now, MSc Entrepreneurship optional · join a seed
+startup · VC internships + MSc Finance
+Product
+Associate Product Manager · Product
+Analyst · UX-side PM
+APM programmes or MSc Product/HCI · MSc Business
+Analytics · MSc HCI
+Sales
+B2B Sales/BD · Account Manager ·
+Partnerships Associate
+Start now, MBA later · industry entry · MSc Management
+Operator
+Chief of Staff track · BizOps Analyst ·
+Program Manager
+Startup entry · MSc Management/Analytics · PMP or MSc
+Build
+Software Engineer · Full-stack Developer ·
+Mobile Developer
+MSc CS conversion if non-CS, else portfolio · portfolio route
+· portfolio route
+Data
+Data Analyst · BI Analyst · Data Scientist
+MSc Data Analytics (open to non-CS) · MSc Business
+Analytics · MSc Data Science (maths needed)
+Product-Tec
+h
+Technical PM · Solutions Engineer · Product
+Analyst (tech)
+CS base + MSc/MBA · CS base · MSc Analytics
+
+
+===== PAGE 15 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 15
+Role
+Careers (one card each)
+Typical next step
+Infrastructure
+DevOps/SRE · Cloud Engineer ·
+Cybersecurity Analyst
+Cloud certs + MSc · AWS/Azure certs · MSc Cyber Security
+Psychology
+Counselling Psychologist · Org Psychologist
+· UX Researcher
+MA/MSc Psych then MPhil/licensure · MSc IO Psych · MSc
+HCI/Psych
+Education
+Teacher/Lecturer · EdTech Content
+Designer · Academic Counsellor
+B.Ed/MA + NET · MSc Instructional Design · MA
+Psychology/Education
+Policy
+Policy Analyst · Public Administration ·
+Development Consultant
+MPP/MA Public Policy · UPSC route or MPA · MA
+Development Studies
+Community
+NGO Program Manager · CSR Associate ·
+Public Health Coordinator
+MSW · MSW or MBA Sustainability · MPH
+
+
+===== PAGE 16 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 16
+ 8
+The verdict sentence bank
+Verdicts are the “we feel you...” lines. Each renders only when its full trigger combination is true, which is what
+makes the report feel like it read the student's mind: no single question gives any verdict away. Render at most
+three verdicts per report, priority top to bottom within the winning category first.
+Venture and independence
+ID
+Trigger (all conditions)
+Verdict line
+V1
+B4=a AND C1=Entrepreneurship AND Founder
+wins AND conf_total >= +2
+We feel you should build something of your own. Not eventually.
+The pattern is already here.
+V2
+B4=a AND A1=c AND A2=a AND
+Structure=Open-ended
+You're an opportunist who works best alone. You spot the gap
+fast and you don't wait for a committee.
+V3
+B4=a AND E1=Freedom
+Freedom isn't a perk for you, it's the requirement. Choose paths
+where you own your decisions early.
+V4
+Founder or Sales wins AND D2=a
+You're rare: you like the grind itself, not just the story of it. That is
+the actual founder trait.
+Leadership
+ID
+Trigger
+Verdict line
+L1
+(B2=a OR B6=a) AND Leadership >= 8 AND A1=d
+We feel you should be leading, and not someday. Rooms already
+reorganise around you; pick work where that's the job.
+L2
+Leadership >= 8 AND People >= 8
+You lead through people, not over them. Look at roles where the
+team is the product.
+L3
+B6=a AND C5 answer takes responsibility
+You take the blame before you take the credit. That is the version
+of leadership that lasts.
+L4
+Leadership >= 8 AND conf role is Operator or
+Operations
+You're the leader who makes it run, not the one who makes the
+speech. Both are leadership. Yours ships.
+Specialist and analytical
+ID
+Trigger
+Verdict line
+S1
+One dim >= 8 AND next best <= 4 AND D2=a
+Go deep, not wide. You have the one trait generalists can't fake:
+you enjoy the boring middle of mastery.
+S2
+Analytical=10 AND Decision=Clearly Deliberate
+Careful is your edge. Stop apologising for taking the extra day; it's
+why your answer is the one that holds.
+S3
+Analytical >= 8 AND People <= 4
+Your best work happens one step away from the noise. Choose
+roles judged on output, not airtime.
+S4
+Practical=10 AND B5=a
+You can't walk past a broken process. Make that a career instead
+of a habit.
+People, craft and care
+ID
+Trigger
+Verdict line
+P1
+People >= 8 AND C1 pick is a solo-ish domain
+One thing your answers keep saying that your plan doesn't: you
+should work with people, not just near them.
+P2
+B6=a AND Psychology or Education role wins
+People fall apart quietly around you and you notice. Very few do.
+Take that seriously as a career signal.
+P3
+Creative >= 8 AND B3=a
+It physically bothers you when good work goes unseen.
+Marketing, product and media pay for exactly that instinct.
+P4
+Creative >= 8 AND Practical >= 8
+You're a maker. The proof of your thinking is a thing that exists.
+Choose work with a visible artifact.
+Honesty verdicts (these build more trust than the flattering ones)
+
+
+===== PAGE 17 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 17
+ID
+Trigger
+Verdict line
+H1
+2+ b answers in Section B
+You like knowing more than doing, in at least two fields. Not a flaw,
+but pick the one where you'd happily do the working too.
+H2
+conf_total <= -2
+The pull is real. The daily cost is the problem, and you told us so
+yourself. Read the cost line again before committing.
+H3
+default_path_flag
+You chose the expected path even though your reactions pointed
+elsewhere. Worth one honest conversation about whose choice
+this is.
+H4
+E2 keystone conflicts with role cost (e.g. Health
++ Markets)
+You protected [keystone], and the role you're drawn to spends
+exactly that. We're not resolving this for you; bring it to the call.
+
+
+===== PAGE 18 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 18
+ 9
+Flags and growth tips
+Delete the static growth-tips list. Tips render only from fired flags, each with the student's specifics slotted into
+a fixed template. Zero flags fired renders the two universal tips (exposure and one conversation), never
+confidence coaching that contradicts the profile.
+Flag
+Trigger
+Tip template
+Romanticism
+2+ b answers in Section B, or D1/D2 in c
+or d
+Close the gap between liking and doing. [n] times you said you
+wanted the answer without doing the working. One real project
+will tell you more than this test can.
+Default path
+C1 = degree default while outside
+seeded top 2
+You picked the expected door. Your reactions pointed at
+[seeded domain]. Look through that one too before deciding.
+Divergence
+Primary animal dimension differs from
+Q0-adjacent expectation
+On paper you're a [degree] student. Your answers are a
+[animal]'s. That difference is the most useful thing in this report.
+Preparation
+gap
+Role confirmed AND F1 = None
+You're certain about a field you've never been near. The certainty
+might be right; get one project inside it and find out cheaply.
+Conversation
+gap
+F2 = No
+Talk to one person doing this job this month. You're fairly sure
+about work you've never heard described by someone living it.
+Family
+E3 = c or d
+Your family is inside this decision. Bring them into the counselling
+session, not after it.
+Constraint
+conflict
+E1/E2 anchor vs winning-role cost
+table
+You protect [anchor]; this path spends it. Both facts stay on the
+page. That tension is the first agenda item for your call.
+Thin signal
+Archetype fallback 2 fired
+We need more signal, and here is the fastest way to generate it:
+[single exposure action from F1/F2].
+
+
+===== PAGE 19 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 19
+ 10
+Abroad gating logic
+The word abroad must not appear anywhere in the test before F4, and F4 itself renders only when the student's
+own earlier answers opened the door. Students who said they'd rather stay never see it and still receive a
+complete report with a domestic next-steps block. On campus this matters: a test that goes blank for the
+student staying in India tells that student, and any faculty member watching, exactly what the test is for.
+show_abroad = (F3 in [Higher studies, Undecided]) AND (A7 in [a, c]) # global or conditional mobility
+if E3 == d: show_abroad stays true but the family flag renders beside it if A7 in [b, d]: F4 and F5
+never render; report closes with the domestic pathway F4 copy quotes A7 back: “You said you would move
+anywhere in the world for the right opportunity. Would that include studying abroad?”
+The quote-back framing converts better than a cold abroad question, and the students it excludes are the
+ones a cold question would have alienated anyway.
+
+
+===== PAGE 20 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 20
+ 11
+The report, section by section
+Report block
+Contents
+Generated from
+1. Header
+Name, profile ID, date, assessment name
+Static + student record
+2. Your Type
+Primary animal (big), secondary modifier line, archetype
+name, strapline
+Section 6 grid; strapline variant keyed to
+Decision slider
+3. Core Strengths
+Four slider lines, each banded Clearly / Lean / Balanced
+with one sentence
+Step 2 bands; never print Clearly from one
+data point
+4. Path Fit radar
+Six dimensions 0 to 10, rendered with real peaks and
+valleys
+Step 1 formula; a useful radar has at least
+one score under 5
+5. Career cards
+Four cards, sorted descending, fit %, one what-line, one
+next-step line
+Section 7 engine + catalog; honesty cap
+applies
+6. We Feel
+(verdicts)
+Up to three verdict lines
+Section 8 bank, trigger-gated
+7. Growth tips
+Only fired flags, specifics slotted in
+Section 9 templates
+8. Next steps
+Counselling CTA, one exposure action, one conversation
+action; abroad block only if module ran
+F1/F2 + gate state + E3
+9. Footer
+Disclaimer: this measures approach and preference, not
+ability; brand links
+Static
+Copy rules. Never the word test result, always what your answers showed. Never a diagnosis tone. Every claim
+in blocks 2, 6 and 7 must trace to at least two answers. The report never says introvert or extrovert; it says
+Reflective or Outgoing, which are observations about energy, not clinical labels. And the report never claims to
+measure intelligence, aptitude or ability anywhere.
+
+
+===== PAGE 21 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 21
+ 12
+Sample report
+Input: Ananya, B.Com 2nd year. A1 c, A2 a, A3 a, A4 d, A5 c, A6 b, A7 c. B: a c b b a c. C1 Finance (seeded rank 1).
+C2-C5: c c c a giving Risk 9, Markets 4. D1 b, D2 b (conf +2). E1 Money, E2 Health, E3 c. F1 One internship, F2 No,
+F3 Higher studies. Gate passes (A7 = c), F4 Open to it.
+SECURE STEPS · ROOTS & ROUTES · Ananya · SS-082026-XXXX
+YOUR TYPE: THE HAWK with an Elephant's discipline
+The Auditor. You see the hole in the plan before anyone else does, and you have the patience to fix the process that
+caused it. Careful is not slow. Careful is your edge.
+CORE STRENGTHS
+Clearly Reflective. You recharge alone and your deepest work happens there. (A1, A2)
+Clearly Deliberate. You compare before you commit, even with a deadline breathing. (A3, A4)
+Lean Structured. You like a frame, and you'll leave it when the room calls for it. (A5, A6)
+Conditional mover. You'd relocate, but only for something exceptional. (A7)
+PATH FIT
+Analytical 10 · Practical 10 · Creative 6 · Entrepreneurial 6 · People Skills 4 · Leadership 4
+CAREER CARDS
+1. Risk Analyst · 84% fit. The person who catches the miss before it costs money. Next step: MSc Risk Management
+(UK/Ireland) or FRM alongside work in India. (Risk 9; conf +2)
+2. Internal Auditor · 78% fit. Same muscle, more structure, matches your Lean Structured side. Next step: CA/CIA
+route or MSc Accounting.
+3. Data Analyst · 71% fit. Your Analytical 10 travels here and your People 4 won't be taxed. Next step: MSc Data
+Analytics, open to commerce backgrounds. (cross-branch card)
+4. Markets / Trading · 52% fit. The pull is real (Markets 4), but your Deliberate style and the public-error cost of
+markets point away. Shown so you know why it's ranked low.
+WE FEEL
+S2: Careful is your edge. Stop apologising for taking the extra day; it's why your answer is the one that holds.
+H1: You like knowing more than doing, in at least two fields. Pick the one where you'd happily do the working too.
+H4: You protected Health, and finance roles can spend exactly that. We're not resolving this for you; bring it to the
+call.
+GROWTH TIPS (from fired flags: romanticism-mild, conversation gap, family)
+Close the gap between liking and doing: two of your reactions wanted the answer without the working. One real
+project settles it.
+Talk to one person in risk or audit this month; you've never heard this job described by someone living it.
+Your family's approval matters to your call, so bring them into the counselling session, not after it.
+NEXT STEPS
+1. A 1:1 session on Risk vs Audit pathways, with your family in the room.
+2. One conversation with a working risk professional before month-end.
+3. You're open to studying abroad and you protect Money with Health as your keystone, so your shortlist will be
+weighted toward funded, affordable programmes in sane working cultures.
+
+
+===== PAGE 22 =====
+ROOTS  &  ROUTES   |   MASTER BUILD SPECIFICATION  v2.0
+SECURE STEPS
+Page 22
+ 13
+Developer change list
+Step
+Change
+1
+Add Q0 intake and A7; retire old Set 2 items Q1, Q2, Q3, Q4, Q5, Q8, both Q10s, Q14 (their content is now assembled
+by the verdict engine, not asked)
+2
+Replace radar scoring with dimension = (raw + 2) * 2; remove any normalisation compressing scores
+3
+Implement slider banding (2 items per slider, Clearly / Lean / Balanced); never render Clearly from one item
+4
+Implement C1 card selection from domain seeds + Q0 default + wildcard; store default_path_flag
+5
+Implement role resolution over C2-C5 weights; carry co-candidates when the top two are within 1 point
+6
+Implement D1/D2 scoring and conf_total; wire the 20-role cost/grind statement table
+7
+Replace the fit formula with Section 7; cap at 55 on conf_total <= -2; clamp 5..95; SORT DESCENDING
+8
+Implement the archetype pipeline: thin-signal check, flat check, pair, tie-breaks; render animal + modifier +
+archetype + strapline variant by Decision slider
+9
+Replace Hidden Talent with the two fallback states; never render fit % or an animal in the More Signal state
+10
+Build the career catalog table (Section 7) with Q0 feasibility variants on next-step lines; implement the four-card
+selector including the cross-branch and honest-low cards
+11
+Implement the verdict engine (Section 8): evaluate triggers, render max three, priority order
+12
+Replace static growth tips with flag-driven templates (Section 9)
+13
+Implement the abroad gate (Section 10); F4 quotes A7 back; domestic close for non-gated students; full report for
+everyone
+14
+QA: Ananya regression (same answers, same Auditor, every run); near-tie stability (An 10 / Pr 8 / Cr 8 must not flip on
+one changed answer); pilot distribution watch (no archetype above 25% of students)
+End of specification. Wording is final unless edited; weights are theory-seeded starting values to be calibrated against the
+first 300 to 500 real completions.
