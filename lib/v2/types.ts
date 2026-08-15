@@ -153,6 +153,7 @@ export type VerdictId =
   | "V1" | "V2" | "V3" | "V4"
   | "L1" | "L2" | "L3" | "L4"
   | "S1" | "S2" | "S3" | "S4"
+  | "P1" | "P2" | "P3" | "P4"
   | "H1" | "H2" | "H3" | "H4";
 
 export interface Verdict {

@@ -63,6 +63,37 @@ describe("verdict engine", () => {
     });
   });
 
+  it("people_society: P-category verdict takes slot 1, then H, then remaining", () => {
+    // Hand-derived fired set: L2 (leadership>=8 && people>=8), P2 (B6=a && winner psychology),
+    // H4 (E2=e -> health, SPENDS.psychology includes health). Everything else deliberately nulled:
+    // B4/B3 != "a" (no V, no P3), domain != finance/technology (no P1), creative/analytical/practical
+    // low (no S*, no P4), A1 != "d" (no L1), winner != founder/sales/operator/operations (no V4/L4),
+    // C5 != RESPONSIBILITY_C5.people_society="d" (no L3), confTotal > -2 and defaultPathFlag false (no H2/H3).
+    const psychAnswers: V2Answers = {
+      A1: ["a"], A2: ["a"], A3: ["a"], A4: ["a"], A5: ["a"], A6: ["a"], A7: ["a"],
+      B1: ["a"], B2: ["c"], B3: ["c"], B4: ["c"], B5: ["c"], B6: ["a"],
+      C5: ["a"],
+      D1: ["a"], D2: ["b"],
+      E1: ["a"], E2: ["e"], E3: ["a"],
+      F1: ["a"], F2: ["b"], F3: ["a"],
+    };
+    const psychRadar: RadarScores = {
+      analytical: 4, people: 8, creative: 4, entrepreneurial: 4, practical: 4, leadership: 8,
+    };
+    const psychCtx: VerdictContext = {
+      answers: psychAnswers,
+      radar: psychRadar,
+      sliders: computeSliders(psychAnswers),
+      domain: "people_society",
+      winner: "psychology",
+      confTotal: 2,
+      defaultPathFlag: false,
+    };
+    expect(evaluateVerdicts(psychCtx).sort()).toEqual(["H4", "L2", "P2"]);
+    const slots = slotVerdicts(psychCtx);
+    expect(slots.map((v) => v.id)).toEqual(["P2", "H4", "L2"]);
+  });
+
   it("backfill excludes further winning-category verdicts", () => {
     // Ananya minus honesty triggers: no b-answers, keystone not spent → only S2/S3/S4 fire.
     const ctx: VerdictContext = {

@@ -106,6 +106,26 @@ export const VERDICT_BANK: BankEntry[] = [
     line: () => "You can't walk past a broken process. Make that a career instead of a habit.",
   },
   {
+    id: "P1", cat: "P",
+    when: (c) => c.radar.people >= 8 && (c.domain === "finance" || c.domain === "technology"),
+    line: () => "One thing your answers keep saying that your plan doesn't: you should work with people, not just near them.",
+  },
+  {
+    id: "P2", cat: "P",
+    when: (c) => b(c, "B6", "a") && (c.winner === "psychology" || c.winner === "education"),
+    line: () => "People fall apart quietly around you and you notice. Very few do. Take that seriously as a career signal.",
+  },
+  {
+    id: "P3", cat: "P",
+    when: (c) => c.radar.creative >= 8 && b(c, "B3", "a"),
+    line: () => "It physically bothers you when good work goes unseen. Marketing, product and media pay for exactly that instinct.",
+  },
+  {
+    id: "P4", cat: "P",
+    when: (c) => c.radar.creative >= 8 && c.radar.practical >= 8,
+    line: () => "You're a maker. The proof of your thinking is a thing that exists. Choose work with a visible artifact.",
+  },
+  {
     id: "H1", cat: "H",
     when: (c) => bAnswerCount(c.answers) >= 2,
     line: () => "You like knowing more than doing, in at least two fields. Not a flaw, but pick the one where you'd happily do the working too.",
