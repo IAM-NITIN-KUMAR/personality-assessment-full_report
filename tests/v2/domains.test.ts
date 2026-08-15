@@ -59,4 +59,22 @@ describe("domain seeds and C1 cards", () => {
       people_society: ["leadership", "people"],
     });
   });
+
+  it("tie-breaking: all tied seed scores rank by fixed DOMAIN_ORDER", () => {
+    // All radar dimensions = 4 → every domain seed score = 8 (tie on all)
+    const allTied: RadarScores = {
+      analytical: 4, people: 4, creative: 4, entrepreneurial: 4, practical: 4, leadership: 4,
+    };
+    expect(seedScores(allTied)).toEqual({
+      finance: 8,            // An 4 + En 4
+      business: 8,           // Pe 4 + Pr 4
+      entrepreneurship: 8,   // En 4 + Cr 4
+      technology: 8,         // Pr 4 + An 4
+      people_society: 8,     // Le 4 + Pe 4
+    });
+    // With all scores tied, rankDomains must break ties by DOMAIN_ORDER
+    expect(rankDomains(allTied)).toEqual([
+      "finance", "business", "entrepreneurship", "technology", "people_society",
+    ]);
+  });
 });
