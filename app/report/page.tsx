@@ -120,6 +120,29 @@ export default function ReportPage() {
     }
   };
 
+  const [downloadingV2, setDownloadingV2] = useState(false);
+
+  const handleDownloadV2 = async () => {
+    setDownloadingV2(true);
+    try {
+      const [{ pdf }, { default: ReportPdfV2 }] = await Promise.all([
+        import("@react-pdf/renderer"),
+        import("@/lib/v2/report-pdf"),
+      ]);
+      const blob = await pdf(<ReportPdfV2 report={reportV2} />).toBlob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = `roots-and-routes-${reportV2.header.profileId}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } finally {
+      setDownloadingV2(false);
+    }
+  };
+
   const handleEndSession = () => {
     const ok = confirm(
       "End this session?\n\nMake sure you've downloaded your PDF — your answers will be cleared from this device.",
@@ -130,9 +153,7 @@ export default function ReportPage() {
 
   if (!hydrated || (!profile && !isMock)) return null;
 
-  // v2 (college) branch — 9-block report, no legacy archetype/PDF wiring here.
-  // The legacy "Download PDF" control is intentionally not rendered on this
-  // branch; Task 18 wires the v2 PDF export into this seam.
+  // v2 (college) branch — 9-block report with its own PDF export (lib/v2/report-pdf.tsx).
   if (isV2) {
     return (
       <main
@@ -173,6 +194,11 @@ export default function ReportPage() {
               <Button variant="outline" className="hidden sm:inline-flex" disabled title="Sharing coming soon">
                 <Share2 className="h-3 w-3" />
                 Share
+              </Button>
+              <Button variant="solid" onClick={handleDownloadV2} disabled={downloadingV2}>
+                <Download className="h-3 w-3" />
+                <span className="hidden sm:inline">{downloadingV2 ? "Generating…" : "Download PDF"}</span>
+                <span className="inline sm:hidden">{downloadingV2 ? "…" : "PDF"}</span>
               </Button>
               <Button variant="ghost" onClick={handleEndSession} title="End session and return home">
                 <LogOut className="h-3 w-3" />
