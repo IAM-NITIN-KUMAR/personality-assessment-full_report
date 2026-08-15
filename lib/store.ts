@@ -143,7 +143,23 @@ export const useAssessment = create<Store>()(
     {
       name: "roots-and-routes-assessment",
       storage: createJSONStorage(() => localStorage),
-      version: 1,
+      version: 2,
+      migrate: (persisted: unknown, version: number) => {
+        const state = persisted as AssessmentState;
+        // v2 engine replaces the UG flow: stale legacy UG answers can't drive the 29-screen flow.
+        if (version < 2 && state?.profile?.educationLevel === "college") {
+          return {
+            ...state,
+            answers: {},
+            trunk: [],
+            adaptiveQuestions: {},
+            rewrites: {},
+            section: "main_character" as const,
+            archetype: undefined,
+          };
+        }
+        return state;
+      },
     },
   ),
 );

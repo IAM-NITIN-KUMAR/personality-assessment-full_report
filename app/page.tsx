@@ -55,6 +55,7 @@ export default function LandingPage() {
         phone: phone.trim(),
         discipline,
         course_id: course ?? null,
+        education_level: educationLevel ?? "college",
       })
       .select("id")
       .single();
