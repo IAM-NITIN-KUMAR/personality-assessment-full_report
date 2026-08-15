@@ -68,6 +68,11 @@ export const VALUE_LABELS: Record<ValueId, string> = {
   relationships: "Relationships", health: "Health", money: "Money",
 };
 
+/** E1/E2 option key → value, in on-screen order (Meaning · Mastery · Freedom · Relationships · Health · Money). */
+export const VALUE_BY_KEY: Record<"a" | "b" | "c" | "d" | "e" | "f", ValueId> = {
+  a: "meaning", b: "mastery", c: "freedom", d: "relationships", e: "health", f: "money",
+};
+
 export type OptionKey = "a" | "b" | "c" | "d" | "e" | "f";
 
 export type BItem = "B1" | "B2" | "B3" | "B4" | "B5" | "B6";
