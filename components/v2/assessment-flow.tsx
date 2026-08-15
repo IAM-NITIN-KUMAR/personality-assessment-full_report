@@ -4,6 +4,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAssessment } from "@/lib/store";
 import { getScreen, nextScreenId, screenOrder } from "@/lib/v2/flow";
+import type { Answer } from "@/lib/types";
 import type { OptionKey, ScreenId, V2Answers } from "@/lib/v2/types";
 import V2Card from "./v2-card";
 
@@ -14,20 +15,22 @@ const ALL_V2_IDS: ScreenId[] = [
   "E1", "E2", "E3", "F1", "F2", "F3", "F4", "F5a", "F5b", "F5c",
 ];
 
+export function toV2Answers(answers: Record<string, Answer>): V2Answers {
+  const out: V2Answers = {};
+  for (const id of ALL_V2_IDS) {
+    const a = answers[id];
+    if (a?.optionIds?.length) out[id] = a.optionIds as OptionKey[];
+  }
+  return out;
+}
+
 export default function V2AssessmentFlow() {
   const router = useRouter();
   const answers = useAssessment((s) => s.answers);
   const saveAnswer = useAssessment((s) => s.answer);
   const [pendingMulti, setPendingMulti] = useState<OptionKey[]>([]);
 
-  const v2Answers: V2Answers = useMemo(() => {
-    const out: V2Answers = {};
-    for (const id of ALL_V2_IDS) {
-      const a = answers[id];
-      if (a?.optionIds?.length) out[id] = a.optionIds as OptionKey[];
-    }
-    return out;
-  }, [answers]);
+  const v2Answers: V2Answers = useMemo(() => toV2Answers(answers), [answers]);
 
   const currentId = nextScreenId(v2Answers);
 
