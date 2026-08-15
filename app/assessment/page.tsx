@@ -9,6 +9,7 @@ import { useAssessment } from "@/lib/store";
 import { AssessmentGraph, HistoryRail } from "@/components/node-graph/assessment-graph";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import V2AssessmentFlow from "@/components/v2/assessment-flow";
 
 import {
   planNext,
@@ -216,6 +217,13 @@ export default function AssessmentPage() {
     trunk.length === 0
   ) {
     return <LoadingShell />;
+  }
+
+  // College (and any profile missing an education level, which defaults to college
+  // throughout the app) gets the v2 29-screen flow. School (10th_12th) keeps the
+  // legacy JSX below, untouched.
+  if (profile.educationLevel !== "10th_12th") {
+    return <V2AssessmentFlow />;
   }
 
   const handleAnswer = (
