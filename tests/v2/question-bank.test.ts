@@ -65,7 +65,7 @@ describe("v2 question bank integrity", () => {
   });
 
   it("maps Q0 keys to degrees and F4 quotes A7 back", () => {
-    expect(DEGREE_BY_Q0).toEqual({ a: "engineering", b: "commerce", c: "science", d: "arts", e: "other" });
+    expect(DEGREE_BY_Q0).toEqual({ a: "engineering", b: "commerce", c: "science", d: "arts", e: "other", f: "other" });
     expect(F4_PROMPT("a")).toContain("anywhere in the world");
     expect(F4_PROMPT("c")).toContain("exceptional");
     expect(F4_PROMPT("a").toLowerCase()).toContain("abroad");

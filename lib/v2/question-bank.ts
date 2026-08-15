@@ -9,9 +9,11 @@ export interface ScreenDef {
   options: { key: OptionKey; label: string }[];
 }
 
-/** Q0 only ever produces answers a-e (its options list has 5 entries); "f" is not a valid Q0 key. */
-export const DEGREE_BY_Q0: Record<Exclude<OptionKey, "f">, Degree> = {
-  a: "engineering", b: "commerce", c: "science", d: "arts", e: "other",
+/** "f" is defensively unreachable at runtime — Q0 only ever renders options a-e — but the
+ * public contract is the full OptionKey domain so downstream indexing (`DEGREE_BY_Q0[key]`
+ * with `key: OptionKey`) type-checks under strict mode. */
+export const DEGREE_BY_Q0: Record<OptionKey, Degree> = {
+  a: "engineering", b: "commerce", c: "science", d: "arts", e: "other", f: "other",
 };
 
 export const B_SCENARIOS: Record<BItem, string> = {
