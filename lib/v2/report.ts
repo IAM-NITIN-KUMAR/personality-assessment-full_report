@@ -95,7 +95,10 @@ export function buildReportV2(input: {
   const conf = confTotal(answers);
   const band = confBand(conf);
   const archetype = computeArchetypeV2(radar, domain);
-  const moreSignal = archetype.kind === "more_signal";
+  // A null domain (C1 unanswered) means there is no winning role and therefore no cards/verdicts to
+  // show — that's exactly the "not enough signal yet" state, so it folds into moreSignal here rather
+  // than leaving state === "full" with cards === null (see report-view.tsx / report-pdf.tsx crash).
+  const moreSignal = archetype.kind === "more_signal" || domain === null;
 
   const cards = !moreSignal && domain && role
     ? buildCards({

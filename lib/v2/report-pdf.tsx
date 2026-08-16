@@ -1,4 +1,5 @@
 import { Document, Font, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { DIM_LABELS, DIM_PRIORITY } from "./types";
 import type { ReportV2 } from "./types";
 
 // Register premium custom fonts from local public directory
@@ -104,9 +105,9 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
         {report.state === "full" && (
           <>
             <Text style={s.sectionTitle}>Path Fit</Text>
-            {Object.entries(report.radar).map(([dim, v]) => (
+            {DIM_PRIORITY.map((dim) => (
               <Text key={dim}>
-                {dim}: {v} / 10
+                {DIM_LABELS[dim]}: {report.radar[dim]} / 10
               </Text>
             ))}
 
