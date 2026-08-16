@@ -265,15 +265,9 @@ export function planNext(args: {
   const section = current.section;
 
   // Gating check: continue only for options 'a' (study further) and 'c' (undecided)
-  console.log("planNext Gating Check:", {
-    currentId: current.id,
-    q20Answer: args.answers?.["Q20"],
-    allAnswers: args.answers ? Object.keys(args.answers) : []
-  });
   if (current.section === "passport_era" && args.answers) {
     const ans = args.answers["Q20"];
     const shouldContinue = ans?.optionIds?.includes("a") || ans?.optionIds?.includes("c");
-    console.log("Q20 Gating decision (section based):", { shouldContinue, ans });
     if (!shouldContinue) {
       return { kind: "transition", nextSection: "report" };
     }
@@ -282,7 +276,6 @@ export function planNext(args: {
   if (current.id === "Q21" && args.answers) {
     const ans = args.answers["Q21"];
     const shouldEnd = ans?.optionIds?.includes("c");
-    console.log("Q21 gating decision:", { shouldEnd, ans });
     if (shouldEnd) {
       return { kind: "transition", nextSection: "report" };
     }

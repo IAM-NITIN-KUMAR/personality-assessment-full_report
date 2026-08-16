@@ -12,13 +12,10 @@ import {
   coursesByDiscipline,
   type Discipline,
 } from "@/lib/course-catalog";
-import { CONTEXT_QUESTIONS } from "@/lib/question-bank/context";
-import { ROOTS_ANCHORS } from "@/lib/question-bank/roots";
-import { ROUTES_BCA } from "@/lib/question-bank/routes-bca";
 import { supabase } from "@/lib/supabase";
 import { AnimatedGradient } from "@/components/ui/animated-gradient";
 
-const ANCHORS_COUNT = CONTEXT_QUESTIONS.length + ROOTS_ANCHORS.length + ROUTES_BCA.length + 1;
+const ANCHORS_COUNT = 29;
 
 
 export default function LandingPage() {
