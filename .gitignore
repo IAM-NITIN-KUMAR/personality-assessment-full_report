@@ -13,3 +13,7 @@ next-env.d.ts
 databasepass.txt
 .env*
 .vercel
+
+# Task 20: secrets cleanup
+.env*.local
+database details/
