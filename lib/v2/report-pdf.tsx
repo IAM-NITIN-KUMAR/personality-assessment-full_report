@@ -613,7 +613,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
             {t.kind === "archetype" ? (
               <>
                 <Text style={s.heroKicker}>{showAnimal ? `THE ${t.animal.toUpperCase()}` : "YOUR TYPE"}</Text>
-                {showAnimal ? <Text style={s.heroRendering}>{t.rendering}</Text> : null}
+                {showAnimal && heroDim ? <Text style={s.heroRendering}>{ANIMALS[heroDim].line}</Text> : null}
                 <Text style={s.heroName}>{t.name}</Text>
                 <Text style={s.heroStrap}>{t.strapline}</Text>
               </>

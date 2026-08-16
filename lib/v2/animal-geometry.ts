@@ -32,155 +32,206 @@ function art(bg: string, verts: ReadonlyArray<Pt>, faces: ReadonlyArray<FaceDef>
 }
 
 /* ------------------------------------------------------------------ */
-/* HAWK — analytical. Side profile facing left, indigo/violet family.  */
-/* Landmarks: brow ridge overhang, hooked beak protruding past the     */
-/* face (tip x=24 vs brow x=52), gape, chin, nape taper into a bust.   */
+/* HAWK — analytical. Front-on symmetric raptor face (same pattern as  */
+/* the lion/tiger successes), indigo/violet family. Landmarks: jagged  */
+/* feather crown, fierce V of ink brow wedges converging over pale     */
+/* eye sockets with ink pupils, pale cere, and a long downward-hooked  */
+/* ink beak on the centre line.                                        */
 /* ------------------------------------------------------------------ */
 
 const HAWK_C = { d1: "#3a3aa6", d2: "#5353d6", m: "#6e6ef0", l1: "#9494f6", l2: "#bcbcfa", hi: "#e9e9fd" };
 
 const HAWK_V: ReadonlyArray<Pt> = [
-  [100, 24], // 0 crown
-  [134, 34], // 1 back of skull
-  [150, 64], // 2 nape upper
-  [158, 104], // 3 back
-  [164, 148], // 4 shoulder
-  [166, 178], // 5 bottom back
-  [112, 180], // 6 bottom mid
-  [60, 178], // 7 bottom front
-  [64, 142], // 8 chest front
-  [76, 116], // 9 throat lower
-  [68, 96], // 10 chin
-  [58, 82], // 11 gape corner
-  [36, 88], // 12 beak hook tip
-  [24, 72], // 13 beak tip
-  [44, 56], // 14 cere
-  [52, 46], // 15 brow ridge
-  [70, 34], // 16 forehead
-  [100, 54], // 17 anchor: skull
-  [88, 84], // 18 anchor: cheek
-  [118, 112], // 19 anchor: neck
-  [108, 152], // 20 anchor: chest
-  [42, 70], // 21 beak mid
-  // eye diamond
-  [66, 57], [75, 53], [80, 60], [71, 64], // 22-25
-  // wing wedge overlays
-  [126, 124], [150, 148], [124, 158], // 26-28
-  [118, 150], [138, 170], [112, 172], // 29-31
-  // nape shade quad
-  [134, 58], [152, 86], [138, 96], [126, 72], // 32-35
-  // malar stripe
-  [74, 72], [84, 92], [76, 96], [70, 80], // 36-39
+  // silhouette — crown tufts across the top, then clockwise
+  [100, 24], // 0 centre spike
+  [112, 42], // 1 valley R inner
+  [126, 28], // 2 spike R
+  [138, 48], // 3 valley R outer
+  [152, 64], // 4 temple R
+  [158, 102], // 5 cheek R
+  [146, 140], // 6 jaw R
+  [124, 164], // 7 ruff R
+  [100, 174], // 8 chin
+  [76, 164], // 9 ruff L
+  [54, 140], // 10 jaw L
+  [42, 102], // 11 cheek L
+  [48, 64], // 12 temple L
+  [62, 48], // 13 valley L outer
+  [74, 28], // 14 spike L
+  [88, 42], // 15 valley L inner
+  // interior anchors
+  [100, 60], // 16 forehead
+  [72, 112], // 17 cheek anchor L
+  [128, 112], // 18 cheek anchor R
+  [100, 142], // 19 chin anchor
+  // pale eye sockets (facial disc)
+  [60, 92], [94, 100], [88, 116], [58, 104], // 20-23 L
+  [140, 92], [106, 100], [112, 116], [142, 104], // 24-27 R
+  // ink pupils
+  [69, 105], [75, 100], [81, 105], [75, 110], // 28-31 L
+  [131, 105], [125, 100], [119, 105], [125, 110], // 32-35 R
+  // fierce ink brow wedges (V converging at centre)
+  [54, 80], [97, 96], [97, 104], [58, 90], // 36-39 L
+  [146, 80], [103, 96], [103, 104], [142, 90], // 40-43 R
+  // cere (pale) above the hook
+  [94, 100], [106, 100], [104, 114], [96, 114], // 44-47
+  // ink beak hook — bulges then narrows to a sharp downward tip
+  [92, 114], [108, 114], [106, 132], [100, 154], [94, 132], // 48-52
 ];
 
 const HAWK_F: ReadonlyArray<FaceDef> = [
-  [[0, 1, 17], HAWK_C.m],
-  [[1, 2, 17], HAWK_C.d2],
-  [[2, 3, 19], HAWK_C.m],
-  [[3, 4, 19], HAWK_C.d2],
-  [[4, 5, 20], HAWK_C.d1],
-  [[5, 6, 20], HAWK_C.d2],
-  [[6, 7, 20], HAWK_C.m],
-  [[7, 8, 20], HAWK_C.l1],
-  [[8, 9, 19], HAWK_C.l2],
-  [[8, 19, 20], HAWK_C.m],
-  [[9, 10, 18], HAWK_C.l1],
-  [[9, 18, 19], HAWK_C.m],
-  [[10, 11, 18], HAWK_C.l2],
-  [[11, 12, 13], INK], // beak hook — ink anchor
-  [[14, 13, 21], HAWK_C.d1], // upper beak ridge
-  [[13, 11, 21], HAWK_C.d2], // beak underside
-  [[11, 14, 21], HAWK_C.m], // beak base
-  [[14, 11, 18], HAWK_C.l1], // lore / malar plane
-  [[14, 18, 15], HAWK_C.hi], // pale facet framing the eye
-  [[15, 18, 17], HAWK_C.l2], // temple
-  [[15, 16, 17], HAWK_C.l1], // forehead
-  [[16, 0, 17], HAWK_C.hi], // crown highlight
-  [[2, 17, 19], HAWK_C.l2], // nape inner
-  [[17, 18, 19], HAWK_C.l1], // neck core
-  [[4, 19, 20], HAWK_C.d1], // shoulder shade
-  [[22, 23, 24, 25], INK], // eye
-  [[26, 27, 28], HAWK_C.d1], // folded-wing wedge
-  [[29, 30, 31], HAWK_C.d2], // second feather wedge
-  [[32, 33, 34, 35], HAWK_C.d2], // nape shade
-  [[36, 37, 38, 39], HAWK_C.d1], // malar stripe
+  // crown (mirror-symmetric shading)
+  [[14, 15, 16], HAWK_C.m],
+  [[15, 0, 16], HAWK_C.l1],
+  [[0, 1, 16], HAWK_C.l1],
+  [[1, 2, 16], HAWK_C.m],
+  [[13, 14, 16], HAWK_C.d2],
+  [[2, 3, 16], HAWK_C.d2],
+  [[12, 13, 16], HAWK_C.m],
+  [[3, 4, 16], HAWK_C.m],
+  // temples + cheeks
+  [[12, 11, 17], HAWK_C.m],
+  [[12, 17, 16], HAWK_C.l2],
+  [[4, 5, 18], HAWK_C.m],
+  [[4, 16, 18], HAWK_C.l2],
+  [[11, 10, 17], HAWK_C.d2],
+  [[5, 6, 18], HAWK_C.d2],
+  // jaw + ruff
+  [[10, 9, 17], HAWK_C.m],
+  [[6, 7, 18], HAWK_C.m],
+  [[9, 17, 19], HAWK_C.l1],
+  [[7, 18, 19], HAWK_C.l1],
+  [[9, 8, 19], HAWK_C.l2],
+  [[7, 8, 19], HAWK_C.l2],
+  // face core (mostly covered by feature overlays)
+  [[16, 17, 19], HAWK_C.l1],
+  [[16, 19, 18], HAWK_C.l1],
+  // overlays: sockets, pupils, brow, cere, hook, chest streaks
+  [[20, 21, 22, 23], HAWK_C.hi], // eye socket L
+  [[24, 25, 26, 27], HAWK_C.hi], // eye socket R
+  [[28, 29, 30, 31], INK], // pupil L
+  [[32, 33, 34, 35], INK], // pupil R
+  [[36, 37, 38, 39], INK], // brow wedge L
+  [[40, 41, 42, 43], INK], // brow wedge R
+  [[44, 45, 46, 47], HAWK_C.l2], // cere
+  [[48, 49, 50, 51, 52], INK], // hooked beak
 ];
 
 /* ------------------------------------------------------------------ */
-/* ELEPHANT — practical. Side profile facing left, slate/blue-grey.    */
-/* Landmarks: domed skull, big ear fan behind the face, trunk hanging  */
-/* from the face front with a notch of daylight before the chest,      */
-/* trunk tip (y=176) well below the jaw (y~124), tusk hint.            */
+/* ELEPHANT — practical. Front-on symmetric head, slate/blue-grey.     */
+/* Landmarks: two huge ear fans flanking a domed head, trunk dropping  */
+/* straight down the centre line past the jaw (segmented by wrinkle    */
+/* bands, dark tip), pale tusks flanking the trunk, ink eyes.          */
 /* ------------------------------------------------------------------ */
 
 const ELE_C = { d1: "#46536c", d2: "#5d6b87", m: "#7889a6", l1: "#9caac4", l2: "#c2cbdd", hi: "#eaeef5" };
 
 const ELE_V: ReadonlyArray<Pt> = [
-  [84, 28], // 0 dome top
-  [118, 34], // 1 back of head / ear attach top
-  [154, 50], // 2 ear top
-  [174, 92], // 3 ear back
-  [164, 138], // 4 ear lower back
-  [132, 148], // 5 ear bottom / ear attach bottom
-  [148, 178], // 6 shoulder bottom
-  [100, 180], // 7 bottom mid
-  [78, 174], // 8 chest bottom front
-  [68, 124], // 9 notch apex (trunk separates from jaw)
-  [64, 152], // 10 trunk inner edge mid
-  [56, 176], // 11 trunk tip
-  [42, 150], // 12 trunk outer low
-  [38, 116], // 13 trunk outer mid
-  [44, 88], // 14 trunk base
-  [50, 60], // 15 forehead front
-  [148, 94], // 16 anchor: ear fan
-  [88, 58], // 17 anchor: skull
-  [80, 104], // 18 anchor: cheek
-  [110, 150], // 19 anchor: chest
-  // inner-ear shade quad
-  [138, 64], [160, 94], [150, 126], [136, 100], // 20-23
-  // eye diamond
-  [60, 76], [66, 72], [70, 78], [64, 82], // 24-27
-  // tusk (in front of trunk)
-  [60, 126], [46, 146], [52, 152], [66, 136], // 28-31
+  // head silhouette
+  [100, 26], // 0 dome apex
+  [70, 40], // 1 dome L
+  [130, 40], // 2 dome R
+  [64, 80], // 3 temple L
+  [136, 80], // 4 temple R
+  [70, 116], // 5 cheek L
+  [130, 116], // 6 cheek R
+  [84, 138], // 7 jaw L
+  [116, 138], // 8 jaw R
+  // trunk column (straight down the centre line)
+  [88, 98], // 9 T0 L
+  [112, 98], // 10 T0 R
+  [89, 124], // 11 T1 L
+  [111, 124], // 12 T1 R
+  [91, 148], // 13 T2 L
+  [109, 148], // 14 T2 R
+  [93, 170], // 15 T3 L
+  [107, 170], // 16 T3 R
+  [90, 184], // 17 tip L
+  [110, 184], // 18 tip R
+  // left ear fan
+  [36, 26], // 19 ear top L
+  [14, 60], // 20
+  [10, 102], // 21 ear outer L
+  [26, 136], // 22
+  [56, 128], // 23 ear bottom L
+  [38, 84], // 24 ear anchor L
+  // right ear fan
+  [164, 26], // 25 ear top R
+  [186, 60], // 26
+  [190, 102], // 27 ear outer R
+  [174, 136], // 28
+  [144, 128], // 29 ear bottom R
+  [162, 84], // 30 ear anchor R
+  // head anchors
+  [100, 64], // 31 forehead
+  [80, 94], // 32 brow L
+  [120, 94], // 33 brow R
+  // ink eyes
+  [71, 90], [79, 84], [87, 90], [79, 96], // 34-37 L
+  [129, 90], [121, 84], [113, 90], [121, 96], // 38-41 R
+  // pale tusks flanking the trunk (flaring slightly outward)
+  [84, 132], [72, 160], [79, 166], [92, 140], // 42-45 L
+  [116, 132], [128, 160], [121, 166], [108, 140], // 46-49 R
+  // trunk tip shade
+  [94, 184], [106, 184], [100, 172], // 50-52
   // trunk wrinkle bands
-  [40, 124], [66, 132], [65, 140], [41, 131], // 32-35
-  [44, 156], [60, 158], [57, 166], [45, 161], // 36-39
-  // cheek shade
-  [76, 120], [92, 132], [84, 146], [72, 134], // 40-43
+  [90, 129], [110, 129], // 53-54 (with 11, 12)
+  [92, 153], [108, 153], // 55-56 (with 13, 14)
 ];
 
 const ELE_F: ReadonlyArray<FaceDef> = [
-  // ear fan
-  [[1, 2, 16], ELE_C.m],
-  [[2, 3, 16], ELE_C.l1],
-  [[3, 4, 16], ELE_C.m],
-  [[4, 5, 16], ELE_C.d2],
-  [[5, 1, 16], ELE_C.d1], // attachment shadow
-  // head + body
-  [[0, 1, 17], ELE_C.l1], // dome
-  [[1, 19, 17], ELE_C.m],
-  [[1, 5, 19], ELE_C.d2], // shadow under ear
-  [[5, 6, 19], ELE_C.m],
-  [[6, 7, 19], ELE_C.d2],
-  [[7, 8, 19], ELE_C.m],
-  [[8, 9, 18], ELE_C.l2], // chest front
-  [[8, 18, 19], ELE_C.l1],
-  [[9, 14, 18], ELE_C.m], // jaw / cheek
-  [[14, 15, 18], ELE_C.l1], // face front
-  [[15, 18, 17], ELE_C.l2],
-  [[15, 0, 17], ELE_C.hi], // forehead highlight
-  [[17, 18, 19], ELE_C.m],
-  // trunk (base -> tip)
-  [[14, 9, 13], ELE_C.m],
-  [[13, 9, 10, 12], ELE_C.l1],
-  [[12, 10, 11], ELE_C.m],
+  // left ear fan (attaches along head edge 1-3-5)
+  [[1, 19, 24], ELE_C.d2],
+  [[19, 20, 24], ELE_C.m],
+  [[20, 21, 24], ELE_C.l1],
+  [[21, 22, 24], ELE_C.m],
+  [[22, 23, 24], ELE_C.d2],
+  [[23, 24, 5], ELE_C.d1],
+  [[24, 3, 5], ELE_C.d2],
+  [[24, 1, 3], ELE_C.d1],
+  // right ear fan (mirror)
+  [[2, 25, 30], ELE_C.d2],
+  [[25, 26, 30], ELE_C.m],
+  [[26, 27, 30], ELE_C.l1],
+  [[27, 28, 30], ELE_C.m],
+  [[28, 29, 30], ELE_C.d2],
+  [[29, 30, 6], ELE_C.d1],
+  [[30, 4, 6], ELE_C.d2],
+  [[30, 2, 4], ELE_C.d1],
+  // dome + forehead
+  [[1, 0, 31], ELE_C.l2],
+  [[0, 2, 31], ELE_C.l2],
+  [[1, 3, 32], ELE_C.m],
+  [[1, 32, 31], ELE_C.l1],
+  [[2, 4, 33], ELE_C.m],
+  [[2, 31, 33], ELE_C.l1],
+  [[31, 32, 9], ELE_C.l2],
+  [[31, 9, 10], ELE_C.hi], // pale forehead blaze above the trunk
+  [[31, 10, 33], ELE_C.l2],
+  // cheeks + jaw
+  [[3, 5, 32], ELE_C.l1],
+  [[32, 5, 9], ELE_C.m],
+  [[5, 9, 11], ELE_C.l1],
+  [[5, 7, 11], ELE_C.m],
+  [[7, 11, 13], ELE_C.l1],
+  [[4, 6, 33], ELE_C.l1],
+  [[33, 6, 10], ELE_C.m],
+  [[6, 10, 12], ELE_C.l1],
+  [[6, 8, 12], ELE_C.m],
+  [[8, 12, 14], ELE_C.l1],
+  // trunk (alternating segments)
+  [[9, 10, 12, 11], ELE_C.l1],
+  [[11, 12, 14, 13], ELE_C.m],
+  [[13, 14, 16, 15], ELE_C.l1],
+  [[15, 16, 18, 17], ELE_C.m],
   // overlays
-  [[20, 21, 22, 23], ELE_C.d1], // inner ear
-  [[24, 25, 26, 27], INK], // eye
-  [[28, 29, 30, 31], ELE_C.hi], // tusk
-  [[32, 33, 34, 35], ELE_C.d2], // trunk band
-  [[36, 37, 38, 39], ELE_C.d2], // trunk band low
-  [[40, 41, 42, 43], ELE_C.m], // cheek shade
+  [[34, 35, 36, 37], INK], // eye L
+  [[38, 39, 40, 41], INK], // eye R
+  [[42, 43, 44, 45], ELE_C.l2], // tusk L
+  [[46, 47, 48, 49], ELE_C.l2], // tusk R
+  [[50, 51, 52], ELE_C.d1], // trunk tip shade
+  [[11, 12, 54, 53], ELE_C.d2], // wrinkle band upper
+  [[13, 14, 56, 55], ELE_C.d2], // wrinkle band lower
 ];
 
 /* ------------------------------------------------------------------ */
@@ -278,175 +329,211 @@ const LION_F: ReadonlyArray<FaceDef> = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* DOLPHIN — people. Side profile facing left, sky/cyan family.        */
-/* Landmarks: melon bulge with crease above the rostrum, rostrum       */
-/* protruding to x=18, smile notch, dorsal fin apex rising to y=20,    */
-/* pale belly, pectoral flipper overlay.                               */
+/* DOLPHIN — people. Side view facing left in the classic leaping      */
+/* arc, sky/cyan family. Landmarks: long pale rostrum with the ink     */
+/* smile line, eye dot behind the beak, steeply rising melon, one      */
+/* smooth arched back with the dorsal fin at its apex, tapering tail   */
+/* stock and two-lobed fluke; pale belly, pectoral flipper overlay.    */
 /* ------------------------------------------------------------------ */
 
 const DOL_C = { d1: "#1e6f9f", d2: "#3489bd", m: "#57a6d6", l1: "#84c1e7", l2: "#b2daf2", hi: "#e4f3fb" };
 
 const DOL_V: ReadonlyArray<Pt> = [
-  [70, 42], // 0 melon top
-  [104, 36], // 1 nape
-  [128, 42], // 2 dorsal fin front base
-  [150, 20], // 3 dorsal fin apex
-  [156, 50], // 4 fin trailing base
-  [174, 78], // 5 back
-  [182, 124], // 6 flank
-  [176, 170], // 7 bottom back
-  [128, 180], // 8 bottom
-  [84, 164], // 9 belly
-  [58, 138], // 10 chest
-  [44, 112], // 11 chin
-  [24, 98], // 12 lower jaw tip
-  [42, 92], // 13 smile notch
-  [18, 82], // 14 rostrum tip
-  [40, 70], // 15 rostrum top
-  [52, 54], // 16 melon front crease
-  [76, 66], // 17 anchor: melon
-  [58, 96], // 18 anchor: jaw
-  [120, 110], // 19 anchor: body
-  [96, 140], // 20 anchor: belly
-  // eye diamond
-  [52, 74], [57, 70], [61, 75], [56, 79], // 21-24
-  // smile line (thin quad from the notch back)
-  [62, 95], [62, 98], [43, 95], // 25-27 (with 13)
-  // pectoral flipper
-  [78, 120], [112, 132], [88, 148], [70, 132], // 28-31
+  [12, 104], // 0 rostrum tip
+  [42, 88], // 1 beak top (crease foot)
+  [48, 70], // 2 melon front (near-vertical step 1->2)
+  [72, 48], // 3 melon top
+  [100, 36], // 4 dorsal fin front base (arc apex)
+  [124, 12], // 5 dorsal fin apex
+  [134, 42], // 6 dorsal fin back base
+  [158, 58], // 7 back mid
+  [180, 100], // 8 tail stock top (back tapers hard)
+  [198, 92], // 9 fluke upper tip
+  [184, 118], // 10 fluke notch
+  [194, 148], // 11 fluke lower tip
+  [168, 114], // 12 tail stock bottom
+  [144, 120], // 13 underside rear
+  [118, 128], // 14 belly rear
+  [92, 126], // 15 belly mid
+  [68, 116], // 16 belly front
+  [50, 110], // 17 throat (beak underside meets chin)
+  [46, 102], // 18 gape corner
+  [68, 86], // 19 anchor: head
+  [108, 76], // 20 anchor: body
+  [144, 96], // 21 anchor: rear
+  [96, 102], // 22 anchor: belly
+  [114, 28], // 23 fin leading-edge light (with 4, 5)
+  // ink eye (behind the gape, under the melon crease)
+  [50, 92], [55, 87], [60, 92], [55, 97], // 24-27
+  // ink smile line (thin quad through the middle of the beak)
+  [14, 101], [46, 101], [46, 105], [16, 106], // 28-31
+  // pectoral flipper (dark, swept back along the belly)
+  [80, 100], [104, 122], [90, 126], [72, 108], // 32-35
   // blowhole
-  [72, 44], [80, 41], [77, 48], // 32-34
-  // fin leading-edge light
-  [146, 40], // 35 (with 2, 3)
+  [76, 48], [84, 44], [82, 52], // 36-38
 ];
 
 const DOL_F: ReadonlyArray<FaceDef> = [
-  [[0, 1, 17], DOL_C.l1], // melon
-  [[1, 2, 19], DOL_C.d2],
-  [[2, 3, 4], DOL_C.d1], // dorsal fin
-  [[2, 4, 19], DOL_C.m],
-  [[4, 5, 19], DOL_C.d2],
-  [[5, 6, 19], DOL_C.m],
-  [[6, 7, 19], DOL_C.d2],
-  [[7, 8, 19], DOL_C.m],
-  [[8, 19, 20], DOL_C.l1],
-  [[8, 9, 20], DOL_C.l2],
-  [[9, 10, 20], DOL_C.hi], // belly
-  [[10, 20, 18], DOL_C.l2],
-  [[10, 11, 18], DOL_C.hi], // throat
-  [[11, 12, 18], DOL_C.l2], // lower jaw
-  [[12, 13, 18], DOL_C.l1],
-  [[13, 14, 18], DOL_C.l2], // upper jaw
-  [[14, 15, 18], DOL_C.l1], // rostrum top plane
-  [[15, 16, 17], DOL_C.l2], // melon crease facet
-  [[15, 17, 18], DOL_C.m], // face core (eye sits here)
-  [[16, 0, 17], DOL_C.hi], // melon highlight
-  [[1, 19, 17], DOL_C.m],
-  [[17, 19, 20], DOL_C.l1],
-  [[17, 20, 18], DOL_C.l2],
+  // beak — pale but visible against the bg, clearly stepped off the melon
+  [[0, 1, 18], DOL_C.l1], // beak upper
+  [[0, 18, 17], DOL_C.l2], // beak lower
+  [[1, 18, 19], DOL_C.l2],
+  [[18, 19, 17], DOL_C.l1],
+  [[1, 2, 19], DOL_C.l1], // crease facet
+  // melon + back arc — dark cape above the lateral line
+  [[2, 3, 19], DOL_C.m],
+  [[3, 19, 20], DOL_C.m],
+  [[3, 4, 20], DOL_C.d2],
+  [[4, 5, 6], DOL_C.d1], // dorsal fin
+  [[4, 6, 20], DOL_C.d2],
+  [[6, 7, 20], DOL_C.m],
+  [[7, 8, 21], DOL_C.d2],
+  [[7, 21, 20], DOL_C.m],
+  // tail stock + fluke
+  [[21, 8, 12], DOL_C.m],
+  [[8, 9, 10], DOL_C.d2],
+  [[10, 11, 12], DOL_C.d1],
+  [[8, 10, 12], DOL_C.d2],
+  // underside + belly — pale below the lateral line
+  [[12, 13, 21], DOL_C.l1],
+  [[13, 14, 21], DOL_C.l2],
+  [[14, 22, 21], DOL_C.l1],
+  [[14, 15, 22], DOL_C.l2],
+  [[15, 16, 22], DOL_C.l2],
+  [[16, 17, 22], DOL_C.l2],
+  [[17, 22, 19], DOL_C.l1],
+  // interior core (lateral band)
+  [[19, 20, 22], DOL_C.l1],
+  [[20, 21, 22], DOL_C.l2],
   // overlays
-  [[21, 22, 23, 24], INK], // eye
-  [[13, 25, 26, 27], INK], // smile line
-  [[28, 29, 30, 31], DOL_C.d2], // flipper
-  [[32, 33, 34], DOL_C.d1], // blowhole
-  [[2, 3, 35], DOL_C.l1], // fin leading edge
+  [[4, 5, 23], DOL_C.l1], // fin leading edge
+  [[24, 25, 26, 27], INK], // eye
+  [[28, 29, 30, 31], INK], // smile line
+  [[32, 33, 34, 35], DOL_C.d2], // flipper
+  [[36, 37, 38], DOL_C.d1], // blowhole
 ];
 
 /* ------------------------------------------------------------------ */
-/* PEACOCK — creative. Side profile facing left: small crested head,   */
-/* S-neck, teal body, and a 7-wedge tail fan arcing behind (teal with  */
-/* pink/violet facets — the two-hue exception). Eyespot diamonds on    */
-/* the fan; beak protrudes past the head front (x=28 vs 46).           */
+/* PEACOCK — creative. Front-on and symmetric (the pattern the lion/   */
+/* tiger proved out): a 7-wedge tail fan behind (teal with pink/violet */
+/* facets — the two-hue exception), diamond eyespots on the fan, and a */
+/* dark slim body + straight elegant neck up the centre line to a      */
+/* small head with three crest dots on stalks; ink beak.               */
 /* ------------------------------------------------------------------ */
 
 const PEA_C = { d1: "#0e6b66", d2: "#14867d", m: "#23a496", l1: "#54c0af", l2: "#90d9ca", hi: "#e8f7f3", p1: "#e58fc7", p2: "#b892ee" };
 
 const PEA_V: ReadonlyArray<Pt> = [
-  [108, 132], // 0 fan hub (hidden behind body)
-  [18, 96], // 1 fan outer, left
-  [32, 52], // 2
-  [64, 22], // 3
-  [106, 14], // 4 fan top
-  [146, 26], // 5
-  [176, 56], // 6
-  [188, 98], // 7 fan outer, right
-  [182, 138], // 8 fan outer, lower right
-  // body hexagon
-  [66, 150], // 9 chest front
-  [74, 176], // 10 bottom front
-  [140, 176], // 11 bottom back
-  [150, 144], // 12 back
-  [120, 124], // 13 upper back
-  [92, 128], // 14 shoulder
-  [106, 152], // 15 anchor: body
-  // neck (front edge F, back edge K)
-  [60, 118], // 16 F1
-  [52, 90], // 17 F2
-  [50, 68], // 18 F3 head base front
-  [80, 120], // 19 K1
-  [68, 94], // 20 K2
-  [64, 70], // 21 K3 head base back
+  [100, 142], // 0 fan hub (hidden behind the body)
+  // fan outer rim, left to right
+  [14, 150], // 1
+  [18, 100], // 2
+  [42, 58], // 3
+  [78, 32], // 4
+  [122, 32], // 5
+  [158, 58], // 6
+  [182, 100], // 7
+  [186, 150], // 8
+  // body
+  [70, 152], // 9 side L
+  [76, 180], // 10 bottom L
+  [124, 180], // 11 bottom R
+  [130, 152], // 12 side R
+  [116, 130], // 13 shoulder R
+  [84, 130], // 14 shoulder L
+  [100, 160], // 15 anchor: body
+  // slim neck (two tapering segments up the centre)
+  [93, 128], // 16 base L
+  [107, 128], // 17 base R
+  [95, 106], // 18 mid L
+  [105, 106], // 19 mid R
+  [96, 86], // 20 top L
+  [104, 86], // 21 top R
   // head
-  [46, 46], // 22 head front top
-  [66, 48], // 23 crown back
-  // beak
-  [46, 52], [28, 58], [46, 62], // 24-26
-  // eye (light on dark head)
-  [52, 55], [56, 52], [59, 56], [55, 59], // 27-30
-  // crest stalks + diamond tips
-  [50, 46], [48, 32], [53, 44], // 31-33 stalk 1
-  [44, 30], [48, 23], [52, 29], [48, 36], // 34-37 tip 1
-  [58, 46], [63, 30], [64, 46], // 38-40 stalk 2
-  [59, 27], [63, 20], [67, 26], [63, 33], // 41-44 tip 2
-  // eyespot diamonds on the fan
-  [40, 66], [45, 60], [50, 66], [45, 72], // 45-48
-  [79, 34], [84, 28], [89, 34], [84, 40], // 49-52
-  [123, 34], [128, 28], [133, 34], [128, 40], // 53-56
-  [163, 72], [168, 66], [173, 72], [168, 78], // 57-60
-  // inner pink cores for two eyespots
-  [82, 34], [84, 31], [86, 34], [84, 37], // 61-64
-  [126, 34], [128, 31], [130, 34], [128, 37], // 65-68
-  // wing overlay on body
-  [88, 136], [124, 132], [134, 162], [96, 166], // 69-72
+  [89, 74], // 22 head L
+  [111, 74], // 23 head R
+  [100, 58], // 24 crown
+  // crest stalks
+  [99, 60], [101, 60], [100, 38], // 25-27 centre
+  [94, 64], [97, 62], [84, 42], // 28-30 left
+  [106, 64], [103, 62], [116, 42], // 31-33 right
+  // crest tip diamonds
+  [95, 34], [100, 29], [105, 34], [100, 39], // 34-37 centre
+  [79, 40], [84, 35], [89, 40], [84, 45], // 38-41 left
+  [111, 40], [116, 35], [121, 40], [116, 45], // 42-45 right
+  // ink eyes on the head
+  [90, 72], [94, 68], [98, 72], [94, 76], // 46-49 L
+  [102, 72], [106, 68], [110, 72], [106, 76], // 50-53 R
+  // ink beak
+  [96, 80], [104, 80], [100, 89], // 54-56
+  // fan eyespots — outer diamond + pink core, 3 per side
+  [29, 124], [36, 117], [43, 124], [36, 131], // 57-60 L1 outer
+  [32, 124], [36, 120], [40, 124], [36, 128], // 61-64 L1 core
+  [41, 80], [48, 73], [55, 80], [48, 87], // 65-68 L2 outer
+  [44, 80], [48, 76], [52, 80], [48, 84], // 69-72 L2 core
+  [67, 52], [74, 45], [81, 52], [74, 59], // 73-76 L3 outer
+  [70, 52], [74, 48], [78, 52], [74, 56], // 77-80 L3 core
+  [119, 52], [126, 45], [133, 52], [126, 59], // 81-84 R3 outer
+  [122, 52], [126, 48], [130, 52], [126, 56], // 85-88 R3 core
+  [145, 80], [152, 73], [159, 80], [152, 87], // 89-92 R2 outer
+  [148, 80], [152, 76], [156, 80], [152, 84], // 93-96 R2 core
+  [157, 124], [164, 117], [171, 124], [164, 131], // 97-100 R1 outer
+  [160, 124], [164, 120], [168, 124], [164, 128], // 101-104 R1 core
+  // wing highlights on the body
+  [82, 140], [96, 150], [86, 166], // 105-107 L
+  [118, 140], [104, 150], [114, 166], // 108-110 R
 ];
 
 const PEA_F: ReadonlyArray<FaceDef> = [
   // tail fan wedges (drawn first — everything else sits on top)
   [[0, 1, 2], PEA_C.d1],
   [[0, 2, 3], PEA_C.p2],
-  [[0, 3, 4], PEA_C.m],
-  [[0, 4, 5], PEA_C.p1],
-  [[0, 5, 6], PEA_C.m],
+  [[0, 3, 4], PEA_C.d2],
+  [[0, 4, 5], PEA_C.l1], // light centre wedge so the dark neck/head reads
+  [[0, 5, 6], PEA_C.d2],
   [[0, 6, 7], PEA_C.p2],
   [[0, 7, 8], PEA_C.d1],
   // eyespots
-  [[45, 46, 47, 48], PEA_C.d1],
-  [[49, 50, 51, 52], PEA_C.d1],
-  [[53, 54, 55, 56], PEA_C.d1],
-  [[57, 58, 59, 60], PEA_C.d1],
+  [[57, 58, 59, 60], PEA_C.l2],
   [[61, 62, 63, 64], PEA_C.p1],
-  [[65, 66, 67, 68], PEA_C.p1],
+  [[65, 66, 67, 68], PEA_C.l2],
+  [[69, 70, 71, 72], PEA_C.p1],
+  [[73, 74, 75, 76], PEA_C.l2],
+  [[77, 78, 79, 80], PEA_C.p1],
+  [[81, 82, 83, 84], PEA_C.l2],
+  [[85, 86, 87, 88], PEA_C.p1],
+  [[89, 90, 91, 92], PEA_C.l2],
+  [[93, 94, 95, 96], PEA_C.p1],
+  [[97, 98, 99, 100], PEA_C.l2],
+  [[101, 102, 103, 104], PEA_C.p1],
   // body
   [[9, 10, 15], PEA_C.d2],
   [[10, 11, 15], PEA_C.d1],
   [[11, 12, 15], PEA_C.d2],
   [[12, 13, 15], PEA_C.m],
-  [[13, 14, 15], PEA_C.d2],
+  [[13, 15, 17], PEA_C.d2],
+  [[17, 16, 15], PEA_C.m], // chest
+  [[16, 14, 15], PEA_C.d2],
   [[14, 9, 15], PEA_C.m],
-  [[69, 70, 71, 72], PEA_C.l1], // folded wing
-  // S-neck (three quads, chest -> head)
-  [[9, 14, 19, 16], PEA_C.d2],
-  [[16, 19, 20, 17], PEA_C.m],
-  [[17, 20, 21, 18], PEA_C.d2],
-  // head, beak, eye
-  [[22, 23, 21, 18], PEA_C.m],
-  [[24, 25, 26], INK], // beak
-  [[27, 28, 29, 30], PEA_C.hi], // eye
+  [[105, 106, 107], PEA_C.l1], // wing highlight L
+  [[108, 109, 110], PEA_C.l1], // wing highlight R
+  // neck
+  [[16, 17, 19, 18], PEA_C.d2],
+  [[18, 19, 21, 20], PEA_C.d1],
+  // head — a shade lighter than the neck so it reads as its own mass
+  [[22, 24, 23], PEA_C.m],
+  [[22, 23, 21, 20], PEA_C.d2],
   // crest
+  [[25, 26, 27], PEA_C.d2],
+  [[28, 29, 30], PEA_C.d2],
   [[31, 32, 33], PEA_C.d2],
   [[34, 35, 36, 37], PEA_C.p1],
-  [[38, 39, 40], PEA_C.d2],
-  [[41, 42, 43, 44], PEA_C.p1],
+  [[38, 39, 40, 41], PEA_C.p1],
+  [[42, 43, 44, 45], PEA_C.p1],
+  // face
+  [[46, 47, 48, 49], INK], // eye L
+  [[50, 51, 52, 53], INK], // eye R
+  [[54, 55, 56], INK], // beak
 ];
 
 /* ------------------------------------------------------------------ */

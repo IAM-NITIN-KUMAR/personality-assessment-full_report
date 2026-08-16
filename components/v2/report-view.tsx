@@ -32,7 +32,7 @@ import {
   Sparkles,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
-import { DOMAIN_LABELS, DIM_LABELS, ROLE_LABELS } from "@/lib/v2/types";
+import { ANIMALS, DOMAIN_LABELS, DIM_LABELS, ROLE_LABELS } from "@/lib/v2/types";
 import type { ReportV2, RadarDim, CareerCard } from "@/lib/v2/types";
 import { ANIMAL_ART } from "@/lib/v2/animal-geometry";
 import { AnimalArt } from "./animal-art";
@@ -415,7 +415,9 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
                   <p className="text-[13px] font-mono font-bold text-[#6e6ef0] uppercase tracking-widest">
                     {showAnimal ? `THE ${t.animal.toUpperCase()}` : "YOUR TYPE"}
                   </p>
-                  {showAnimal && <p className="text-[13px] italic text-ink-400">{t.rendering}</p>}
+                  {showAnimal && heroDim && (
+                    <p className="text-[13px] italic text-ink-400">{ANIMALS[heroDim].line}</p>
+                  )}
                   <h2 className="text-[26px] sm:text-[32px] font-black text-ink leading-tight">{t.name}</h2>
                   <p className="text-[14px] sm:text-[15px] text-ink-600 leading-relaxed max-w-xl">{t.strapline}</p>
                 </>
