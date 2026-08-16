@@ -33,88 +33,86 @@ function art(bg: string, verts: ReadonlyArray<Pt>, faces: ReadonlyArray<FaceDef>
 
 /* ------------------------------------------------------------------ */
 /* HAWK — analytical. Front-on symmetric raptor face (same pattern as  */
-/* the lion/tiger successes), indigo/violet family. Landmarks: jagged  */
-/* feather crown, fierce V of ink brow wedges converging over pale     */
-/* eye sockets with ink pupils, pale cere, and a long downward-hooked  */
-/* ink beak on the centre line.                                        */
+/* the lion/tiger successes), indigo/violet family. Deliberately NOT   */
+/* an owl: single low crest peak (no paired ear tufts), a face taller  */
+/* than it is wide, small eye slivers shadowed under a heavy ink brow  */
+/* ridge, falcon malar stripes, and a long decisively hooked ink beak  */
+/* on the centre line.                                                 */
 /* ------------------------------------------------------------------ */
 
 const HAWK_C = { d1: "#3a3aa6", d2: "#5353d6", m: "#6e6ef0", l1: "#9494f6", l2: "#bcbcfa", hi: "#e9e9fd" };
 
 const HAWK_V: ReadonlyArray<Pt> = [
-  // silhouette — crown tufts across the top, then clockwise
-  [100, 24], // 0 centre spike
-  [112, 42], // 1 valley R inner
-  [126, 28], // 2 spike R
-  [138, 48], // 3 valley R outer
-  [152, 64], // 4 temple R
-  [158, 102], // 5 cheek R
-  [146, 140], // 6 jaw R
-  [124, 164], // 7 ruff R
-  [100, 174], // 8 chin
-  [76, 164], // 9 ruff L
-  [54, 140], // 10 jaw L
-  [42, 102], // 11 cheek L
-  [48, 64], // 12 temple L
-  [62, 48], // 13 valley L outer
-  [74, 28], // 14 spike L
-  [88, 42], // 15 valley L inner
+  // silhouette — flat swept crown with one low centre peak, clockwise
+  [100, 30], // 0 crest peak
+  [126, 38], // 1 crown R
+  [142, 58], // 2 temple R
+  [150, 100], // 3 cheek R
+  [138, 140], // 4 jaw R
+  [120, 164], // 5 ruff R
+  [100, 176], // 6 chin
+  [80, 164], // 7 ruff L
+  [62, 140], // 8 jaw L
+  [50, 100], // 9 cheek L
+  [58, 58], // 10 temple L
+  [74, 38], // 11 crown L
   // interior anchors
-  [100, 60], // 16 forehead
-  [72, 112], // 17 cheek anchor L
-  [128, 112], // 18 cheek anchor R
-  [100, 142], // 19 chin anchor
-  // pale eye sockets (facial disc)
-  [60, 92], [94, 100], [88, 116], [58, 104], // 20-23 L
-  [140, 92], [106, 100], [112, 116], [142, 104], // 24-27 R
+  [100, 62], // 12 forehead
+  [74, 110], // 13 cheek anchor L
+  [126, 110], // 14 cheek anchor R
+  [100, 144], // 15 chin anchor
+  // small pale eye slivers tucked under the brow ridge
+  [64, 98], [90, 104], [86, 114], [62, 108], // 16-19 L
+  [136, 98], [110, 104], [114, 114], [138, 108], // 20-23 R
   // ink pupils
-  [69, 105], [75, 100], [81, 105], [75, 110], // 28-31 L
-  [131, 105], [125, 100], [119, 105], [125, 110], // 32-35 R
-  // fierce ink brow wedges (V converging at centre)
-  [54, 80], [97, 96], [97, 104], [58, 90], // 36-39 L
-  [146, 80], [103, 96], [103, 104], [142, 90], // 40-43 R
+  [70, 107], [75, 103], [80, 107], [75, 111], // 24-27 L
+  [130, 107], [125, 103], [120, 107], [125, 111], // 28-31 R
+  // heavy overhanging ink brow wedges (V converging at centre)
+  [54, 82], [98, 96], [98, 106], [58, 96], // 32-35 L
+  [146, 82], [102, 96], [102, 106], [142, 96], // 36-39 R
   // cere (pale) above the hook
-  [94, 100], [106, 100], [104, 114], [96, 114], // 44-47
-  // ink beak hook — bulges then narrows to a sharp downward tip
-  [92, 114], [108, 114], [106, 132], [100, 154], [94, 132], // 48-52
+  [94, 96], [106, 96], [104, 112], [96, 112], // 40-43
+  // long ink beak hook — bulges then narrows to a sharp downward tip
+  [91, 112], [109, 112], [106, 136], [100, 162], [94, 136], // 44-48
+  // falcon malar stripes below the eyes
+  [66, 118], [76, 116], [70, 132], // 49-51 L
+  [134, 118], [124, 116], [130, 132], // 52-54 R
 ];
 
 const HAWK_F: ReadonlyArray<FaceDef> = [
-  // crown (mirror-symmetric shading)
-  [[14, 15, 16], HAWK_C.m],
-  [[15, 0, 16], HAWK_C.l1],
-  [[0, 1, 16], HAWK_C.l1],
-  [[1, 2, 16], HAWK_C.m],
-  [[13, 14, 16], HAWK_C.d2],
-  [[2, 3, 16], HAWK_C.d2],
-  [[12, 13, 16], HAWK_C.m],
-  [[3, 4, 16], HAWK_C.m],
-  // temples + cheeks
-  [[12, 11, 17], HAWK_C.m],
-  [[12, 17, 16], HAWK_C.l2],
-  [[4, 5, 18], HAWK_C.m],
-  [[4, 16, 18], HAWK_C.l2],
-  [[11, 10, 17], HAWK_C.d2],
-  [[5, 6, 18], HAWK_C.d2],
+  // crown (mirror-symmetric shading, flat and sleek)
+  [[11, 0, 12], HAWK_C.l1],
+  [[0, 1, 12], HAWK_C.l1],
+  [[10, 11, 12], HAWK_C.m],
+  [[1, 2, 12], HAWK_C.m],
+  // temples + cheeks (narrowed face)
+  [[10, 13, 12], HAWK_C.l2],
+  [[2, 12, 14], HAWK_C.l2],
+  [[10, 9, 13], HAWK_C.d2],
+  [[2, 3, 14], HAWK_C.d2],
+  [[9, 8, 13], HAWK_C.m],
+  [[3, 4, 14], HAWK_C.m],
   // jaw + ruff
-  [[10, 9, 17], HAWK_C.m],
-  [[6, 7, 18], HAWK_C.m],
-  [[9, 17, 19], HAWK_C.l1],
-  [[7, 18, 19], HAWK_C.l1],
-  [[9, 8, 19], HAWK_C.l2],
-  [[7, 8, 19], HAWK_C.l2],
+  [[8, 7, 13], HAWK_C.d2],
+  [[4, 5, 14], HAWK_C.d2],
+  [[7, 13, 15], HAWK_C.l1],
+  [[5, 14, 15], HAWK_C.l1],
+  [[7, 6, 15], HAWK_C.l2],
+  [[5, 6, 15], HAWK_C.l2],
   // face core (mostly covered by feature overlays)
-  [[16, 17, 19], HAWK_C.l1],
-  [[16, 19, 18], HAWK_C.l1],
-  // overlays: sockets, pupils, brow, cere, hook, chest streaks
-  [[20, 21, 22, 23], HAWK_C.hi], // eye socket L
-  [[24, 25, 26, 27], HAWK_C.hi], // eye socket R
-  [[28, 29, 30, 31], INK], // pupil L
-  [[32, 33, 34, 35], INK], // pupil R
-  [[36, 37, 38, 39], INK], // brow wedge L
-  [[40, 41, 42, 43], INK], // brow wedge R
-  [[44, 45, 46, 47], HAWK_C.l2], // cere
-  [[48, 49, 50, 51, 52], INK], // hooked beak
+  [[12, 13, 15], HAWK_C.l1],
+  [[12, 15, 14], HAWK_C.l1],
+  // overlays: eye slivers, pupils, brow, cere, hook, malar stripes
+  [[16, 17, 18, 19], HAWK_C.hi], // eye sliver L
+  [[20, 21, 22, 23], HAWK_C.hi], // eye sliver R
+  [[24, 25, 26, 27], INK], // pupil L
+  [[28, 29, 30, 31], INK], // pupil R
+  [[32, 33, 34, 35], INK], // brow ridge L
+  [[36, 37, 38, 39], INK], // brow ridge R
+  [[40, 41, 42, 43], HAWK_C.l2], // cere
+  [[44, 45, 46, 47, 48], INK], // hooked beak
+  [[49, 50, 51], HAWK_C.d1], // malar stripe L
+  [[52, 53, 54], HAWK_C.d1], // malar stripe R
 ];
 
 /* ------------------------------------------------------------------ */
