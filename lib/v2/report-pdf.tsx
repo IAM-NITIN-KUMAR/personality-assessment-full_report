@@ -551,12 +551,19 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
   // rule — more_signal never renders fit%, cards, or an animal, even if the
   // pairing math technically produced one).
   const showAnimal = isFull && t.kind === "archetype";
-  const heroDim: RadarDim | null = t.kind === "archetype" ? t.primary : null;
+  const heroDim: RadarDim | null = isFull && t.kind === "archetype" ? t.primary : null;
 
+  // The entire archetype/explorer identity — eyebrow, heading, strapline —
+  // is gated on isFull. more_signal must never name a type, even when the
+  // underlying pairing math (t.kind) technically resolved one.
   const eyebrow =
-    t.kind === "archetype" ? `Archetype: ${t.name}` : t.kind === "explorer" ? "Type: Explorer Profile" : "Type: Gathering More Signal";
+    isFull && t.kind === "archetype"
+      ? `Archetype: ${t.name}`
+      : isFull && t.kind === "explorer"
+        ? "Type: Explorer Profile"
+        : "Type: Gathering More Signal";
 
-  const heroCopy = t.kind === "explorer" ? t.copy : t.kind === "more_signal" ? t.copy : MORE_SIGNAL_FALLBACK_COPY;
+  const heroCopy = isFull && t.kind === "explorer" ? t.copy : MORE_SIGNAL_FALLBACK_COPY;
 
   return (
     <Document title={`${report.header.assessmentName} — ${report.header.name}`}>
@@ -610,7 +617,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
             </View>
           )}
           <View style={s.heroTextCol}>
-            {t.kind === "archetype" ? (
+            {isFull && t.kind === "archetype" ? (
               <>
                 <Text style={s.heroKicker}>{showAnimal ? `THE ${t.animal.toUpperCase()}` : "YOUR TYPE"}</Text>
                 {showAnimal && heroDim ? <Text style={s.heroRendering}>{ANIMALS[heroDim].line}</Text> : null}
@@ -619,7 +626,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
               </>
             ) : (
               <>
-                <Text style={s.heroKicker}>{t.kind === "explorer" ? "A BRIDGE PROFILE" : "STILL BUILDING THE PICTURE"}</Text>
+                <Text style={s.heroKicker}>{isFull && t.kind === "explorer" ? "A BRIDGE PROFILE" : "STILL BUILDING THE PICTURE"}</Text>
                 <Text style={s.heroStrap}>{heroCopy}</Text>
               </>
             )}
@@ -641,11 +648,13 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
               </View>
             ))}
           </View>
-          <View style={s.colHalf}>
-            <SectionHeader>YOUR PATH FIT SCORE</SectionHeader>
-            <Text style={s.radarSubLabel}>SIX-DIMENSION PROFILE</Text>
-            <PdfRadar scores={report.radar} />
-          </View>
+          {isFull && (
+            <View style={s.colHalf}>
+              <SectionHeader>YOUR PATH FIT SCORE</SectionHeader>
+              <Text style={s.radarSubLabel}>SIX-DIMENSION PROFILE</Text>
+              <PdfRadar scores={report.radar} />
+            </View>
+          )}
         </View>
 
         <View style={{ marginBottom: 18 }}>

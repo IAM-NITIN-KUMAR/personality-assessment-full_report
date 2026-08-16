@@ -112,7 +112,7 @@ export const ANIMALS: Record<RadarDim, { name: string; line: string }> = {
   analytical: { name: "Hawk", line: "Sees the detail from a distance that others miss. Baaz ki nazar." },
   practical: { name: "Elephant", line: "Steady, remembers everything, carries what others can't. Never rushed, never late." },
   leadership: { name: "Lion", line: "Doesn't chase the room's approval. The room organises around it." },
-  people: { name: "Dolphin", line: "Reads the group, moves with it, lifts it. Intelligence that works through connection." },
+  people: { name: "Dolphin", line: "Reads the group, moves with it, lifts it. Insight that works through connection." },
   creative: { name: "Peacock", line: "Makes the thing nobody asked for and everybody remembers." },
   entrepreneurial: { name: "Tiger", line: "Hunts alone, picks its moment, commits fully. The opportunist, in the best sense." },
 };

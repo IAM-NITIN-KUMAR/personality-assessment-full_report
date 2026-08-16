@@ -324,12 +324,19 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
   // hard rule — more_signal never renders fit%, cards, or an animal, even
   // if the pairing math technically produced one).
   const showAnimal = isFull && t.kind === "archetype";
-  const heroDim: RadarDim | null = t.kind === "archetype" ? t.primary : null;
+  const heroDim: RadarDim | null = isFull && t.kind === "archetype" ? t.primary : null;
 
+  // The entire archetype/explorer identity — eyebrow, heading, strapline —
+  // is gated on isFull. more_signal must never name a type, even when the
+  // underlying pairing math (t.kind) technically resolved one.
   const eyebrow =
-    t.kind === "archetype" ? `Archetype: ${t.name}` : t.kind === "explorer" ? "Type: Explorer Profile" : "Type: Gathering More Signal";
+    isFull && t.kind === "archetype"
+      ? `Archetype: ${t.name}`
+      : isFull && t.kind === "explorer"
+        ? "Type: Explorer Profile"
+        : "Type: Gathering More Signal";
 
-  const heroCopy = t.kind === "explorer" ? t.copy : t.kind === "more_signal" ? t.copy : MORE_SIGNAL_FALLBACK_COPY;
+  const heroCopy = isFull && t.kind === "explorer" ? t.copy : MORE_SIGNAL_FALLBACK_COPY;
 
   return (
     <article className="max-w-4xl mx-auto px-3 sm:px-6 pb-20 mt-4 sm:mt-8 space-y-8">
@@ -401,7 +408,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
               </div>
             ) : (
               <div className="w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] rounded-2xl bg-[#f3f0fc] flex items-center justify-center shrink-0 mx-auto sm:mx-0">
-                {t.kind === "explorer" ? (
+                {isFull && t.kind === "explorer" ? (
                   <Compass className="size-16 text-[#6e6ef0]/60" strokeWidth={1.5} />
                 ) : (
                   <Sparkles className="size-16 text-[#6e6ef0]/60" strokeWidth={1.5} />
@@ -410,7 +417,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
             )}
 
             <div className="space-y-3 text-center sm:text-left">
-              {t.kind === "archetype" ? (
+              {isFull && t.kind === "archetype" ? (
                 <>
                   <p className="text-[13px] font-mono font-bold text-[#6e6ef0] uppercase tracking-widest">
                     {showAnimal ? `THE ${t.animal.toUpperCase()}` : "YOUR TYPE"}
@@ -424,7 +431,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
               ) : (
                 <>
                   <p className="text-[13px] font-mono font-bold text-[#6e6ef0] uppercase tracking-widest">
-                    {t.kind === "explorer" ? "A BRIDGE PROFILE" : "STILL BUILDING THE PICTURE"}
+                    {isFull && t.kind === "explorer" ? "A BRIDGE PROFILE" : "STILL BUILDING THE PICTURE"}
                   </p>
                   <p className="text-[14px] sm:text-[15px] text-ink-600 leading-relaxed max-w-xl">{heroCopy}</p>
                 </>
@@ -433,8 +440,10 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
           </div>
         </section>
 
-        {/* Core Strengths + Path Fit Radar */}
-        <section className="grid md:grid-cols-2 gap-10 py-6 border-t border-line/50">
+        {/* Core Strengths + Path Fit Radar — the radar (and its header) is
+            full-state only; more_signal flows straight from strengths to
+            the page-2 fallback content, same as the prior design. */}
+        <section className={isFull ? "grid md:grid-cols-2 gap-10 py-6 border-t border-line/50" : "py-6 border-t border-line/50"}>
           <div className="space-y-6">
             <SectionHeader icon={Star}>YOUR CORE STRENGTHS</SectionHeader>
             <div className="space-y-3">
@@ -460,15 +469,17 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
             </div>
           </div>
 
-          <div className="space-y-6 flex flex-col items-center">
-            <div className="flex flex-col gap-1.5 self-start">
-              <SectionHeader icon={TrendingUp}>YOUR PATH FIT SCORE</SectionHeader>
-              <div className="text-[11px] font-extrabold text-[#6e6ef0] tracking-wider uppercase font-mono pl-8.5">
-                SIX-DIMENSION PROFILE
+          {isFull && (
+            <div className="space-y-6 flex flex-col items-center">
+              <div className="flex flex-col gap-1.5 self-start">
+                <SectionHeader icon={TrendingUp}>YOUR PATH FIT SCORE</SectionHeader>
+                <div className="text-[11px] font-extrabold text-[#6e6ef0] tracking-wider uppercase font-mono pl-8.5">
+                  SIX-DIMENSION PROFILE
+                </div>
               </div>
+              <HexRadar scores={report.radar} />
             </div>
-            <HexRadar scores={report.radar} />
-          </div>
+          )}
         </section>
 
         {/* Career Traits */}

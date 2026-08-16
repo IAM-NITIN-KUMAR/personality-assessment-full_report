@@ -59,6 +59,12 @@ describe("buildReportV2 states", () => {
     expect(r.state).toBe("more_signal");
     expect(r.cards).toBeNull();
     expect(r.verdicts).toEqual([]);
+    // Regression for the hero-identity leak: Ananya's radar is strong enough that the
+    // pairing math still resolves a full archetype (kind "archetype") even though the
+    // report as a whole is more_signal (no C1 → no domain). Renderers must gate the
+    // eyebrow/name/strapline on report.state, not on yourType.kind alone — asserting
+    // this combination stays reachable is what pins that bug down at the engine level.
+    expect(r.yourType.kind).toBe("archetype");
   });
 
   it("invariant holds generally: state full ⇒ cards non-null", () => {
