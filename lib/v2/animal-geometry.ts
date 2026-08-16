@@ -32,87 +32,106 @@ function art(bg: string, verts: ReadonlyArray<Pt>, faces: ReadonlyArray<FaceDef>
 }
 
 /* ------------------------------------------------------------------ */
-/* HAWK — analytical. HEAD-ONLY side profile facing left, indigo +     */
-/* ink. Round 3: the chest/shoulder bust is gone — the composition is  */
-/* just the head at ~80% of the frame: flat swept crown, heavy ink     */
-/* brow overhanging a fierce pale eye, pale cere with ink nostril,     */
-/* a LONG decisively-hooked ink beak (hook tip below the jawline),     */
-/* strong malar/jaw angle, and a short neck stub that tapers through   */
-/* 2 dark feather facets and exits the frame's lower edge cleanly.     */
+/* HAWK — analytical. CUTE round chick-raptor, front-on, pastel        */
+/* indigo. Big near-circular head (12-gon) over a small round body     */
+/* with stubby wing lobes; two feather tufts on the crown; pale owl-   */
+/* cafe face disc; huge ink sparkle eyes set low on the face; a tiny   */
+/* yellow-gold beak that still keeps a little downward hook (the       */
+/* "hawk" cue); pale chest patch and soft blush diamonds.              */
 /* ------------------------------------------------------------------ */
 
-const HAWK_C = { d1: "#3a3aa6", d2: "#5353d6", m: "#6e6ef0", l1: "#9494f6", l2: "#bcbcfa", hi: "#e9e9fd" };
+const HAWK_C = {
+  d2: "#9595ea", m: "#adadf2", l1: "#c5c5f7", l2: "#dcdcfb", hi: "#f2f2fe",
+  gold: "#f2c14e", goldD: "#d89a2e", blush: "#f2b8cf", spark: "#ffffff",
+};
 
 const HAWK_V: ReadonlyArray<Pt> = [
-  // silhouette, clockwise from the beak front
-  [14, 92], // 0 culmen forward point (beak front, upper)
-  [40, 82], // 1 culmen mid
-  [66, 78], // 2 beak root top (beak meets forehead at a step)
-  [74, 52], // 3 forehead / brow front (steep rise off the beak)
-  [112, 28], // 4 crown apex (flat, swept back)
-  [150, 40], // 5 crown back
-  [174, 72], // 6 nape
-  [182, 122], // 7 neck back
-  [176, 200], // 8 neck back at the frame's lower edge
-  [98, 200], // 9 neck front at the frame's lower edge
-  [86, 152], // 10 throat
-  [70, 124], // 11 chin / jaw front
-  [66, 104], // 12 gape corner (beak underside meets face)
-  [50, 106], // 13 hook inner
-  [38, 134], // 14 hook tip — curves down-back below the jawline (y=124)
-  [14, 112], // 15 beak front bend (gives the hook its curve)
-  // interior anchors
-  [112, 60], // 16 crown interior
-  [148, 90], // 17 nape interior
-  [106, 112], // 18 cheek centre
-  [136, 152], // 19 neck interior
-  // pale cere band over the beak root (with vertex 2)
-  [74, 80], [70, 92], [54, 86], // 20-22
-  // heavy straight ink brow, overhanging the eye
-  [74, 56], [124, 44], [122, 54], [80, 66], // 23-26
-  // fierce pale eye sliver set deep under the brow ridge
-  [78, 70], [112, 62], [110, 80], [76, 84], // 27-30
-  // ink pupil
-  [87, 72], [96, 66], [103, 73], [94, 79], // 31-34
-  // malar wedge — strong jaw/cheek angle below the eye
-  [78, 104], [100, 98], [88, 130], // 35-37
-  // neck taper feather facets fading toward the lower edge
-  [104, 170], [126, 164], [150, 168], // 38-40 tops
-  [116, 192], [140, 188], // 41-42 tips
-  // ink nostril in the cere
-  [62, 83], [67, 85], [63, 89], // 43-45
+  // head ring — 12 facets approximating a circle, centre (100,84)
+  [100, 28], // 0 crown
+  [131, 36], // 1
+  [154, 56], // 2
+  [162, 84], // 3
+  [154, 112], // 4
+  [131, 132], // 5
+  [100, 140], // 6 chin
+  [69, 132], // 7
+  [46, 112], // 8
+  [38, 84], // 9
+  [46, 56], // 10
+  [69, 36], // 11
+  [100, 84], // 12 head centre
+  // round body ring below the head (shares 5 and 7 with the head)
+  [56, 148], [50, 168], [64, 184], [100, 190], [136, 184], [150, 168], [144, 148], // 13-19
+  [100, 160], // 20 body centre
+  // stubby wing lobes
+  [58, 136], [40, 148], [40, 168], [56, 176], [68, 154], // 21-25 L
+  [142, 136], [160, 148], [160, 168], [144, 176], [132, 154], // 26-30 R
+  // crown feather tufts (bases tucked under the head silhouette)
+  [78, 42], [85, 13], [97, 38], // 31-33 L
+  [103, 38], [115, 13], [122, 42], // 34-36 R
+  // pale face disc
+  [60, 66], [100, 56], [140, 66], [152, 92], [138, 120], [100, 132], [62, 120], [48, 92], // 37-44
+  // huge round ink eyes (octagons), set low on the face
+  [62, 96], [66, 86], [76, 82], [86, 86], [90, 96], [86, 106], [76, 110], [66, 106], // 45-52 L
+  [110, 96], [114, 86], [124, 82], [134, 86], [138, 96], [134, 106], [124, 110], [114, 106], // 53-60 R
+  // white sparkle highlights (upper-right of each eye)
+  [77, 90], [81, 86], [85, 90], [81, 94], // 61-64 L
+  [125, 90], [129, 86], [133, 90], [129, 94], // 65-68 R
+  // tiny gold beak with a small downward hook
+  [91, 111], [109, 111], [100, 124], // 69-71 upper
+  [96, 118], [104, 117], [106, 124], [98, 129], // 72-75 hook tip
+  // pale chest patch
+  [80, 148], [100, 142], [120, 148], [128, 164], [112, 182], [88, 182], [72, 164], // 76-82
+  // blush diamonds
+  [56, 112], [62, 107], [68, 112], [62, 117], // 83-86 L
+  [132, 112], [138, 107], [144, 112], [138, 117], // 87-90 R
 ];
 
 const HAWK_F: ReadonlyArray<FaceDef> = [
-  // crown — light at the front, darkening toward nape and neck
-  [[2, 3, 16], HAWK_C.l2],
-  [[3, 4, 16], HAWK_C.l1],
-  [[4, 5, 16], HAWK_C.l2],
-  [[5, 17, 16], HAWK_C.m],
-  [[5, 6, 17], HAWK_C.d2],
-  [[6, 7, 17], HAWK_C.d1],
-  [[7, 19, 17], HAWK_C.d2],
-  [[7, 8, 19], HAWK_C.d1],
-  [[8, 9, 19], HAWK_C.d2],
-  [[9, 10, 19], HAWK_C.m],
-  [[10, 19, 18], HAWK_C.l1],
-  [[10, 11, 18], HAWK_C.l2],
-  [[11, 12, 18], HAWK_C.l1],
-  [[12, 2, 18], HAWK_C.l2],
-  [[2, 16, 18], HAWK_C.l1],
-  [[16, 17, 18], HAWK_C.l2],
-  [[17, 19, 18], HAWK_C.m],
-  // long hooked ink beak — one decisive mass dominating the profile
-  [[2, 1, 0, 15, 14, 13, 12], INK],
-  // overlays
-  [[2, 20, 21, 22], HAWK_C.l2], // pale cere at the beak base
-  [[43, 44, 45], INK], // nostril in the cere
-  [[23, 24, 25, 26], INK], // heavy straight brow ridge
-  [[27, 28, 29, 30], HAWK_C.hi], // eye sliver deep under the brow
-  [[31, 32, 33, 34], INK], // pupil
-  [[35, 36, 37], HAWK_C.d1], // malar / jaw angle
-  [[38, 39, 41], HAWK_C.d2], // neck taper feather layers
-  [[39, 40, 42], HAWK_C.d1],
+  // crown tufts first — the head covers their bases
+  [[31, 32, 33], HAWK_C.m],
+  [[34, 35, 36], HAWK_C.m],
+  // head — 12-facet fan, symmetric light shading
+  [[11, 0, 12], HAWK_C.l2],
+  [[0, 1, 12], HAWK_C.l2],
+  [[1, 2, 12], HAWK_C.l1],
+  [[2, 3, 12], HAWK_C.m],
+  [[3, 4, 12], HAWK_C.l1],
+  [[4, 5, 12], HAWK_C.m],
+  [[5, 6, 12], HAWK_C.l2],
+  [[6, 7, 12], HAWK_C.l2],
+  [[7, 8, 12], HAWK_C.m],
+  [[8, 9, 12], HAWK_C.l1],
+  [[9, 10, 12], HAWK_C.m],
+  [[10, 11, 12], HAWK_C.l1],
+  // pale face disc over the head facets
+  [[37, 38, 39, 40, 41, 42, 43, 44], HAWK_C.hi],
+  // round body fan (covers the chin seam — no gaps)
+  [[7, 13, 20], HAWK_C.m],
+  [[13, 14, 20], HAWK_C.l1],
+  [[14, 15, 20], HAWK_C.m],
+  [[15, 16, 20], HAWK_C.l1],
+  [[16, 17, 20], HAWK_C.l1],
+  [[17, 18, 20], HAWK_C.m],
+  [[18, 19, 20], HAWK_C.l1],
+  [[19, 5, 20], HAWK_C.m],
+  [[5, 7, 20], HAWK_C.l2],
+  // stubby wings
+  [[21, 22, 23, 24, 25], HAWK_C.d2],
+  [[26, 27, 28, 29, 30], HAWK_C.d2],
+  // pale chest patch
+  [[76, 77, 78, 79, 80, 81, 82], HAWK_C.hi],
+  // blush
+  [[83, 84, 85, 86], HAWK_C.blush],
+  [[87, 88, 89, 90], HAWK_C.blush],
+  // huge friendly ink eyes + sparkles
+  [[45, 46, 47, 48, 49, 50, 51, 52], INK],
+  [[53, 54, 55, 56, 57, 58, 59, 60], INK],
+  [[61, 62, 63, 64], HAWK_C.spark],
+  [[65, 66, 67, 68], HAWK_C.spark],
+  // tiny hooked gold beak
+  [[69, 70, 71], HAWK_C.gold],
+  [[72, 73, 74, 75], HAWK_C.goldD],
 ];
 
 /* ------------------------------------------------------------------ */
@@ -233,139 +252,131 @@ const ELE_F: ReadonlyArray<FaceDef> = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* LION — leadership. Front-on symmetric face, warm amber/gold.        */
-/* Round 3 mane: the outer silhouette is 12 short fur clumps with     */
-/* blunt TILTED tips (each tip chord slants — swept like combed fur),  */
-/* lengths varying irregularly r=70-84 over a valley ring of varying   */
-/* depth (r=63-68), so nothing reads as a star or a gear. The top      */
-/* clump is a parted double tuft; under the chin the mane falls as a   */
-/* wide shallow scalloped ruff — no downward spikes. Inner lighter     */
-/* ring and the refined face are unchanged from round 2.               */
+/* LION — leadership. CUTE front-on face, soft pastel amber/gold.      */
+/* Sunflower mane: 12 regular rounded scallop lobes (valleys r=60,     */
+/* blunt tips r=78) around a big round face (r=48). Small round ears   */
+/* peek from the mane top; huge ink sparkle eyes sit low on the face   */
+/* over a pale muzzle with a tiny ink triangle nose, short philtrum    */
+/* and a w-shaped cat-smile mouth; warm pink blush diamonds.           */
 /* ------------------------------------------------------------------ */
 
-const LION_C = { d1: "#9a6210", d2: "#c07d1d", m: "#e09c2e", l1: "#edbb5e", l2: "#f5d795", hi: "#fbeecf" };
+const LION_C = {
+  d1: "#eaa63e", d2: "#f2b95c", m: "#f7cd82", l1: "#fbdfa6", l2: "#fdecc8", hi: "#fff8ea",
+  pink: "#f5b8c4", spark: "#ffffff",
+};
 
 const LION_V: ReadonlyArray<Pt> = [
-  // mane valley ring — 15+30k deg (same angles as the mid ring),
-  // radii varying 63-68 for irregular notch depths
-  [117, 38], // 0 r64
-  [148, 52], // 1 r68
-  [162, 83], // 2 r64
-  [165, 117], // 3 r67
-  [145, 145], // 4 r63
-  [117, 164], // 5 r66
-  [83, 164], // 6 r66
-  [55, 145], // 7 r63
-  [35, 117], // 8 r67
-  [38, 83], // 9 r64
-  [52, 52], // 10 r68
-  [83, 38], // 11 r64
-  // mid mane ring — r=56, offset 15deg (interlocks with the outer ring)
-  [114, 46], [140, 60], [154, 86], [154, 114], [140, 140], [114, 154], // 12-17
-  [86, 154], [60, 140], [46, 114], [46, 86], [60, 60], [86, 46], // 18-23
-  // face 12-gon — r=40, same angles as the mid ring
-  [110, 61], [128, 72], [139, 90], [139, 110], [128, 128], [110, 139], // 24-29
-  [90, 139], [72, 128], [61, 110], [61, 90], [72, 72], [90, 61], // 30-35
-  // face interior helpers
-  [78, 88], // 36 brow L
-  [122, 88], // 37 brow R
-  [84, 112], // 38 muzzle corner L
-  [116, 112], // 39 muzzle corner R
-  // calm ink eyes
-  [74, 90], [88, 88], [90, 93], [76, 95], // 40-43 L
-  [126, 90], [112, 88], [110, 93], [124, 95], // 44-47 R
-  // regal pale brow ridges
-  [72, 84], [90, 82], [88, 87], [74, 89], // 48-51 L
-  [128, 84], [110, 82], [112, 87], [126, 89], // 52-55 R
-  // defined pale muzzle
-  [84, 106], [116, 106], [122, 127], [100, 138], [78, 127], // 56-60
-  // ink nose triangle
-  [92, 108], [108, 108], [100, 120], // 61-63
+  // mane valley ring — r=60 at 15+30k deg around (100,100)
+  [158, 116], // 0 (15 deg)
+  [142, 142], // 1
+  [116, 158], // 2
+  [84, 158], // 3
+  [58, 142], // 4
+  [42, 116], // 5
+  [42, 84], // 6
+  [58, 58], // 7
+  [84, 42], // 8
+  [116, 42], // 9
+  [142, 58], // 10
+  [158, 84], // 11
+  // scallop lobe tips — r=78, two blunt tips per lobe (valley+10, +20 deg)
+  [171, 133], [164, 145], // 12-13 lobe 0 (V0->V1)
+  [145, 164], [133, 171], // 14-15 lobe 1
+  [107, 178], [93, 178], // 16-17 lobe 2 (bottom)
+  [67, 171], [55, 164], // 18-19 lobe 3
+  [36, 145], [29, 133], // 20-21 lobe 4
+  [22, 107], [22, 93], // 22-23 lobe 5 (left)
+  [29, 67], [36, 55], // 24-25 lobe 6
+  [55, 36], [67, 29], // 26-27 lobe 7
+  [93, 22], [107, 22], // 28-29 lobe 8 (top)
+  [133, 29], [145, 36], // 30-31 lobe 9
+  [164, 55], [171, 67], // 32-33 lobe 10
+  [178, 93], [178, 107], // 34-35 lobe 11 (right)
+  // face ring — r=48, same angles as the valleys
+  [146, 112], [134, 134], [112, 146], [88, 146], [66, 134], [54, 112], // 36-41
+  [54, 88], [66, 66], [88, 54], [112, 54], [134, 66], [146, 88], // 42-47
+  [100, 100], // 48 face centre
+  // small round ears peeking from the mane top
+  [58, 52], [61, 40], [72, 36], [82, 43], [78, 56], // 49-53 L outer
+  [66, 48], [71, 41], [77, 47], [71, 53], // 54-57 L inner
+  [142, 52], [139, 40], [128, 36], [118, 43], [122, 56], // 58-62 R outer
+  [134, 48], [129, 41], [123, 47], [129, 53], // 63-66 R inner
+  // pale muzzle
+  [88, 114], [112, 114], [120, 128], [100, 140], [80, 128], // 67-71
+  // blush diamonds
+  [60, 120], [66, 114], [72, 120], [66, 126], // 72-75 L
+  [128, 120], [134, 114], [140, 120], [134, 126], // 76-79 R
+  // huge round ink eyes (octagons), low on the face
+  [66, 102], [70, 93], [78, 90], [86, 93], [90, 102], [86, 111], [78, 114], [70, 111], // 80-87 L
+  [110, 102], [114, 93], [122, 90], [130, 93], [134, 102], [130, 111], [122, 114], [114, 111], // 88-95 R
+  // white sparkle highlights
+  [78, 97], [82, 93], [86, 97], [82, 101], // 96-99 L
+  [122, 97], [126, 93], [130, 97], [126, 101], // 100-103 R
+  // tiny ink triangle nose
+  [94, 116], [106, 116], [100, 124], // 104-106
   // philtrum
-  [99, 120], [101, 120], [101, 128], [99, 128], // 64-67
-  // mouth line
-  [88, 131], [100, 126], [112, 131], [100, 134], // 68-71
-  // small rounded ears just inside the mane ring
-  [66, 48], [82, 36], [96, 50], [90, 62], [72, 62], // 72-76 L outer
-  [73, 50], [82, 43], [89, 53], [79, 58], // 77-80 L inner
-  [134, 48], [118, 36], [104, 50], [110, 62], [128, 62], // 81-85 R outer
-  [127, 50], [118, 43], [111, 53], [121, 58], // 86-89 R inner
-  // fur clump tips — blunt tilted tips, lengths varying irregularly;
-  // top clump is a parted double tuft, bottom is a shallow scallop
-  [87, 17], [100, 25], [113, 17], // 90-92 clump 0 (top double tuft, r=84/75/84)
-  [132, 25], [145, 41], // 93-94 clump 1 (tilted r=82->74)
-  [162, 53], [177, 67], // 95-96 clump 2 (tilted r=78->84)
-  [179, 90], [172, 109], // 97-98 clump 3 (right, tilted r=80->73)
-  [169, 129], [165, 149], // 99-100 clump 4 (tilted r=75->81)
-  [147, 160], [125, 165], // 101-102 clump 5 (tilted r=76->70)
-  [112, 171], [100, 167], [88, 171], // 103-105 clump 6 (bottom scalloped ruff, r=72/67/72)
-  [75, 165], [53, 160], // 106-107 clump 7 (mirror of 5)
-  [35, 149], [31, 129], // 108-109 clump 8 (mirror of 4)
-  [28, 109], [21, 90], // 110-111 clump 9 (left, mirror of 3)
-  [23, 67], [38, 53], // 112-113 clump 10 (mirror of 2)
-  [55, 41], [68, 25], // 114-115 clump 11 (mirror of 1)
+  [99, 124], [101, 124], [101, 128], [99, 128], // 107-110
+  // w-shaped cat-smile mouth (corners up)
+  [88, 130], [94, 134], [100, 130], [106, 134], [112, 130], // 111-115 top path
+  [110, 134], [106, 138], [100, 134], [94, 138], [90, 134], // 116-120 bottom path
 ];
 
 const LION_F: ReadonlyArray<FaceDef> = [
-  // outer mane fur clumps — short tilted wedges, alternating tone
-  [[11, 90, 91, 92, 0], LION_C.d1], // parted top tuft
-  [[0, 93, 94, 1], LION_C.d2],
-  [[1, 95, 96, 2], LION_C.d1],
-  [[2, 97, 98, 3], LION_C.d2], // right
-  [[3, 99, 100, 4], LION_C.d1],
-  [[4, 101, 102, 5], LION_C.d2],
-  [[5, 103, 104, 105, 6], LION_C.d1], // soft scalloped bottom ruff
-  [[6, 106, 107, 7], LION_C.d2],
-  [[7, 108, 109, 8], LION_C.d1],
-  [[8, 110, 111, 9], LION_C.d2], // left
-  [[9, 112, 113, 10], LION_C.d1],
-  [[10, 114, 115, 11], LION_C.d2],
-  // mane collar — valley ring down to the mid ring
-  [[0, 1, 13, 12], LION_C.d2],
-  [[1, 2, 14, 13], LION_C.m],
-  [[2, 3, 15, 14], LION_C.d2],
-  [[3, 4, 16, 15], LION_C.m],
-  [[4, 5, 17, 16], LION_C.d2],
-  [[5, 6, 18, 17], LION_C.m],
-  [[6, 7, 19, 18], LION_C.d2],
-  [[7, 8, 20, 19], LION_C.m],
-  [[8, 9, 21, 20], LION_C.d2],
-  [[9, 10, 22, 21], LION_C.m],
-  [[10, 11, 23, 22], LION_C.d2],
-  [[11, 0, 12, 23], LION_C.m],
-  // inner mane layer — 12 lighter quads down to the face rim
-  [[12, 13, 25, 24], LION_C.l1],
-  [[13, 14, 26, 25], LION_C.m],
-  [[14, 15, 27, 26], LION_C.l1],
-  [[15, 16, 28, 27], LION_C.m],
-  [[16, 17, 29, 28], LION_C.l1],
-  [[17, 18, 30, 29], LION_C.m],
-  [[18, 19, 31, 30], LION_C.l1],
-  [[19, 20, 32, 31], LION_C.m],
-  [[20, 21, 33, 32], LION_C.l1],
-  [[21, 22, 34, 33], LION_C.m],
-  [[22, 23, 35, 34], LION_C.l1],
-  [[23, 12, 24, 35], LION_C.m],
-  // ears (over the mane, just inside the ring)
-  [[72, 73, 74, 75, 76], LION_C.m],
-  [[77, 78, 79, 80], LION_C.l2],
-  [[81, 82, 83, 84, 85], LION_C.m],
-  [[86, 87, 88, 89], LION_C.l2],
-  // face
-  [[34, 35, 24, 25, 37, 36], LION_C.l2], // forehead band
-  [[33, 34, 36, 38, 32], LION_C.l1], // cheek L
-  [[26, 25, 37, 39, 27], LION_C.l1], // cheek R
-  [[36, 37, 39, 38], LION_C.hi], // nose bridge
-  [[38, 39, 28, 29, 30, 31], LION_C.l2], // lower face / jaw
+  // 12 rounded scallop mane lobes, alternating tone (sunflower ring)
+  [[0, 12, 13, 1], LION_C.d1],
+  [[1, 14, 15, 2], LION_C.d2],
+  [[2, 16, 17, 3], LION_C.d1],
+  [[3, 18, 19, 4], LION_C.d2],
+  [[4, 20, 21, 5], LION_C.d1],
+  [[5, 22, 23, 6], LION_C.d2],
+  [[6, 24, 25, 7], LION_C.d1],
+  [[7, 26, 27, 8], LION_C.d2],
+  [[8, 28, 29, 9], LION_C.d1],
+  [[9, 30, 31, 10], LION_C.d2],
+  [[10, 32, 33, 11], LION_C.d1],
+  [[11, 34, 35, 0], LION_C.d2],
+  // mane collar — valley ring down to the face rim
+  [[0, 1, 37, 36], LION_C.m],
+  [[1, 2, 38, 37], LION_C.l1],
+  [[2, 3, 39, 38], LION_C.m],
+  [[3, 4, 40, 39], LION_C.l1],
+  [[4, 5, 41, 40], LION_C.m],
+  [[5, 6, 42, 41], LION_C.l1],
+  [[6, 7, 43, 42], LION_C.m],
+  [[7, 8, 44, 43], LION_C.l1],
+  [[8, 9, 45, 44], LION_C.m],
+  [[9, 10, 46, 45], LION_C.l1],
+  [[10, 11, 47, 46], LION_C.m],
+  [[11, 0, 36, 47], LION_C.l1],
+  // big round face — 12-facet fan
+  [[36, 37, 48], LION_C.l2],
+  [[37, 38, 48], LION_C.l1],
+  [[38, 39, 48], LION_C.l2],
+  [[39, 40, 48], LION_C.l1],
+  [[40, 41, 48], LION_C.l2],
+  [[41, 42, 48], LION_C.l1],
+  [[42, 43, 48], LION_C.l2],
+  [[43, 44, 48], LION_C.l1],
+  [[44, 45, 48], LION_C.l2],
+  [[45, 46, 48], LION_C.l1],
+  [[46, 47, 48], LION_C.l2],
+  [[47, 36, 48], LION_C.l1],
+  // small round ears peeking from the mane
+  [[49, 50, 51, 52, 53], LION_C.d2],
+  [[54, 55, 56, 57], LION_C.pink],
+  [[58, 59, 60, 61, 62], LION_C.d2],
+  [[63, 64, 65, 66], LION_C.pink],
   // features
-  [[56, 57, 58, 59, 60], LION_C.hi], // pale muzzle
-  [[48, 49, 50, 51], LION_C.hi], // brow L
-  [[52, 53, 54, 55], LION_C.hi], // brow R
-  [[40, 41, 42, 43], INK], // eye L
-  [[44, 45, 46, 47], INK], // eye R
-  [[61, 62, 63], INK], // nose
-  [[64, 65, 66, 67], INK], // philtrum
-  [[68, 69, 70, 71], INK], // mouth line
+  [[67, 68, 69, 70, 71], LION_C.hi], // pale muzzle
+  [[72, 73, 74, 75], LION_C.pink], // blush L
+  [[76, 77, 78, 79], LION_C.pink], // blush R
+  [[80, 81, 82, 83, 84, 85, 86, 87], INK], // eye L
+  [[88, 89, 90, 91, 92, 93, 94, 95], INK], // eye R
+  [[96, 97, 98, 99], LION_C.spark], // sparkle L
+  [[100, 101, 102, 103], LION_C.spark], // sparkle R
+  [[104, 105, 106], INK], // tiny nose
+  [[107, 108, 109, 110], INK], // philtrum
+  [[111, 112, 113, 114, 115, 116, 117, 118, 119, 120], INK], // cat-smile mouth
 ];
 
 /* ------------------------------------------------------------------ */
@@ -582,128 +593,108 @@ const PEA_F: ReadonlyArray<FaceDef> = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* TIGER — entrepreneurial. Front-on symmetric face, deep orange with  */
-/* ink stripes. Round 3 — FIERCE, not sad-cat: flat broad skull (top   */
-/* y=56, cheeks flaring to x=18-182 with side ruff jags), small ear    */
-/* tufts, heavy ink brow wedges pressing down toward the nose bridge,  */
-/* eyes slanted hard (outer corners UP, inner corners low = glare),    */
-/* fewer/thicker clearly-curved ink stripe wedges, strong wide muzzle  */
-/* and an M-shaped snarl mouth line with upturned corners.             */
+/* TIGER — entrepreneurial. CUTE front-on face, soft pastel orange.    */
+/* Big near-circular head (12-gon, slightly wider than tall) with      */
+/* small rounded ears peeking behind the crown (pink inner ears);      */
+/* huge ink sparkle eyes low on the face over a white muzzle patch;    */
+/* tiny pink nose + w-shaped cat-smile mouth; exactly 7 short, small,  */
+/* friendly ink stripe marks (3 forehead + 2 per cheek); blush.        */
 /* ------------------------------------------------------------------ */
 
 const TIG_C = {
-  d1: "#b1490f", d2: "#d2641a", m: "#ea7f28", l1: "#f29e52", l2: "#f8c48c", hi: "#fde8cd",
-  amber: "#f2b23e", pink: "#e0708c",
+  d2: "#f0985a", m: "#f6ae74", l1: "#fac490", l2: "#fddcb4", hi: "#fff3e4",
+  pink: "#f4a7bb", earPink: "#fbc9d8", spark: "#ffffff",
 };
 
 const TIG_V: ReadonlyArray<Pt> = [
-  // silhouette, clockwise from skull top L — flat wide skull, broad cheeks
-  [68, 56], // 0 skull top L
-  [132, 56], // 1 skull top R
-  [152, 38], // 2 ear tip R (small tuft)
-  [148, 70], // 3 ear base / temple R
-  [182, 94], // 4 cheek flare R (wide)
-  [170, 120], // 5 cheek inner R
-  [184, 138], // 6 side ruff jag R
-  [152, 158], // 7 jaw R
-  [124, 176], // 8 ruff R
-  [100, 182], // 9 chin
-  [76, 176], // 10 ruff L
-  [48, 158], // 11 jaw L
-  [16, 138], // 12 side ruff jag L
-  [30, 120], // 13 cheek inner L
-  [18, 94], // 14 cheek flare L (wide)
-  [52, 70], // 15 ear base / temple L
-  [48, 38], // 16 ear tip L (small tuft)
-  // anchors
-  [100, 82], // 17 brow
-  [100, 128], // 18 muzzle
-  [62, 110], // 19 cheek L
-  [138, 110], // 20 cheek R
-  // inner ears
-  [136, 54], [148, 44], [146, 66], // 21-23 R
-  [64, 54], [52, 44], [54, 66], // 24-26 L
-  // white eye patches (angled with the glare)
-  [58, 82], [92, 86], [92, 104], [62, 102], // 27-30 L
-  [142, 82], [108, 86], [108, 104], [138, 102], // 31-34 R
-  // heavy ink brow wedges pressing down toward the nose bridge
-  [56, 76], [94, 87], [94, 97], [60, 82], // 35-38 L
-  [144, 76], [106, 87], [106, 97], [140, 82], // 39-42 R
-  // amber eyes — outer corners UP, inner corners low (aggressive glare)
-  [64, 88], [90, 96], [90, 103], [68, 95], // 43-46 L
-  [136, 88], [110, 96], [110, 103], [132, 95], // 47-50 R
-  // ink pupils
-  [74, 93], [80, 95], [78, 98], [72, 96], // 51-54 L
-  [126, 93], [120, 95], [122, 98], [128, 96], // 55-58 R
-  // white muzzle patches + chin (wide, strong)
-  [72, 120], [96, 118], [96, 142], [84, 148], [72, 136], // 59-63 L
-  [128, 120], [104, 118], [104, 142], [116, 148], [128, 136], // 64-68 R
-  [88, 154], [112, 154], [100, 168], // 69-71 chin white
-  // pink nose triangle, ink philtrum
-  [88, 116], [112, 116], [100, 130], // 72-74 nose
-  [98, 130], [102, 130], [102, 144], [98, 144], // 75-78 philtrum
-  // M-shaped snarl mouth — corners flick up and out
-  [80, 147], [88, 151], [100, 145], [112, 151], [120, 147], // 79-83 top path
-  [118, 151], [112, 155], [100, 149], [88, 155], [82, 151], // 84-88 bottom path
-  // bold curved ink stripes — fewer, thicker, clearly bent
-  [94, 58], [106, 58], [108, 72], [100, 86], [92, 72], // 89-93 centre brow
-  [70, 60], [86, 58], [78, 78], [62, 84], // 94-97 brow L
-  [130, 60], [114, 58], [122, 78], [138, 84], // 98-101 brow R
-  [22, 98], [48, 100], [58, 110], [50, 118], [24, 108], // 102-106 cheek L upper
-  [178, 98], [152, 100], [142, 110], [150, 118], [176, 108], // 107-111 cheek R upper
-  [26, 126], [52, 124], [64, 132], [56, 140], [34, 140], // 112-116 cheek L lower
-  [174, 126], [148, 124], [136, 132], [144, 140], [166, 140], // 117-121 cheek R lower
+  // small rounded ears (bases tucked under the head silhouette)
+  [42, 44], [46, 22], [62, 13], [78, 26], [74, 48], // 0-4 L outer
+  [52, 34], [56, 22], [64, 18], [70, 26], [66, 36], // 5-9 L inner
+  [158, 44], [154, 22], [138, 13], [122, 26], [126, 48], // 10-14 R outer
+  [148, 34], [144, 22], [136, 18], [130, 26], [134, 36], // 15-19 R inner
+  // head ring — 12 facets on an ellipse rx=70 ry=64, centre (100,98)
+  [100, 34], // 20 crown
+  [135, 43], // 21
+  [161, 66], // 22
+  [170, 98], // 23
+  [161, 130], // 24
+  [135, 153], // 25
+  [100, 162], // 26 chin
+  [65, 153], // 27
+  [39, 130], // 28
+  [30, 98], // 29
+  [39, 66], // 30
+  [65, 43], // 31
+  [100, 98], // 32 head centre
+  // white muzzle / cheek patch
+  [66, 110], [100, 102], [134, 110], [140, 132], [118, 154], [82, 154], [60, 132], // 33-39
+  // blush diamonds
+  [58, 120], [64, 115], [70, 120], [64, 125], // 40-43 L
+  [130, 120], [136, 115], [142, 120], [136, 125], // 44-47 R
+  // 7 short friendly ink stripe marks
+  [97, 50], [103, 50], [102, 68], [98, 68], // 48-51 forehead centre
+  [81, 54], [87, 52], [86, 68], [81, 66], // 52-55 forehead L
+  [113, 52], [119, 54], [119, 66], [114, 68], // 56-59 forehead R
+  [42, 90], [56, 88], [57, 94], [43, 96], // 60-63 cheek L upper
+  [46, 108], [60, 106], [61, 112], [47, 114], // 64-67 cheek L lower
+  [144, 88], [158, 90], [157, 96], [143, 94], // 68-71 cheek R upper
+  [140, 106], [154, 108], [153, 114], [139, 112], // 72-75 cheek R lower
+  // huge round ink eyes (octagons), low on the face
+  [61, 96], [65, 87], [74, 83], [83, 87], [87, 96], [83, 105], [74, 109], [65, 105], // 76-83 L
+  [113, 96], [117, 87], [126, 83], [135, 87], [139, 96], [135, 105], [126, 109], [117, 105], // 84-91 R
+  // white sparkle highlights
+  [74, 91], [78, 87], [82, 91], [78, 95], // 92-95 L
+  [126, 91], [130, 87], [134, 91], [130, 95], // 96-99 R
+  // tiny pink nose
+  [93, 112], [107, 112], [100, 121], // 100-102
+  // ink philtrum
+  [99, 121], [101, 121], [101, 127], [99, 127], // 103-106
+  // w-shaped cat-smile mouth (corners up)
+  [86, 129], [93, 134], [100, 129], [107, 134], [114, 129], // 107-111 top path
+  [112, 133], [107, 138], [100, 133], [93, 138], [88, 133], // 112-116 bottom path
 ];
 
 const TIG_F: ReadonlyArray<FaceDef> = [
-  // base mesh — flat skull, flaring cheeks, ruff jags in the silhouette
-  [[0, 1, 17], TIG_C.l1], // forehead
-  [[1, 2, 3], TIG_C.d1], // ear R
-  [[1, 3, 20], TIG_C.m], // temple R
-  [[3, 4, 20], TIG_C.d2],
-  [[4, 5, 20], TIG_C.m], // cheek R
-  [[5, 6, 7], TIG_C.d2], // side ruff jag R
-  [[5, 7, 20], TIG_C.m],
-  [[7, 20, 18], TIG_C.l1],
-  [[7, 8, 18], TIG_C.l2],
-  [[8, 9, 18], TIG_C.l2], // ruff
-  [[9, 10, 18], TIG_C.l2],
-  [[10, 11, 18], TIG_C.l2],
-  [[11, 19, 18], TIG_C.l1],
-  [[11, 12, 13], TIG_C.d2], // side ruff jag L
-  [[11, 13, 19], TIG_C.m],
-  [[13, 14, 19], TIG_C.m], // cheek L
-  [[14, 15, 19], TIG_C.d2],
-  [[0, 15, 19], TIG_C.m], // temple L
-  [[0, 16, 15], TIG_C.d1], // ear L
-  [[0, 19, 17], TIG_C.l2], // brow L
-  [[1, 17, 20], TIG_C.l2], // brow R
-  [[19, 17, 18], TIG_C.l1],
-  [[17, 20, 18], TIG_C.l1],
-  // overlays
-  [[21, 22, 23], TIG_C.hi], // inner ear R
-  [[24, 25, 26], TIG_C.hi], // inner ear L
-  [[27, 28, 29, 30], TIG_C.hi], // eye patch L
-  [[31, 32, 33, 34], TIG_C.hi], // eye patch R
-  [[35, 36, 37, 38], INK], // brow wedge L (pressing down-in)
-  [[39, 40, 41, 42], INK], // brow wedge R
-  [[43, 44, 45, 46], TIG_C.amber], // glare eye L
-  [[47, 48, 49, 50], TIG_C.amber], // glare eye R
-  [[51, 52, 53, 54], INK], // pupil L
-  [[55, 56, 57, 58], INK], // pupil R
-  [[59, 60, 61, 62, 63], TIG_C.hi], // muzzle white L
-  [[64, 65, 66, 67, 68], TIG_C.hi], // muzzle white R
-  [[69, 70, 71], TIG_C.hi], // chin white
-  [[72, 73, 74], TIG_C.pink], // nose
-  [[75, 76, 77, 78], INK], // philtrum
-  [[79, 80, 81, 82, 83, 84, 85, 86, 87, 88], INK], // snarl mouth
-  [[89, 90, 91, 92, 93], INK], // centre brow stripe
-  [[94, 95, 96, 97], INK], // brow stripe L
-  [[98, 99, 100, 101], INK], // brow stripe R
-  [[102, 103, 104, 105, 106], INK], // cheek stripe L upper
-  [[107, 108, 109, 110, 111], INK], // cheek stripe R upper
-  [[112, 113, 114, 115, 116], INK], // cheek stripe L lower
-  [[117, 118, 119, 120, 121], INK], // cheek stripe R lower
+  // ears first — the head covers their bases so they peek from behind
+  [[0, 1, 2, 3, 4], TIG_C.d2],
+  [[5, 6, 7, 8, 9], TIG_C.earPink],
+  [[10, 11, 12, 13, 14], TIG_C.d2],
+  [[15, 16, 17, 18, 19], TIG_C.earPink],
+  // big round head — 12-facet fan, symmetric soft shading
+  [[31, 20, 32], TIG_C.l2],
+  [[20, 21, 32], TIG_C.l2],
+  [[21, 22, 32], TIG_C.l1],
+  [[22, 23, 32], TIG_C.m],
+  [[23, 24, 32], TIG_C.l1],
+  [[24, 25, 32], TIG_C.m],
+  [[25, 26, 32], TIG_C.l2],
+  [[26, 27, 32], TIG_C.l2],
+  [[27, 28, 32], TIG_C.m],
+  [[28, 29, 32], TIG_C.l1],
+  [[29, 30, 32], TIG_C.m],
+  [[30, 31, 32], TIG_C.l1],
+  // white muzzle patch
+  [[33, 34, 35, 36, 37, 38, 39], TIG_C.hi],
+  // blush
+  [[40, 41, 42, 43], TIG_C.pink],
+  [[44, 45, 46, 47], TIG_C.pink],
+  // 7 small friendly stripes
+  [[48, 49, 50, 51], INK],
+  [[52, 53, 54, 55], INK],
+  [[56, 57, 58, 59], INK],
+  [[60, 61, 62, 63], INK],
+  [[64, 65, 66, 67], INK],
+  [[68, 69, 70, 71], INK],
+  [[72, 73, 74, 75], INK],
+  // huge friendly ink eyes + sparkles
+  [[76, 77, 78, 79, 80, 81, 82, 83], INK],
+  [[84, 85, 86, 87, 88, 89, 90, 91], INK],
+  [[92, 93, 94, 95], TIG_C.spark],
+  [[96, 97, 98, 99], TIG_C.spark],
+  // tiny pink nose, philtrum, cat-smile mouth
+  [[100, 101, 102], TIG_C.pink],
+  [[103, 104, 105, 106], INK],
+  [[107, 108, 109, 110, 111, 112, 113, 114, 115, 116], INK],
 ];
 
 /* ------------------------------------------------------------------ */
