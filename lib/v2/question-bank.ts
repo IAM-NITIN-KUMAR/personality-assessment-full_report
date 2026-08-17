@@ -39,10 +39,10 @@ export const B_SCENARIOS: Record<BItem, string> = {
 
 export const B_REACTION_PROMPT = "What's your honest first reaction?";
 export const B_REACTION_OPTIONS: { key: OptionKey; label: string }[] = [
-  { key: "a", label: "I'd start working on it in my head right away" },
-  { key: "b", label: "I'd want it fixed, but I wouldn't want to be the one doing it" },
-  { key: "c", label: "It wouldn't really pull me in" },
-  { key: "d", label: "Just reading it tires me out" },
+  { key: "a", label: "I was already thinking about what I'd try first" },
+  { key: "b", label: "I'd be curious how it turns out, but I wouldn't want to do it myself" },
+  { key: "c", label: "It wouldn't really pull me in either way" },
+  { key: "d", label: "Honestly, just thinking about it drains me" },
 ];
 
 const bScreen = (id: BItem): ScreenDef => ({
@@ -54,6 +54,16 @@ const bScreen = (id: BItem): ScreenDef => ({
 });
 
 export const C1_PROMPT = "Based on how you reacted, which of these worlds would you like to look inside?";
+
+/** One-line descriptors appended to the C1 domain cards so the choice means
+ * something to a student who hasn't met these worlds yet. */
+export const C1_BLURBS: Record<DomainId, string> = {
+  finance: "markets, money, and what things are worth",
+  business: "how companies run, grow, and win",
+  entrepreneurship: "building something of your own from zero",
+  technology: "building products and making sense of data",
+  people_society: "understanding, teaching, and helping people",
+};
 
 export const STATIC_SCREENS: Record<
   Exclude<ScreenId, "C1" | "C2" | "C3" | "C4" | "C5" | "D1" | "D2" | "F4">,
@@ -147,16 +157,24 @@ export const STATIC_SCREENS: Record<
     prompt: "If you could fully protect only one of these in your career, which would it be?",
     hint: "The others will take a hit sometimes — that's the trade.",
     options: [
-      { key: "a", label: "Meaning" }, { key: "b", label: "Mastery" }, { key: "c", label: "Freedom" },
-      { key: "d", label: "Relationships" }, { key: "e", label: "Health" }, { key: "f", label: "Money" },
+      { key: "a", label: "Meaning — work that actually matters to me" },
+      { key: "b", label: "Mastery — getting genuinely good at something" },
+      { key: "c", label: "Freedom — control over my time and choices" },
+      { key: "d", label: "Relationships — time for the people I care about" },
+      { key: "e", label: "Health — energy and peace of mind" },
+      { key: "f", label: "Money — comfort and security" },
     ],
   },
   E2: {
     id: "E2", category: "Roots",
     prompt: "Losing which of these would make even a dream job not worth it?",
     options: [
-      { key: "a", label: "Meaning" }, { key: "b", label: "Mastery" }, { key: "c", label: "Freedom" },
-      { key: "d", label: "Relationships" }, { key: "e", label: "Health" }, { key: "f", label: "Money" },
+      { key: "a", label: "Meaning — work that actually matters to me" },
+      { key: "b", label: "Mastery — getting genuinely good at something" },
+      { key: "c", label: "Freedom — control over my time and choices" },
+      { key: "d", label: "Relationships — time for the people I care about" },
+      { key: "e", label: "Health — energy and peace of mind" },
+      { key: "f", label: "Money — comfort and security" },
     ],
   },
   E3: {
@@ -400,7 +418,7 @@ export const D_OPTIONS = {
   ],
   d2: [
     { key: "a" as const, label: "Yes, gladly" },
-    { key: "b" as const, label: "Yes, if it compounds" },
+    { key: "b" as const, label: "Yes, if it's clearly building toward something" },
     { key: "c" as const, label: "I'd try" },
     { key: "d" as const, label: "No" },
   ],

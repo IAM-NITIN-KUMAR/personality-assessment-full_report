@@ -1,5 +1,5 @@
 import {
-  C1_PROMPT, C_BRANCHES, DEGREE_BY_Q0, D_OPTIONS, D_STATEMENTS, F4_OPTIONS, F4_PROMPT, STATIC_SCREENS,
+  C1_BLURBS, C1_PROMPT, C_BRANCHES, DEGREE_BY_Q0, D_OPTIONS, D_STATEMENTS, F4_OPTIONS, F4_PROMPT, STATIC_SCREENS,
 } from "./question-bank";
 import { selectC1Cards } from "./scoring/domains";
 import { computeRadar } from "./scoring/radar";
@@ -61,7 +61,7 @@ export function getScreen(id: ScreenId, answers: V2Answers): ScreenV2 {
       id, category: "Pick your world", prompt: C1_PROMPT,
       options: c1Cards(answers).map((d, i) => ({
         key: ["a", "b", "c", "d"][i] as OptionKey,
-        label: DOMAIN_LABELS[d],
+        label: `${DOMAIN_LABELS[d]} — ${C1_BLURBS[d]}`,
       })),
     };
   }

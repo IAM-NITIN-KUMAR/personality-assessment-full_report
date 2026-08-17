@@ -54,9 +54,11 @@ describe("flow engine", () => {
 
   it("materialises C1 with her four domain cards", () => {
     const c1 = getScreen("C1", ananya);
-    expect(c1.options.map((o) => o.label)).toEqual([
-      "Technology & Data", "Finance & Capital", "Business & Management", "Entrepreneurship & Product",
-    ]);
+    const labels = c1.options.map((o) => o.label);
+    expect(labels[0]).toMatch(/^Technology & Data — /);
+    expect(labels[1]).toMatch(/^Finance & Capital — /);
+    expect(labels[2]).toMatch(/^Business & Management — /);
+    expect(labels[3]).toMatch(/^Entrepreneurship & Product — /);
   });
 
   it("materialises C2 from the chosen branch", () => {
