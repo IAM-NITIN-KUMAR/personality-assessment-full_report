@@ -63,7 +63,7 @@ describe("flow engine", () => {
 
   it("materialises C2 from the chosen branch", () => {
     const c2 = getScreen("C2", ananya);
-    expect(c2.prompt).toBe("Monday morning. Four problems are on the table — which one do you walk toward?");
+    expect(c2.prompt).toBe("Monday morning at a finance firm. Which of these would you rather be doing?");
     expect(c2.options[2].label).toBe("Doing the review that catches the mistake everyone missed");
   });
 

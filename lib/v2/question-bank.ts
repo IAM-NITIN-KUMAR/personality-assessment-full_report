@@ -265,7 +265,7 @@ export const C_BRANCHES: Record<DomainId, { roles: RoleId[]; screens: CScreenDef
   finance: {
     roles: ["markets", "deals", "risk", "advisory"],
     screens: [
-      { id: "C2", prompt: "Monday morning. Four problems are on the table — which one do you walk toward?", options: [
+      { id: "C2", prompt: "Monday morning at a finance firm. Which of these would you rather be doing?", options: [
         { key: "a", label: "Figuring out the number nobody can explain", weights: { markets: 3, risk: 2 } },
         { key: "b", label: "Running the negotiation that decides the price", weights: { deals: 3, advisory: 1 } },
         { key: "c", label: "Doing the review that catches the mistake everyone missed", weights: { risk: 3, markets: 1 } },
@@ -294,7 +294,7 @@ export const C_BRANCHES: Record<DomainId, { roles: RoleId[]; screens: CScreenDef
   business: {
     roles: ["operations", "strategy", "growth", "people_hr"],
     screens: [
-      { id: "C2", prompt: "Monday morning. Four meetings need someone — which one do you take?", options: [
+      { id: "C2", prompt: "Monday morning at a company. Which of these would you rather be doing?", options: [
         { key: "a", label: "Working out why the same delay keeps happening", weights: { operations: 3 } },
         { key: "b", label: "Deciding which of three markets to enter", weights: { strategy: 3 } },
         { key: "c", label: "Figuring out why people click but don't buy", weights: { growth: 3 } },
@@ -352,7 +352,7 @@ export const C_BRANCHES: Record<DomainId, { roles: RoleId[]; screens: CScreenDef
   technology: {
     roles: ["build", "data", "product_tech", "infrastructure"],
     screens: [
-      { id: "C2", prompt: "Monday morning. Four problems just landed — which one do you grab?", options: [
+      { id: "C2", prompt: "Monday morning on a tech team. Which of these would you rather be doing?", options: [
         { key: "a", label: "Building the thing due Friday that doesn't exist yet", weights: { build: 3 } },
         { key: "b", label: "Finding out why the number changed overnight", weights: { data: 3 } },
         { key: "c", label: "Settling the argument over what to build at all", weights: { product_tech: 3 } },
