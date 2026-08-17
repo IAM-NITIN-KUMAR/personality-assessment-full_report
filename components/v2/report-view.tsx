@@ -44,6 +44,9 @@ import { AnimalArt } from "./animal-art";
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
+/** All six radar dims in display order — used by the fallback hero cluster. */
+const ALL_DIMS: RadarDim[] = ["analytical", "people", "creative", "entrepreneurial", "practical", "leadership"];
+
 function formatDateISO(iso: string): string {
   const [y, m, d] = iso.split("-");
   const mi = Number(m) - 1;
@@ -407,12 +410,23 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
                 <AnimalArt dim={heroDim} size={280} />
               </div>
             ) : (
-              <div className="w-[140px] h-[140px] sm:w-[180px] sm:h-[180px] rounded-2xl bg-[#f3f0fc] flex items-center justify-center shrink-0 mx-auto sm:mx-0">
-                {isFull && t.kind === "explorer" ? (
-                  <Compass className="size-16 text-[#6e6ef0]/60" strokeWidth={1.5} />
-                ) : (
-                  <Sparkles className="size-16 text-[#6e6ef0]/60" strokeWidth={1.5} />
-                )}
+              // No single animal earned — show the whole cast instead of a
+              // blank tile: bold for the Explorer (pulled in many directions),
+              // soft for more_signal (picture still forming).
+              <div
+                className={`grid grid-cols-3 gap-1.5 p-2.5 rounded-2xl bg-[#f3f0fc] shrink-0 mx-auto sm:mx-0 ${
+                  isFull && t.kind === "explorer" ? "" : "opacity-55 saturate-[0.6]"
+                }`}
+              >
+                {ALL_DIMS.map((d) => (
+                  <div
+                    key={d}
+                    className="w-[52px] h-[52px] sm:w-[64px] sm:h-[64px] rounded-xl overflow-hidden border border-line/50 [&>svg]:w-full [&>svg]:h-full"
+                    style={{ backgroundColor: ANIMAL_ART[d].bg }}
+                  >
+                    <AnimalArt dim={d} size={64} />
+                  </div>
+                ))}
               </div>
             )}
 

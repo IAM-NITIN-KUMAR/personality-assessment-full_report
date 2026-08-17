@@ -2,8 +2,10 @@ import { describe, it, expect } from "vitest";
 import {
   STATIC_SCREENS, C_BRANCHES, D_STATEMENTS, D_OPTIONS,
   B_SCENARIOS, B_REACTION_OPTIONS, DEGREE_BY_Q0, F4_PROMPT, C1_PROMPT,
+  Q0_KEY_BY_DISCIPLINE,
 } from "../../lib/v2/question-bank";
 import { DOMAIN_ORDER } from "../../lib/v2/types";
+import { DISCIPLINES } from "../../lib/course-catalog";
 
 describe("v2 question bank integrity", () => {
   it("has every static screen with 4+ options (E1/E2 have 6, F3 has 3)", () => {
@@ -62,6 +64,14 @@ describe("v2 question bank integrity", () => {
     ];
     const text = JSON.stringify([pre, D_STATEMENTS, D_OPTIONS, C1_PROMPT, B_SCENARIOS]);
     expect(text.toLowerCase()).not.toContain("abroad");
+  });
+
+  it("seeds a Q0 key for every registration discipline", () => {
+    for (const d of DISCIPLINES) {
+      const key = Q0_KEY_BY_DISCIPLINE[d.id];
+      expect(key, d.id).toBeDefined();
+      expect(["a", "b", "c", "d", "e"]).toContain(key);
+    }
   });
 
   it("maps Q0 keys to degrees and F4 quotes A7 back", () => {

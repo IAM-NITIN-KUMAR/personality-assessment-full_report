@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useAssessment } from "@/lib/store";
 import { getScreen, nextScreenId, screenOrder } from "@/lib/v2/flow";
+import { Q0_KEY_BY_DISCIPLINE } from "@/lib/v2/question-bank";
 import { QuestionCard } from "@/components/node-graph/question-card";
 import { AssessmentChrome } from "@/components/assessment-chrome";
 import type { Answer, Question } from "@/lib/types";
@@ -41,6 +42,16 @@ export default function V2AssessmentFlow() {
 
   const v2Answers: V2Answers = useMemo(() => toV2Answers(answers), [answers]);
 
+  // Q0 never renders: registration already asked the field of study, so seed
+  // the degree answer from the profile's discipline. The Q0 screen stays in
+  // the engine as a fallback for profiles with no discipline.
+  useEffect(() => {
+    if (!v2Answers.Q0 && profile?.discipline) {
+      const key = Q0_KEY_BY_DISCIPLINE[profile.discipline] ?? "e";
+      saveAnswer("Q0", { optionIds: [key] });
+    }
+  }, [v2Answers.Q0, profile?.discipline, saveAnswer]);
+
   const currentId = nextScreenId(v2Answers);
 
   useEffect(() => {
@@ -53,7 +64,9 @@ export default function V2AssessmentFlow() {
 
   if (currentId === null) return null;
   const screen = getScreen(currentId, v2Answers);
-  const order = screenOrder(v2Answers);
+  // Q0 is seeded from the profile and hidden from the count — unless the
+  // fallback actually has to render it (profile without a discipline).
+  const order = screenOrder(v2Answers).filter((id) => id !== "Q0" || currentId === "Q0");
   const done = order.indexOf(currentId);
 
   const question: Question = {

@@ -61,14 +61,15 @@ describe("flow engine", () => {
 
   it("materialises C2 from the chosen branch", () => {
     const c2 = getScreen("C2", ananya);
-    expect(c2.prompt).toBe("Four rooms, one morning. Pick yours.");
-    expect(c2.options[2].label).toBe("The review that catches the miss");
+    expect(c2.prompt).toBe("Monday morning. Four problems are on the table — which one do you walk toward?");
+    expect(c2.options[2].label).toBe("Doing the review that catches the mistake everyone missed");
   });
 
   it("injects the winning role's cost/grind statements into D1/D2", () => {
     const d1 = getScreen("D1", ananya);
     const d2 = getScreen("D2", ananya);
-    expect(d1.prompt).toBe("Being the person who slows things down, and unpopular for it");
+    expect(d1.prompt).toContain("being the person who slows things down, and unpopular for it");
+    expect(d1.prompt).toContain("Could you live with that?");
     expect(d2.prompt).toContain("rules that change yearly");
     expect(d2.prompt).toContain("Would you actually do that?");
   });

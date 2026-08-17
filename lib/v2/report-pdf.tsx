@@ -173,14 +173,18 @@ const s = StyleSheet.create({
     marginBottom: 18,
   },
   heroAnimalTile: { width: 92, height: 92, borderRadius: 12, borderWidth: 1, borderColor: LINE, overflow: "hidden" },
-  heroPlaceholderTile: {
-    width: 92,
-    height: 92,
+  heroClusterTile: {
+    width: 140,
     borderRadius: 12,
     backgroundColor: CHIP_BG,
+    padding: 5,
+    flexDirection: "row",
+    flexWrap: "wrap",
+    gap: 4,
     alignItems: "center",
     justifyContent: "center",
   },
+  heroClusterCell: { width: 40, height: 40, borderRadius: 8, borderWidth: 1, borderColor: LINE, overflow: "hidden" },
   heroTextCol: { flex: 1 },
   heroKicker: { fontSize: 8.5, fontFamily: MONO_BOLD, color: ACCENT, textTransform: "uppercase", letterSpacing: 1 },
   heroRendering: { fontSize: 8.5, fontFamily: SANS_ITALIC, color: INK_400, marginTop: 3 },
@@ -415,6 +419,30 @@ function AnimalTile({ dim }: { dim: RadarDim }) {
   );
 }
 
+const ALL_DIMS: RadarDim[] = ["analytical", "people", "creative", "entrepreneurial", "practical", "leadership"];
+
+/** Fallback hero art (explorer / more_signal): the full six-animal cast in a
+ * 3x2 grid — soft for more_signal, where the picture is still forming. */
+function AnimalClusterTile({ soft }: { soft: boolean }) {
+  return (
+    <View style={[s.heroClusterTile, soft ? { opacity: 0.55 } : {}]}>
+      {ALL_DIMS.map((dim) => {
+        const art = ANIMAL_ART[dim];
+        return (
+          <View key={dim} style={s.heroClusterCell}>
+            <Svg width={40} height={40} viewBox="0 0 200 200">
+              <Rect width={200} height={200} fill={art.bg} />
+              {art.polygons.map((p, i) => (
+                <Polygon key={i} points={p.points} fill={p.fill} stroke={p.fill} strokeWidth={0.6} />
+              ))}
+            </Svg>
+          </View>
+        );
+      })}
+    </View>
+  );
+}
+
 /** Hexagon radar drawn as raw Svg, same drawing geometry as the on-screen
  * HexRadar, fed with the six v2 RadarDim scores (0..10 integers). Dimension
  * labels render as a legend list beside the chart rather than absolutely
@@ -608,13 +636,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
           {showAnimal && heroDim ? (
             <AnimalTile dim={heroDim} />
           ) : (
-            <View style={s.heroPlaceholderTile}>
-              <Svg width={40} height={40} viewBox="0 0 40 40">
-                <Line x1={8} y1={20} x2={32} y2={20} stroke={ACCENT} strokeWidth={1.5} opacity={0.6} />
-                <Line x1={20} y1={8} x2={20} y2={32} stroke={ACCENT} strokeWidth={1.5} opacity={0.6} />
-                <Polygon points="20,12 24,20 20,28 16,20" fill="none" stroke={ACCENT} strokeWidth={1.5} opacity={0.8} />
-              </Svg>
-            </View>
+            <AnimalClusterTile soft={!(isFull && t.kind === "explorer")} />
           )}
           <View style={s.heroTextCol}>
             {isFull && t.kind === "archetype" ? (

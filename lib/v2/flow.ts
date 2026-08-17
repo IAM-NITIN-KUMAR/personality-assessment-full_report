@@ -80,7 +80,7 @@ export function getScreen(id: ScreenId, answers: V2Answers): ScreenV2 {
     const { winner } = resolveRole(domain, answers);
     const st = D_STATEMENTS[winner];
     return id === "D1"
-      ? { id, category: "The real cost", prompt: st.cost, options: D_OPTIONS.d1 }
+      ? { id, category: "The real cost", prompt: `Part of this path: ${st.cost.charAt(0).toLowerCase()}${st.cost.slice(1)}. Could you live with that?`, options: D_OPTIONS.d1 }
       : { id, category: "The real cost", prompt: `${st.grind} — Would you actually do that?`, options: D_OPTIONS.d2 };
   }
   if (id === "F4") {
