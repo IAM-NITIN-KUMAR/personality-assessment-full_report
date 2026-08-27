@@ -20,11 +20,16 @@ export async function POST(req: Request) {
     name: name.trim(), email: email.trim(), phone: phone.trim(),
     discipline, course: typeof course === "string" && course ? course : null, educationLevel,
   };
-  const result = await redeemCode(supabaseCodesDb(), code, student);
-  if (!result.ok) {
-    await sleep(400); // cheap brute-force damper
-    const status = result.reason === "student_insert_failed" ? 500 : 403;
-    return NextResponse.json({ error: result.reason }, { status });
+  try {
+    const result = await redeemCode(supabaseCodesDb(), code, student);
+    if (!result.ok) {
+      await sleep(400); // cheap brute-force damper
+      const status = result.reason === "student_insert_failed" ? 500 : 403;
+      return NextResponse.json({ error: result.reason }, { status });
+    }
+    return NextResponse.json({ studentId: result.studentId });
+  } catch (err) {
+    console.error("redeem failed:", err);
+    return NextResponse.json({ error: "server_error" }, { status: 500 });
   }
-  return NextResponse.json({ studentId: result.studentId });
 }
