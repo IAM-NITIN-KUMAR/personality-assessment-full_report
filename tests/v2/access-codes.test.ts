@@ -19,7 +19,12 @@ function memDb(seed: Partial<CodeRow>[] = []) {
     used_at: null, used_by_student_id: null,
   }));
   const students: { id: string }[] = [];
-  const db: CodesDb & { rows: CodeRow[]; failInsertStudent?: boolean } = {
+  const db: CodesDb & {
+    rows: CodeRow[];
+    failInsertStudent?: boolean;
+    failAttachStudent?: boolean;
+    failReleaseCode?: boolean;
+  } = {
     rows,
     async insertCode({ code, label }) {
       const row: CodeRow = {
@@ -54,10 +59,12 @@ function memDb(seed: Partial<CodeRow>[] = []) {
       return s;
     },
     async attachStudent(codeId, studentId) {
+      if (db.failAttachStudent) throw new Error("attachStudent boom");
       const r = rows.find((x) => x.id === codeId);
       if (r) r.used_by_student_id = studentId;
     },
     async releaseCode(codeId) {
+      if (db.failReleaseCode) throw new Error("releaseCode boom");
       const r = rows.find((x) => x.id === codeId);
       if (r) { r.status = "active"; r.used_at = null; }
     },
@@ -109,6 +116,21 @@ describe("redeemCode", () => {
     expect(result).toEqual({ ok: false, reason: "student_insert_failed" });
     expect(db.rows[0].status).toBe("active");
     expect(db.rows[0].used_at).toBeNull();
+  });
+
+  it("still succeeds for the buyer when attachStudent throws (bookkeeping only)", async () => {
+    const db = memDb([{ code: "ABCD2345" }]);
+    db.failAttachStudent = true;
+    const result = await redeemCode(db, "ABCD2345", STUDENT);
+    expect(result).toEqual({ ok: true, studentId: "s1" });
+  });
+
+  it("still reports student_insert_failed when the releaseCode compensation also throws", async () => {
+    const db = memDb([{ code: "ABCD2345" }]);
+    db.failInsertStudent = true;
+    db.failReleaseCode = true;
+    const result = await redeemCode(db, "ABCD2345", STUDENT);
+    expect(result).toEqual({ ok: false, reason: "student_insert_failed" });
   });
 });
 

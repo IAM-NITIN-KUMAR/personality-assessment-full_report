@@ -61,9 +61,17 @@ export async function redeemCode(
   }
   const inserted = await db.insertStudent(student);
   if (!inserted) {
-    await db.releaseCode(claimed.id); // give the buyer their code back
+    try {
+      await db.releaseCode(claimed.id); // give the buyer their code back
+    } catch (err) {
+      console.error("releaseCode failed (code stuck 'used', reactivate manually):", err);
+    }
     return { ok: false, reason: "student_insert_failed" };
   }
-  await db.attachStudent(claimed.id, inserted.id);
+  try {
+    await db.attachStudent(claimed.id, inserted.id);
+  } catch (err) {
+    console.error("attachStudent failed (code linked manually later):", err);
+  }
   return { ok: true, studentId: inserted.id };
 }

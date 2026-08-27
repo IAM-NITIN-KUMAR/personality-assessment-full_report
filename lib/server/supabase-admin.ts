@@ -1,3 +1,4 @@
+import "server-only";
 // lib/server/supabase-admin.ts
 // Service-role Supabase access. Server-only: never import from a client file.
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";

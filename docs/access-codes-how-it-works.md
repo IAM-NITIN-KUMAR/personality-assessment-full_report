@@ -30,7 +30,21 @@ project — there's no automated migration runner. It creates the
 policies, so only the server (using the service-role key below) can ever
 touch it — not the browser, not the anon key.
 
-**2. Set three environment variables**, locally in `.env.local` and again in
+**2. Remove any anon-key INSERT policy on `students`.** Registration now
+goes through the server (the service-role client), not the browser directly.
+If an old policy still lets the anon key insert into `students`, anyone
+holding the public anon key can create student rows directly, bypassing the
+access-code check entirely. Check Supabase → Authentication → Policies for
+the `students` table, find the actual policy name, and drop it:
+
+```sql
+-- Run in the Supabase SQL editor. Check the actual policy name first under
+-- Authentication → Policies → students table — it varies by when/how the
+-- table was first set up.
+drop policy if exists "<your anon insert policy name>" on students;
+```
+
+**3. Set three environment variables**, locally in `.env.local` and again in
 the hosting provider's environment settings for production:
 
 ```bash
@@ -65,7 +79,10 @@ than silently letting requests through.
 This is what you'll actually do, day to day:
 
 1. **Open `/admin`** and log in with `ADMIN_PASSWORD`. The session lasts 12
-   hours, so you won't need to log in again mid-day.
+   hours, so you won't need to log in again mid-day. There is no logout
+   button — sessions simply expire after 12 hours, and rotating
+   `ADMIN_SESSION_SECRET` invalidates all sessions immediately if you ever
+   need to force one out.
 2. **Generate a code.** Optionally type a label first — something that'll
    remind you who it's for later, like `Riya, paid 26 Aug UPI`. Click
    Generate.

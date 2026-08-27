@@ -23,8 +23,8 @@ export async function POST(req: Request) {
   try {
     const result = await redeemCode(supabaseCodesDb(), code, student);
     if (!result.ok) {
-      await sleep(400); // cheap brute-force damper
       const status = result.reason === "student_insert_failed" ? 500 : 403;
+      if (status === 403) await sleep(400); // cheap brute-force damper; don't dampen a legitimate buyer's retry
       return NextResponse.json({ error: result.reason }, { status });
     }
     return NextResponse.json({ studentId: result.studentId });
