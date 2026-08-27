@@ -12,7 +12,6 @@ import {
   coursesByDiscipline,
   type Discipline,
 } from "@/lib/course-catalog";
-import { supabase } from "@/lib/supabase";
 import { AnimatedGradient } from "@/components/ui/animated-gradient";
 
 const ANCHORS_COUNT = 29;
@@ -34,41 +33,44 @@ export default function LandingPage() {
   const [discipline, setDiscipline] = useState<Discipline>("tech_cs");
   const [course, setCourse] = useState<string | undefined>(undefined);
   const [submitting, setSubmitting] = useState(false);
+  const [accessCode, setAccessCode] = useState("");
+  const [codeError, setCodeError] = useState<string | null>(null);
 
   if (!hydrated) return <main className="min-h-dvh" />;
 
   const handleStart = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!name.trim() || !email.trim() || !phone.trim()) return;
+    if (!name.trim() || !email.trim() || !phone.trim() || !accessCode.trim()) return;
     if (existingProfile) reset();
 
     setSubmitting(true);
+    setCodeError(null);
 
-    const { data, error } = await supabase
-      .from("students")
-      .insert({
-        name: name.trim(),
-        email: email.trim(),
-        phone: phone.trim(),
-        discipline,
-        course_id: course ?? null,
-        education_level: educationLevel ?? "college",
-      })
-      .select("id")
-      .single();
+    const res = await fetch("/api/redeem", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        code: accessCode, name, email, phone, discipline,
+        course: course ?? null, educationLevel: educationLevel ?? "college",
+      }),
+    }).catch(() => null);
 
-    if (error) console.error("Supabase insert error:", error);
+    if (!res || !res.ok) {
+      const reason = res ? (await res.json().catch(() => ({}))).error : "network";
+      setCodeError(
+        reason === "invalid_code" ? "That code isn't recognized — check for typos."
+        : reason === "code_used" ? "This code has already been used."
+        : reason === "code_revoked" ? "This code was cancelled. Contact Secure Steps."
+        : "Something went wrong — please try again.",
+      );
+      setSubmitting(false);
+      return;
+    }
 
-    const studentId = data?.id;
-
+    const { studentId } = await res.json();
     setProfile({
-      name: name.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-      educationLevel,
-      discipline,
-      course,
-      studentId: data?.id,
+      name: name.trim(), email: email.trim(), phone: phone.trim(),
+      educationLevel, discipline, course, studentId,
     });
     setSubmitting(false);
     router.push("/assessment");
@@ -98,6 +100,7 @@ export default function LandingPage() {
             discipline={discipline}
             setDiscipline={(d) => { setDiscipline(d); setCourse(undefined); }}
             course={course} setCourse={setCourse}
+            accessCode={accessCode} setAccessCode={setAccessCode} codeError={codeError}
             onSubmit={handleStart}
             existing={!!existingProfile}
             submitting={submitting}
@@ -168,6 +171,7 @@ function Form(props: {
   educationLevel: "10th_12th" | "college"; setEducationLevel: (lvl: "10th_12th" | "college") => void;
   discipline: Discipline; setDiscipline: (d: Discipline) => void;
   course: string | undefined; setCourse: (c: string | undefined) => void;
+  accessCode: string; setAccessCode: (s: string) => void; codeError: string | null;
   onSubmit: (e: React.FormEvent) => void;
   existing: boolean;
   submitting: boolean;
@@ -221,6 +225,16 @@ function Form(props: {
             <input type="tel" value={props.phone} onChange={(e) => props.setPhone(e.target.value)} placeholder="+91 99999 99999"
               className="w-full rounded-xl px-4 py-3 text-[15px] text-ink placeholder:text-ink-300 outline-none transition-all"
               style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)} />
+          </Field>
+          <Field label="SECURITY CODE" required>
+            <input type="text" value={props.accessCode}
+              onChange={(e) => props.setAccessCode(e.target.value.toUpperCase())}
+              placeholder="XXXX-XXXX" autoCapitalize="characters" autoComplete="off"
+              className="w-full rounded-xl px-4 py-3 text-[15px] font-mono tracking-[0.15em] text-ink placeholder:text-ink-300 outline-none transition-all"
+              style={inputStyle} onFocus={(e) => Object.assign(e.currentTarget.style, focusStyle)} onBlur={(e) => Object.assign(e.currentTarget.style, blurStyle)} />
+            {props.codeError && (
+              <p className="mt-2 text-[13px] text-red-600">{props.codeError}</p>
+            )}
           </Field>
           <Field label="CURRENT EDUCATION LEVEL">
             <select value={props.educationLevel} onChange={(e) => props.setEducationLevel(e.target.value as "10th_12th" | "college")}
@@ -277,7 +291,7 @@ function Form(props: {
         </div>
         <button
           type="submit"
-          disabled={!props.name.trim() || !props.email.trim() || !props.phone.trim() || props.submitting}
+          disabled={!props.name.trim() || !props.email.trim() || !props.phone.trim() || !props.accessCode.trim() || props.submitting}
           className="w-full mt-6 py-4 rounded-2xl text-white font-mono text-[13px] tracking-[0.12em] uppercase font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
           style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)", boxShadow: "0 4px 16px -4px rgba(10,14,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" }}
           onMouseEnter={(e) => { if (!e.currentTarget.disabled) { e.currentTarget.style.boxShadow = "0 8px 24px -4px rgba(10,14,26,0.5), inset 0 1px 0 rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
