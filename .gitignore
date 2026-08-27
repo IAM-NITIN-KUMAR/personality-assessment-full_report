@@ -17,3 +17,6 @@ databasepass.txt
 # Task 20: secrets cleanup
 .env*.local
 database details/
+
+# .env.example is a template with no real values — safe and intended to be tracked
+!.env.example
