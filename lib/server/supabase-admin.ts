@@ -47,7 +47,8 @@ export function supabaseCodesDb(sb: SupabaseClient = getSupabaseAdmin()): CodesD
       return data && data.length > 0 ? { id: data[0].id } : null;
     },
     async findByCode(code) {
-      const { data } = await sb.from("access_codes").select("status").eq("code", code).maybeSingle();
+      const { data, error } = await sb.from("access_codes").select("status").eq("code", code).maybeSingle();
+      if (error) throw new Error(`findByCode failed: ${error.message}`);
       return (data as { status: CodeRow["status"] } | null) ?? null;
     },
     async insertStudent(d: StudentDetails) {
@@ -62,10 +63,12 @@ export function supabaseCodesDb(sb: SupabaseClient = getSupabaseAdmin()): CodesD
       return { id: data.id };
     },
     async attachStudent(codeId, studentId) {
-      await sb.from("access_codes").update({ used_by_student_id: studentId }).eq("id", codeId);
+      const { error } = await sb.from("access_codes").update({ used_by_student_id: studentId }).eq("id", codeId);
+      if (error) throw new Error(`attachStudent failed: ${error.message}`);
     },
     async releaseCode(codeId) {
-      await sb.from("access_codes").update({ status: "active", used_at: null }).eq("id", codeId);
+      const { error } = await sb.from("access_codes").update({ status: "active", used_at: null }).eq("id", codeId);
+      if (error) throw new Error(`releaseCode failed: ${error.message}`);
     },
   };
 }

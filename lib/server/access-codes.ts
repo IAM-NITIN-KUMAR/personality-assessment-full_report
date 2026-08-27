@@ -22,11 +22,14 @@ export type RedeemResult =
 export interface CodesDb {
   insertCode(row: { code: string; label: string | null }): Promise<{ id: string }>;
   listCodes(): Promise<CodeRow[]>;
+  /** UPDATE ... SET status='revoked' WHERE id=$1 AND status='active'; true if a row changed. */
   revokeActive(id: string): Promise<boolean>;
+  /** UPDATE ... SET status='used', used_at=now() WHERE code=$1 AND status='active'; the claimed row's id, or null. */
   claimActive(code: string): Promise<{ id: string } | null>;
   findByCode(code: string): Promise<Pick<CodeRow, "status"> | null>;
   insertStudent(details: StudentDetails): Promise<{ id: string } | null>;
   attachStudent(codeId: string, studentId: string): Promise<void>;
+  /** Compensating update: used → active, clears used_at (insert failed). */
   releaseCode(codeId: string): Promise<void>;
 }
 
