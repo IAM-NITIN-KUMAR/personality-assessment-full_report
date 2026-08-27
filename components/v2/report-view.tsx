@@ -34,7 +34,7 @@ import {
 import { Logo } from "@/components/ui/logo";
 import { ANIMALS, DOMAIN_LABELS, DIM_LABELS, ROLE_LABELS } from "@/lib/v2/types";
 import type { ReportV2, RadarDim, CareerCard } from "@/lib/v2/types";
-import { ANIMAL_ART } from "@/lib/v2/animal-geometry";
+import { ANIMAL_ART, PUP, PUP_ART } from "@/lib/v2/animal-geometry";
 import { AnimalArt } from "./animal-art";
 
 // ---------------------------------------------------------------------------
@@ -409,14 +409,19 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
               >
                 <AnimalArt dim={heroDim} size={280} />
               </div>
-            ) : (
-              // No single animal earned — show the whole cast instead of a
-              // blank tile: bold for the Explorer (pulled in many directions),
-              // soft for more_signal (picture still forming).
+            ) : isFull && t.kind === "explorer" ? (
+              // The Explorer earns Pup — pulled by every real scent.
               <div
-                className={`grid grid-cols-3 gap-1.5 p-2.5 rounded-2xl bg-[#f3f0fc] shrink-0 mx-auto sm:mx-0 ${
-                  isFull && t.kind === "explorer" ? "" : "opacity-55 saturate-[0.6]"
-                }`}
+                className="relative w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] md:w-[270px] md:h-[270px] overflow-hidden rounded-2xl border border-line shrink-0 mx-auto sm:mx-0 [&>svg]:w-full [&>svg]:h-full"
+                style={{ backgroundColor: PUP_ART.bg }}
+              >
+                <AnimalArt dim="pup" size={280} />
+              </div>
+            ) : (
+              // more_signal — picture still forming, so no single animal:
+              // the whole cast, soft.
+              <div
+                className="grid grid-cols-3 gap-1.5 p-2.5 rounded-2xl bg-[#f3f0fc] shrink-0 mx-auto sm:mx-0 opacity-55 saturate-[0.6]"
               >
                 {ALL_DIMS.map((d) => (
                   <div
@@ -445,8 +450,14 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
               ) : (
                 <>
                   <p className="text-[13px] font-mono font-bold text-[#6e6ef0] uppercase tracking-widest">
-                    {isFull && t.kind === "explorer" ? "A BRIDGE PROFILE" : "STILL BUILDING THE PICTURE"}
+                    {isFull && t.kind === "explorer" ? "THE PUP" : "STILL BUILDING THE PICTURE"}
                   </p>
+                  {isFull && t.kind === "explorer" && (
+                    <p className="text-[13px] italic text-ink-400">{PUP.line}</p>
+                  )}
+                  {isFull && t.kind === "explorer" && (
+                    <h2 className="text-[26px] sm:text-[32px] font-black text-ink leading-tight">The Explorer</h2>
+                  )}
                   <p className="text-[14px] sm:text-[15px] text-ink-600 leading-relaxed max-w-xl">{heroCopy}</p>
                 </>
               )}

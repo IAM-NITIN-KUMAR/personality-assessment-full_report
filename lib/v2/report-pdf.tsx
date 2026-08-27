@@ -1,7 +1,7 @@
 import { Document, Line, Page, Polygon, Rect, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
 import { ANIMALS, DIM_LABELS, DOMAIN_LABELS, ROLE_LABELS } from "./types";
 import type { CareerCard, RadarDim, ReportV2 } from "./types";
-import { ANIMAL_ART } from "./animal-geometry";
+import { ANIMAL_ART, PUP, PUP_ART } from "./animal-geometry";
 
 // ---------------------------------------------------------------------------
 // react-pdf counterpart of components/v2/report-view.tsx. Mirrors its 3-page
@@ -405,8 +405,8 @@ function SectionHeader({ children }: { children: string }) {
   );
 }
 
-function AnimalTile({ dim }: { dim: RadarDim }) {
-  const art = ANIMAL_ART[dim];
+function AnimalTile({ dim }: { dim: RadarDim | "pup" }) {
+  const art = dim === "pup" ? PUP_ART : ANIMAL_ART[dim];
   return (
     <View style={s.heroAnimalTile}>
       <Svg width={92} height={92} viewBox="0 0 200 200">
@@ -421,8 +421,8 @@ function AnimalTile({ dim }: { dim: RadarDim }) {
 
 const ALL_DIMS: RadarDim[] = ["analytical", "people", "creative", "entrepreneurial", "practical", "leadership"];
 
-/** Fallback hero art (explorer / more_signal): the full six-animal cast in a
- * 3x2 grid — soft for more_signal, where the picture is still forming. */
+/** Fallback hero art (more_signal): the full six-animal cast in a 3x2
+ * grid, soft — the picture is still forming, so no single animal. */
 function AnimalClusterTile({ soft }: { soft: boolean }) {
   return (
     <View style={[s.heroClusterTile, soft ? { opacity: 0.55 } : {}]}>
@@ -635,8 +635,11 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
         <View style={s.heroSection}>
           {showAnimal && heroDim ? (
             <AnimalTile dim={heroDim} />
+          ) : isFull && t.kind === "explorer" ? (
+            // The Explorer earns Pup — pulled by every real scent.
+            <AnimalTile dim="pup" />
           ) : (
-            <AnimalClusterTile soft={!(isFull && t.kind === "explorer")} />
+            <AnimalClusterTile soft />
           )}
           <View style={s.heroTextCol}>
             {isFull && t.kind === "archetype" ? (
@@ -646,9 +649,16 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
                 <Text style={s.heroName}>{t.name}</Text>
                 <Text style={s.heroStrap}>{t.strapline}</Text>
               </>
+            ) : isFull && t.kind === "explorer" ? (
+              <>
+                <Text style={s.heroKicker}>THE PUP</Text>
+                <Text style={s.heroRendering}>{PUP.line}</Text>
+                <Text style={s.heroName}>The Explorer</Text>
+                <Text style={s.heroStrap}>{heroCopy}</Text>
+              </>
             ) : (
               <>
-                <Text style={s.heroKicker}>{isFull && t.kind === "explorer" ? "A BRIDGE PROFILE" : "STILL BUILDING THE PICTURE"}</Text>
+                <Text style={s.heroKicker}>STILL BUILDING THE PICTURE</Text>
                 <Text style={s.heroStrap}>{heroCopy}</Text>
               </>
             )}

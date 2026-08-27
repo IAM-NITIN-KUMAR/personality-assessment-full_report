@@ -707,3 +707,124 @@ export const ANIMAL_ART: Record<RadarDim, AnimalArt> = {
   creative: art("#e9f1fb", PEA_V, PEA_F),
   entrepreneurial: art("#fdf2e6", TIG_V, TIG_F),
 };
+
+/* ------------------------------------------------------------------ */
+/* PUP — the Explorer's animal. Not bound to a RadarDim, so it lives   */
+/* outside ANIMAL_ART. CUTE round caramel puppy, front-on, warm peach  */
+/* bg. Big near-circular head (12-gon) over a small round body; long   */
+/* floppy ears with pink-tan inner facets; pale muzzle patch; huge ink */
+/* sparkle eyes; ink triangle nose over a tiny w-smile with a pink     */
+/* tongue; crown fur patch, blush diamonds, front paws, wagging tail.  */
+/* ------------------------------------------------------------------ */
+
+const PUP_C = {
+  d2: "#d8a878", m: "#e8c39a", l1: "#f2d7b6", l2: "#f9e7cf", hi: "#fdf4e7",
+  earD: "#c08d5e", earIn: "#e8a58a", blush: "#f2b8cf", tongue: "#f490ac",
+  spark: "#ffffff",
+};
+
+const PUP_V: ReadonlyArray<Pt> = [
+  // head ring — 12 facets approximating a circle, centre (100,82)
+  [100, 26], // 0 crown
+  [131, 34], // 1
+  [154, 54], // 2
+  [162, 82], // 3
+  [154, 110], // 4
+  [131, 130], // 5
+  [100, 138], // 6 chin
+  [69, 130], // 7
+  [46, 110], // 8
+  [38, 82], // 9
+  [46, 54], // 10
+  [69, 34], // 11
+  [100, 82], // 12 head centre
+  // round body ring below the head (shares 5 and 7 with the head)
+  [56, 146], [50, 166], [64, 182], [100, 188], [136, 182], [150, 166], [144, 146], // 13-19
+  [100, 158], // 20 body centre
+  // long floppy ears hanging over the head sides
+  [66, 32], [34, 44], [26, 78], [40, 104], [58, 96], [64, 58], // 21-26 L
+  [134, 32], [166, 44], [174, 78], [160, 104], [142, 96], [136, 58], // 27-32 R
+  // pale muzzle patch (octagon around 100,110)
+  [74, 100], [86, 90], [114, 90], [126, 100], [126, 120], [114, 130], [86, 130], [74, 120], // 33-40
+  // huge round ink eyes (octagons) above the muzzle
+  [58, 76], [62, 66], [72, 62], [82, 66], [86, 76], [82, 86], [72, 90], [62, 86], // 41-48 L
+  [114, 76], [118, 66], [128, 62], [138, 66], [142, 76], [138, 86], [128, 90], [118, 86], // 49-56 R
+  // white sparkle highlights (upper-right of each eye)
+  [73, 70], [77, 66], [81, 70], [77, 74], // 57-60 L
+  [129, 70], [133, 66], [137, 70], [133, 74], // 61-64 R
+  // ink triangle nose, w-smile, pink tongue
+  [90, 98], [110, 98], [100, 110], // 65-67 nose
+  [92, 118], [100, 113], [108, 118], [100, 122], // 68-71 mouth
+  [94, 122], [106, 122], [106, 134], [94, 134], // 72-75 tongue
+  // soft blush diamonds on the cheeks
+  [52, 98], [58, 92], [64, 98], [58, 104], // 76-79 L
+  [136, 98], [142, 92], [148, 98], [142, 104], // 80-83 R
+  // darker fur patch on the crown
+  [100, 34], [112, 44], [100, 56], [88, 44], // 84-87
+  // stubby front paws at the base of the body
+  [72, 180], [92, 180], [92, 190], [72, 190], // 88-91 L
+  [108, 180], [128, 180], [128, 190], [108, 190], // 92-95 R
+  // wagging tail poking out to the right
+  [150, 150], [172, 138], [178, 150], [158, 162], // 96-99
+  // pale chest patch
+  [84, 150], [100, 144], [116, 150], [116, 170], [100, 178], [84, 170], // 100-105
+];
+
+const PUP_F: ReadonlyArray<FaceDef> = [
+  // tail first so the body overlaps its root
+  [[96, 97, 98, 99], PUP_C.d2],
+  // body fan
+  [[7, 13, 20], PUP_C.m],
+  [[13, 14, 20], PUP_C.l1],
+  [[14, 15, 20], PUP_C.m],
+  [[15, 16, 20], PUP_C.l1],
+  [[16, 17, 20], PUP_C.m],
+  [[17, 18, 20], PUP_C.l1],
+  [[18, 19, 20], PUP_C.m],
+  [[19, 5, 20], PUP_C.l1],
+  [[5, 7, 20], PUP_C.l2],
+  // chest patch and paws
+  [[100, 101, 102, 103, 104, 105], PUP_C.hi],
+  [[88, 89, 90, 91], PUP_C.hi],
+  [[92, 93, 94, 95], PUP_C.hi],
+  // head fan
+  [[0, 1, 12], PUP_C.l1],
+  [[1, 2, 12], PUP_C.m],
+  [[2, 3, 12], PUP_C.l1],
+  [[3, 4, 12], PUP_C.m],
+  [[4, 5, 12], PUP_C.l1],
+  [[5, 6, 12], PUP_C.l2],
+  [[6, 7, 12], PUP_C.l2],
+  [[7, 8, 12], PUP_C.l1],
+  [[8, 9, 12], PUP_C.m],
+  [[9, 10, 12], PUP_C.l1],
+  [[10, 11, 12], PUP_C.m],
+  [[11, 0, 12], PUP_C.l1],
+  // crown fur patch
+  [[84, 85, 86, 87], PUP_C.d2],
+  // floppy ears (outer shell + inner facet)
+  [[21, 22, 23, 24, 25, 26], PUP_C.earD],
+  [[23, 24, 25, 26], PUP_C.earIn],
+  [[27, 28, 29, 30, 31, 32], PUP_C.earD],
+  [[29, 30, 31, 32], PUP_C.earIn],
+  // muzzle and blush
+  [[33, 34, 35, 36, 37, 38, 39, 40], PUP_C.hi],
+  [[76, 77, 78, 79], PUP_C.blush],
+  [[80, 81, 82, 83], PUP_C.blush],
+  // eyes, sparkles, nose, smile, tongue
+  [[41, 42, 43, 44, 45, 46, 47, 48], INK],
+  [[49, 50, 51, 52, 53, 54, 55, 56], INK],
+  [[57, 58, 59, 60], PUP_C.spark],
+  [[61, 62, 63, 64], PUP_C.spark],
+  [[65, 66, 67], INK],
+  [[68, 69, 70, 71], INK],
+  [[72, 73, 74, 75], PUP_C.tongue],
+];
+
+/** The Explorer's animal — a curious pup pulled by every real scent. */
+export const PUP_ART: AnimalArt = art("#fdeeec", PUP_V, PUP_F);
+
+export const PUP = {
+  name: "Pup",
+  line: "Nose to the ground, heart wide open. Follows every trail until one becomes home.",
+};
