@@ -22,11 +22,15 @@ const STATUS_STYLES: Record<CodeRow["status"], string> = {
 export default function AdminPage() {
   const [authed, setAuthed] = useState<boolean | null>(null); // null = probing
   const [codes, setCodes] = useState<CodeRow[]>([]);
+  const [loadError, setLoadError] = useState(false);
 
   const refresh = useCallback(async () => {
     const res = await fetch("/api/admin/codes").catch(() => null);
     if (!res || res.status === 401) { setAuthed(false); return; }
-    setCodes((await res.json()).codes);
+    if (!res.ok) { setAuthed(true); setLoadError(true); setCodes([]); return; }
+    const body = await res.json().catch(() => null);
+    setCodes(body?.codes ?? []);
+    setLoadError(false);
     setAuthed(true);
   }, []);
 
@@ -44,6 +48,9 @@ export default function AdminPage() {
             </button>
           )}
         </header>
+        {authed && loadError && (
+          <p className="text-[13px] text-red-600">Couldn&apos;t load codes — check the server and hit refresh.</p>
+        )}
         {authed ? <Dashboard codes={codes} onChanged={refresh} /> : <Login onSuccess={refresh} />}
       </div>
     </main>
