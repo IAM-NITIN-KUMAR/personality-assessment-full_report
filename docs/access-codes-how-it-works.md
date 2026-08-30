@@ -153,9 +153,11 @@ system with a real buyer:
    landing page — expect "This code was cancelled."
 6. Try a made-up code — expect "That code isn't recognized."
 
-This checklist has not been run yet as of this write-up — it needs Supabase
-credentials and the migration applied, neither of which was available while
-writing this doc. Run it once before the first real code goes out.
+This checklist was run against the live Supabase project on 2026-08-30
+(steps 1-6 via the API routes, plus a direct anon-key insert into `students`
+which was correctly rejected by RLS). Re-run it after any change to the
+migration, the RLS policies, or the three env vars — and once more against
+the production deployment before the first real code goes out.
 
 ## What's next (not built yet)
 
