@@ -1,6 +1,8 @@
 // Roots & Routes v2 engine types. All weights/tables that reference these are
 // calibration seeds (spec v2, end note).
 
+import type { Journey } from "./journeys/data";
+
 export type Degree = "engineering" | "commerce" | "science" | "arts" | "other";
 
 export type RadarDim =
@@ -181,4 +183,6 @@ export interface ReportV2 {
   /** For the report body: winning role + co-candidate if any. */
   role: { winner: RoleId; coCandidate: RoleId | null; confTotal: number; confBand: "confirmed" | "provisional" | "mismatch" } | null;
   domain: DomainId | null;
+  /** Real graduates who walked the recommended path. Three for engineering students in the full state, else []. */
+  journeys: Journey[];
 }

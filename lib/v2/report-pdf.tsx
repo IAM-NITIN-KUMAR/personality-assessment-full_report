@@ -1,6 +1,7 @@
 import { Document, Line, Page, Polygon, Rect, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
 import { ANIMALS, DIM_LABELS, DOMAIN_LABELS, ROLE_LABELS } from "./types";
 import type { CareerCard, RadarDim, ReportV2 } from "./types";
+import type { Journey } from "./journeys/data";
 import { ANIMAL_ART, PUP, PUP_ART } from "./animal-geometry";
 
 // ---------------------------------------------------------------------------
@@ -314,6 +315,24 @@ const s = StyleSheet.create({
   matchWhat: { fontSize: 8.5, color: INK_400, lineHeight: 1.45 },
   matchNext: { fontSize: 8.5, color: INK_500, lineHeight: 1.45, marginTop: 5 },
   matchNextLabel: { fontFamily: SANS_BOLD, color: INK_700 },
+  journeyIntro: { fontSize: 8.5, color: INK_500, lineHeight: 1.45, marginBottom: 10, maxWidth: 420 },
+  journeyIntroStrong: { fontFamily: SANS_BOLD, color: INK_700 },
+  journeyGrid: { flexDirection: "row", gap: 10, marginBottom: 8 },
+  journeyCard: { flex: 1, borderRadius: 12, borderWidth: 1, borderColor: LINE, backgroundColor: CARD_BG_2, padding: 10 },
+  journeyTopRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 4, marginBottom: 8 },
+  journeyName: { fontSize: 9.5, fontFamily: SANS_BOLD, color: INK_700, flex: 1, lineHeight: 1.3 },
+  journeyStatus: { fontSize: 6, fontFamily: MONO_BOLD, color: ACCENT, backgroundColor: CHIP_BG, borderRadius: 4, paddingHorizontal: 4, paddingVertical: 2, textTransform: "uppercase" },
+  journeySteps: { borderLeftWidth: 1, borderLeftColor: "#d9d4f5", marginLeft: 3, paddingLeft: 8, marginBottom: 8 },
+  journeyStep: { marginBottom: 5, position: "relative" },
+  journeyDot: { position: "absolute", left: -11.5, top: 2, width: 6, height: 6, borderRadius: 3, backgroundColor: "#c4b5fd" },
+  journeyDotNow: { backgroundColor: ACCENT },
+  journeyStepLabel: { fontSize: 5.5, fontFamily: MONO_BOLD, color: INK_400, textTransform: "uppercase", letterSpacing: 0.6 },
+  journeyStepText: { fontSize: 7.5, color: INK_500, lineHeight: 1.35, marginTop: 1 },
+  journeyStepTextNow: { fontFamily: SANS_BOLD, color: INK_700 },
+  journeySkills: { flexDirection: "row", flexWrap: "wrap", gap: 3, marginBottom: 7 },
+  journeySkill: { fontSize: 6.5, fontFamily: SANS_BOLD, color: INK_500, backgroundColor: "#ffffff", borderWidth: 1, borderColor: LINE, borderRadius: 4, paddingHorizontal: 4, paddingVertical: 2 },
+  journeyStory: { fontSize: 7.5, color: INK_400, lineHeight: 1.4 },
+  journeyFoot: { fontSize: 6.5, color: INK_300, lineHeight: 1.4 },
   matchHonesty: { fontSize: 8, fontFamily: SANS_ITALIC, color: AMBER_FG, lineHeight: 1.4, marginTop: 5 },
 
   fallbackBox: { borderRadius: 12, borderWidth: 1, borderColor: LINE, backgroundColor: CARD_BG_2, padding: 16, maxWidth: "70%" },
@@ -564,6 +583,40 @@ function MatchCardSmall({ card }: { card: CareerCard }) {
   );
 }
 
+const JOURNEY_STEPS: { key: keyof Journey["steps"]; label: string }[] = [
+  { key: "degree", label: "Degree" },
+  { key: "firstJob", label: "First job" },
+  { key: "bridge", label: "Added on top" },
+  { key: "now", label: "Now" },
+];
+
+function JourneyCard({ journey }: { journey: Journey }) {
+  const last = JOURNEY_STEPS.length - 1;
+  return (
+    <View style={s.journeyCard}>
+      <View style={s.journeyTopRow}>
+        <Text style={s.journeyName}>{journey.name}</Text>
+        <Text style={s.journeyStatus}>{journey.status}</Text>
+      </View>
+      <View style={s.journeySteps}>
+        {JOURNEY_STEPS.map((st, i) => (
+          <View key={st.key} style={s.journeyStep}>
+            <View style={[s.journeyDot, i === last ? s.journeyDotNow : {}]} />
+            <Text style={s.journeyStepLabel}>{st.label}</Text>
+            <Text style={[s.journeyStepText, i === last ? s.journeyStepTextNow : {}]}>{journey.steps[st.key]}</Text>
+          </View>
+        ))}
+      </View>
+      <View style={s.journeySkills}>
+        {journey.skills.map((sk) => (
+          <Text key={sk} style={s.journeySkill}>{sk}</Text>
+        ))}
+      </View>
+      <Text style={s.journeyStory}>{journey.story}</Text>
+    </View>
+  );
+}
+
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
@@ -774,6 +827,26 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
                     <MatchCardSmall key={c.career} card={c} />
                   ))}
                 </View>
+              </View>
+            )}
+
+            {report.journeys.length > 0 && (
+              <View style={{ paddingTop: 14, borderTopWidth: 1, borderTopColor: LINE_SUBTLE }}>
+                <SectionHeader>PEOPLE WHO WALKED THIS PATH</SectionHeader>
+                <Text style={s.journeyIntro}>
+                  Three real graduates who started where you are. What they studied, where they began, what they added on
+                  top of the degree, and where it took them. The road to{" "}
+                  <Text style={s.journeyIntroStrong}>{report.cards[0].career}</Text> is not theoretical.
+                </Text>
+                <View style={s.journeyGrid}>
+                  {report.journeys.map((j) => (
+                    <JourneyCard key={j.id} journey={j} />
+                  ))}
+                </View>
+                <Text style={s.journeyFoot}>
+                  Profiles as shared on LinkedIn with Secure Steps; not independently verified. Roles and employers as at
+                  September 2026.
+                </Text>
               </View>
             )}
           </>

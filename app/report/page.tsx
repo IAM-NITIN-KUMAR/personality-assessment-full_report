@@ -34,7 +34,11 @@ export default function ReportPage() {
     if (hydrated && profile && !archetype && !isV2) computeArchetype();
   }, [hydrated, profile, archetype, computeArchetype, isV2]);
 
-  const isMock = typeof window !== "undefined" && window.location.search.includes("mock=true");
+  // ?mock=true previews Ananya (commerce); ?mock=eng previews the same answers as a CSE student
+  // so the engineering-only journeys section renders locally.
+  const mockKind = typeof window !== "undefined" ? new URLSearchParams(window.location.search).get("mock") : null;
+  const isMock = mockKind === "true" || mockKind === "eng";
+  const isEngMock = mockKind === "eng";
 
   // Redirect from effect, never during render.
   useEffect(() => {
@@ -84,7 +88,9 @@ export default function ReportPage() {
   }, [profile, archetype, answers, allQuestions, mockData, isMock]);
 
   // v2 (college) report — built independently of the legacy `data` above.
-  const v2Answers = isMock ? ANANYA_ANSWERS : toV2Answers(answers);
+  const v2Answers = isEngMock
+    ? { ...ANANYA_ANSWERS, Q0: ["a" as const], C1: ["a" as const] }
+    : isMock ? ANANYA_ANSWERS : toV2Answers(answers);
   const reportV2 = useMemo(
     () =>
       buildReportV2({
@@ -92,8 +98,10 @@ export default function ReportPage() {
         email: profile?.email,
         dateISO: new Date().toISOString().slice(0, 10),
         answers: v2Answers,
+        discipline: isEngMock ? "tech_cs" : profile?.discipline,
+        course: isEngMock ? "btech_cse" : profile?.course,
       }),
-    [isMock, profile, v2Answers],
+    [isMock, isEngMock, profile, v2Answers],
   );
 
   const [downloading, setDownloading] = useState(false);

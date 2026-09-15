@@ -72,3 +72,36 @@ describe("buildReportV2 states", () => {
     if (full.state === "full") expect(full.cards).not.toBeNull();
   });
 });
+
+describe("buildReportV2 journeys", () => {
+  const eng: V2Answers = { ...ANANYA_ANSWERS, Q0: ["a"], C1: ["a"] }; // engineering, first card = technology
+
+  it("commerce student gets no journeys (roadmap is engineering-only for now)", () => {
+    const r = buildReportV2({ name: "X", dateISO: "2026-09-15", answers: ANANYA_ANSWERS, discipline: "commerce" });
+    expect(r.journeys).toEqual([]);
+  });
+
+  it("engineering student in the full state gets exactly three journeys", () => {
+    const r = buildReportV2({ name: "X", dateISO: "2026-09-15", answers: eng, discipline: "tech_cs", course: "btech_cse" });
+    expect(r.state).toBe("full");
+    expect(r.domain).toBe("technology");
+    expect(r.journeys).toHaveLength(3);
+    // Role proof can come from another course; at least one pick is always the student's own.
+    expect(r.journeys.some((j) => j.courses.includes("btech_cse"))).toBe(true);
+    expect(r.journeys.some((j) => j.proves.includes(r.role!.winner))).toBe(true);
+  });
+
+  it("journeys follow the winning role, so a different course changes the pick", () => {
+    const cse = buildReportV2({ name: "X", dateISO: "2026-09-15", answers: eng, discipline: "tech_cs", course: "btech_cse" });
+    const mech = buildReportV2({ name: "X", dateISO: "2026-09-15", answers: eng, discipline: "tech_engg", course: "btech_mech" });
+    expect(cse.journeys.map((j) => j.id)).not.toEqual(mech.journeys.map((j) => j.id));
+    expect(mech.journeys.some((j) => j.courses.includes("btech_mech"))).toBe(true);
+  });
+
+  it("more_signal engineering student gets no journeys", () => {
+    const thin: V2Answers = { ...eng, B1: ["b"], B2: ["c"], B3: ["c"], B4: ["c"], B5: ["b"], B6: ["c"] };
+    const r = buildReportV2({ name: "X", dateISO: "2026-09-15", answers: thin, discipline: "tech_cs" });
+    expect(r.state).toBe("more_signal");
+    expect(r.journeys).toEqual([]);
+  });
+});

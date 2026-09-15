@@ -30,10 +30,12 @@ import {
   LayoutGrid,
   MapPin,
   Sparkles,
+  Footprints,
 } from "lucide-react";
 import { Logo } from "@/components/ui/logo";
 import { ANIMALS, DOMAIN_LABELS, DIM_LABELS, ROLE_LABELS } from "@/lib/v2/types";
 import type { ReportV2, RadarDim, CareerCard } from "@/lib/v2/types";
+import type { Journey } from "@/lib/v2/journeys/data";
 import { ANIMAL_ART, PUP, PUP_ART } from "@/lib/v2/animal-geometry";
 import { AnimalArt } from "./animal-art";
 
@@ -308,6 +310,54 @@ function MatchCardSmall({ card }: { card: CareerCard }) {
           <p className="text-[11px] italic text-amber-700 leading-relaxed mt-2">{card.honestyLine}</p>
         )}
       </div>
+    </div>
+  );
+}
+
+const JOURNEY_STEPS: { key: keyof Journey["steps"]; label: string }[] = [
+  { key: "degree", label: "Degree" },
+  { key: "firstJob", label: "First job" },
+  { key: "bridge", label: "Added on top" },
+  { key: "now", label: "Now" },
+];
+
+function JourneyCard({ journey }: { journey: Journey }) {
+  const last = JOURNEY_STEPS.length - 1;
+  return (
+    <div className="rounded-[16px] p-5 border border-line bg-[#f8f7fd]/30 hover:bg-[#f8f7fd]/60 transition-all flex flex-col gap-4">
+      <div className="flex items-start justify-between gap-2">
+        <h4 className="text-[14px] font-extrabold text-ink-700 leading-snug">{journey.name}</h4>
+        <span className="text-[8.5px] font-mono font-black text-[#6e6ef0] bg-[#f3f0fc] px-2 py-0.5 rounded-md whitespace-nowrap uppercase shrink-0">
+          {journey.status}
+        </span>
+      </div>
+
+      <ol className="relative border-l border-[#6e6ef0]/30 ml-1.5 space-y-3">
+        {JOURNEY_STEPS.map((st, i) => (
+          <li key={st.key} className="pl-4 relative">
+            <span
+              className={
+                "absolute -left-[5px] top-[5px] size-[9px] rounded-full border-2 border-white " +
+                (i === last ? "bg-[#6e6ef0]" : "bg-[#c4b5fd]")
+              }
+            />
+            <p className="text-[9px] font-mono font-black uppercase tracking-wider text-ink-400">{st.label}</p>
+            <p className={"text-[11.5px] leading-snug mt-0.5 " + (i === last ? "font-semibold text-ink-700" : "text-ink-600")}>
+              {journey.steps[st.key]}
+            </p>
+          </li>
+        ))}
+      </ol>
+
+      <div className="flex flex-wrap gap-1.5">
+        {journey.skills.map((sk) => (
+          <span key={sk} className="text-[9.5px] font-semibold text-ink-600 bg-white border border-line px-2 py-0.5 rounded-md">
+            {sk}
+          </span>
+        ))}
+      </div>
+
+      <p className="text-[11.5px] text-ink-500 leading-relaxed">{journey.story}</p>
     </div>
   );
 }
@@ -597,6 +647,26 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
                     <MatchCardSmall key={c.career} card={c} />
                   ))}
                 </div>
+              </section>
+            )}
+
+            {report.journeys.length > 0 && (
+              <section className="py-6 border-t border-line/50 space-y-6">
+                <SectionHeader icon={Footprints}>PEOPLE WHO WALKED THIS PATH</SectionHeader>
+                <p className="text-[13px] text-ink-600 leading-relaxed max-w-2xl">
+                  Three real graduates who started where you are. What they studied, where they began, what they added
+                  on top of the degree, and where it took them. The road to{" "}
+                  <span className="font-semibold text-ink-700">{report.cards[0].career}</span> is not theoretical.
+                </p>
+                <div className="grid md:grid-cols-3 gap-4">
+                  {report.journeys.map((j) => (
+                    <JourneyCard key={j.id} journey={j} />
+                  ))}
+                </div>
+                <p className="text-[10px] text-ink-400 leading-relaxed">
+                  Profiles as shared on LinkedIn with Secure Steps; not independently verified. Roles and employers as at
+                  September 2026.
+                </p>
               </section>
             )}
           </>
