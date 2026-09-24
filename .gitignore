@@ -20,3 +20,14 @@ database details/
 
 # .env.example is a template with no real values — safe and intended to be tracked
 !.env.example
+
+# Generated or dropped-in documents at the repo root. The canonical copies live
+# under "career roadmaps/" and docs/ — root-level exports are scratch.
+/*.pdf
+/*.docx
+
+# Office lock files
+~$*
+
+# Local verification scratch output
+/picker-verify.txt

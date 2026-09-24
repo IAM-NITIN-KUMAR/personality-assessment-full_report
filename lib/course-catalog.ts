@@ -357,7 +357,7 @@ export const COURSES: Course[] = [
   },
   {
     id: "bba_branding_entrepreneurship",
-    title: "BCom — Branding and Entrepreneurship",
+    title: "BBA — Branding and Entrepreneurship",
     discipline: "business",
     description: "Commerce + brand + founder skills. Best for students who want to start ventures.",
     careers: [
@@ -1072,7 +1072,7 @@ export const COURSES: Course[] = [
     title: "MS in Quantitative Economics",
     discipline: "economics",
     level: "masters",
-    description: "Deeps mathematical modelling, economic forecasting, corporate financial theory, and econometrics.",
+    description: "Deep mathematical modelling, economic forecasting, corporate financial theory, and econometrics.",
     careers: [
       { role: "Quantitative Economist", salaryIndia: "₹12–32 LPA" },
       { role: "Policy Advisor (Economic)", salaryIndia: "₹10–26 LPA" },
@@ -1197,6 +1197,566 @@ export const COURSES: Course[] = [
       { role: "Yield Management Lead",         salaryIndia: "₹10–25 LPA" },
     ],
     weights: { social: 0.25, energy: 0.15 },
+  },
+
+  // ── EXPANDED MASTERS SHELF (Indian qualification naming) ─────────────
+  // Technology & Computer Science
+  {
+    id: "mca",
+    title: "MCA — Master of Computer Applications",
+    discipline: "tech_cs",
+    level: "masters",
+    description: "Two-year applied CS masters open to BCA and B.Sc graduates. The standard bridge into product engineering for students without a B.Tech.",
+    careers: [
+      { role: "Software Development Engineer",      salaryIndia: "₹8–24 LPA" },
+      { role: "Full-stack / Mobile Engineer",       salaryIndia: "₹7–22 LPA" },
+      { role: "Technical Consultant (IT Services)", salaryIndia: "₹9–26 LPA" },
+    ],
+    weights: { drive: 0.25, structure: 0.15, decision_style: 0.1 },
+  },
+  {
+    id: "mtech_data_science",
+    title: "M.Tech — Data Science and Big Data Analytics",
+    discipline: "tech_cs",
+    level: "masters",
+    description: "Distributed data systems, statistical learning, and production analytics pipelines at scale. Heavier on engineering than a pure analytics masters.",
+    careers: [
+      { role: "Senior Data Scientist",   salaryIndia: "₹18–45 LPA" },
+      { role: "Big Data Engineer",       salaryIndia: "₹14–35 LPA" },
+      { role: "Analytics Platform Lead", salaryIndia: "₹16–38 LPA" },
+    ],
+    weights: { decision_style: 0.3, structure: 0.2, drive: 0.15 },
+  },
+
+  // Engineering (non-CS)
+  {
+    id: "mtech_vlsi",
+    title: "M.Tech — VLSI Design and Embedded Systems",
+    discipline: "tech_engg",
+    level: "masters",
+    description: "Chip design flows, RTL verification, embedded firmware, and low-power silicon. One of the fastest-growing deep-tech hiring pools in India.",
+    careers: [
+      { role: "VLSI Design Engineer",       salaryIndia: "₹12–32 LPA" },
+      { role: "Verification Engineer",      salaryIndia: "₹11–28 LPA" },
+      { role: "Embedded Systems Architect", salaryIndia: "₹14–34 LPA" },
+    ],
+    weights: { structure: 0.3, decision_style: 0.25 },
+  },
+  {
+    id: "mtech_structural",
+    title: "M.Tech — Structural Engineering",
+    discipline: "tech_engg",
+    level: "masters",
+    description: "Advanced structural analysis, earthquake-resistant design, and large-span infrastructure. The standard PG route for civil graduates.",
+    careers: [
+      { role: "Structural Design Engineer",    salaryIndia: "₹8–22 LPA" },
+      { role: "Infrastructure Project Lead",   salaryIndia: "₹10–26 LPA" },
+      { role: "Seismic / Forensic Consultant", salaryIndia: "₹9–24 LPA" },
+    ],
+    weights: { structure: 0.3, decision_style: 0.2 },
+  },
+  {
+    id: "mtech_aerospace",
+    title: "M.Tech — Aerospace Engineering",
+    discipline: "tech_engg",
+    level: "masters",
+    description: "Flight mechanics, propulsion, computational aerodynamics, and spacecraft systems. Feeds ISRO, DRDO, and the private launch sector.",
+    careers: [
+      { role: "Aerospace Design Engineer",     salaryIndia: "₹10–28 LPA" },
+      { role: "Propulsion / Systems Engineer", salaryIndia: "₹12–30 LPA" },
+      { role: "Flight Test Engineer",          salaryIndia: "₹10–26 LPA" },
+    ],
+    weights: { structure: 0.25, drive: 0.2, decision_style: 0.15 },
+  },
+
+  // Business & Management
+  {
+    id: "mba_hr",
+    title: "MBA — Human Resource Management",
+    discipline: "business",
+    level: "masters",
+    description: "Talent strategy, organisational behaviour, compensation design, and industrial relations for people-led leadership tracks.",
+    careers: [
+      { role: "HR Business Partner",      salaryIndia: "₹9–24 LPA" },
+      { role: "Talent Acquisition Lead",  salaryIndia: "₹8–22 LPA" },
+      { role: "Head of People & Culture", salaryIndia: "₹18–40 LPA" },
+    ],
+    weights: { social: 0.35, structure: 0.15 },
+  },
+  {
+    id: "mba_marketing",
+    title: "MBA — Marketing and Brand Management",
+    discipline: "business",
+    level: "masters",
+    description: "Consumer insight, brand architecture, go-to-market planning, and the economics of performance marketing.",
+    careers: [
+      { role: "Brand Manager",             salaryIndia: "₹12–28 LPA" },
+      { role: "Growth / Performance Lead", salaryIndia: "₹12–32 LPA" },
+      { role: "Chief Marketing Officer",   salaryIndia: "₹25–60 LPA" },
+    ],
+    weights: { social: 0.3, risk: 0.2, drive: 0.15 },
+  },
+  {
+    id: "mba_operations",
+    title: "MBA — Operations and Supply Chain Management",
+    discipline: "business",
+    level: "masters",
+    description: "Process design, logistics networks, procurement strategy, and lean manufacturing systems.",
+    careers: [
+      { role: "Supply Chain Manager",       salaryIndia: "₹10–26 LPA" },
+      { role: "Operations Excellence Lead", salaryIndia: "₹12–30 LPA" },
+      { role: "Plant / Category Head",      salaryIndia: "₹18–42 LPA" },
+    ],
+    weights: { structure: 0.35, drive: 0.15 },
+  },
+  {
+    id: "mba_entrepreneurship",
+    title: "MBA — Entrepreneurship and Family Business",
+    discipline: "business",
+    level: "masters",
+    description: "Venture building, fundraising, succession planning, and scaling an existing family enterprise into a professional organisation.",
+    careers: [
+      { role: "Founder / Co-founder",              salaryIndia: "Highly scalable" },
+      { role: "Business Head (Family Enterprise)", salaryIndia: "₹12–35 LPA" },
+      { role: "Venture Capital Associate",         salaryIndia: "₹15–40 LPA" },
+    ],
+    weights: { risk: 0.35, drive: 0.3, social: 0.15 },
+  },
+
+  // Commerce & Finance
+  {
+    id: "mcom_accountancy_tax",
+    title: "M.Com — Accountancy and Taxation",
+    discipline: "commerce",
+    level: "masters",
+    description: "Advanced financial reporting, direct and indirect tax law, audit standards, and corporate compliance. Pairs naturally with CA or CS.",
+    careers: [
+      { role: "Tax Manager",          salaryIndia: "₹8–22 LPA" },
+      { role: "Statutory Audit Lead", salaryIndia: "₹8–20 LPA" },
+      { role: "Financial Controller", salaryIndia: "₹14–32 LPA" },
+    ],
+    weights: { structure: 0.35, decision_style: 0.15 },
+  },
+  {
+    id: "mcom_financial_management",
+    title: "M.Com — Financial Management",
+    discipline: "commerce",
+    level: "masters",
+    description: "Corporate treasury, working-capital strategy, valuation, and financial planning for mid-to-large enterprises.",
+    careers: [
+      { role: "Finance Manager",  salaryIndia: "₹9–24 LPA" },
+      { role: "Treasury Analyst", salaryIndia: "₹8–20 LPA" },
+      { role: "FP&A Lead",        salaryIndia: "₹12–30 LPA" },
+    ],
+    weights: { structure: 0.3, decision_style: 0.2 },
+  },
+  {
+    id: "msc_quant_finance",
+    title: "M.Sc — Quantitative Finance and Risk Management",
+    discipline: "commerce",
+    level: "masters",
+    description: "Stochastic modelling, derivatives pricing, credit and market risk, and the mathematics behind institutional trading desks.",
+    careers: [
+      { role: "Quantitative Analyst",   salaryIndia: "₹18–50 LPA" },
+      { role: "Market Risk Manager",    salaryIndia: "₹14–32 LPA" },
+      { role: "Derivatives Structurer", salaryIndia: "₹16–40 LPA" },
+    ],
+    weights: { decision_style: 0.35, structure: 0.25, risk: 0.1 },
+  },
+
+  // Pure & Applied Sciences
+  {
+    id: "msc_chemistry",
+    title: "M.Sc — Chemistry",
+    discipline: "science",
+    level: "masters",
+    description: "Organic, inorganic, and physical chemistry at research depth, with heavy instrumentation and synthesis lab work.",
+    careers: [
+      { role: "Research Chemist (Pharma)", salaryIndia: "₹6–18 LPA" },
+      { role: "Quality / Analytical Lead", salaryIndia: "₹6–16 LPA" },
+      { role: "Process Chemist",           salaryIndia: "₹7–20 LPA" },
+    ],
+    weights: { structure: 0.3, decision_style: 0.2 },
+  },
+  {
+    id: "msc_physics_astro",
+    title: "M.Sc — Physics with Astrophysics",
+    discipline: "science",
+    level: "masters",
+    description: "Quantum mechanics, condensed matter, and observational astrophysics. The standard on-ramp to a PhD or a national research lab.",
+    careers: [
+      { role: "Research Associate (Physics)",    salaryIndia: "₹6–16 LPA" },
+      { role: "Scientific Computing Specialist", salaryIndia: "₹10–26 LPA" },
+      { role: "Data Scientist (Science Track)",  salaryIndia: "₹12–30 LPA" },
+    ],
+    weights: { decision_style: 0.35, structure: 0.2 },
+  },
+  {
+    id: "msc_forensic_science",
+    title: "M.Sc — Forensic Science",
+    discipline: "science",
+    level: "masters",
+    description: "Crime-scene analysis, DNA profiling, toxicology, questioned documents, and courtroom expert testimony.",
+    careers: [
+      { role: "Forensic Analyst (State Lab)", salaryIndia: "₹5–14 LPA" },
+      { role: "Digital Forensics Examiner",   salaryIndia: "₹8–22 LPA" },
+      { role: "Forensic Consultant",          salaryIndia: "₹7–18 LPA" },
+    ],
+    weights: { structure: 0.3, decision_style: 0.25 },
+  },
+  {
+    id: "msc_actuarial",
+    title: "M.Sc — Actuarial Science",
+    discipline: "science",
+    level: "masters",
+    description: "Survival models, insurance mathematics, pension valuation, and the exam pathway toward IAI or IFoA fellowship.",
+    careers: [
+      { role: "Actuarial Analyst",  salaryIndia: "₹8–22 LPA" },
+      { role: "Pricing Actuary",    salaryIndia: "₹14–35 LPA" },
+      { role: "Consulting Actuary", salaryIndia: "₹20–50 LPA" },
+    ],
+    weights: { decision_style: 0.35, structure: 0.3 },
+  },
+
+  // Economics
+  {
+    id: "ma_economics",
+    title: "MA — Economics",
+    discipline: "economics",
+    level: "masters",
+    description: "Microeconomic theory, macro policy, and applied econometrics. The classic route to research, civil services, and policy institutions.",
+    careers: [
+      { role: "Economist (Institution / Bank)",  salaryIndia: "₹8–24 LPA" },
+      { role: "Research Associate (Think Tank)", salaryIndia: "₹6–18 LPA" },
+      { role: "Business Economist",              salaryIndia: "₹10–26 LPA" },
+    ],
+    weights: { decision_style: 0.3, structure: 0.2 },
+  },
+  {
+    id: "msc_econometrics",
+    title: "M.Sc — Econometrics and Data Analytics",
+    discipline: "economics",
+    level: "masters",
+    description: "Causal inference, time-series forecasting, and statistical programming applied to markets and public policy.",
+    careers: [
+      { role: "Econometrician",                salaryIndia: "₹12–30 LPA" },
+      { role: "Data Scientist (Economics)",    salaryIndia: "₹14–35 LPA" },
+      { role: "Pricing & Forecasting Analyst", salaryIndia: "₹10–26 LPA" },
+    ],
+    weights: { decision_style: 0.35, structure: 0.25 },
+  },
+  {
+    id: "ma_development_studies",
+    title: "MA — Development Studies and Public Economics",
+    discipline: "economics",
+    level: "masters",
+    description: "Poverty and inequality measurement, impact evaluation, and the economics of health, education, and welfare programmes.",
+    careers: [
+      { role: "Development Sector Analyst",             salaryIndia: "₹6–18 LPA" },
+      { role: "Impact Evaluation Lead",                 salaryIndia: "₹8–22 LPA" },
+      { role: "Programme Manager (NGO / Multilateral)", salaryIndia: "₹9–26 LPA" },
+    ],
+    weights: { social: 0.3, decision_style: 0.2 },
+  },
+
+  // Psychology
+  {
+    id: "ma_counselling_psych",
+    title: "MA — Counselling Psychology",
+    discipline: "psychology",
+    level: "masters",
+    description: "Therapeutic frameworks, supervised counselling practice, and case formulation for school, workplace, and private settings.",
+    careers: [
+      { role: "Counselling Psychologist",   salaryIndia: "₹6–18 LPA" },
+      { role: "School / Campus Counsellor", salaryIndia: "₹5–14 LPA" },
+      { role: "Wellbeing Programme Lead",   salaryIndia: "₹8–22 LPA" },
+    ],
+    weights: { social: 0.35, energy: 0.1 },
+  },
+  {
+    id: "msc_org_psych",
+    title: "M.Sc — Organisational Psychology and HR",
+    discipline: "psychology",
+    level: "masters",
+    description: "Psychometrics, selection science, team dynamics, and behavioural design applied inside organisations.",
+    careers: [
+      { role: "Organisational Psychologist",  salaryIndia: "₹9–24 LPA" },
+      { role: "Talent Assessment Consultant", salaryIndia: "₹10–26 LPA" },
+      { role: "People Analytics Lead",        salaryIndia: "₹12–30 LPA" },
+    ],
+    weights: { social: 0.3, decision_style: 0.2, structure: 0.15 },
+  },
+  {
+    id: "msc_cognitive_neuro",
+    title: "M.Sc — Cognitive Science and Neuropsychology",
+    discipline: "psychology",
+    level: "masters",
+    description: "Brain-behaviour relationships, cognitive testing, neuroimaging methods, and computational models of the mind.",
+    careers: [
+      { role: "Neuropsychology Researcher",  salaryIndia: "₹7–20 LPA" },
+      { role: "UX Researcher (Cognitive)",   salaryIndia: "₹12–30 LPA" },
+      { role: "Clinical Research Associate", salaryIndia: "₹8–22 LPA" },
+    ],
+    weights: { decision_style: 0.3, structure: 0.2 },
+  },
+
+  // Humanities
+  {
+    id: "ma_english_lit",
+    title: "MA — English Literature",
+    discipline: "humanities",
+    level: "masters",
+    description: "Literary theory, postcolonial and comparative literature, and advanced critical writing with a research dissertation.",
+    careers: [
+      { role: "Academic / Lecturer (post-NET)",   salaryIndia: "₹6–18 LPA" },
+      { role: "Editor / Publishing Professional", salaryIndia: "₹6–16 LPA" },
+      { role: "Content Strategy Lead",            salaryIndia: "₹8–22 LPA" },
+    ],
+    weights: { decision_style: 0.2, social: 0.1 },
+  },
+  {
+    id: "ma_history",
+    title: "MA — History",
+    discipline: "humanities",
+    level: "masters",
+    description: "Historiography, archival research methods, and regional or global history specialisations.",
+    careers: [
+      { role: "Historian / Academic",        salaryIndia: "₹6–16 LPA" },
+      { role: "Archivist / Museum Curator",  salaryIndia: "₹5–14 LPA" },
+      { role: "Civil Services (UPSC track)", salaryIndia: "₹9–22 LPA" },
+    ],
+    weights: { structure: 0.2, decision_style: 0.15 },
+  },
+  {
+    id: "ma_polsci_ir",
+    title: "MA — Political Science and International Relations",
+    discipline: "humanities",
+    level: "masters",
+    description: "Comparative politics, diplomacy, security studies, and the institutions of global governance.",
+    careers: [
+      { role: "Policy Researcher",           salaryIndia: "₹7–20 LPA" },
+      { role: "Foreign Service (IFS track)", salaryIndia: "₹10–24 LPA" },
+      { role: "Geopolitical Risk Analyst",   salaryIndia: "₹10–26 LPA" },
+    ],
+    weights: { decision_style: 0.25, social: 0.15 },
+  },
+  {
+    id: "ma_sociology",
+    title: "MA — Sociology",
+    discipline: "humanities",
+    level: "masters",
+    description: "Social theory, qualitative and quantitative field methods, and the study of institutions, gender, caste, and urban life.",
+    careers: [
+      { role: "Social Researcher",         salaryIndia: "₹6–16 LPA" },
+      { role: "CSR / ESG Specialist",      salaryIndia: "₹8–22 LPA" },
+      { role: "Qualitative Insights Lead", salaryIndia: "₹9–24 LPA" },
+    ],
+    weights: { social: 0.3, decision_style: 0.15 },
+  },
+  {
+    id: "msw",
+    title: "MSW — Master of Social Work",
+    discipline: "humanities",
+    level: "masters",
+    description: "Field-based professional training in community organisation, medical and psychiatric social work, and welfare administration.",
+    careers: [
+      { role: "Medical / Psychiatric Social Worker", salaryIndia: "₹5–14 LPA" },
+      { role: "CSR Programme Manager",               salaryIndia: "₹8–22 LPA" },
+      { role: "Development Sector Lead",             salaryIndia: "₹9–24 LPA" },
+    ],
+    weights: { social: 0.4, energy: 0.1 },
+  },
+
+  // Media & Communication
+  {
+    id: "ma_mass_comm",
+    title: "MA — Mass Communication",
+    discipline: "media",
+    level: "masters",
+    description: "Media theory, multi-platform reporting, communication research, and newsroom-grade production practice.",
+    careers: [
+      { role: "News / Features Editor",        salaryIndia: "₹7–20 LPA" },
+      { role: "Corporate Communications Lead", salaryIndia: "₹9–24 LPA" },
+      { role: "Media Researcher",              salaryIndia: "₹6–16 LPA" },
+    ],
+    weights: { social: 0.25, risk: 0.15 },
+  },
+  {
+    id: "ma_film_tv",
+    title: "MA — Film and Television Production",
+    discipline: "media",
+    level: "masters",
+    description: "Direction, cinematography, editing, and production management across film, streaming, and long-form television.",
+    careers: [
+      { role: "Director / Assistant Director", salaryIndia: "₹6–25 LPA" },
+      { role: "Editor / Post-production Lead", salaryIndia: "₹7–20 LPA" },
+      { role: "Showrunner / Producer",         salaryIndia: "₹12–40 LPA" },
+    ],
+    weights: { risk: 0.3, drive: 0.2, energy: 0.1 },
+  },
+  {
+    id: "ma_advertising_pr",
+    title: "MA — Advertising and Public Relations",
+    discipline: "media",
+    level: "masters",
+    description: "Campaign strategy, reputation management, media planning, and crisis communication.",
+    careers: [
+      { role: "Account Planner (Agency)",   salaryIndia: "₹7–20 LPA" },
+      { role: "PR / Reputation Manager",    salaryIndia: "₹8–22 LPA" },
+      { role: "Creative Strategy Director", salaryIndia: "₹14–35 LPA" },
+    ],
+    weights: { social: 0.3, risk: 0.2 },
+  },
+  {
+    id: "ma_performing_arts",
+    title: "MA — Performing Arts (Theatre and Music)",
+    discipline: "media",
+    level: "masters",
+    description: "Advanced performance practice, dramaturgy, composition, and arts pedagogy, built around a production thesis.",
+    careers: [
+      { role: "Performer / Practitioner",     salaryIndia: "₹4–18 LPA" },
+      { role: "Arts Educator",                salaryIndia: "₹5–14 LPA" },
+      { role: "Creative / Festival Director", salaryIndia: "₹8–22 LPA" },
+    ],
+    weights: { risk: 0.3, energy: 0.2, social: 0.15 },
+  },
+
+  // Law
+  {
+    id: "llm_corporate",
+    title: "LL.M. — Corporate and Commercial Law",
+    discipline: "law",
+    level: "masters",
+    description: "Company law, mergers and acquisitions, securities regulation, and cross-border commercial contracting.",
+    careers: [
+      { role: "M&A Associate (Law Firm)",   salaryIndia: "₹14–40 LPA" },
+      { role: "In-house Corporate Counsel", salaryIndia: "₹14–35 LPA" },
+      { role: "Compliance Head",            salaryIndia: "₹18–42 LPA" },
+    ],
+    weights: { structure: 0.3, decision_style: 0.25 },
+  },
+  {
+    id: "llm_ip_tech",
+    title: "LL.M. — Intellectual Property and Technology Law",
+    discipline: "law",
+    level: "masters",
+    description: "Patents, trademarks, data protection, platform regulation, and the law of emerging technologies.",
+    careers: [
+      { role: "IP Attorney",                       salaryIndia: "₹12–32 LPA" },
+      { role: "Technology Policy Counsel",         salaryIndia: "₹12–30 LPA" },
+      { role: "Privacy / Data Protection Officer", salaryIndia: "₹15–38 LPA" },
+    ],
+    weights: { decision_style: 0.3, structure: 0.25 },
+  },
+  {
+    id: "llm_constitutional",
+    title: "LL.M. — Constitutional and Human Rights Law",
+    discipline: "law",
+    level: "masters",
+    description: "Constitutional interpretation, civil liberties, public interest litigation, and international human rights instruments.",
+    careers: [
+      { role: "Litigation Counsel",                 salaryIndia: "₹8–28 LPA" },
+      { role: "Judicial Services (aspirant track)", salaryIndia: "₹10–24 LPA" },
+      { role: "Human Rights Advocate / Researcher", salaryIndia: "₹7–20 LPA" },
+    ],
+    weights: { social: 0.25, decision_style: 0.25 },
+  },
+
+  // Design & Architecture
+  {
+    id: "mdes_product",
+    title: "M.Des — Product and Industrial Design",
+    discipline: "design_arch",
+    level: "masters",
+    description: "Form-giving, materials and manufacturing, ergonomics, and design research for physical products.",
+    careers: [
+      { role: "Product / Industrial Designer", salaryIndia: "₹8–24 LPA" },
+      { role: "Design Researcher",             salaryIndia: "₹10–26 LPA" },
+      { role: "Design Studio Lead",            salaryIndia: "₹15–36 LPA" },
+    ],
+    weights: { risk: 0.25, drive: 0.2, structure: 0.15 },
+  },
+  {
+    id: "mdes_communication",
+    title: "M.Des — Communication Design",
+    discipline: "design_arch",
+    level: "masters",
+    description: "Visual systems, typography, motion, and narrative design across print, screen, and environment.",
+    careers: [
+      { role: "Brand / Visual Designer", salaryIndia: "₹7–22 LPA" },
+      { role: "Motion & Graphics Lead",  salaryIndia: "₹9–24 LPA" },
+      { role: "Design Director",         salaryIndia: "₹18–40 LPA" },
+    ],
+    weights: { risk: 0.3, energy: 0.1 },
+  },
+  {
+    id: "mplan_urban",
+    title: "M.Plan — Urban and Regional Planning",
+    discipline: "design_arch",
+    level: "masters",
+    description: "Land-use planning, transport networks, housing policy, and GIS-driven regional development.",
+    careers: [
+      { role: "Urban Planner",                 salaryIndia: "₹8–22 LPA" },
+      { role: "Transport Planning Consultant", salaryIndia: "₹10–26 LPA" },
+      { role: "Smart City Programme Lead",     salaryIndia: "₹12–30 LPA" },
+    ],
+    weights: { structure: 0.3, social: 0.15 },
+  },
+
+  // Education
+  {
+    id: "med",
+    title: "M.Ed — Master of Education",
+    discipline: "education",
+    level: "masters",
+    description: "Educational psychology, curriculum theory, assessment design, and school leadership. The route to senior academic roles and NET eligibility.",
+    careers: [
+      { role: "Academic Coordinator",    salaryIndia: "₹6–16 LPA" },
+      { role: "School Principal / Head", salaryIndia: "₹10–28 LPA" },
+      { role: "Teacher Educator",        salaryIndia: "₹7–18 LPA" },
+    ],
+    weights: { social: 0.3, structure: 0.2 },
+  },
+  {
+    id: "ma_special_education",
+    title: "MA — Special Education and Inclusive Practice",
+    discipline: "education",
+    level: "masters",
+    description: "Learning-disability assessment, individualised education plans, assistive technology, and inclusive classroom design.",
+    careers: [
+      { role: "Special Educator",             salaryIndia: "₹5–14 LPA" },
+      { role: "Learning Support Coordinator", salaryIndia: "₹6–16 LPA" },
+      { role: "Inclusion Consultant",         salaryIndia: "₹8–20 LPA" },
+    ],
+    weights: { social: 0.35, structure: 0.15 },
+  },
+
+  // Hospitality
+  {
+    id: "mhm",
+    title: "MHM — Master of Hotel Management",
+    discipline: "hospitality",
+    level: "masters",
+    description: "Advanced rooms-division and F&B operations, revenue management, and multi-property leadership.",
+    careers: [
+      { role: "Hotel Operations Manager",   salaryIndia: "₹8–22 LPA" },
+      { role: "Revenue Manager",            salaryIndia: "₹9–24 LPA" },
+      { role: "General Manager (Property)", salaryIndia: "₹15–35 LPA" },
+    ],
+    weights: { social: 0.3, energy: 0.2, structure: 0.15 },
+  },
+  {
+    id: "msc_culinary_business",
+    title: "M.Sc — Culinary Arts and Food Business Management",
+    discipline: "hospitality",
+    level: "masters",
+    description: "Advanced culinary technique paired with food-cost engineering, menu strategy, and restaurant entrepreneurship.",
+    careers: [
+      { role: "Executive Chef",                  salaryIndia: "₹8–24 LPA" },
+      { role: "Food & Beverage Director",        salaryIndia: "₹12–28 LPA" },
+      { role: "Restaurant Founder / Consultant", salaryIndia: "Highly scalable" },
+    ],
+    weights: { energy: 0.25, risk: 0.2, drive: 0.2 },
   },
 ];
 
