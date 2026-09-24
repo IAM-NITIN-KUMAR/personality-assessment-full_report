@@ -9,21 +9,24 @@ const DISCIPLINE_IDS = new Set(DISCIPLINES.map((d) => d.id));
 const masters = COURSES.filter((c) => c.level === "masters");
 const bachelors = COURSES.filter((c) => (c.level ?? "bachelors") === "bachelors");
 
-/** Masters offered per discipline. Every stream a student can enrol in needs a real PG shelf. */
+/**
+ * Masters offered per discipline, as the picker lists them. Every stream but Business counts one
+ * extra for the cross-disciplinary MBA, which any bachelor's can lead to.
+ */
 const MASTERS_PER_DISCIPLINE: Partial<Record<Discipline, number>> = {
-  tech_cs: 6,
-  tech_engg: 6,
+  tech_cs: 7,
+  tech_engg: 7,
   business: 6,
-  commerce: 5,
-  science: 6,
-  economics: 4,
-  psychology: 4,
-  humanities: 6,
-  media: 5,
-  law: 4,
-  design_arch: 5,
-  education: 3,
-  hospitality: 3,
+  commerce: 6,
+  science: 7,
+  economics: 5,
+  psychology: 5,
+  humanities: 7,
+  media: 6,
+  law: 5,
+  design_arch: 6,
+  education: 4,
+  hospitality: 4,
 };
 
 describe("course catalog", () => {
@@ -37,6 +40,28 @@ describe("course catalog", () => {
       const found = coursesByDiscipline(discipline as Discipline).filter((c) => c.level === "masters");
       expect(found.length, discipline).toBe(count);
     }
+  });
+
+  it("offers the MBA in every stream, exactly once", () => {
+    for (const d of DISCIPLINES) {
+      const listed = coursesByDiscipline(d.id).filter((c) => c.id === "mba");
+      expect(listed.length, d.id).toBe(1);
+      expect(listed[0].level, d.id).toBe("masters");
+    }
+  });
+
+  it("leaks no other course across streams", () => {
+    for (const d of DISCIPLINES) {
+      for (const c of coursesByDiscipline(d.id)) {
+        if (c.crossDiscipline) continue;
+        expect(c.discipline, `${c.id} listed under ${d.id}`).toBe(d.id);
+      }
+    }
+  });
+
+  it("marks only genuinely cross-disciplinary courses", () => {
+    const cross = COURSES.filter((c) => c.crossDiscipline).map((c) => c.id);
+    expect(cross).toEqual(["mba"]);
   });
 
   it("keeps ids and titles unique and resolvable", () => {

@@ -64,6 +64,12 @@ export interface Course {
   title: string;
   discipline: Discipline;
   level?: "bachelors" | "masters";
+  /**
+   * Listed in every stream's picker, not just `discipline`. For programmes any bachelor's can lead
+   * to — the MBA takes graduates from every degree, so filing it under Business alone hid it from
+   * the students most likely to be asking about it.
+   */
+  crossDiscipline?: boolean;
   description: string;
   careers: CourseCareer[];
   /**
@@ -990,6 +996,7 @@ export const COURSES: Course[] = [
     title: "MBA (General / Specializations)",
     discipline: "business",
     level: "masters",
+    crossDiscipline: true,
     description: "Two-year flagship MBA. Core strategies, global finance, corporate leadership, and organization scaling.",
     careers: [
       { role: "Management Consultant",    salaryIndia: "₹15–35 LPA" },
@@ -1760,9 +1767,12 @@ export const COURSES: Course[] = [
   },
 ];
 
-/** Group courses by discipline for the UI picker. */
+/**
+ * Group courses by discipline for the UI picker. Cross-disciplinary programmes are listed in every
+ * stream; a single pass keeps them from appearing twice in their own.
+ */
 export function coursesByDiscipline(discipline: Discipline): Course[] {
-  return COURSES.filter((c) => c.discipline === discipline);
+  return COURSES.filter((c) => c.discipline === discipline || c.crossDiscipline);
 }
 
 export function courseById(id: string | undefined): Course | undefined {
