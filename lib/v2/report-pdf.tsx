@@ -2,6 +2,7 @@ import { Document, Line, Page, Polygon, Rect, StyleSheet, Svg, Text, View } from
 import { ANIMALS, DIM_LABELS, DOMAIN_LABELS, ROLE_LABELS } from "./types";
 import type { CareerCard, RadarDim, ReportV2 } from "./types";
 import type { Journey } from "./journeys/data";
+import { journeyIntroLead } from "./journeys/select";
 import { ANIMAL_ART, PUP, PUP_ART } from "./animal-geometry";
 
 // ---------------------------------------------------------------------------
@@ -583,6 +584,15 @@ function MatchCardSmall({ card }: { card: CareerCard }) {
   );
 }
 
+/** Cards per row. A row renders as one unbreakable unit so a card never splits across pages. */
+const JOURNEY_ROW = 3;
+
+function chunk<T>(items: T[], size: number): T[][] {
+  const out: T[][] = [];
+  for (let i = 0; i < items.length; i += size) out.push(items.slice(i, i + size));
+  return out;
+}
+
 const JOURNEY_STEPS: { key: keyof Journey["steps"]; label: string }[] = [
   { key: "degree", label: "Degree" },
   { key: "firstJob", label: "First job" },
@@ -595,7 +605,7 @@ function JourneyCard({ journey }: { journey: Journey }) {
   return (
     <View style={s.journeyCard}>
       <View style={s.journeyTopRow}>
-        <Text style={s.journeyName}>{journey.name}</Text>
+        <Text style={s.journeyName}>{journey.label}</Text>
         <Text style={s.journeyStatus}>{journey.status}</Text>
       </View>
       <View style={s.journeySteps}>
@@ -834,15 +844,20 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
               <View style={{ paddingTop: 14, borderTopWidth: 1, borderTopColor: LINE_SUBTLE }}>
                 <SectionHeader>PEOPLE WHO WALKED THIS PATH</SectionHeader>
                 <Text style={s.journeyIntro}>
-                  Three real graduates who started where you are. What they studied, where they began, what they added on
+                  {journeyIntroLead(report.journeys.length)} What they studied, where they began, what they added on
                   top of the degree, and where it took them. The road to{" "}
                   <Text style={s.journeyIntroStrong}>{report.cards[0].career}</Text> is not theoretical.
                 </Text>
-                <View style={s.journeyGrid}>
-                  {report.journeys.map((j) => (
-                    <JourneyCard key={j.id} journey={j} />
-                  ))}
-                </View>
+                {chunk(report.journeys, JOURNEY_ROW).map((row, i) => (
+                  <View key={row[0].id} style={s.journeyGrid} wrap={false}>
+                    {row.map((j) => (
+                      <JourneyCard key={j.id} journey={j} />
+                    ))}
+                    {Array.from({ length: JOURNEY_ROW - row.length }).map((_, k) => (
+                      <View key={"spacer-" + i + "-" + k} style={{ flex: 1 }} />
+                    ))}
+                  </View>
+                ))}
                 <Text style={s.journeyFoot}>
                   Profiles as shared on LinkedIn with Secure Steps; not independently verified. Roles and employers as at
                   September 2026.

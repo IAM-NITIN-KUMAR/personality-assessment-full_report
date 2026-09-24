@@ -36,6 +36,7 @@ import { Logo } from "@/components/ui/logo";
 import { ANIMALS, DOMAIN_LABELS, DIM_LABELS, ROLE_LABELS } from "@/lib/v2/types";
 import type { ReportV2, RadarDim, CareerCard } from "@/lib/v2/types";
 import type { Journey } from "@/lib/v2/journeys/data";
+import { journeyIntroLead } from "@/lib/v2/journeys/select";
 import { ANIMAL_ART, PUP, PUP_ART } from "@/lib/v2/animal-geometry";
 import { AnimalArt } from "./animal-art";
 
@@ -326,7 +327,7 @@ function JourneyCard({ journey }: { journey: Journey }) {
   return (
     <div className="rounded-[16px] p-5 border border-line bg-[#f8f7fd]/30 hover:bg-[#f8f7fd]/60 transition-all flex flex-col gap-4">
       <div className="flex items-start justify-between gap-2">
-        <h4 className="text-[14px] font-extrabold text-ink-700 leading-snug">{journey.name}</h4>
+        <h4 className="text-[14px] font-extrabold text-ink-700 leading-snug">{journey.label}</h4>
         <span className="text-[8.5px] font-mono font-black text-[#6e6ef0] bg-[#f3f0fc] px-2 py-0.5 rounded-md whitespace-nowrap uppercase shrink-0">
           {journey.status}
         </span>
@@ -654,7 +655,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
               <section className="py-6 border-t border-line/50 space-y-6">
                 <SectionHeader icon={Footprints}>PEOPLE WHO WALKED THIS PATH</SectionHeader>
                 <p className="text-[13px] text-ink-600 leading-relaxed max-w-2xl">
-                  Three real graduates who started where you are. What they studied, where they began, what they added
+                  {journeyIntroLead(report.journeys.length)} What they studied, where they began, what they added
                   on top of the degree, and where it took them. The road to{" "}
                   <span className="font-semibold text-ink-700">{report.cards[0].career}</span> is not theoretical.
                 </p>

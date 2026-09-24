@@ -76,16 +76,16 @@ describe("buildReportV2 states", () => {
 describe("buildReportV2 journeys", () => {
   const eng: V2Answers = { ...ANANYA_ANSWERS, Q0: ["a"], C1: ["a"] }; // engineering, first card = technology
 
-  it("commerce student gets no journeys (roadmap is engineering-only for now)", () => {
+  it("commerce student gets no journeys when no profile proves their winning role", () => {
     const r = buildReportV2({ name: "X", dateISO: "2026-09-15", answers: ANANYA_ANSWERS, discipline: "commerce" });
     expect(r.journeys).toEqual([]);
   });
 
-  it("engineering student in the full state gets exactly three journeys", () => {
+  it("engineering student in the full state gets a full set of six journeys", () => {
     const r = buildReportV2({ name: "X", dateISO: "2026-09-15", answers: eng, discipline: "tech_cs", course: "btech_cse" });
     expect(r.state).toBe("full");
     expect(r.domain).toBe("technology");
-    expect(r.journeys).toHaveLength(3);
+    expect(r.journeys).toHaveLength(6);
     // Role proof can come from another course; at least one pick is always the student's own.
     expect(r.journeys.some((j) => j.courses.includes("btech_cse"))).toBe(true);
     expect(r.journeys.some((j) => j.proves.includes(r.role!.winner))).toBe(true);

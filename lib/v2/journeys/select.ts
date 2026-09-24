@@ -3,7 +3,29 @@ import type { Degree, RoleId } from "../types";
 import { JOURNEYS } from "./data";
 import type { Journey } from "./data";
 
-export const JOURNEY_COUNT = 3;
+export const JOURNEY_COUNT = 6;
+
+/**
+ * Minimum score a journey must reach to be shown at all. Three is the cost of proving the
+ * student's co-candidate role, or of being their own course — sharing only a discipline (1) is
+ * not relevance. This, not the degree label, decides who sees journeys: a commerce student
+ * heading for a data career sees the graduates who prove that career.
+ */
+export const RELEVANCE_FLOOR = 3;
+
+const COUNT_WORDS = ["No", "One", "Two", "Three", "Four", "Five", "Six"];
+
+/**
+ * Opening sentence for the journeys section, shared by the web report and the PDF so the copy can
+ * never drift from how many cards actually render.
+ */
+export function journeyIntroLead(n: number): string {
+  const word = COUNT_WORDS[n] ?? String(n);
+  return n === 1
+    ? word + " real graduate who started where you are."
+    : word + " real graduates who started where you are.";
+}
+
 
 /** Calibration seeds: role proof (5) strictly beats same-course + same-discipline (3 + 1). */
 const W = { course: 3, discipline: 1, winner: 5, coCandidate: 3 } as const;
@@ -26,21 +48,21 @@ function score(j: Journey, a: SelectJourneysArgs): number {
 }
 
 /**
- * Picks the three real journeys that best prove the student's winning career, preferring their own
- * course. Engineering degrees only (the roadmap covers technology and engineering); otherwise [].
- * Guarantees at least one same-course journey when the data has one. Deterministic: ties break on
- * roadmap serial.
+ * Picks the journeys that best prove the student's winning career, preferring their own course.
+ * Relevance gates the section, not the degree: anything below RELEVANCE_FLOOR is dropped, so a
+ * student whose career no journey proves sees none at all. Guarantees at least one same-course
+ * journey when the data has one. Deterministic: ties break on roadmap serial.
  */
 export function selectJourneys(a: SelectJourneysArgs): Journey[] {
-  if (a.degree !== "engineering") return [];
-
   const ranked = JOURNEYS
     .map((j) => ({ j, s: score(j, a) }))
+    .filter((e) => e.s >= RELEVANCE_FLOOR)
     .sort((x, y) => y.s - x.s || x.j.id.localeCompare(y.j.id));
 
   const top = ranked.slice(0, JOURNEY_COUNT);
   const ownCourse = (e: { j: Journey }) => Boolean(a.course && e.j.courses.includes(a.course));
-  if (a.course && !top.some(ownCourse)) {
+  // Only needed when the list was truncated — a shorter list already holds every relevant journey.
+  if (a.course && top.length === JOURNEY_COUNT && !top.some(ownCourse)) {
     const best = ranked.find(ownCourse);
     if (best) top[JOURNEY_COUNT - 1] = best;
   }
