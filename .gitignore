@@ -1,33 +1,51 @@
+# Dependencies
 node_modules
+
+# Next.js build
 .next
 out
+
+# Environment & secrets
 .env
 .env.local
 .env*.local
+.env.production*
+database details/
+databasepass.txt
+!.env.example
+
+# OS files
 .DS_Store
+
+# TypeScript
 *.tsbuildinfo
 next-env.d.ts
 
-.vercel
-.env*
-databasepass.txt
-.env*
+# Vercel
 .vercel
 
-# Task 20: secrets cleanup
-.env*.local
-database details/
-
-# .env.example is a template with no real values — safe and intended to be tracked
-!.env.example
-
-# Generated or dropped-in documents at the repo root. The canonical copies live
-# under "career roadmaps/" and docs/ — root-level exports are scratch.
+# Documents at repo root (source docs, exports)
 /*.pdf
 /*.docx
+/*.txt
 
 # Office lock files
 ~$*
+
+# Scratch scripts directory
+sc/
+
+# One-off Python scripts
+generate_doc.py
+
+# Career roadmaps directory (not app code)
+career roadmaps/
+
+# AI tool state (developer-local)
+.claude/
+.remember/
+.superpowers/
+docs/superpowers/
 
 # Local verification scratch output
 /picker-verify.txt
