@@ -39,6 +39,7 @@ import type { Journey } from "@/lib/v2/journeys/data";
 import { journeyIntroLead } from "@/lib/v2/journeys/select";
 import { ANIMAL_ART, PUP, PUP_ART } from "@/lib/v2/animal-geometry";
 import { AnimalArt } from "./animal-art";
+import { ThinkingPageView } from "./thinking-page";
 
 // ---------------------------------------------------------------------------
 // Small formatting helpers (no Date.now(), no new Date() — everything comes
@@ -137,10 +138,10 @@ function SectionHeader({ icon: Icon, children }: { icon: typeof Star; children: 
   );
 }
 
-function PageTag({ n }: { n: number }) {
+function PageTag({ n, total }: { n: number; total: number }) {
   return (
     <div className="absolute top-0 right-0 bg-[#f3f0fc] text-[#6e6ef0] font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
-      PAGE {n} OF 3
+      PAGE {n} OF {total}
     </div>
   );
 }
@@ -370,6 +371,7 @@ function JourneyCard({ journey }: { journey: Journey }) {
 export default function ReportViewV2({ report }: { report: ReportV2 }) {
   const t = report.yourType;
   const isFull = report.state === "full";
+  const totalPages = report.thinking ? 4 : 3;
 
   const initials = useMemo(() => initialsOf(report.header.name), [report.header.name]);
   const dateStr = useMemo(() => formatDateISO(report.header.date), [report.header.date]);
@@ -401,7 +403,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
       >
-        <PageTag n={1} />
+        <PageTag n={1} total={totalPages} />
 
         {/* Header Block */}
         <header className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-line">
@@ -627,7 +629,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
       >
-        <PageTag n={2} />
+        <PageTag n={2} total={totalPages} />
 
         {isFull && report.cards ? (
           <>
@@ -683,7 +685,21 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
         )}
       </motion.div>
 
-      {/* PAGE 3: NEXT Secure Step */}
+      {/* PAGE 3: First Principles thinking page (only once the module is answered) */}
+      {report.thinking && (
+        <motion.div
+          initial={{ opacity: 0, y: 15 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true, margin: "-100px" }}
+          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
+          className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
+        >
+          <PageTag n={3} total={totalPages} />
+          <ThinkingPageView t={report.thinking} />
+        </motion.div>
+      )}
+
+      {/* PAGE 3 (or 4): NEXT Secure Step */}
       <motion.div
         initial={{ opacity: 0, y: 15 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -691,7 +707,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
       >
-        <PageTag n={3} />
+        <PageTag n={totalPages} total={totalPages} />
 
         {report.verdicts.length > 0 && (
           <section className="py-6 border-b border-line/50 space-y-4 mb-6">

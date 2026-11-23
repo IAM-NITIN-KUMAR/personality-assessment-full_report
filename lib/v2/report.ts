@@ -10,6 +10,8 @@ import { UNIVERSAL_TIPS, evaluateFlags } from "./flags";
 import { chosenDomain, degreeOf } from "./flow";
 import { showAbroad } from "./gate";
 import { selectJourneys } from "./journeys/select";
+import { buildThinking } from "./fp/thinking";
+import type { FpAnswers } from "./fp/score";
 import type { Discipline } from "../course-catalog";
 import { ROLE_LABELS, VALUE_BY_KEY, VALUE_LABELS } from "./types";
 import type { ReportV2, SlidersResult, V2Answers, ValueId } from "./types";
@@ -86,8 +88,10 @@ export function buildReportV2(input: {
   name: string; email?: string; dateISO: string; answers: V2Answers;
   /** From the registration profile; sharpen the journeys pick. Optional so existing callers keep working. */
   discipline?: Discipline; course?: string;
+  /** First Principles module answers (keys prefixed `fp.`). Optional so existing callers keep working. */
+  fp?: FpAnswers;
 }): ReportV2 {
-  const { name, email = "", dateISO, answers, discipline, course } = input;
+  const { name, email = "", dateISO, answers, discipline, course, fp } = input;
   const degree = degreeOf(answers) ?? "other";
   const radar = computeRadar(answers);
   const sliders = computeSliders(answers);
@@ -170,5 +174,6 @@ export function buildReportV2(input: {
     role: role ? { winner: role.winner, coCandidate: role.coCandidate, confTotal: conf, confBand: band } : null,
     domain,
     journeys,
+    thinking: fp ? buildThinking({ fp, radar }) : null,
   };
 }

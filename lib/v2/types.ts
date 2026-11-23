@@ -2,6 +2,7 @@
 // calibration seeds (spec v2, end note).
 
 import type { Journey } from "./journeys/data";
+import type { ThinkingPage } from "./fp/thinking";
 
 export type Degree = "engineering" | "commerce" | "science" | "arts" | "other";
 
@@ -185,4 +186,6 @@ export interface ReportV2 {
   domain: DomainId | null;
   /** Real graduates who walked the recommended path. Three for engineering students in the full state, else []. */
   journeys: Journey[];
+  /** First Principles "How you are thinking about your next step" page. null until the module is answered. */
+  thinking: ThinkingPage | null;
 }

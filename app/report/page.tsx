@@ -10,6 +10,8 @@ import { buildReport } from "@/lib/report-data";
 import { toV2Answers } from "@/components/v2/assessment-flow";
 import { buildReportV2 } from "@/lib/v2/report";
 import { ANANYA_ANSWERS, ANANYA_NAME } from "@/lib/v2/fixtures";
+import { ANANYA_FP } from "@/lib/v2/fp/fixtures";
+import { toFpAnswers } from "@/lib/v2/fp/score";
 import ReportViewV2 from "@/components/v2/report-view";
 
 export default function ReportPage() {
@@ -100,8 +102,9 @@ export default function ReportPage() {
         answers: v2Answers,
         discipline: isEngMock ? "tech_cs" : profile?.discipline,
         course: isEngMock ? "btech_cse" : profile?.course,
+        fp: isMock ? ANANYA_FP : toFpAnswers(answers),
       }),
-    [isMock, isEngMock, profile, v2Answers],
+    [isMock, isEngMock, profile, v2Answers, answers],
   );
 
   const [downloading, setDownloading] = useState(false);

@@ -4,6 +4,7 @@ import type { CareerCard, RadarDim, ReportV2 } from "./types";
 import type { Journey } from "./journeys/data";
 import { journeyIntroLead } from "./journeys/select";
 import { ANIMAL_ART, PUP, PUP_ART } from "./animal-geometry";
+import { ThinkingPdfPage } from "./fp/thinking-pdf";
 
 // ---------------------------------------------------------------------------
 // react-pdf counterpart of components/v2/report-view.tsx. Mirrors its 3-page
@@ -410,9 +411,9 @@ const s = StyleSheet.create({
 // Sub-components
 // ---------------------------------------------------------------------------
 
-function PageTag({ n }: { n: number }) {
+function PageTag({ n, total }: { n: number; total: number }) {
   return (
-    <Text style={s.pageTag}>PAGE {n} OF 3</Text>
+    <Text style={s.pageTag}>PAGE {n} OF {total}</Text>
   );
 }
 
@@ -634,6 +635,7 @@ function JourneyCard({ journey }: { journey: Journey }) {
 export default function ReportPdfV2({ report }: { report: ReportV2 }) {
   const t = report.yourType;
   const isFull = report.state === "full";
+  const totalPages = report.thinking ? 4 : 3;
 
   const initials = initialsOf(report.header.name);
   const dateStr = formatDateISO(report.header.date);
@@ -660,7 +662,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
     <Document title={`${report.header.assessmentName} — ${report.header.name}`}>
       {/* PAGE 1: Personal Assessment */}
       <Page size="A4" style={s.page}>
-        <PageTag n={1} />
+        <PageTag n={1} total={totalPages} />
 
         <View style={s.headerRow}>
           <Text style={s.logoText}>SecureSteps</Text>
@@ -816,7 +818,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
 
       {/* PAGE 2: Future Plans */}
       <Page size="A4" style={s.page}>
-        <PageTag n={2} />
+        <PageTag n={2} total={totalPages} />
 
         {isFull && report.cards ? (
           <>
@@ -875,9 +877,12 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
         )}
       </Page>
 
-      {/* PAGE 3: Next Secure Step */}
+      {/* PAGE 3: First Principles thinking page */}
+      {report.thinking && <ThinkingPdfPage t={report.thinking} n={3} total={totalPages} />}
+
+      {/* PAGE 3 (or 4): Next Secure Step */}
       <Page size="A4" style={s.page}>
-        <PageTag n={3} />
+        <PageTag n={totalPages} total={totalPages} />
 
         {report.verdicts.length > 0 && (
           <View style={{ paddingBottom: 14, borderBottomWidth: 1, borderBottomColor: LINE_SUBTLE, marginBottom: 18 }}>

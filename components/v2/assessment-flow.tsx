@@ -6,6 +6,13 @@ import { motion } from "framer-motion";
 import { useAssessment } from "@/lib/store";
 import { getScreen, nextScreenId, screenOrder } from "@/lib/v2/flow";
 import { Q0_KEY_BY_DISCIPLINE } from "@/lib/v2/question-bank";
+import { POST_STEPS, PRE_STEPS } from "@/lib/v2/fp/bank";
+import { toFpAnswers } from "@/lib/v2/fp/score";
+import { nextPostStep, nextPreStep } from "@/lib/v2/fp/steps";
+import { buildThinking } from "@/lib/v2/fp/thinking";
+import { computeRadar } from "@/lib/v2/scoring/radar";
+import { FpStepView } from "@/components/v2/fp-step";
+import type { FpCommit } from "@/components/v2/fp-step";
 import { QuestionCard } from "@/components/node-graph/question-card";
 import { AssessmentChrome } from "@/components/assessment-chrome";
 import type { Answer, Question } from "@/lib/types";
@@ -52,22 +59,68 @@ export default function V2AssessmentFlow() {
     }
   }, [v2Answers.Q0, profile?.discipline, saveAnswer]);
 
-  const currentId = nextScreenId(v2Answers);
+  // First Principles module: Part A runs before the main test, Parts B-D after it.
+  const fp = useMemo(() => toFpAnswers(answers), [answers]);
+  const preStep = nextPreStep(fp);
+  const coreId = preStep ? null : nextScreenId(v2Answers);
+  const postStep = !preStep && coreId === null ? nextPostStep(fp) : null;
+  const currentId = coreId;
+  const finished = !preStep && !coreId && !postStep;
 
   useEffect(() => {
-    if (currentId === null) router.push("/report");
-  }, [currentId, router]);
+    if (finished) router.push("/report");
+  }, [finished, router]);
   useEffect(() => {
     setSelected([]);
     selectedRef.current = [];
   }, [currentId]);
+
+  const commitFp = (entries: FpCommit[]) => {
+    entries.forEach((e) => saveAnswer(e.id, { optionIds: e.optionIds, text: e.text }));
+  };
+
+  const coreCount = screenOrder(v2Answers).filter((id) => id !== "Q0").length;
+  const totalCount = PRE_STEPS.length + coreCount + POST_STEPS.length;
+
+  const fpStep = preStep ?? postStep;
+  if (fpStep) {
+    const index = preStep
+      ? PRE_STEPS.findIndex((x) => x.id === fpStep.id)
+      : PRE_STEPS.length + coreCount + POST_STEPS.findIndex((x) => x.id === fpStep.id);
+    const suggested = fpStep.kind === "conclusions"
+      ? [...(buildThinking({ fp, radar: computeRadar(v2Answers) })?.suggested ?? ["", "", ""])]
+      : [];
+    return (
+      <AssessmentChrome
+        name={profile?.name ?? ""}
+        sectionLabel={fpStep.category}
+        onReset={() => {
+          if (confirm("Start over from the beginning?")) {
+            reset();
+            router.push("/");
+          }
+        }}
+      >
+        <div className="flex-1 flex flex-col justify-center relative z-10 overflow-y-auto px-4 md:px-8">
+          <div className="w-full max-w-3xl mx-auto py-6">
+            <FpStepView
+              step={fpStep}
+              positionLabel={`${index + 1} of ${totalCount}`}
+              suggested={suggested}
+              onSubmit={commitFp}
+            />
+          </div>
+        </div>
+      </AssessmentChrome>
+    );
+  }
 
   if (currentId === null) return null;
   const screen = getScreen(currentId, v2Answers);
   // Q0 is seeded from the profile and hidden from the count — unless the
   // fallback actually has to render it (profile without a discipline).
   const order = screenOrder(v2Answers).filter((id) => id !== "Q0" || currentId === "Q0");
-  const done = order.indexOf(currentId);
+  const done = PRE_STEPS.length + order.indexOf(currentId);
 
   const question: Question = {
     id: screen.id,
@@ -117,7 +170,7 @@ export default function V2AssessmentFlow() {
             }}
             onAutoAdvance={() => commit(selectedRef.current)}
             onNext={() => commit(selectedRef.current)}
-            positionLabel={`${done + 1} of ${order.length}`}
+            positionLabel={`${done + 1} of ${totalCount}`}
           />
         </motion.div>
       </div>
