@@ -19,11 +19,11 @@ export interface FpGridRow {
 }
 
 export type FpStep =
-  | { kind: "choice"; id: string; part: FpPart; category: string; prompt: string; hint?: string; multi?: boolean; options: FpOption[] }
+  | { kind: "choice"; id: string; part: FpPart; category: string; prompt: string; hint?: string; multi?: boolean; /** Most options a multi-select accepts. */ max?: number; options: FpOption[] }
   | { kind: "text"; id: string; part: FpPart; category: string; prompt: string; hint?: string }
   | { kind: "grid"; id: string; part: FpPart; category: string; prompt: string; hint?: string;
-      options: FpOption[]; anchors?: [string, string]; rows: FpGridRow[] }
-  | { kind: "conclusions"; id: string; part: FpPart; category: string; prompt: string; hint?: string };
+      options: FpOption[]; anchors?: [string, string]; rows: FpGridRow[] };
+
 
 const SCALE_1_5: FpOption[] = [1, 2, 3, 4, 5].map((n) => ({ id: String(n), label: String(n) }));
 
@@ -233,14 +233,14 @@ const A = (id: string) => fpId(`A${id}`);
 
 export const PRE_STEPS: FpStep[] = [
   { kind: "text", id: A("1"), part: "A", category: "Your starting point", prompt: "Right now, which career or field are you leaning towards?", hint: "A job, a field, or just \"I have no idea yet\". Any answer is fine." },
-  { kind: "choice", id: A("2"), part: "A", category: "Your starting point", prompt: "What is the main reason you are leaning that way?", options: REASONS },
+  { kind: "choice", id: A("2"), part: "A", category: "Your starting point", prompt: "What is the main reason behind the career you are leaning towards?", options: REASONS },
   { kind: "choice", id: A("3"), part: "A", category: "Your starting point", prompt: "What kind of workplace do you picture yourself in?", options: WORKPLACES },
   { kind: "choice", id: A("4"), part: "A", category: "Your starting point", prompt: "Why that workplace?", options: REASONS },
   { kind: "choice", id: A("5"), part: "A", category: "Your starting point", prompt: "After your current course, what do you plan to do next?", options: NEXT_STEPS },
   { kind: "choice", id: A("6"), part: "A", category: "Your starting point", prompt: "Why that next step?", options: NEXT_REASONS },
   {
     kind: "grid", id: A("7"), part: "A", category: "Your starting point",
-    prompt: "How sure are you about each answer?", hint: "1 is just a guess, 5 is very sure.",
+    prompt: "How sure are you about this answer?", hint: "1 is just a guess, 5 is very sure.",
     options: SCALE_1_5, anchors: ["Just a guess", "Very sure"],
     rows: A7_ROWS.map((r) => ({ ...r, id: fpId(`A7.${r.id}`) })),
   },
@@ -249,8 +249,8 @@ export const PRE_STEPS: FpStep[] = [
 const group = (g: Conclusion): BStatement[] => B_STATEMENTS.filter((s) => s.group === g);
 const bStep = (g: Conclusion): FpStep => ({
   kind: "grid", id: fpId(`B.${g}`), part: "B", category: "Check your assumptions",
-  prompt: g === "career" ? "How much do you agree? Career route" : g === "work" ? "How much do you agree? Work environment" : "How much do you agree? Next step",
-  hint: "There are no wrong answers. We're only checking which beliefs are steering your choice.",
+  prompt: g === "career" ? "About your career route" : g === "work" ? "About your work environment" : "About your next step",
+  hint: "How much do you agree? There are no wrong answers. We're only checking which beliefs are steering your choice.",
   options: SCALE_1_5, anchors: AGREE_ANCHORS,
   rows: group(g).map((s) => ({ id: fpId(`B${s.n}`), label: s.text })),
 });
@@ -265,17 +265,17 @@ export const C_STEPS_FIXED: FpStep[] = [
   },
   {
     kind: "grid", id: fpId("C1.parts"), part: "C", category: "Break it down",
-    prompt: "Now pick the one that fits that day best, for each part.", options: [],
+    prompt: "Pick the one that fits that day best.", options: [],
     rows: PARTS.map((p) => ({ id: fpId(`C1.${p}`), label: PART_OPTIONS[p].prompt, options: PART_OPTIONS[p].options })),
   },
   {
     kind: "grid", id: fpId("C2.dials"), part: "C", category: "Break it down",
-    prompt: "Place yourself on each dial.", hint: "1 is the left side, 5 is the right side.",
+    prompt: "Place yourself on this dial.", hint: "1 is the left side, 5 is the right side.",
     options: SCALE_1_5,
     rows: DIALS.map((d) => ({ id: fpId(`C2.${d}`), label: DIAL_DEF[d].label, left: DIAL_DEF[d].left, right: DIAL_DEF[d].right })),
   },
   {
-    kind: "choice", id: fpId("C2.focus"), part: "C", category: "Break it down", multi: true,
+    kind: "choice", id: fpId("C2.focus"), part: "C", category: "Break it down", multi: true, max: 2,
     prompt: "Which do you most enjoy working with?", hint: "Pick up to two.", options: FOCUS_OPTIONS,
   },
   {
@@ -285,15 +285,10 @@ export const C_STEPS_FIXED: FpStep[] = [
   },
 ];
 
-export const CONCLUSIONS_STEP: FpStep = {
-  kind: "conclusions", id: fpId("D"), part: "D", category: "Your thinking page",
-  prompt: "Here are your three conclusions, in your own words.",
-  hint: "We've suggested wording from your answers. Edit anything that doesn't sound like you.",
-};
-
+/** The three conclusions are written on the report's Thinking Page (spec Part D, Box 3), not in the test. */
 export const CONCLUSION_IDS = [fpId("D.1"), fpId("D.2"), fpId("D.3")] as const;
 
-export const POST_STEPS: FpStep[] = [...B_STEPS, ...C_STEPS_FIXED, CONCLUSIONS_STEP];
+export const POST_STEPS: FpStep[] = [...B_STEPS, ...C_STEPS_FIXED];
 export const ALL_FP_STEPS: FpStep[] = [...PRE_STEPS, ...POST_STEPS];
 
 export const NO_IDEA = /^\s*(i\s*)?(have\s*)?(no|not|don'?t|dont|idk|nothing|unsure|none)\b.*$/i;

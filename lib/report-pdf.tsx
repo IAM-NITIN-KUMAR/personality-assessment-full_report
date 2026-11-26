@@ -20,6 +20,7 @@ import {
 import { ReportData, Stat } from "./report-data";
 import { DIMENSION_LABELS, Dimension } from "./types";
 import { DISCIPLINES, courseById } from "./course-catalog";
+import { THEME } from "./theme";
 
 // Register premium custom fonts from local public directory
 Font.register({
@@ -78,9 +79,9 @@ const COLORS = {
   inkSoft: "#3A3D48",
   inkMuted: "#6B6F78",
   inkFaint: "#9CA0A8",
-  line: "#E5E7EB",
-  electric: "#F3A6D9",
-  electricTint: "#FDEEF8",
+  line: THEME.line,
+  electric: THEME.accent,
+  electricTint: THEME.tint,
   positive: "#16A34A",
   warning: "#E76F51",
 };
@@ -187,7 +188,7 @@ const styles = StyleSheet.create({
     <Svg style={{ width: size, height: size }} viewBox="0 0 64 64">
       <Path
         d="M 6 22 C 18 22, 26 24, 32 32 C 38 40, 46 42, 58 42"
-        stroke="#6e6ef0"
+        stroke={THEME.accent}
         strokeWidth={8.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
       />
       <Path
         d="M 42 6 C 42 18, 40 26, 32 32 C 24 38, 22 46, 22 58"
-        stroke="#6e6ef0"
+        stroke={THEME.accent}
         strokeWidth={8.5}
         strokeLinecap="round"
         strokeLinejoin="round"
@@ -211,7 +212,7 @@ function PdfBulletIcon({ index }: { index: number }) {
       {index === 0 && (
         <Path
           d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .5 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"
-          stroke="#6e6ef0"
+          stroke={THEME.accent}
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -221,7 +222,7 @@ function PdfBulletIcon({ index }: { index: number }) {
       {index === 1 && (
         <Path
           d="M4.5 16.5c-1.5 1.25-2.5 3.5-2.5 3.5s2.25-1 3.5-2.5M12 5l-8 8M19 12l-8 8M19 5a5 5 0 0 0-7 7l7-7Z"
-          stroke="#6e6ef0"
+          stroke={THEME.accent}
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -231,7 +232,7 @@ function PdfBulletIcon({ index }: { index: number }) {
       {index === 2 && (
         <Path
           d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2M9 7a4 4 0 1 0 0-8 4 4 0 0 0 0 8ZM22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"
-          stroke="#6e6ef0"
+          stroke={THEME.accent}
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -241,7 +242,7 @@ function PdfBulletIcon({ index }: { index: number }) {
       {index === 3 && (
         <Path
           d="m16.24 7.76-2.12 6.36-6.36 2.12 2.12-6.36 6.36-2.12zM12 22c5.52 0 10-4.48 10-10S17.52 2 12 2 2 6.48 2 12s4.48 10 10 10z"
-          stroke="#6e6ef0"
+          stroke={THEME.accent}
           strokeWidth={2}
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -272,7 +273,7 @@ const pdfStyles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     borderBottomWidth: 1,
-    borderBottomColor: "#E5E7EB",
+    borderBottomColor: THEME.line,
     paddingBottom: 6,
   },
   logoSection: {
@@ -320,7 +321,7 @@ const pdfStyles = StyleSheet.create({
   insightArchetype: {
     fontFamily: MONO_BOLD,
     fontSize: 9,
-    color: "#6e6ef0",
+    color: THEME.accent,
     textTransform: "uppercase",
     marginTop: 4,
     marginBottom: 4,
@@ -335,22 +336,22 @@ const pdfStyles = StyleSheet.create({
     marginTop: 6,
     padding: 6,
     borderRadius: 6,
-    backgroundColor: "#F3F0FC",
+    backgroundColor: THEME.tint,
     borderWidth: 0.5,
-    borderColor: "#E5DDF5",
+    borderColor: THEME.accentSoft,
   },
   pdfIntroText: {
     fontFamily: SANS_BOLD,
     fontSize: 7.5,
-    color: "#6e6ef0",
+    color: THEME.accent,
     lineHeight: 1.3,
   },
   profileCard: {
     flex: 0.9,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: THEME.line,
     borderRadius: 8,
-    backgroundColor: "#f8f7fd",
+    backgroundColor: THEME.surfaceSubtle,
     padding: 8,
     flexDirection: "row",
     alignItems: "center",
@@ -378,7 +379,7 @@ const pdfStyles = StyleSheet.create({
   profileSub: {
     fontFamily: SANS_BOLD,
     fontSize: 7.5,
-    color: "#6e6ef0",
+    color: THEME.accent,
     marginTop: 1,
   },
   profileMeta: {
@@ -412,14 +413,14 @@ const pdfStyles = StyleSheet.create({
   sectionSubtitleText: {
     fontFamily: MONO_BOLD,
     fontSize: 7.5,
-    color: "#6e6ef0",
+    color: THEME.accent,
     textTransform: "uppercase",
   },
   strengthCard: {
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: THEME.line,
     borderRadius: 6,
-    backgroundColor: "#fbfaff",
+    backgroundColor: THEME.surfaceSubtle,
     padding: 6,
     flexDirection: "row",
     gap: 6,
@@ -429,7 +430,7 @@ const pdfStyles = StyleSheet.create({
     width: 18,
     height: 18,
     borderRadius: 9,
-    backgroundColor: "#f3f0fc",
+    backgroundColor: THEME.tint,
     justifyContent: "center",
     alignItems: "center",
     paddingTop: 1.5,
@@ -454,7 +455,7 @@ const pdfStyles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "flex-start",
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: THEME.line,
     borderRadius: 8,
     backgroundColor: "#FFFFFF",
     padding: 8,
@@ -485,9 +486,9 @@ const pdfStyles = StyleSheet.create({
   matchCard: {
     flex: 1,
     borderWidth: 1,
-    borderColor: "#E5E7EB",
+    borderColor: THEME.line,
     borderRadius: 8,
-    backgroundColor: "#f8f7fd",
+    backgroundColor: THEME.surfaceSubtle,
     padding: 8,
     flexDirection: "column",
     justifyContent: "flex-start",
@@ -503,14 +504,14 @@ const pdfStyles = StyleSheet.create({
   matchBadge: {
     fontFamily: MONO_BOLD,
     fontSize: 7,
-    color: "#6e6ef0",
-    backgroundColor: "#f3f0fc",
+    color: THEME.accent,
+    backgroundColor: THEME.tint,
     paddingHorizontal: 3,
     paddingVertical: 0.5,
     borderRadius: 2,
   },
   matchCardIndexContainer: {
-    backgroundColor: "#6e6ef0",
+    backgroundColor: THEME.accent,
     width: 12,
     height: 12,
     borderRadius: 6,
@@ -586,7 +587,7 @@ const pdfStyles = StyleSheet.create({
   },
   quoteSection: {
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
+    borderTopColor: THEME.line,
     paddingTop: 6,
     paddingBottom: 6,
     alignItems: "center",
@@ -605,7 +606,7 @@ const pdfStyles = StyleSheet.create({
     left: 30,
     right: 30,
     borderTopWidth: 1,
-    borderTopColor: "#E5E7EB",
+    borderTopColor: THEME.line,
     paddingTop: 6,
     flexDirection: "row",
     justifyContent: "space-between",
@@ -629,7 +630,7 @@ const pdfStyles = StyleSheet.create({
   footerLink: {
     fontFamily: SANS_BOLD,
     fontSize: 8,
-    color: "#6e6ef0",
+    color: THEME.accent,
   },
 });
 
@@ -658,7 +659,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
     .sort((a, b) => b.score - a.score)
     .slice(0, 3)
     .map((env, idx) => {
-      const colors = ["#10b981", "#6e6ef0", "#0ea5e9"];
+      const colors = ["#10b981", THEME.accent, THEME.sky];
       return {
         label: env.key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
         score: env.score,
@@ -668,7 +669,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
 
 
   const careerChartData = data.commonCareerPaths.map((path, idx) => {
-    const colors = ["#6e6ef0", "#f3a6d9", "#3b82f6", "#10b981"];
+    const colors = [THEME.accent, THEME.sky, THEME.accentSoft, "#10b981"];
     return {
       label: path.role,
       percentage: path.percentage,
@@ -901,7 +902,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
               else if (item.dimension === "drive") { radarLabel = "Leadership"; scoreVal = scores.leadership; }
 
               return (
-                <View key={idx} style={{ width: "48%", backgroundColor: "#fbfaff", borderWidth: 0.5, borderColor: COLORS.line, borderRadius: 6, padding: 5, marginBottom: 2 }}>
+                <View key={idx} style={{ width: "48%", backgroundColor: THEME.surfaceSubtle, borderWidth: 0.5, borderColor: COLORS.line, borderRadius: 6, padding: 5, marginBottom: 2 }}>
                   <View style={{ flexDirection: "row", justifyContent: "space-between", marginBottom: 1 }}>
                     <Text style={{ fontFamily: SANS_BOLD, fontSize: 7.5, color: COLORS.ink }}>{radarLabel}</Text>
                     <Text style={{ fontFamily: MONO_BOLD, fontSize: 6.5, color: COLORS.inkMuted }}>{scoreVal.toFixed(1)}/10</Text>
@@ -920,7 +921,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
           </View>
           <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
             {data.drivers.map((driver, idx) => (
-              <View key={idx} style={{ width: "48%", backgroundColor: "#fbfaff", borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", borderRadius: 8, padding: 10, marginBottom: 8 }} wrap={false}>
+              <View key={idx} style={{ width: "48%", backgroundColor: THEME.surfaceSubtle, borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", borderRadius: 8, padding: 10, marginBottom: 8 }} wrap={false}>
                 <Text style={{ fontFamily: MONO_BOLD, fontSize: 7, color: COLORS.inkMuted, textTransform: "uppercase", marginBottom: 2 }}>{driver.category}</Text>
                 <Text style={{ fontFamily: SANS_BOLD, fontSize: 9.5, color: COLORS.electric, marginBottom: 4 }}>{driver.label}</Text>
                 <Text style={{ fontFamily: SANS, fontSize: 8.5, color: COLORS.ink, lineHeight: 1.4 }}>{driver.description}</Text>
@@ -977,7 +978,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
               <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
                 <Text style={pdfStyles.sectionTitleText}>IDEAL ENVIRONMENT</Text>
               </View>
-              <View style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: "#fbfaff", gap: 6 }}>
+              <View style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: THEME.surfaceSubtle, gap: 6 }}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                   <PdfConcentricRings items={topEnvironments} />
                   <View style={{ flex: 1, gap: 5 }}>
@@ -1002,7 +1003,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
               <View style={[pdfStyles.sectionHeading, { marginBottom: 6 }]}>
                 <Text style={pdfStyles.sectionTitleText}>CAREER DISTRIBUTION</Text>
               </View>
-              <View style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: "#fbfaff", gap: 6 }}>
+              <View style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, padding: 8, backgroundColor: THEME.surfaceSubtle, gap: 6 }}>
                 <View style={{ flexDirection: "row", alignItems: "center", gap: 10 }}>
                   <PdfDonut items={careerChartData} />
                   <View style={{ flex: 1, gap: 5 }}>
@@ -1034,9 +1035,9 @@ export function ReportDocument({ data }: { data: ReportData }) {
           <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between", marginTop: 8 }}>
             {data.careerTraits.map((group, gIdx) => (
               <View key={gIdx} style={{ width: "48%", marginBottom: 12 }} wrap={false}>
-                <Text style={{ fontFamily: SANS_BOLD, fontSize: 8.5, color: "#6e6ef0", borderBottomWidth: 0.5, borderBottomColor: COLORS.line, paddingBottom: 3, marginBottom: 6, textTransform: "uppercase" }}>{group.category}</Text>
+                <Text style={{ fontFamily: SANS_BOLD, fontSize: 8.5, color: THEME.accent, borderBottomWidth: 0.5, borderBottomColor: COLORS.line, paddingBottom: 3, marginBottom: 6, textTransform: "uppercase" }}>{group.category}</Text>
                 {group.traits.map((trait, tIdx) => (
-                  <View key={tIdx} style={{ backgroundColor: "#fbfaff", borderWidth: 0.5, borderColor: COLORS.line, borderRadius: 6, padding: 6, marginBottom: 5 }}>
+                  <View key={tIdx} style={{ backgroundColor: THEME.surfaceSubtle, borderWidth: 0.5, borderColor: COLORS.line, borderRadius: 6, padding: 6, marginBottom: 5 }}>
                     <Text style={{ fontFamily: SANS_BOLD, fontSize: 8, color: COLORS.ink, marginBottom: 2 }}>{trait.label}</Text>
                     <Text style={{ fontFamily: SANS, fontSize: 7, color: COLORS.inkMuted, lineHeight: 1.25 }}>{trait.score > 50 ? trait.highLabel : trait.lowLabel}</Text>
                   </View>
@@ -1106,7 +1107,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
             </View>
             <View style={{ flexDirection: "row", flexWrap: "wrap" }}>
               {data.sharedInterests.map((interest, idx) => (
-                <View key={idx} style={{ backgroundColor: "#f8f7fd", paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", marginRight: 6, marginBottom: 6 }}>
+                <View key={idx} style={{ backgroundColor: THEME.surfaceSubtle, paddingHorizontal: 8, paddingVertical: 4, borderRadius: 6, borderWidth: 1, borderColor: COLORS.line, borderStyle: "solid", marginRight: 6, marginBottom: 6 }}>
                   <Text style={{ fontFamily: SANS_BOLD, fontSize: 8, color: COLORS.ink }}>{interest}</Text>
                 </View>
               ))}
@@ -1171,7 +1172,7 @@ export function ReportDocument({ data }: { data: ReportData }) {
 
         {/* SECTION 12: Note to Parents & Quote */}
         <View style={{ marginBottom: 10 }}>
-          <View wrap={false} style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, backgroundColor: "#f8f7fd", padding: 12, marginTop: 5 }}>
+          <View wrap={false} style={{ borderWidth: 0.7, borderColor: COLORS.line, borderRadius: 8, backgroundColor: THEME.surfaceSubtle, padding: 12, marginTop: 5 }}>
             <Text style={[styles.h4, { marginBottom: 8, color: COLORS.ink }]}>
               {data.parentLetter.greeting}
             </Text>
@@ -1438,9 +1439,9 @@ function PdfRadar({ axes, size }: { axes: PdfRadarAxis[]; size: number }) {
       {/* Filled polygon */}
       <Polygon
         points={polygonPoints}
-        fill="#6e6ef0"
+        fill={THEME.accent}
         fillOpacity={0.14}
-        stroke="#6e6ef0"
+        stroke={THEME.accent}
         strokeWidth={1.6}
       />
 
@@ -1453,7 +1454,7 @@ function PdfRadar({ axes, size }: { axes: PdfRadarAxis[]; size: number }) {
             cx={p.x}
             cy={p.y}
             r={2.2}
-            fill="#6e6ef0"
+            fill={THEME.accent}
             stroke={COLORS.white}
             strokeWidth={0.9}
           />
@@ -1594,7 +1595,7 @@ function PdfConcentricRings({
               cy={cy}
               r={r}
               fill="none"
-              stroke="#E5E7EB"
+              stroke={THEME.line}
               strokeWidth={strokeWidth}
               strokeOpacity={0.4}
             />

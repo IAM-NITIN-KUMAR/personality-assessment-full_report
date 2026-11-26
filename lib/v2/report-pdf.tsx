@@ -1,10 +1,11 @@
-import { Document, Line, Page, Polygon, Rect, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
+import { Document, Font, Line, Page, Polygon, Rect, StyleSheet, Svg, Text, View } from "@react-pdf/renderer";
 import { ANIMALS, DIM_LABELS, DOMAIN_LABELS, ROLE_LABELS } from "./types";
 import type { CareerCard, RadarDim, ReportV2 } from "./types";
 import type { Journey } from "./journeys/data";
 import { journeyIntroLead } from "./journeys/select";
 import { ANIMAL_ART, PUP, PUP_ART } from "./animal-geometry";
 import { ThinkingPdfPage } from "./fp/thinking-pdf";
+import { THEME } from "../theme";
 
 // ---------------------------------------------------------------------------
 // react-pdf counterpart of components/v2/report-view.tsx. Mirrors its 3-page
@@ -18,6 +19,9 @@ import { ThinkingPdfPage } from "./fp/thinking-pdf";
 // fallback copy) rather than imports — importing the component file would
 // drag "use client" / framer-motion / lucide-react into the PDF bundle.
 // ---------------------------------------------------------------------------
+
+// Never split a word across lines ("PATH-WAY"): wrap whole words only.
+Font.registerHyphenationCallback((word) => [word]);
 
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
@@ -86,12 +90,12 @@ const INK_700 = "#1A1D26";
 const INK_500 = "#3A3D48";
 const INK_400 = "#6B6F78";
 const INK_300 = "#9CA0A8";
-const LINE = "#E5E7EB";
-const LINE_SUBTLE = "#EEF0F3";
-const ACCENT = "#6e6ef0";
-const CHIP_BG = "#f3f0fc";
-const CARD_BG = "#fbfaff";
-const CARD_BG_2 = "#f8f7fd";
+const LINE = THEME.line;
+const LINE_SUBTLE = THEME.lineSubtle;
+const ACCENT = THEME.accent;
+const CHIP_BG = THEME.tint;
+const CARD_BG = THEME.surfaceSubtle;
+const CARD_BG_2 = THEME.surfaceSubtle;
 const GREEN_BG = "#e8f8ef";
 const GREEN_FG = "#15803d";
 const BLUE_BG = "#eef3fe";
@@ -230,7 +234,7 @@ const s = StyleSheet.create({
     backgroundColor: CARD_BG_2,
     paddingHorizontal: 6,
     paddingVertical: 3,
-    width: "31%",
+    width: "48%",
   },
   radarLegendLabel: { fontSize: 7.5, fontFamily: SANS_BOLD, color: INK_700 },
   radarLegendScore: { fontSize: 7, fontFamily: MONO, color: INK_300, marginLeft: "auto" },
@@ -296,8 +300,8 @@ const s = StyleSheet.create({
 
   // Match cards
   matchGrid: { flexDirection: "row", flexWrap: "wrap", gap: 12, marginBottom: 18 },
-  matchCardBig: { width: "47%", borderRadius: 12, borderWidth: 1, borderColor: LINE, backgroundColor: CARD_BG_2, padding: 12 },
-  matchCardSmall: { width: "47%", borderRadius: 12, borderWidth: 1, borderColor: LINE, backgroundColor: CARD_BG_2, padding: 12 },
+  matchCardBig: { width: "48.8%", borderRadius: 12, borderWidth: 1, borderColor: LINE, backgroundColor: CARD_BG_2, padding: 12 },
+  matchCardSmall: { width: "48.8%", borderRadius: 12, borderWidth: 1, borderColor: LINE, backgroundColor: CARD_BG_2, padding: 12 },
   matchTopRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "center", marginBottom: 8 },
   matchIndexBadge: {
     width: 16,
@@ -324,9 +328,9 @@ const s = StyleSheet.create({
   journeyTopRow: { flexDirection: "row", justifyContent: "space-between", alignItems: "flex-start", gap: 4, marginBottom: 8 },
   journeyName: { fontSize: 9.5, fontFamily: SANS_BOLD, color: INK_700, flex: 1, lineHeight: 1.3 },
   journeyStatus: { fontSize: 6, fontFamily: MONO_BOLD, color: ACCENT, backgroundColor: CHIP_BG, borderRadius: 4, paddingHorizontal: 4, paddingVertical: 2, textTransform: "uppercase" },
-  journeySteps: { borderLeftWidth: 1, borderLeftColor: "#d9d4f5", marginLeft: 3, paddingLeft: 8, marginBottom: 8 },
+  journeySteps: { borderLeftWidth: 1, borderLeftColor: THEME.accentSoft, marginLeft: 3, paddingLeft: 8, marginBottom: 8 },
   journeyStep: { marginBottom: 5, position: "relative" },
-  journeyDot: { position: "absolute", left: -11.5, top: 2, width: 6, height: 6, borderRadius: 3, backgroundColor: "#c4b5fd" },
+  journeyDot: { position: "absolute", left: -11.5, top: 2, width: 6, height: 6, borderRadius: 3, backgroundColor: THEME.accentSoft },
   journeyDotNow: { backgroundColor: ACCENT },
   journeyStepLabel: { fontSize: 5.5, fontFamily: MONO_BOLD, color: INK_400, textTransform: "uppercase", letterSpacing: 0.6 },
   journeyStepText: { fontSize: 7.5, color: INK_500, lineHeight: 1.35, marginTop: 1 },
@@ -411,9 +415,10 @@ const s = StyleSheet.create({
 // Sub-components
 // ---------------------------------------------------------------------------
 
-function PageTag({ n, total }: { n: number; total: number }) {
+/** Numbered from the real page count, so a section that runs onto a second sheet is still labelled correctly. */
+export function PageTag() {
   return (
-    <Text style={s.pageTag}>PAGE {n} OF {total}</Text>
+    <Text style={s.pageTag} fixed render={({ pageNumber, totalPages }) => `PAGE ${pageNumber} OF ${totalPages}`} />
   );
 }
 
@@ -492,7 +497,7 @@ function PdfRadar({ scores }: { scores: Record<RadarDim, number> }) {
           const pts = [0, 1, 2, 3, 4, 5]
             .map((i) => { const a = angleFor(i); return `${(cx + Math.cos(a) * r).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`; })
             .join(" ");
-          return <Polygon key={rv} points={pts} fill="none" stroke="rgba(110,110,240,0.15)" strokeWidth={0.75} />;
+          return <Polygon key={rv} points={pts} fill="none" stroke={THEME.accentSoft} strokeWidth={0.75} />;
         })}
         {[0, 1, 2, 3, 4, 5].map((i) => {
           const a = angleFor(i);
@@ -503,12 +508,12 @@ function PdfRadar({ scores }: { scores: Record<RadarDim, number> }) {
               y1={cy}
               x2={cx + Math.cos(a) * radius}
               y2={cy + Math.sin(a) * radius}
-              stroke="rgba(110,110,240,0.2)"
+              stroke={THEME.accentSoft}
               strokeWidth={0.75}
             />
           );
         })}
-        <Polygon points={polygonPoints} fill="rgba(110,110,240,0.18)" stroke={ACCENT} strokeWidth={1.5} />
+        <Polygon points={polygonPoints} fill={ACCENT} fillOpacity={0.18} stroke={ACCENT} strokeWidth={1.5} />
       </Svg>
       <View style={s.radarLegend}>
         {HEX_ORDER.map((d) => (
@@ -635,7 +640,6 @@ function JourneyCard({ journey }: { journey: Journey }) {
 export default function ReportPdfV2({ report }: { report: ReportV2 }) {
   const t = report.yourType;
   const isFull = report.state === "full";
-  const totalPages = report.thinking ? 4 : 3;
 
   const initials = initialsOf(report.header.name);
   const dateStr = formatDateISO(report.header.date);
@@ -662,7 +666,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
     <Document title={`${report.header.assessmentName} — ${report.header.name}`}>
       {/* PAGE 1: Personal Assessment */}
       <Page size="A4" style={s.page}>
-        <PageTag n={1} total={totalPages} />
+        <PageTag />
 
         <View style={s.headerRow}>
           <Text style={s.logoText}>SecureSteps</Text>
@@ -754,7 +758,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
           )}
         </View>
 
-        <View style={{ marginBottom: 18 }}>
+        <View style={{ marginBottom: 18 }} wrap={false}>
           <SectionHeader>CAREER TRAITS ANALYSIS</SectionHeader>
           <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
             {report.coreStrengths.map((c) =>
@@ -773,7 +777,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
           </View>
         </View>
 
-        <View>
+        <View style={{ marginBottom: 18 }} wrap={false}>
           <SectionHeader>KEY DRIVERS</SectionHeader>
           <View style={{ flexDirection: "row", flexWrap: "wrap", justifyContent: "space-between" }}>
             {report.domain && (
@@ -814,15 +818,11 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
             )}
           </View>
         </View>
-      </Page>
 
-      {/* PAGE 2: Future Plans */}
-      <Page size="A4" style={s.page}>
-        <PageTag n={2} total={totalPages} />
-
+        {/* Future plans: flows on from the sections above, so no sheet is left half empty */}
         {isFull && report.cards ? (
           <>
-            <View style={{ marginBottom: 18 }}>
+            <View style={{ marginBottom: 18 }} wrap={false}>
               <SectionHeader>BEST PATH MATCHES FOR YOU</SectionHeader>
               <View style={s.matchGrid}>
                 {report.cards.slice(0, 2).map((c, i) => (
@@ -832,7 +832,7 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
             </View>
 
             {report.cards.length > 2 && (
-              <View>
+              <View wrap={false}>
                 <SectionHeader>ALTERNATIVE PATHWAYS</SectionHeader>
                 <View style={s.matchGrid}>
                   {report.cards.slice(2, 4).map((c) => (
@@ -844,20 +844,27 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
 
             {report.journeys.length > 0 && (
               <View style={{ paddingTop: 14, borderTopWidth: 1, borderTopColor: LINE_SUBTLE }}>
-                <SectionHeader>PEOPLE WHO WALKED THIS PATH</SectionHeader>
-                <Text style={s.journeyIntro}>
-                  {journeyIntroLead(report.journeys.length)} What they studied, where they began, what they added on
-                  top of the degree, and where it took them. The road to{" "}
-                  <Text style={s.journeyIntroStrong}>{report.cards[0].career}</Text> is not theoretical.
-                </Text>
                 {chunk(report.journeys, JOURNEY_ROW).map((row, i) => (
-                  <View key={row[0].id} style={s.journeyGrid} wrap={false}>
-                    {row.map((j) => (
-                      <JourneyCard key={j.id} journey={j} />
-                    ))}
-                    {Array.from({ length: JOURNEY_ROW - row.length }).map((_, k) => (
-                      <View key={"spacer-" + i + "-" + k} style={{ flex: 1 }} />
-                    ))}
+                  // The heading travels with the first row, so it is never stranded at the foot of a sheet.
+                  <View key={row[0].id} wrap={false}>
+                    {i === 0 && (
+                      <>
+                        <SectionHeader>PEOPLE WHO WALKED THIS PATH</SectionHeader>
+                        <Text style={s.journeyIntro}>
+                          {journeyIntroLead(report.journeys.length)} What they studied, where they began, what they
+                          added on top of the degree, and where it took them. The road to{" "}
+                          <Text style={s.journeyIntroStrong}>{report.cards![0].career}</Text> is not theoretical.
+                        </Text>
+                      </>
+                    )}
+                    <View style={s.journeyGrid}>
+                      {row.map((j) => (
+                        <JourneyCard key={j.id} journey={j} />
+                      ))}
+                      {Array.from({ length: JOURNEY_ROW - row.length }).map((_, k) => (
+                        <View key={"spacer-" + i + "-" + k} style={{ flex: 1 }} />
+                      ))}
+                    </View>
                   </View>
                 ))}
                 <Text style={s.journeyFoot}>
@@ -878,14 +885,14 @@ export default function ReportPdfV2({ report }: { report: ReportV2 }) {
       </Page>
 
       {/* PAGE 3: First Principles thinking page */}
-      {report.thinking && <ThinkingPdfPage t={report.thinking} n={3} total={totalPages} />}
+      {report.thinking && <ThinkingPdfPage t={report.thinking} tag={<PageTag />} />}
 
       {/* PAGE 3 (or 4): Next Secure Step */}
       <Page size="A4" style={s.page}>
-        <PageTag n={totalPages} total={totalPages} />
+        <PageTag />
 
         {report.verdicts.length > 0 && (
-          <View style={{ paddingBottom: 14, borderBottomWidth: 1, borderBottomColor: LINE_SUBTLE, marginBottom: 18 }}>
+          <View style={{ paddingBottom: 14, borderBottomWidth: 1, borderBottomColor: LINE_SUBTLE, marginBottom: 18 }} wrap={false}>
             <SectionHeader>WE FEEL</SectionHeader>
             <View style={s.verdictRow}>
               {report.verdicts.slice(0, 3).map((v) => (

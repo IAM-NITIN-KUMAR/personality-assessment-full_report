@@ -36,9 +36,9 @@ export default function AdminPage() {
 
   useEffect(() => { refresh(); }, [refresh]);
 
-  if (authed === null) return <main className="min-h-dvh bg-[#f7e8ee]" />;
+  if (authed === null) return <main className="min-h-dvh bg-surface-wash" />;
   return (
-    <main className="min-h-dvh bg-[#f7e8ee] px-4 py-10">
+    <main className="min-h-dvh bg-surface-wash px-4 py-10">
       <div className="max-w-3xl mx-auto space-y-6">
         <header className="flex items-center justify-between">
           <h1 className="font-mono text-[13px] font-semibold tracking-wide uppercase">Secure Steps · Access Codes</h1>

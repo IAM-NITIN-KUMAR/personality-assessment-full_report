@@ -12,7 +12,10 @@ import { buildReportV2 } from "@/lib/v2/report";
 import { ANANYA_ANSWERS, ANANYA_NAME } from "@/lib/v2/fixtures";
 import { ANANYA_FP } from "@/lib/v2/fp/fixtures";
 import { toFpAnswers } from "@/lib/v2/fp/score";
+import { askedOnly } from "@/lib/v2/fp/steps";
+import { CONCLUSION_IDS } from "@/lib/v2/fp/bank";
 import ReportViewV2 from "@/components/v2/report-view";
+import { GLOW, PAGE_WASH } from "@/lib/theme";
 
 export default function ReportPage() {
   const router = useRouter();
@@ -22,6 +25,7 @@ export default function ReportPage() {
   const profile = useAssessment((s) => s.profile);
   const archetype = useAssessment((s) => s.archetype);
   const answers = useAssessment((s) => s.answers);
+  const saveAnswer = useAssessment((s) => s.answer);
   const allQuestions = useAssessment((s) => s.allQuestions);
   const computeArchetype = useAssessment((s) => s.computeArchetype);
 
@@ -102,7 +106,7 @@ export default function ReportPage() {
         answers: v2Answers,
         discipline: isEngMock ? "tech_cs" : profile?.discipline,
         course: isEngMock ? "btech_cse" : profile?.course,
-        fp: isMock ? ANANYA_FP : toFpAnswers(answers),
+        fp: askedOnly(isMock ? ANANYA_FP : toFpAnswers(answers)),
       }),
     [isMock, isEngMock, profile, v2Answers, answers],
   );
@@ -171,24 +175,19 @@ export default function ReportPage() {
         className="min-h-dvh relative overflow-x-hidden"
         style={{
           background: `
-            radial-gradient(circle at 15% 15%, rgba(244, 184, 212, 0.22), transparent 32%),
-            radial-gradient(circle at 85% 30%, rgba(196, 181, 253, 0.2), transparent 30%),
-            radial-gradient(circle at 30% 75%, rgba(186, 230, 253, 0.16), transparent 35%),
-            radial-gradient(circle at 75% 85%, rgba(254, 243, 199, 0.18), transparent 32%),
-            linear-gradient(
-              135deg,
-              #f8eef2 0%,
-              #f1edf6 45%,
-              #eef3f9 100%
-            )
+            radial-gradient(circle at 15% 15%, ${GLOW.sky}, transparent 32%),
+            radial-gradient(circle at 85% 30%, ${GLOW.royal}, transparent 30%),
+            radial-gradient(circle at 30% 75%, ${GLOW.pale}, transparent 35%),
+            radial-gradient(circle at 75% 85%, ${GLOW.mist}, transparent 32%),
+            ${PAGE_WASH}
           `,
         }}
       >
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
-          <div className="absolute top-[5%] left-[-6%] h-[500px] w-[500px] rounded-full bg-pink-300/18 blur-[130px]" />
-          <div className="absolute top-[25%] right-[-8%] h-[480px] w-[480px] rounded-full bg-violet-300/16 blur-[130px]" />
-          <div className="absolute bottom-[20%] left-[-4%] h-[450px] w-[450px] rounded-full bg-blue-200/14 blur-[120px]" />
-          <div className="absolute bottom-[5%] right-[10%] h-[380px] w-[380px] rounded-full bg-amber-200/12 blur-[100px]" />
+          <div className="absolute top-[5%] left-[-6%] h-[500px] w-[500px] rounded-full bg-electric-400/20 blur-[130px]" />
+          <div className="absolute top-[25%] right-[-8%] h-[480px] w-[480px] rounded-full bg-electric/10 blur-[130px]" />
+          <div className="absolute bottom-[20%] left-[-4%] h-[450px] w-[450px] rounded-full bg-electric-300/30 blur-[120px]" />
+          <div className="absolute bottom-[5%] right-[10%] h-[380px] w-[380px] rounded-full bg-electric-400/10 blur-[100px]" />
         </div>
 
         <header className="sticky top-0 z-30 bg-white/25 backdrop-blur-xl border-b border-white/20">
@@ -220,7 +219,10 @@ export default function ReportPage() {
         </header>
 
         <div className="relative z-10">
-          <ReportViewV2 report={reportV2} />
+          <ReportViewV2
+            report={reportV2}
+            onSaveConclusions={isMock ? undefined : (texts) => CONCLUSION_IDS.forEach((id, i) => saveAnswer(id, { text: texts[i] }))}
+          />
         </div>
       </main>
     );
@@ -239,24 +241,19 @@ export default function ReportPage() {
       className="min-h-dvh relative overflow-x-hidden"
       style={{
         background: `
-          radial-gradient(circle at 15% 15%, rgba(244, 184, 212, 0.22), transparent 32%),
-          radial-gradient(circle at 85% 30%, rgba(196, 181, 253, 0.2), transparent 30%),
-          radial-gradient(circle at 30% 75%, rgba(186, 230, 253, 0.16), transparent 35%),
-          radial-gradient(circle at 75% 85%, rgba(254, 243, 199, 0.18), transparent 32%),
-          linear-gradient(
-            135deg,
-            #f8eef2 0%,
-            #f1edf6 45%,
-            #eef3f9 100%
-          )
+          radial-gradient(circle at 15% 15%, ${GLOW.sky}, transparent 32%),
+          radial-gradient(circle at 85% 30%, ${GLOW.royal}, transparent 30%),
+          radial-gradient(circle at 30% 75%, ${GLOW.pale}, transparent 35%),
+          radial-gradient(circle at 75% 85%, ${GLOW.mist}, transparent 32%),
+          ${PAGE_WASH}
         `,
       }}
     >
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[5%] left-[-6%] h-[500px] w-[500px] rounded-full bg-pink-300/18 blur-[130px]" />
-        <div className="absolute top-[25%] right-[-8%] h-[480px] w-[480px] rounded-full bg-violet-300/16 blur-[130px]" />
-        <div className="absolute bottom-[20%] left-[-4%] h-[450px] w-[450px] rounded-full bg-blue-200/14 blur-[120px]" />
-        <div className="absolute bottom-[5%] right-[10%] h-[380px] w-[380px] rounded-full bg-amber-200/12 blur-[100px]" />
+        <div className="absolute top-[5%] left-[-6%] h-[500px] w-[500px] rounded-full bg-electric-400/20 blur-[130px]" />
+        <div className="absolute top-[25%] right-[-8%] h-[480px] w-[480px] rounded-full bg-electric/10 blur-[130px]" />
+        <div className="absolute bottom-[20%] left-[-4%] h-[450px] w-[450px] rounded-full bg-electric-300/30 blur-[120px]" />
+        <div className="absolute bottom-[5%] right-[10%] h-[380px] w-[380px] rounded-full bg-electric-400/10 blur-[100px]" />
       </div>
 
       <header className="sticky top-0 z-30 bg-white/25 backdrop-blur-xl border-b border-white/20">

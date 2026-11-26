@@ -13,6 +13,7 @@ import {
   type Discipline,
 } from "@/lib/course-catalog";
 import { AnimatedGradient } from "@/components/ui/animated-gradient";
+import { THEME, alpha, CTA_GRADIENT } from "@/lib/theme";
 
 const ANCHORS_COUNT = 29;
 
@@ -77,7 +78,7 @@ export default function LandingPage() {
   };
 
   return (
-    <main className="min-h-dvh overflow-x-hidden relative bg-[#f7e8ee]">
+    <main className="min-h-dvh overflow-x-hidden relative bg-surface-wash">
       <AnimatedGradient />
       <Header />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 py-12 sm:py-16 lg:py-20 relative z-10">
@@ -193,8 +194,8 @@ function Form(props: {
       : []
     : courses.filter((c) => c.level !== "masters");
   const mastersCourses = courses.filter((c) => c.level === "masters");
-  const inputStyle = { background: "rgba(255,255,255,0.7)", border: "1px solid rgba(200,190,220,0.4)", boxShadow: "inset 0 1px 3px rgba(180,140,200,0.08)" };
-  const focusStyle = { background: "rgba(255,255,255,0.95)", border: "1px solid rgba(180,140,220,0.6)", boxShadow: "0 0 0 3px rgba(196,181,253,0.2), inset 0 1px 3px rgba(180,140,200,0.08)" };
+  const inputStyle = { background: "rgba(255,255,255,0.7)", border: `1px solid ${alpha(THEME.lineStrong, 0.7)}`, boxShadow: `inset 0 1px 3px ${alpha(THEME.accent, 0.06)}` };
+  const focusStyle = { background: "rgba(255,255,255,0.95)", border: `1px solid ${THEME.sky}`, boxShadow: `0 0 0 3px ${alpha(THEME.sky, 0.22)}, inset 0 1px 3px ${alpha(THEME.accent, 0.06)}` };
   const blurStyle = inputStyle;
 
   return (
@@ -202,7 +203,7 @@ function Form(props: {
       initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}
       onSubmit={props.onSubmit}
       className="relative rounded-[28px] p-7 md:p-8"
-      style={{ background: "rgba(255,255,255,0.55)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)", border: "1px solid rgba(255,255,255,0.75)", boxShadow: "0 8px 32px -4px rgba(180,140,200,0.18), 0 2px 8px -2px rgba(180,140,200,0.12), inset 0 1px 0 rgba(255,255,255,0.9)" }}
+      style={{ background: "rgba(255,255,255,0.55)", backdropFilter: "blur(28px)", WebkitBackdropFilter: "blur(28px)", border: "1px solid rgba(255,255,255,0.75)", boxShadow: `0 8px 32px -4px ${alpha(THEME.accent, 0.16)}, 0 2px 8px -2px ${alpha(THEME.accent, 0.08)}, inset 0 1px 0 rgba(255,255,255,0.9)` }}
     >
       <div className="absolute inset-0 rounded-[28px] pointer-events-none" style={{ background: "linear-gradient(135deg, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.0) 60%)" }} />
       <div className="relative">
@@ -293,9 +294,9 @@ function Form(props: {
           type="submit"
           disabled={!props.name.trim() || !props.email.trim() || !props.phone.trim() || !props.accessCode.trim() || props.submitting}
           className="w-full mt-6 py-4 rounded-2xl text-white font-mono text-[13px] tracking-[0.12em] uppercase font-semibold flex items-center justify-center gap-2 transition-all disabled:opacity-40 disabled:cursor-not-allowed"
-          style={{ background: "linear-gradient(135deg, #1a1a2e 0%, #16213e 60%, #0f3460 100%)", boxShadow: "0 4px 16px -4px rgba(10,14,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1)" }}
-          onMouseEnter={(e) => { if (!e.currentTarget.disabled) { e.currentTarget.style.boxShadow = "0 8px 24px -4px rgba(10,14,26,0.5), inset 0 1px 0 rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(-1px)"; } }}
-          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = "0 4px 16px -4px rgba(10,14,26,0.4), inset 0 1px 0 rgba(255,255,255,0.1)"; e.currentTarget.style.transform = "translateY(0)"; }}
+          style={{ background: CTA_GRADIENT, boxShadow: `0 4px 16px -4px ${alpha(THEME.accent, 0.45)}, inset 0 1px 0 rgba(255,255,255,0.1)` }}
+          onMouseEnter={(e) => { if (!e.currentTarget.disabled) { e.currentTarget.style.boxShadow = `0 8px 24px -4px ${alpha(THEME.accent, 0.55)}, inset 0 1px 0 rgba(255,255,255,0.1)`; e.currentTarget.style.transform = "translateY(-1px)"; } }}
+          onMouseLeave={(e) => { e.currentTarget.style.boxShadow = `0 4px 16px -4px ${alpha(THEME.accent, 0.45)}, inset 0 1px 0 rgba(255,255,255,0.1)`; e.currentTarget.style.transform = "translateY(0)"; }}
         >
           {props.submitting ? "Starting…" : "Begin Assessment"}
           <ArrowRight className="h-3.5 w-3.5" />

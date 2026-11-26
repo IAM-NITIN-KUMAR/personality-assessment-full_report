@@ -1,49 +1,56 @@
 import type { Config } from "tailwindcss";
+import { THEME, alpha } from "./lib/theme";
 
 const config: Config = {
   content: ["./app/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}", "./lib/**/*.{ts,tsx}"],
   theme: {
     extend: {
       colors: {
-        // Performance-instrument palette — white surface, deep navy/black ink,
-        // electric blue accent, monospace eyebrows. Replaces the earlier cream
-        // theme entirely.
+        // Every value comes from lib/theme.ts, which is the one place colours
+        // are defined (screens, charts and PDFs all read it). Change it there.
         surface: {
-          DEFAULT: "#FDF7FB",
-          panel: "#F5E8F0",
-          subtle: "#FBF0F7",
+          DEFAULT: THEME.surface,
+          panel: THEME.tint,
+          subtle: THEME.surfaceSubtle,
+          wash: THEME.wash[0],
         },
         ink: {
-          DEFAULT: "#0A0E1A",
-          900: "#08090C",
-          700: "#1A1D26",
-          500: "#3A3D48",
-          400: "#6B6F78",
-          300: "#9CA0A8",
-          200: "#C7CAD0",
+          DEFAULT: THEME.ink,
+          900: THEME.ink900,
+          700: THEME.ink700,
+          500: THEME.ink500,
+          400: THEME.ink400,
+          300: THEME.ink300,
+          200: THEME.ink200,
         },
         line: {
-          DEFAULT: "#E5E7EB",
-          strong: "#D1D5DB",
-          subtle: "#EEF0F3",
+          DEFAULT: THEME.line,
+          strong: THEME.lineStrong,
+          subtle: THEME.lineSubtle,
         },
-        // Brand accent — Secure Steps pink. Token name kept as "electric" to
-        // avoid churning every consumer; the value is what changed.
+        // Brand accent. Royal blue by default; 400 is Origen's sky blue for
+        // glow, focus and hover. The token keeps its original name, "electric".
         electric: {
-          DEFAULT: "#F3A6D9",
-          400: "#F8C2E4",
-          500: "#F3A6D9",
-          600: "#C59AE8",
-          700: "#A878D0",
-          tint: "#FDEEF8",
+          DEFAULT: THEME.accent,
+          300: THEME.accentSoft,
+          400: THEME.sky,
+          500: THEME.accent,
+          600: THEME.accentDark,
+          700: THEME.accentInk,
+          tint: THEME.tint,
         },
-        positive: "#16A34A",
-        warning: "#E76F51",
+        positive: THEME.positive,
+        warning: THEME.warning,
+      },
+      boxShadow: {
+        // Hover lift on answer options, and the focus ring on text inputs.
+        lift: `0 12px 24px -8px ${alpha(THEME.accent, 0.22)}`,
+        focus: `0 0 0 3px ${alpha(THEME.sky, 0.25)}`,
       },
       fontFamily: {
-        sans: ["var(--font-sans)", "Inter", "system-ui", "sans-serif"],
-        mono: ["var(--font-mono)", "JetBrains Mono", "ui-monospace", "monospace"],
-        display: ["var(--font-display)", "Inter", "system-ui", "sans-serif"],
+        sans: ["var(--font-sans)", "Urbanist", "system-ui", "sans-serif"],
+        mono: ["var(--font-mono)", "Urbanist", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Urbanist", "system-ui", "sans-serif"],
       },
       letterSpacing: {
         labelmono: "0.12em",

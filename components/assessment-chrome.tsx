@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Logo } from "@/components/ui/logo";
+import { THEME, alpha, GLOW, PAGE_WASH } from "@/lib/theme";
 
 interface CloudProps {
   duration: number;
@@ -67,27 +68,27 @@ function Cloud({ duration, delay, size, top, opacity, shape, direction }: CloudP
         viewBox="0 0 100 60"
         className="w-full h-auto"
         style={{
-          filter: "drop-shadow(0 6px 12px rgba(150, 130, 190, 0.12))"
+          filter: `drop-shadow(0 6px 12px ${alpha(THEME.accent, 0.1)})`
         }}
       >
         <defs>
           <linearGradient id={`grad-${shape}`} x1="0%" y1="0%" x2="0%" y2="100%">
             <stop offset="0%" stopColor="#ffffff" />
             <stop offset="65%" stopColor="#ffffff" />
-            <stop offset="100%" stopColor="#eae3f5" />
+            <stop offset="100%" stopColor={THEME.tint} />
           </linearGradient>
         </defs>
         {/* Sticker offset shadow layer */}
         <path
           d={CLOUD_PATHS[shape]}
-          fill="#dcd6e8"
+          fill={THEME.line}
           transform="translate(0, 3)"
         />
         {/* Main cloud body with 3D gradient fill */}
         <path
           d={CLOUD_PATHS[shape]}
           fill={`url(#grad-${shape})`}
-          stroke="#beb5d0"
+          stroke={THEME.lineStrong}
           strokeWidth="2.2"
           strokeLinecap="round"
           strokeLinejoin="round"
@@ -151,26 +152,21 @@ export function AssessmentChrome({
       className="h-dvh flex flex-col overflow-hidden relative"
       style={{
         background: `
-          radial-gradient(circle at 10% 30%, rgba(244, 184, 212, 0.22), transparent 28%),
-          radial-gradient(circle at 88% 18%, rgba(196, 181, 253, 0.18), transparent 26%),
-          radial-gradient(circle at 72% 82%, rgba(186, 230, 253, 0.14), transparent 28%),
-          linear-gradient(
-            135deg,
-            #f8eef2 0%,
-            #f1edf6 45%,
-            #eef3f9 100%
-          )
+          radial-gradient(circle at 10% 30%, ${GLOW.sky}, transparent 28%),
+          radial-gradient(circle at 88% 18%, ${GLOW.royal}, transparent 26%),
+          radial-gradient(circle at 72% 82%, ${GLOW.pale}, transparent 28%),
+          ${PAGE_WASH}
         `,
       }}
     >
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute top-[8%] left-[-4%] h-[420px] w-[420px] rounded-full bg-pink-300/18 blur-[120px]" />
+        <div className="absolute top-[8%] left-[-4%] h-[420px] w-[420px] rounded-full bg-electric-400/20 blur-[120px]" />
 
-        <div className="absolute top-[12%] right-[-6%] h-[380px] w-[380px] rounded-full bg-violet-300/16 blur-[120px]" />
+        <div className="absolute top-[12%] right-[-6%] h-[380px] w-[380px] rounded-full bg-electric/10 blur-[120px]" />
 
-        <div className="absolute bottom-[-8%] right-[18%] h-[340px] w-[340px] rounded-full bg-blue-200/14 blur-[110px]" />
+        <div className="absolute bottom-[-8%] right-[18%] h-[340px] w-[340px] rounded-full bg-electric-300/30 blur-[110px]" />
 
-        <div className="absolute top-[38%] left-[42%] h-[180px] w-[180px] rounded-full bg-fuchsia-200/10 blur-[90px]" />
+        <div className="absolute top-[38%] left-[42%] h-[180px] w-[180px] rounded-full bg-electric-300/20 blur-[90px]" />
 
         {/* Floating background clouds */}
         {/* Left to Right */}

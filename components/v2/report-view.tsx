@@ -40,6 +40,8 @@ import { journeyIntroLead } from "@/lib/v2/journeys/select";
 import { ANIMAL_ART, PUP, PUP_ART } from "@/lib/v2/animal-geometry";
 import { AnimalArt } from "./animal-art";
 import { ThinkingPageView } from "./thinking-page";
+import { GitaChatSection } from "./gita-chat";
+import { THEME, alpha } from "@/lib/theme";
 
 // ---------------------------------------------------------------------------
 // Small formatting helpers (no Date.now(), no new Date() — everything comes
@@ -130,7 +132,7 @@ const MORE_SIGNAL_FALLBACK_COPY =
 function SectionHeader({ icon: Icon, children }: { icon: typeof Star; children: React.ReactNode }) {
   return (
     <div className="flex items-center gap-2.5">
-      <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+      <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
         <Icon className="size-3.5" strokeWidth={3} />
       </div>
       <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">{children}</h2>
@@ -140,7 +142,7 @@ function SectionHeader({ icon: Icon, children }: { icon: typeof Star; children: 
 
 function PageTag({ n, total }: { n: number; total: number }) {
   return (
-    <div className="absolute top-0 right-0 bg-[#f3f0fc] text-[#6e6ef0] font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
+    <div className="absolute top-0 right-0 bg-electric-tint text-electric font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
       PAGE {n} OF {total}
     </div>
   );
@@ -159,7 +161,7 @@ function TraitScale({
 }) {
   const percent = scalePercent(heading, right);
   return (
-    <div className="rounded-xl border border-line/50 bg-[#fbfaff]/50 hover:bg-[#fbfaff] transition-all p-3.5 space-y-2.5">
+    <div className="rounded-xl border border-line/50 bg-surface-subtle/50 hover:bg-surface-subtle transition-all p-3.5 space-y-2.5">
       <div className="flex justify-between text-[10px] font-bold text-ink-400 uppercase tracking-wide">
         <span>{left}</span>
         <span>{right}</span>
@@ -167,7 +169,7 @@ function TraitScale({
       <div className="relative h-1.5 w-full bg-line/50 rounded-full">
         <div className="absolute inset-y-0 left-1/2 w-px bg-line" />
         <div
-          className="absolute top-1/2 size-3 rounded-full bg-[#6e6ef0] border-2 border-white shadow -translate-y-1/2 -translate-x-1/2"
+          className="absolute top-1/2 size-3 rounded-full bg-electric border-2 border-white shadow -translate-y-1/2 -translate-x-1/2"
           style={{ left: `${percent}%` }}
         />
       </div>
@@ -181,9 +183,9 @@ function TraitScale({
 
 function MobilityChip({ heading, sentence }: { heading: string; sentence: string }) {
   return (
-    <div className="rounded-xl border border-line/50 bg-[#fbfaff]/50 hover:bg-[#fbfaff] transition-all p-3.5 space-y-2.5">
+    <div className="rounded-xl border border-line/50 bg-surface-subtle/50 hover:bg-surface-subtle transition-all p-3.5 space-y-2.5">
       <div className="text-[10px] font-bold text-ink-400 uppercase tracking-wide">Mobility</div>
-      <span className="inline-block text-[12px] font-extrabold text-[#6e6ef0] bg-[#f3f0fc] rounded-md px-2.5 py-1">
+      <span className="inline-block text-[12px] font-extrabold text-electric bg-electric-tint rounded-md px-2.5 py-1">
         {heading}
       </span>
       <p className="text-[11.5px] text-ink-500 leading-relaxed">{sentence}</p>
@@ -229,7 +231,7 @@ function HexRadar({ scores }: { scores: Record<RadarDim, number> }) {
               key={rv}
               points={[0, 1, 2, 3, 4, 5].map((i) => { const a = angleFor(i); return `${(cx + Math.cos(a) * r).toFixed(1)},${(cy + Math.sin(a) * r).toFixed(1)}`; }).join(" ")}
               fill="none"
-              stroke="rgba(110, 110, 240, 0.08)"
+              stroke={alpha(THEME.accent, 0.08)}
               strokeWidth={1}
             />
           );
@@ -237,13 +239,13 @@ function HexRadar({ scores }: { scores: Record<RadarDim, number> }) {
         {[0, 1, 2, 3, 4, 5].map((i) => {
           const a = angleFor(i);
           return (
-            <line key={`spoke-${i}`} x1={cx} y1={cy} x2={cx + Math.cos(a) * radius} y2={cy + Math.sin(a) * radius} stroke="rgba(110, 110, 240, 0.12)" strokeWidth={1} />
+            <line key={`spoke-${i}`} x1={cx} y1={cy} x2={cx + Math.cos(a) * radius} y2={cy + Math.sin(a) * radius} stroke={alpha(THEME.accent, 0.12)} strokeWidth={1} />
           );
         })}
-        <polygon points={polygonPoints} fill="rgba(110, 110, 240, 0.14)" stroke="#6e6ef0" strokeWidth={2} strokeLinejoin="round" />
+        <polygon points={polygonPoints} fill={alpha(THEME.accent, 0.14)} stroke={THEME.accent} strokeWidth={2} strokeLinejoin="round" />
         {axesValues.map((v, i) => {
           const p = point(i, v);
-          return <circle key={`dot-${i}`} cx={p.x} cy={p.y} r={4} fill="#6e6ef0" stroke="white" strokeWidth={1.5} />;
+          return <circle key={`dot-${i}`} cx={p.x} cy={p.y} r={4} fill={THEME.accent} stroke="white" strokeWidth={1.5} />;
         })}
       </svg>
       {HEX_ORDER.map((d, i) => {
@@ -251,7 +253,7 @@ function HexRadar({ scores }: { scores: Record<RadarDim, number> }) {
         return (
           <div key={d} className={labelPositions[i]}>
             <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
-              <Icon className="size-3.5 text-[#6e6ef0]" />
+              <Icon className="size-3.5 text-electric" />
               <span>{DIM_LABELS[d]}</span>
             </div>
             <span className={`font-mono text-[9px] text-ink-400 font-bold mt-0.5 ${scoreAlign[i]}`}>{scores[d]}/10</span>
@@ -265,16 +267,16 @@ function HexRadar({ scores }: { scores: Record<RadarDim, number> }) {
 function MatchCardBig({ card, index }: { card: CareerCard; index: number }) {
   const Icon = getMatchIcon(card.career);
   return (
-    <div className="rounded-[16px] p-5 border border-line bg-[#f8f7fd]/30 hover:bg-[#f8f7fd]/60 transition-all space-y-3.5">
+    <div className="rounded-[16px] p-5 border border-line bg-surface-subtle/30 hover:bg-surface-subtle/60 transition-all space-y-3.5">
       <div className="flex items-center justify-between gap-2">
-        <span className="size-6 rounded-full bg-[#6e6ef0] text-white font-mono text-[11px] font-extrabold flex items-center justify-center shrink-0">
+        <span className="size-6 rounded-full bg-electric text-white font-mono text-[11px] font-extrabold flex items-center justify-center shrink-0">
           {index + 1}
         </span>
         <div className="flex items-center gap-2">
-          <span className="text-[9px] font-mono font-black text-[#6e6ef0] bg-[#f3f0fc] px-2 py-0.5 rounded-md">
+          <span className="text-[9px] font-mono font-black text-electric bg-electric-tint px-2 py-0.5 rounded-md">
             {card.fit}% FIT
           </span>
-          <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-[#6e6ef0] shrink-0 shadow-sm">
+          <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-electric shrink-0 shadow-sm">
             <Icon className="size-5" />
           </div>
         </div>
@@ -296,9 +298,9 @@ function MatchCardBig({ card, index }: { card: CareerCard; index: number }) {
 function MatchCardSmall({ card }: { card: CareerCard }) {
   const Icon = getMatchIcon(card.career);
   return (
-    <div className="rounded-[16px] p-5 border border-line bg-[#f8f7fd]/30 hover:bg-[#f8f7fd]/60 transition-all space-y-3">
+    <div className="rounded-[16px] p-5 border border-line bg-surface-subtle/30 hover:bg-surface-subtle/60 transition-all space-y-3">
       <div className="flex items-center justify-between">
-        <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-[#6e6ef0] shadow-sm">
+        <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-electric shadow-sm">
           <Icon className="size-4" />
         </div>
         <span className="text-[9px] font-mono font-black text-ink-500 bg-line/50 px-2 py-0.5 rounded-md">
@@ -326,21 +328,21 @@ const JOURNEY_STEPS: { key: keyof Journey["steps"]; label: string }[] = [
 function JourneyCard({ journey }: { journey: Journey }) {
   const last = JOURNEY_STEPS.length - 1;
   return (
-    <div className="rounded-[16px] p-5 border border-line bg-[#f8f7fd]/30 hover:bg-[#f8f7fd]/60 transition-all flex flex-col gap-4">
+    <div className="rounded-[16px] p-5 border border-line bg-surface-subtle/30 hover:bg-surface-subtle/60 transition-all flex flex-col gap-4">
       <div className="flex items-start justify-between gap-2">
         <h4 className="text-[14px] font-extrabold text-ink-700 leading-snug">{journey.label}</h4>
-        <span className="text-[8.5px] font-mono font-black text-[#6e6ef0] bg-[#f3f0fc] px-2 py-0.5 rounded-md whitespace-nowrap uppercase shrink-0">
+        <span className="text-[8.5px] font-mono font-black text-electric bg-electric-tint px-2 py-0.5 rounded-md whitespace-nowrap uppercase shrink-0">
           {journey.status}
         </span>
       </div>
 
-      <ol className="relative border-l border-[#6e6ef0]/30 ml-1.5 space-y-3">
+      <ol className="relative border-l border-electric/30 ml-1.5 space-y-3">
         {JOURNEY_STEPS.map((st, i) => (
           <li key={st.key} className="pl-4 relative">
             <span
               className={
                 "absolute -left-[5px] top-[5px] size-[9px] rounded-full border-2 border-white " +
-                (i === last ? "bg-[#6e6ef0]" : "bg-[#c4b5fd]")
+                (i === last ? "bg-electric" : "bg-electric-300")
               }
             />
             <p className="text-[9px] font-mono font-black uppercase tracking-wider text-ink-400">{st.label}</p>
@@ -368,7 +370,11 @@ function JourneyCard({ journey }: { journey: Journey }) {
 // Main
 // ---------------------------------------------------------------------------
 
-export default function ReportViewV2({ report }: { report: ReportV2 }) {
+export default function ReportViewV2({ report, onSaveConclusions }: {
+  report: ReportV2;
+  /** Saves the student's three conclusions from the Thinking Page. Omit for a read-only report. */
+  onSaveConclusions?: (texts: string[]) => void;
+}) {
   const t = report.yourType;
   const isFull = report.state === "full";
   const totalPages = report.thinking ? 4 : 3;
@@ -408,7 +414,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
         {/* Header Block */}
         <header className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-line">
           <div className="flex items-center gap-2.5">
-            <Logo className="size-7 text-[#6e6ef0]" />
+            <Logo className="size-7 text-electric" />
             <span className="text-[24px] font-black tracking-tight text-ink font-sans">SecureSteps</span>
           </div>
           <div className="flex items-center gap-4 pl-0 sm:pl-4 border-l-0 sm:border-l border-line/60">
@@ -425,15 +431,15 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
             <h1 className="text-[32px] sm:text-[40px] font-black leading-tight text-ink uppercase tracking-tight">
               YOUR PERSONAL PATHWAY INSIGHT
             </h1>
-            <div className="text-[15px] font-extrabold text-[#6e6ef0] tracking-wider uppercase font-mono">{eyebrow}</div>
+            <div className="text-[15px] font-extrabold text-electric tracking-wider uppercase font-mono">{eyebrow}</div>
             <p className="text-[14px] sm:text-[15px] leading-relaxed text-ink-500 max-w-md">
               This is you — decoded. Your answers reveal your natural strengths, what drives you, and the paths
               that will help you thrive.
             </p>
           </div>
 
-          <div className="rounded-[18px] p-6 border border-line bg-[#f8f7fd]/40 flex gap-4 items-center">
-            <div className="size-14 rounded-full bg-[#0a0e1a] text-white flex items-center justify-center font-mono text-[18px] font-black shrink-0">
+          <div className="rounded-[18px] p-6 border border-line bg-surface-subtle/40 flex gap-4 items-center">
+            <div className="size-14 rounded-full bg-ink text-white flex items-center justify-center font-mono text-[18px] font-black shrink-0">
               {initials}
             </div>
             <div className="min-w-0 space-y-1.5">
@@ -454,7 +460,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
 
         {/* HERO — signature type panel */}
         <section className="py-6 border-t border-line/50">
-          <div className="rounded-[20px] border border-line bg-[#fbfaff]/60 p-5 sm:p-8 grid sm:grid-cols-[auto,1fr] gap-6 sm:gap-8 items-center">
+          <div className="rounded-[20px] border border-line bg-surface-subtle/60 p-5 sm:p-8 grid sm:grid-cols-[auto,1fr] gap-6 sm:gap-8 items-center">
             {showAnimal && heroDim ? (
               <div
                 className="relative w-[180px] h-[180px] sm:w-[240px] sm:h-[240px] md:w-[270px] md:h-[270px] overflow-hidden rounded-2xl border border-line shrink-0 mx-auto sm:mx-0 [&>svg]:w-full [&>svg]:h-full"
@@ -474,7 +480,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
               // more_signal — picture still forming, so no single animal:
               // the whole cast, soft.
               <div
-                className="grid grid-cols-3 gap-1.5 p-2.5 rounded-2xl bg-[#f3f0fc] shrink-0 mx-auto sm:mx-0 opacity-55 saturate-[0.6]"
+                className="grid grid-cols-3 gap-1.5 p-2.5 rounded-2xl bg-electric-tint shrink-0 mx-auto sm:mx-0 opacity-55 saturate-[0.6]"
               >
                 {ALL_DIMS.map((d) => (
                   <div
@@ -491,7 +497,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
             <div className="space-y-3 text-center sm:text-left">
               {isFull && t.kind === "archetype" ? (
                 <>
-                  <p className="text-[13px] font-mono font-bold text-[#6e6ef0] uppercase tracking-widest">
+                  <p className="text-[13px] font-mono font-bold text-electric uppercase tracking-widest">
                     {showAnimal ? `THE ${t.animal.toUpperCase()}` : "YOUR TYPE"}
                   </p>
                   {showAnimal && heroDim && (
@@ -502,7 +508,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
                 </>
               ) : (
                 <>
-                  <p className="text-[13px] font-mono font-bold text-[#6e6ef0] uppercase tracking-widest">
+                  <p className="text-[13px] font-mono font-bold text-electric uppercase tracking-widest">
                     {isFull && t.kind === "explorer" ? "THE PUP" : "STILL BUILDING THE PICTURE"}
                   </p>
                   {isFull && t.kind === "explorer" && (
@@ -530,9 +536,9 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
                 return (
                   <div
                     key={s.label}
-                    className="rounded-[14px] p-4 border border-line/40 bg-[#fbfaff]/60 hover:bg-[#fbfaff] transition-all flex gap-3.5 items-start"
+                    className="rounded-[14px] p-4 border border-line/40 bg-surface-subtle/60 hover:bg-surface-subtle transition-all flex gap-3.5 items-start"
                   >
-                    <div className="size-8 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0] shrink-0 mt-0.5">
+                    <div className="size-8 rounded-full bg-electric-tint flex items-center justify-center text-electric shrink-0 mt-0.5">
                       <Icon className="size-5" />
                     </div>
                     <div>
@@ -551,7 +557,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
             <div className="space-y-6 flex flex-col items-center">
               <div className="flex flex-col gap-1.5 self-start">
                 <SectionHeader icon={TrendingUp}>YOUR PATH FIT SCORE</SectionHeader>
-                <div className="text-[11px] font-extrabold text-[#6e6ef0] tracking-wider uppercase font-mono pl-8.5">
+                <div className="text-[11px] font-extrabold text-electric tracking-wider uppercase font-mono pl-8.5">
                   SIX-DIMENSION PROFILE
                 </div>
               </div>
@@ -585,23 +591,23 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
           <SectionHeader icon={Compass}>KEY DRIVERS</SectionHeader>
           <div className="grid sm:grid-cols-2 gap-4">
             {report.domain && (
-              <div className="rounded-[14px] p-4 border border-line bg-[#fbfaff]/60 shadow-sm space-y-2">
+              <div className="rounded-[14px] p-4 border border-line bg-surface-subtle/60 shadow-sm space-y-2">
                 <div className="text-[10px] font-bold text-ink-400 font-mono uppercase">Chosen Direction</div>
-                <h4 className="text-[14px] font-extrabold text-[#6e6ef0]">{DOMAIN_LABELS[report.domain]}</h4>
+                <h4 className="text-[14px] font-extrabold text-electric">{DOMAIN_LABELS[report.domain]}</h4>
                 <p className="text-[12px] text-ink-600 leading-relaxed">
                   Where your career cards and next steps below are anchored.
                 </p>
               </div>
             )}
             {report.role && (
-              <div className="rounded-[14px] p-4 border border-line bg-[#fbfaff]/60 shadow-sm space-y-2">
+              <div className="rounded-[14px] p-4 border border-line bg-surface-subtle/60 shadow-sm space-y-2">
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-[10px] font-bold text-ink-400 font-mono uppercase">Role Resolution</div>
                   <span className={`text-[9px] font-mono font-black px-2 py-0.5 rounded-md capitalize ${CONF_BAND_STYLE[report.role.confBand]}`}>
                     {report.role.confBand}
                   </span>
                 </div>
-                <h4 className="text-[14px] font-extrabold text-[#6e6ef0]">
+                <h4 className="text-[14px] font-extrabold text-electric">
                   {ROLE_LABELS[report.role.winner]}
                   {report.role.coCandidate ? ` vs ${ROLE_LABELS[report.role.coCandidate]}` : ""}
                 </h4>
@@ -612,7 +618,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
               </div>
             )}
             {report.nextSteps.abroad && (
-              <div className="rounded-[14px] p-4 border border-line bg-[#fbfaff]/60 shadow-sm space-y-2 sm:col-span-2">
+              <div className="rounded-[14px] p-4 border border-line bg-surface-subtle/60 shadow-sm space-y-2 sm:col-span-2">
                 <div className="text-[10px] font-bold text-ink-400 font-mono uppercase">Mobility &amp; Values</div>
                 <p className="text-[12px] text-ink-600 leading-relaxed italic">&ldquo;{report.nextSteps.abroad}&rdquo;</p>
               </div>
@@ -676,7 +682,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
         ) : (
           <section className="py-10 space-y-6">
             <SectionHeader icon={Sparkles}>WHAT HAPPENS NEXT</SectionHeader>
-            <div className="rounded-[18px] p-6 sm:p-8 border border-line bg-[#f8f7fd]/40 max-w-2xl">
+            <div className="rounded-[18px] p-6 sm:p-8 border border-line bg-surface-subtle/40 max-w-2xl">
               <p className="text-[14.5px] leading-relaxed text-ink-600">
                 No percentages today — they wouldn&apos;t be honest. The fastest way forward is below.
               </p>
@@ -695,7 +701,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
           className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
         >
           <PageTag n={3} total={totalPages} />
-          <ThinkingPageView t={report.thinking} />
+          <ThinkingPageView t={report.thinking} onSaveConclusions={onSaveConclusions} />
         </motion.div>
       )}
 
@@ -714,8 +720,8 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
             <SectionHeader icon={Lightbulb}>WE FEEL</SectionHeader>
             <div className="grid sm:grid-cols-3 gap-4">
               {report.verdicts.slice(0, 3).map((v) => (
-                <div key={v.id} className="rounded-[14px] p-4 border border-line/50 bg-[#fbfaff]/60 space-y-2">
-                  <Quote className="size-4 text-[#6e6ef0]/40" />
+                <div key={v.id} className="rounded-[14px] p-4 border border-line/50 bg-surface-subtle/60 space-y-2">
+                  <Quote className="size-4 text-electric/40" />
                   <p className="text-[12.5px] text-ink-600 leading-relaxed italic">{v.line}</p>
                 </div>
               ))}
@@ -758,8 +764,8 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
                 </div>
               ))}
               {report.nextSteps.abroad && (
-                <div className="flex gap-3.5 items-start rounded-xl border border-[#6e6ef0]/20 bg-[#f3f0fc]/60 p-3">
-                  <span className="size-5 rounded-full bg-[#6e6ef0] text-white font-mono text-[10.5px] font-black flex items-center justify-center shrink-0 mt-0.5">
+                <div className="flex gap-3.5 items-start rounded-xl border border-electric/20 bg-electric-tint/60 p-3">
+                  <span className="size-5 rounded-full bg-electric text-white font-mono text-[10.5px] font-black flex items-center justify-center shrink-0 mt-0.5">
                     4
                   </span>
                   <p className="text-[13.5px] text-ink-700 font-medium leading-relaxed">{report.nextSteps.abroad}</p>
@@ -770,7 +776,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
         </section>
 
         <section className="py-6 border-t border-line/50 flex flex-col items-center text-center space-y-2">
-          <Quote className="size-6 text-[#6e6ef0]/30 transform rotate-180" />
+          <Quote className="size-6 text-electric/30 transform rotate-180" />
           <p className="text-[15px] sm:text-[16px] font-extrabold italic text-ink-600 leading-relaxed max-w-lg">
             You don&apos;t need to have it all figured out. You just need the right direction.
           </p>
@@ -778,7 +784,7 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
 
         <footer className="pt-6 border-t border-line/60 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 mt-6">
           <div className="flex items-center gap-2">
-            <Logo className="size-5 text-[#6e6ef0]" />
+            <Logo className="size-5 text-electric" />
             <span className="font-bold text-[13px] font-sans text-ink-400">SecureSteps</span>
           </div>
           <p className="text-[11.5px] text-ink-400 leading-relaxed text-center sm:text-right max-w-md">
@@ -787,6 +793,9 @@ export default function ReportViewV2({ report }: { report: ReportV2 }) {
           </p>
         </footer>
       </motion.div>
+
+      {/* Still unsure? Ask the Gita. Web report only (not in the PDF); hidden when the chat service is down. */}
+      <GitaChatSection report={report} />
     </article>
   );
 }

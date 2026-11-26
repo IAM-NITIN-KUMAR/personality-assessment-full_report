@@ -2,8 +2,8 @@ import type { Answer } from "../../types";
 import type { RadarDim, RadarScores } from "../types";
 import { DIM_PRIORITY } from "../types";
 import {
-  B_STATEMENTS, DIALS, DIAL_DEF, FLAG_AT, FP_PREFIX, GAP_DEF, GAP_PRIORITY, GROUP_LABEL, NO_IDEA, PARTS, REASON_SHORT,
-  fpId,
+  B_STATEMENTS, DIALS, DIAL_DEF, FLAG_AT, FP_PREFIX, GAP_DEF, GAP_PRIORITY, GROUP_LABEL, NO_IDEA, PARTS, REASON_PHRASE,
+  REASON_SHORT, WORKPLACE_PHRASE, fpId,
 } from "./bank";
 import type { BStatement, Conclusion, Dial, Focus, Gap, Part } from "./bank";
 import { CAREER_TAGS, DIAL_INDEX, WORKPLACE_DIALS } from "./tags";
@@ -27,6 +27,20 @@ export const num = (a: FpAnswers, id: string): number | undefined => {
   const v = Number(one(a, id));
   return Number.isFinite(v) && v >= 1 && v <= 5 ? v : undefined;
 };
+
+// ------------------------------------------------------------ Starting point
+
+/** The three starting-point answers in plain words. The Ask the Gita chat is told these. */
+export interface StartingPoint { reason?: string; workplace?: string; missing: string[] }
+
+export function startingPoint(a: FpAnswers): StartingPoint | null {
+  const reason = REASON_PHRASE[one(a, fpId("A2")) ?? ""];
+  const workplace = WORKPLACE_PHRASE[one(a, fpId("A3")) ?? ""];
+  const picked = many(a, fpId("C3.gap"));
+  const missing = GAP_PRIORITY.filter((g) => picked.includes(g)).map((g) => GAP_DEF[g].word);
+  if (!reason && !workplace && missing.length === 0) return null;
+  return { ...(reason ? { reason } : {}), ...(workplace ? { workplace } : {}), missing };
+}
 
 // ------------------------------------------------------------ Part B
 

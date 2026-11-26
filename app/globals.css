@@ -4,14 +4,14 @@
 
 @layer base {
   :root {
-    --font-sans: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
-    --font-mono: "Plus Jakarta Sans", "Inter", system-ui, -apple-system, sans-serif;
-    --font-display: "Outfit", "Inter", system-ui, sans-serif;
+    --font-sans: "Urbanist", system-ui, -apple-system, sans-serif;
+    --font-mono: "Urbanist", system-ui, -apple-system, sans-serif;
+    --font-display: "Urbanist", system-ui, sans-serif;
   }
 
   html, body {
-    background-color: #CCCCFF;
-    color: #0A0E1A;
+    background-color: theme('colors.surface.wash');
+    color: theme('colors.ink.DEFAULT');
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
@@ -35,7 +35,7 @@
     background-repeat: no-repeat;
     background-position: center;
     will-change: transform;
-    filter: drop-shadow(0 8px 14px rgba(110, 110, 180, 0.18));
+    filter: drop-shadow(0 8px 14px theme('colors.electric.DEFAULT / 14%'));
   }
 
   @keyframes drift-right {
@@ -59,7 +59,7 @@
   .cloud-4 { top: 70%; width: 320px; height: 130px; opacity: 0.9;  animation: drift-left 110s linear infinite; animation-delay: -55s; }
   .cloud-5 { bottom: 6%; width: 440px; height: 180px; opacity: 1;   animation: drift-right 150s linear infinite; animation-delay: -90s; }
 
-  ::selection { background: rgba(243, 166, 217, 0.32); color: #0A0E1A; }
+  ::selection { background: theme('colors.electric.400 / 32%'); color: theme('colors.ink.DEFAULT'); }
 }
 
 @layer components {
@@ -102,7 +102,7 @@
   /* Card surface — hairline border + directional drop shadow on right and bottom. */
   .panel {
     background: #FFFFFF;
-    border: 1px solid rgba(229, 231, 235, 0.6);
+    border: 1px solid theme('colors.line.DEFAULT / 80%');
     border-radius: 22px;
     box-shadow:
       14px 14px 32px -8px rgba(10, 14, 26, 0.18),
@@ -111,7 +111,7 @@
 
   .panel-soft {
     background: #FFFFFF;
-    border: 1px solid rgba(229, 231, 235, 0.5);
+    border: 1px solid theme('colors.line.DEFAULT / 70%');
     border-radius: 18px;
     box-shadow:
       10px 10px 24px -6px rgba(10, 14, 26, 0.14),
@@ -152,14 +152,14 @@
 @layer utilities {
   .text-balance { text-wrap: balance; }
   .scrollbar-thin::-webkit-scrollbar { width: 6px; height: 6px; }
-  .scrollbar-thin::-webkit-scrollbar-thumb { background: #D1D5DB; border-radius: 3px; }
+  .scrollbar-thin::-webkit-scrollbar-thumb { background: theme('colors.line.strong'); border-radius: 3px; }
   .scrollbar-none::-webkit-scrollbar { display: none; }
 
   /* Geometric glow used as a corner motif on cards (mimics the BASIC/PRO/ELITE icons). */
   .corner-motif {
     background:
-      radial-gradient(circle at 30% 30%, rgba(243, 166, 217, 0.18) 0%, transparent 50%),
-      conic-gradient(from 220deg at 50% 50%, #F3A6D9 0deg, #C59AE8 90deg, #F3A6D9 180deg, #A878D0 270deg, #F3A6D9 360deg);
+      radial-gradient(circle at 30% 30%, theme('colors.electric.400 / 18%') 0%, transparent 50%),
+      conic-gradient(from 220deg at 50% 50%, theme('colors.electric.400') 0deg, theme('colors.electric.DEFAULT') 90deg, theme('colors.electric.400') 180deg, theme('colors.electric.600') 270deg, theme('colors.electric.400') 360deg);
     filter: blur(0.5px);
   }
 }

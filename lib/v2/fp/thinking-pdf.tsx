@@ -1,14 +1,15 @@
 import { Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import type { ReactNode } from "react";
 import type { ThinkingPage } from "./thinking";
+import { THEME } from "../../theme";
 
 // react-pdf counterpart of components/v2/thinking-page.tsx. Base-14 fonts only, like report-pdf.tsx.
 const INK = "#0A0E1A", INK_700 = "#1A1D26", INK_500 = "#3A3D48", INK_400 = "#6B6F78", INK_300 = "#9CA0A8";
-const LINE = "#E5E7EB", ACCENT = "#6e6ef0", CHIP_BG = "#f3f0fc", CARD_BG = "#fbfaff";
+const LINE = THEME.line, ACCENT = THEME.accent, CHIP_BG = THEME.tint, CARD_BG = THEME.surfaceSubtle;
 const SANS = "Helvetica", BOLD = "Helvetica-Bold", ITALIC = "Helvetica-Oblique", MONO_BOLD = "Courier-Bold";
 
 const s = StyleSheet.create({
   page: { paddingTop: 34, paddingBottom: 34, paddingHorizontal: 34, fontSize: 9, color: INK_500, fontFamily: SANS },
-  tag: { position: "absolute", top: 0, right: 0, backgroundColor: CHIP_BG, color: ACCENT, fontFamily: MONO_BOLD, fontSize: 7.5, paddingHorizontal: 10, paddingVertical: 5, borderBottomLeftRadius: 10 },
   eyebrow: { fontFamily: MONO_BOLD, fontSize: 7.5, color: ACCENT, letterSpacing: 1.2, textTransform: "uppercase" },
   title: { fontFamily: BOLD, fontSize: 19, color: INK, marginTop: 3, lineHeight: 1.15 },
   lead: { fontSize: 8.5, color: INK_400, lineHeight: 1.45, marginTop: 5, marginBottom: 12, maxWidth: 420 },
@@ -33,7 +34,7 @@ const s = StyleSheet.create({
   matchName: { fontFamily: BOLD, fontSize: 9.5, color: INK, marginTop: 2 },
   matchSub: { fontSize: 7, color: INK_400, marginTop: 2 },
   chips: { fontSize: 6.8, color: ACCENT, marginTop: 4 },
-  quote: { borderWidth: 1, borderColor: "#d9d6f7", backgroundColor: CHIP_BG, borderRadius: 8, padding: 9, marginBottom: 5 },
+  quote: { borderWidth: 1, borderColor: THEME.accentSoft, backgroundColor: CHIP_BG, borderRadius: 8, padding: 9, marginBottom: 5 },
   quoteText: { fontFamily: BOLD, fontSize: 9.5, color: INK_700, lineHeight: 1.45 },
   twoCol: { flexDirection: "row", gap: 10 },
   dialRow: { flexDirection: "row", alignItems: "center", marginBottom: 4 },
@@ -52,10 +53,10 @@ function Head({ n, children }: { n: number; children: string }) {
   );
 }
 
-export function ThinkingPdfPage({ t, n, total }: { t: ThinkingPage; n: number; total: number }) {
+export function ThinkingPdfPage({ t, tag }: { t: ThinkingPage; tag: ReactNode }) {
   return (
     <Page size="A4" style={s.page}>
-      <Text style={s.tag}>PAGE {n} OF {total}</Text>
+      {tag}
       <Text style={s.eyebrow}>First principles</Text>
       <Text style={s.title}>How you are thinking about your next step</Text>
       <Text style={s.lead}>
@@ -103,14 +104,15 @@ export function ThinkingPdfPage({ t, n, total }: { t: ThinkingPage; n: number; t
               <View key={i} style={s.tr} wrap={false}>
                 <Text style={[s.td, { fontFamily: BOLD, color: INK_700 }]}>&ldquo;{r.belief}&rdquo;</Text>
                 <Text style={s.td}>{r.evidence}</Text>
-                <Text style={[s.td, { fontFamily: ITALIC, color: "#4b4bd1" }]}>{r.question}</Text>
+                <Text style={[s.td, { fontFamily: ITALIC, color: THEME.accentInk }]}>{r.question}</Text>
               </View>
             ))}
           </View>
         )}
       </View>
 
-      <View style={s.box} wrap={false}>
+      {/* Starts the second sheet: boxes 1-2 on the first, the rebuild and conclusions together on the next. */}
+      <View style={s.box} wrap={false} break>
         <Head n={0}>Your route, rebuilt from the facts</Head>
         <View style={s.matchRow}>
           {t.routes.map((r, i) => (

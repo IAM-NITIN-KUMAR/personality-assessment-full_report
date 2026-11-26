@@ -128,7 +128,7 @@ function isAnswered(q: Question, a?: Answer): boolean {
   return !!a.optionIds && a.optionIds.length > 0;
 }
 
-function CornerMotif({ kind }: { kind: string }) {
+export function CornerMotif({ kind }: { kind: string }) {
   return (
     <div className="absolute top-7 right-7 pointer-events-none">
       <div
@@ -220,7 +220,7 @@ function ChoiceList({
               "group w-full text-left rounded-xl px-4 py-2.5 sm:px-5 sm:py-3.5 border transition-all flex items-center gap-2.5 sm:gap-3.5",
               isSelected
                 ? "border-ink bg-ink text-white shadow-sm"
-                : "border-line bg-white hover:bg-electric-tint hover:border-[#FAE251] hover:shadow-[0_12px_24px_-8px_rgba(110,110,180,0.25)] text-ink",
+                : "border-line bg-white hover:bg-electric-tint hover:border-electric-400 hover:shadow-lift text-ink",
             )}
           >
             <span
@@ -228,7 +228,7 @@ function ChoiceList({
                 "shrink-0 size-6 sm:size-7 rounded-full border flex items-center justify-center transition-all",
                 isSelected
                   ? "bg-electric border-electric"
-                  : "border-line group-hover:border-[#FAE251]",
+                  : "border-line group-hover:border-electric-400",
               )}
             >
               {isSelected && <Check className="h-4 w-4 text-white" strokeWidth={3} />}
@@ -257,7 +257,7 @@ function ShortText({
       className={cn(
         "w-full rounded-xl border border-line bg-surface-subtle px-4 py-2.5 sm:px-5 sm:py-4 text-[14px] sm:text-[16px] md:text-[17px] text-ink",
         "placeholder:text-ink-300 focus:outline-none focus:border-electric",
-        "focus:bg-white focus:shadow-[0_0_0_3px_rgba(243,166,217,0.25)] transition-all resize-none",
+        "focus:bg-white focus:shadow-focus transition-all resize-none",
       )}
     />
   );

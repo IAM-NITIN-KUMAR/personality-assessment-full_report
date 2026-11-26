@@ -28,10 +28,12 @@ import {
   Quote,
   Lightbulb
 } from "lucide-react";
+import { GitaChatSectionLegacy } from "@/components/v2/gita-chat";
 import { Logo } from "@/components/ui/logo";
 import { ReportData } from "@/lib/report-data";
 import { Dimension } from "@/lib/types";
 import { DISCIPLINES, courseById } from "@/lib/course-catalog";
+import { THEME, alpha } from "@/lib/theme";
 
 // Dynamic Core Strengths definitions mapped to user Archetypes
 const ARCHETYPE_STRENGTHS: Record<string, Array<{ title: string; desc: string; icon: "bulb" | "rocket" | "group" | "compass" }>> = {
@@ -159,7 +161,7 @@ export function ReportView({ data }: { data: ReportData }) {
     if (data.profile.educationLevel === "10th_12th" || data.profile.discipline === "schooling") {
       const streamText = data.profile.educationLevel === "10th_12th" ? ` (${disciplineLabel})` : "";
       return (
-        <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-[#f3f0fc] text-[#6e6ef0] rounded-xl px-4 py-2.5 border border-[#6e6ef0]/15 shadow-sm">
+        <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-electric-tint text-electric rounded-xl px-4 py-2.5 border border-electric/15 shadow-sm">
           👋 It's wonderful to know you are currently in <strong>Schooling{streamText}</strong>! This is a unique phase of pure potential where you can build strong foundations. We'll help you pinpoint the best undergraduate routes matching your style.
         </span>
       );
@@ -167,14 +169,14 @@ export function ReportView({ data }: { data: ReportData }) {
 
     if (chosenCourse) {
       return (
-        <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-[#f3f0fc] text-[#6e6ef0] rounded-xl px-4 py-2.5 border border-[#6e6ef0]/15 shadow-sm">
+        <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-electric-tint text-electric rounded-xl px-4 py-2.5 border border-electric/15 shadow-sm">
           🎯 It's fantastic to know you are focusing on the <strong>{disciplineLabel}</strong> stream, with your sights set on <strong>{chosenCourse.title}</strong>! Let's explore how this matches your cognitive DNA and what similar pathways might expand your horizon.
         </span>
       );
     }
 
     return (
-      <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-[#f3f0fc] text-[#6e6ef0] rounded-xl px-4 py-2.5 border border-[#6e6ef0]/15 shadow-sm">
+      <span className="inline-block mt-2 text-[13px] font-medium leading-relaxed bg-electric-tint text-electric rounded-xl px-4 py-2.5 border border-electric/15 shadow-sm">
         ✨ It's great to know you are focusing on the <strong>{disciplineLabel}</strong> stream! Let's explore the best matching specializations and pathways that align with your unique archetype.
       </span>
     );
@@ -202,7 +204,7 @@ export function ReportView({ data }: { data: ReportData }) {
 
   const topEnvironments = useMemo(() => {
     const sorted = [...data.environmentFit].sort((a, b) => b.score - a.score).slice(0, 3);
-    const colors = ["#10b981", "#6e6ef0", "#0ea5e9"]; // green, brand-purple, cyan
+    const colors = ["#10b981", THEME.accent, THEME.sky]; // green, brand-purple, cyan
     return sorted.map((env, idx) => ({
       label: env.key.replace(/_/g, " ").replace(/\b\w/g, c => c.toUpperCase()),
       score: env.score,
@@ -211,7 +213,7 @@ export function ReportView({ data }: { data: ReportData }) {
   }, [data.environmentFit]);
 
   const careerChartData = useMemo(() => {
-    const colors = ["#6e6ef0", "#f3a6d9", "#3b82f6", "#10b981"]; // brand purple, brand pink, blue, green
+    const colors = [THEME.accent, THEME.sky, THEME.accentSoft, "#10b981"]; // brand purple, brand pink, blue, green
     return data.commonCareerPaths.map((path, idx) => ({
       label: path.role,
       percentage: path.percentage,
@@ -270,13 +272,13 @@ export function ReportView({ data }: { data: ReportData }) {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 bg-[#f3f0fc] text-[#6e6ef0] font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
+        <div className="absolute top-0 right-0 bg-electric-tint text-electric font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
           PAGE 1 OF 3
         </div>
         {/* Header Block */}
         <header className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-line">
           <div className="flex items-center gap-2.5">
-            <Logo className="size-7 text-[#6e6ef0]" />
+            <Logo className="size-7 text-electric" />
             <span className="text-[24px] font-black tracking-tight text-ink font-sans">
               SecureSteps
             </span>
@@ -299,7 +301,7 @@ export function ReportView({ data }: { data: ReportData }) {
             <h1 className="text-[32px] sm:text-[40px] font-black leading-tight text-ink uppercase tracking-tight">
               YOUR PERSONAL PATHWAY INSIGHT
             </h1>
-            <div className="text-[15px] font-extrabold text-[#6e6ef0] tracking-wider uppercase font-mono">
+            <div className="text-[15px] font-extrabold text-electric tracking-wider uppercase font-mono">
               Archetype: {data.archetype.name}
             </div>
             <p className="text-[14px] sm:text-[15px] leading-relaxed text-ink-500 max-w-md">
@@ -309,8 +311,8 @@ export function ReportView({ data }: { data: ReportData }) {
           </div>
 
           {/* User Profile Card */}
-          <div className="rounded-[18px] p-6 border border-line bg-[#f8f7fd]/40 flex gap-4 items-center">
-            <div className="size-14 rounded-full bg-[#0a0e1a] text-white flex items-center justify-center font-mono text-[18px] font-black shrink-0">
+          <div className="rounded-[18px] p-6 border border-line bg-surface-subtle/40 flex gap-4 items-center">
+            <div className="size-14 rounded-full bg-ink text-white flex items-center justify-center font-mono text-[18px] font-black shrink-0">
               {initials}
             </div>
             <div className="min-w-0 space-y-1.5">
@@ -338,7 +340,7 @@ export function ReportView({ data }: { data: ReportData }) {
           {/* Left: Core Strengths */}
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+              <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
                 <Star className="size-3.5" strokeWidth={3} />
               </div>
               <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
@@ -352,9 +354,9 @@ export function ReportView({ data }: { data: ReportData }) {
                 return (
                   <div
                     key={idx}
-                    className="rounded-[14px] p-4 border border-line/40 bg-[#fbfaff]/60 hover:bg-[#fbfaff] transition-all flex gap-3.5 items-start"
+                    className="rounded-[14px] p-4 border border-line/40 bg-surface-subtle/60 hover:bg-surface-subtle transition-all flex gap-3.5 items-start"
                   >
-                    <div className="size-8 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0] shrink-0 mt-0.5">
+                    <div className="size-8 rounded-full bg-electric-tint flex items-center justify-center text-electric shrink-0 mt-0.5">
                       <IconComponent className="size-5" />
                     </div>
                     <div>
@@ -375,14 +377,14 @@ export function ReportView({ data }: { data: ReportData }) {
           <div className="space-y-6 flex flex-col items-center">
             <div className="flex flex-col gap-1.5 self-start">
               <div className="flex items-center gap-2.5">
-                <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+                <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
                   <TrendingUp className="size-3.5" strokeWidth={3} />
                 </div>
                 <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
                   YOUR PATH FIT SCORE
                 </h2>
               </div>
-              <div className="text-[11px] font-extrabold text-[#6e6ef0] tracking-wider uppercase font-mono pl-8.5">
+              <div className="text-[11px] font-extrabold text-electric tracking-wider uppercase font-mono pl-8.5">
                 {data.archetype.name} PATHWAY
               </div>
             </div>
@@ -401,7 +403,7 @@ export function ReportView({ data }: { data: ReportData }) {
               {/* Top Center: Analytical */}
               <div className="absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center text-center">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
-                  <Brain className="size-3.5 text-[#6e6ef0]" />
+                  <Brain className="size-3.5 text-electric" />
                   <span>Analytical</span>
                 </div>
                 <span className="font-mono text-[9px] text-ink-400 font-bold mt-0.5">{scores.analytical.toFixed(1)}/10</span>
@@ -410,7 +412,7 @@ export function ReportView({ data }: { data: ReportData }) {
               {/* Top Right: Creative */}
               <div className="absolute top-[18%] -right-2 sm:right-0 flex flex-col items-start">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
-                  <Palette className="size-3.5 text-[#6e6ef0]" />
+                  <Palette className="size-3.5 text-electric" />
                   <span>Creative</span>
                 </div>
                 <span className="font-mono text-[9px] text-ink-400 font-bold mt-0.5 pl-4">{scores.creative.toFixed(1)}/10</span>
@@ -419,7 +421,7 @@ export function ReportView({ data }: { data: ReportData }) {
               {/* Bottom Right: Leadership */}
               <div className="absolute bottom-[18%] -right-2 sm:right-0 flex flex-col items-start">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
-                  <UserCheck className="size-3.5 text-[#6e6ef0]" />
+                  <UserCheck className="size-3.5 text-electric" />
                   <span>Leadership</span>
                 </div>
                 <span className="font-mono text-[9px] text-ink-400 font-bold mt-0.5 pl-4">{scores.leadership.toFixed(1)}/10</span>
@@ -428,7 +430,7 @@ export function ReportView({ data }: { data: ReportData }) {
               {/* Bottom Center: People Skills */}
               <div className="absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center text-center">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
-                  <Users className="size-3.5 text-[#6e6ef0]" />
+                  <Users className="size-3.5 text-electric" />
                   <span>People Skills</span>
                 </div>
                 <span className="font-mono text-[9px] text-ink-400 font-bold mt-0.5">{scores.peopleSkills.toFixed(1)}/10</span>
@@ -437,7 +439,7 @@ export function ReportView({ data }: { data: ReportData }) {
               {/* Bottom Left: Practical */}
               <div className="absolute bottom-[18%] -left-2 sm:left-0 flex flex-col items-end">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
-                  <Settings className="size-3.5 text-[#6e6ef0]" />
+                  <Settings className="size-3.5 text-electric" />
                   <span>Practical</span>
                 </div>
                 <span className="font-mono text-[9px] text-ink-400 font-bold mt-0.5 pr-4">{scores.practical.toFixed(1)}/10</span>
@@ -446,7 +448,7 @@ export function ReportView({ data }: { data: ReportData }) {
               {/* Top Left: Entrepreneurial */}
               <div className="absolute top-[18%] -left-2 sm:left-0 flex flex-col items-end">
                 <div className="flex items-center gap-1 text-[10.5px] font-extrabold text-ink-700">
-                  <Rocket className="size-3.5 text-[#6e6ef0]" />
+                  <Rocket className="size-3.5 text-electric" />
                   <span>Entrepreneurial</span>
                 </div>
                 <span className="font-mono text-[9px] text-ink-400 font-bold mt-0.5 pr-4">{scores.entrepreneurial.toFixed(1)}/10</span>
@@ -458,7 +460,7 @@ export function ReportView({ data }: { data: ReportData }) {
         {/* Key Drivers */}
         <section className="py-6 border-t border-line/50 space-y-6 mt-6">
           <div className="flex items-center gap-2.5">
-            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+            <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
               <Compass className="size-3.5" strokeWidth={3} />
             </div>
             <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
@@ -467,9 +469,9 @@ export function ReportView({ data }: { data: ReportData }) {
           </div>
           <div className="grid sm:grid-cols-2 gap-4">
             {data.drivers.map((driver, idx) => (
-              <div key={idx} className="rounded-[14px] p-4 border border-line bg-[#fbfaff]/60 shadow-sm space-y-2">
+              <div key={idx} className="rounded-[14px] p-4 border border-line bg-surface-subtle/60 shadow-sm space-y-2">
                 <div className="text-[10px] font-bold text-ink-400 font-mono uppercase">{driver.category}</div>
-                <h4 className="text-[14px] font-extrabold text-[#6e6ef0]">{driver.label}</h4>
+                <h4 className="text-[14px] font-extrabold text-electric">{driver.label}</h4>
                 <p className="text-[12px] text-ink-600 leading-relaxed">{driver.description}</p>
               </div>
             ))}
@@ -480,7 +482,7 @@ export function ReportView({ data }: { data: ReportData }) {
         <section className="grid md:grid-cols-2 gap-10 py-6 border-t border-line/50 mt-2">
           <div className="space-y-6">
              <div className="flex items-center gap-2.5">
-               <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+               <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
                  <Briefcase className="size-3.5" strokeWidth={3} />
                </div>
                <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">TOP PREFERENCES</h2>
@@ -498,7 +500,7 @@ export function ReportView({ data }: { data: ReportData }) {
                        whileInView={{ width: `${pref.score}%` }}
                        viewport={{ once: true }}
                        transition={{ duration: 1, delay: 0.1 * idx, ease: "easeOut" }}
-                       className="h-full bg-[#6e6ef0] rounded-full" 
+                       className="h-full bg-electric rounded-full" 
                      />
                    </div>
                    <p className="text-[11.5px] text-ink-500">{pref.detail}</p>
@@ -508,7 +510,7 @@ export function ReportView({ data }: { data: ReportData }) {
           </div>
           <div className="space-y-6">
              <div className="flex items-center gap-2.5">
-               <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+               <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
                  <Star className="size-3.5" strokeWidth={3} />
                </div>
                <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">TOP APTITUDES</h2>
@@ -526,7 +528,7 @@ export function ReportView({ data }: { data: ReportData }) {
                        whileInView={{ width: `${apt.score}%` }}
                        viewport={{ once: true }}
                        transition={{ duration: 1, delay: 0.1 * idx, ease: "easeOut" }}
-                       className="h-full bg-[#6e6ef0] rounded-full" 
+                       className="h-full bg-electric rounded-full" 
                      />
                    </div>
                    <p className="text-[11.5px] text-ink-500">{apt.detail}</p>
@@ -539,7 +541,7 @@ export function ReportView({ data }: { data: ReportData }) {
         {/* Career Traits (Deep Dive Bi-Directional Scales) */}
         <section className="py-6 border-t border-line/50 space-y-6">
           <div className="flex items-center gap-2.5 mb-6">
-            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+            <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
               <LineChart className="size-3.5" strokeWidth={3} />
             </div>
             <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
@@ -555,7 +557,7 @@ export function ReportView({ data }: { data: ReportData }) {
                   {group.traits.map((trait, tIdx) => (
                     <div
                       key={tIdx}
-                      className="p-3.5 rounded-xl border border-line/50 bg-[#fbfaff]/50 hover:bg-[#fbfaff] transition-all flex flex-col gap-1.5"
+                      className="p-3.5 rounded-xl border border-line/50 bg-surface-subtle/50 hover:bg-surface-subtle transition-all flex flex-col gap-1.5"
                     >
                       <div className="flex justify-between items-center">
                         <span className="text-[13px] font-bold text-ink-700">
@@ -582,14 +584,14 @@ export function ReportView({ data }: { data: ReportData }) {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 bg-[#f3f0fc] text-[#6e6ef0] font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
+        <div className="absolute top-0 right-0 bg-electric-tint text-electric font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
           PAGE 2 OF 3
         </div>
 
         {/* Best Path Matches Section */}
         <section className="py-6 space-y-6">
           <div className="flex items-center gap-2.5">
-            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+            <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
               <Award className="size-3.5" strokeWidth={3} />
             </div>
             <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
@@ -603,20 +605,20 @@ export function ReportView({ data }: { data: ReportData }) {
               return (
                 <div
                   key={idx}
-                  className="rounded-[16px] p-5 border border-line bg-[#f8f7fd]/30 hover:bg-[#f8f7fd]/60 transition-all space-y-4 relative flex flex-col justify-between"
+                  className="rounded-[16px] p-5 border border-line bg-surface-subtle/30 hover:bg-surface-subtle/60 transition-all space-y-4 relative flex flex-col justify-between"
                 >
                   <div className="space-y-3.5">
                     <div className="flex items-center justify-between gap-2">
-                      <span className="size-6 rounded-full bg-[#6e6ef0] text-white font-mono text-[11px] font-extrabold flex items-center justify-center shrink-0">
+                      <span className="size-6 rounded-full bg-electric text-white font-mono text-[11px] font-extrabold flex items-center justify-center shrink-0">
                         {idx + 1}
                       </span>
                       <div className="flex items-center gap-2">
                         {match.match && (
-                          <span className="text-[9px] font-mono font-black text-[#6e6ef0] bg-[#f3f0fc] px-2 py-0.5 rounded-md">
+                          <span className="text-[9px] font-mono font-black text-electric bg-electric-tint px-2 py-0.5 rounded-md">
                             {match.match}% FIT
                           </span>
                         )}
-                        <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-[#6e6ef0] shrink-0 shadow-sm">
+                        <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-electric shrink-0 shadow-sm">
                           <MatchIcon className="size-5" />
                         </div>
                       </div>
@@ -640,7 +642,7 @@ export function ReportView({ data }: { data: ReportData }) {
         {data.alternativeDegrees.length > 0 && (
           <section className="py-6 border-t border-line/50 space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+              <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
                 <Globe className="size-3.5" strokeWidth={3} />
               </div>
               <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
@@ -651,9 +653,9 @@ export function ReportView({ data }: { data: ReportData }) {
               {data.alternativeDegrees.map((match, idx) => {
                 const MatchIcon = getMatchIcon(match.title);
                 return (
-                  <div key={idx} className="rounded-[16px] p-5 border border-line bg-[#f8f7fd]/30 hover:bg-[#f8f7fd]/60 transition-all space-y-3">
+                  <div key={idx} className="rounded-[16px] p-5 border border-line bg-surface-subtle/30 hover:bg-surface-subtle/60 transition-all space-y-3">
                     <div className="flex items-center justify-between">
-                      <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-[#6e6ef0] shadow-sm">
+                      <div className="size-8 rounded-xl bg-white border border-line flex items-center justify-center text-electric shadow-sm">
                         <MatchIcon className="size-4" />
                       </div>
                       <span className="text-[9px] font-mono font-black text-ink-500 bg-line/50 px-2 py-0.5 rounded-md">
@@ -675,7 +677,7 @@ export function ReportView({ data }: { data: ReportData }) {
         <section className="grid md:grid-cols-2 gap-10 py-6 border-t border-line/50">
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+              <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
                 <Settings className="size-3.5" strokeWidth={3} />
               </div>
               <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">IDEAL ENVIRONMENT</h2>
@@ -687,7 +689,7 @@ export function ReportView({ data }: { data: ReportData }) {
           </div>
           <div className="space-y-6">
             <div className="flex items-center gap-2.5">
-              <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+              <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
                 <Users className="size-3.5" strokeWidth={3} />
               </div>
               <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">CAREER DISTRIBUTION</h2>
@@ -708,14 +710,14 @@ export function ReportView({ data }: { data: ReportData }) {
         transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
         className="bg-white border border-line rounded-[24px] shadow-2xl p-4 sm:p-8 md:p-12 text-ink relative overflow-hidden"
       >
-        <div className="absolute top-0 right-0 bg-[#f3f0fc] text-[#6e6ef0] font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
+        <div className="absolute top-0 right-0 bg-electric-tint text-electric font-mono text-[10px] font-bold px-4 py-1.5 rounded-bl-[16px] z-10 border-b border-l border-line/50 shadow-sm">
           PAGE 3 OF 3
         </div>
 
         {/* Shared Interests */}
         <section className="py-6 border-b border-line/50 space-y-4 mb-6">
           <div className="flex items-center gap-2.5">
-            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+            <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
               <Lightbulb className="size-3.5" strokeWidth={3} />
             </div>
             <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
@@ -724,7 +726,7 @@ export function ReportView({ data }: { data: ReportData }) {
           </div>
           <div className="flex flex-wrap gap-2">
             {data.sharedInterests.map((interest, idx) => (
-              <div key={idx} className="px-3 py-1.5 bg-[#f8f7fd] border border-line/60 rounded-lg text-[12px] font-medium text-ink-600">
+              <div key={idx} className="px-3 py-1.5 bg-surface-subtle border border-line/60 rounded-lg text-[12px] font-medium text-ink-600">
                 {interest}
               </div>
             ))}
@@ -809,19 +811,19 @@ export function ReportView({ data }: { data: ReportData }) {
         {/* Parent Letter */}
         <section className="py-6 border-t border-line/50 space-y-5 mt-6">
           <div className="flex items-center gap-2.5">
-            <div className="size-6 rounded-full bg-[#f3f0fc] flex items-center justify-center text-[#6e6ef0]">
+            <div className="size-6 rounded-full bg-electric-tint flex items-center justify-center text-electric">
               <Quote className="size-3.5" strokeWidth={3} />
             </div>
             <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">
               A NOTE FOR YOUR FAMILY
             </h2>
           </div>
-          <div className="rounded-[18px] p-6 sm:p-8 border border-line bg-[#f8f7fd]/40 space-y-4 max-w-3xl mx-auto">
+          <div className="rounded-[18px] p-6 sm:p-8 border border-line bg-surface-subtle/40 space-y-4 max-w-3xl mx-auto">
             <h3 className="text-[16px] font-bold text-ink-800 border-b border-line/50 pb-2">
               {data.parentLetter.greeting}
             </h3>
             {data.parentLetter.paragraphs.map((para, idx) => (
-              <p key={idx} className="text-[13.5px] leading-relaxed text-[#3a3d48]">
+              <p key={idx} className="text-[13.5px] leading-relaxed text-ink-500">
                 {para}
               </p>
             ))}
@@ -835,7 +837,7 @@ export function ReportView({ data }: { data: ReportData }) {
 
         {/* Center Quote Block */}
         <section className="py-6 border-t border-line/50 flex flex-col items-center text-center space-y-2">
-          <Quote className="size-6 text-[#6e6ef0]/30 transform rotate-180" />
+          <Quote className="size-6 text-electric/30 transform rotate-180" />
           <p className="text-[15px] sm:text-[16px] font-extrabold italic text-ink-600 leading-relaxed max-w-lg">
             You don't need to have it all figured out. You just need the right direction.
           </p>
@@ -844,7 +846,7 @@ export function ReportView({ data }: { data: ReportData }) {
         {/* Footer */}
         <footer className="pt-6 border-t border-line/60 flex items-center justify-between text-ink-300 flex-wrap gap-4 mt-6">
           <div className="flex items-center gap-2">
-            <Logo className="size-5 text-[#6e6ef0]" />
+            <Logo className="size-5 text-electric" />
             <span className="font-bold text-[13px] font-sans text-ink-400">
               SecureSteps
             </span>
@@ -855,18 +857,21 @@ export function ReportView({ data }: { data: ReportData }) {
               href="https://www.securesteps.co.in/"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-[#6e6ef0] hover:underline font-semibold"
+              className="text-electric hover:underline font-semibold"
             >
               https://www.securesteps.co.in/
             </a>
           </div>
           <div className="flex items-center gap-4 text-ink-400">
-            <Globe className="size-4 hover:text-[#6e6ef0] transition-colors cursor-pointer" />
-            <Instagram className="size-4 hover:text-[#6e6ef0] transition-colors cursor-pointer" />
-            <Facebook className="size-4 hover:text-[#6e6ef0] transition-colors cursor-pointer" />
+            <Globe className="size-4 hover:text-electric transition-colors cursor-pointer" />
+            <Instagram className="size-4 hover:text-electric transition-colors cursor-pointer" />
+            <Facebook className="size-4 hover:text-electric transition-colors cursor-pointer" />
           </div>
         </footer>
       </motion.div>
+
+      {/* Still unsure? Ask the Gita. Web report only (not in the PDF); hidden when the chat service is down. */}
+      <GitaChatSectionLegacy data={data} />
     </article>
   );
 }
@@ -932,7 +937,7 @@ function DashboardRadarChart({
               })
               .join(" ")}
             fill="none"
-            stroke="rgba(110, 110, 240, 0.08)"
+            stroke={alpha(THEME.accent, 0.08)}
             strokeWidth={1}
           />
         );
@@ -950,7 +955,7 @@ function DashboardRadarChart({
             y1={cy}
             x2={px}
             y2={py}
-            stroke="rgba(110, 110, 240, 0.12)"
+            stroke={alpha(THEME.accent, 0.12)}
             strokeWidth={1}
           />
         );
@@ -959,8 +964,8 @@ function DashboardRadarChart({
       {/* Filled polygon */}
       <polygon
         points={polygonPoints}
-        fill="rgba(110, 110, 240, 0.14)"
-        stroke="#6e6ef0"
+        fill={alpha(THEME.accent, 0.14)}
+        stroke={THEME.accent}
         strokeWidth={2}
         strokeLinejoin="round"
       />
@@ -974,7 +979,7 @@ function DashboardRadarChart({
             cx={p.x}
             cy={p.y}
             r={4}
-            fill="#6e6ef0"
+            fill={THEME.accent}
             stroke="white"
             strokeWidth={1.5}
           />
@@ -997,7 +1002,7 @@ function ConcentricRingsChart({
   const gap = 5;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl border border-line bg-[#fbfaff]/50 w-full">
+    <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl border border-line bg-surface-subtle/50 w-full">
       <svg viewBox={`0 0 ${size} ${size}`} className="w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] shrink-0">
         {items.map((item, idx) => {
           const r = 25 + idx * (strokeWidth + gap);
@@ -1069,7 +1074,7 @@ function DonutChart({
   let accumPercentage = 0;
 
   return (
-    <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl border border-line bg-[#fbfaff]/50 w-full">
+    <div className="flex flex-col sm:flex-row items-center gap-6 p-4 rounded-xl border border-line bg-surface-subtle/50 w-full">
       <svg viewBox={`0 0 ${size} ${size}`} className="w-[110px] h-[110px] sm:w-[130px] sm:h-[130px] shrink-0">
         {items.map((item, idx) => {
           const fraction = item.percentage / 100;

@@ -3,6 +3,7 @@
 
 import type { Journey } from "./journeys/data";
 import type { ThinkingPage } from "./fp/thinking";
+import type { StartingPoint } from "./fp/score";
 
 export type Degree = "engineering" | "commerce" | "science" | "arts" | "other";
 
@@ -188,4 +189,6 @@ export interface ReportV2 {
   journeys: Journey[];
   /** First Principles "How you are thinking about your next step" page. null until the module is answered. */
   thinking: ThinkingPage | null;
+  /** The three starting-point answers in plain words. null when none were given. */
+  startingPoint?: StartingPoint | null;
 }

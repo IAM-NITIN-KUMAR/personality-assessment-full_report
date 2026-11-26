@@ -3,10 +3,11 @@ import { CATALOG } from "../../lib/v2/careers/catalog";
 import { computeRadar } from "../../lib/v2/scoring/radar";
 import { ANANYA_ANSWERS } from "../../lib/v2/fixtures";
 import { CAREER_TAGS } from "../../lib/v2/fp/tags";
-import { B_STATEMENTS, fpId, POST_STEPS, PRE_STEPS } from "../../lib/v2/fp/bank";
+import { B_STATEMENTS, CONCLUSION_IDS, fpId, PRE_STEPS } from "../../lib/v2/fp/bank";
+import { screenOrder } from "../../lib/v2/flow";
 import { assumptions, bandFor, namedInA1, rebuildRoute, resolveGap, environment } from "../../lib/v2/fp/score";
 import type { FpAnswers } from "../../lib/v2/fp/score";
-import { nextPostStep, nextPreStep, stepDone } from "../../lib/v2/fp/steps";
+import { askedOnly, FP_PAGE_COUNT, nextPostPage, nextPrePage, pageDone, pagesOf, POST_PAGES, PRE_PAGES, stepDone } from "../../lib/v2/fp/steps";
 import { buildThinking, fpComplete } from "../../lib/v2/fp/thinking";
 import { ANANYA_FP } from "../../lib/v2/fp/fixtures";
 
@@ -93,26 +94,52 @@ describe("environment and gap", () => {
 });
 
 describe("step flow", () => {
-  it("walks Part A in order and then nothing is left before the main test", () => {
-    const a: FpAnswers = {};
-    const seen: string[] = [];
-    for (let s = nextPreStep(a); s; s = nextPreStep(a)) {
-      seen.push(s.id);
-      if (s.kind === "text") a[s.id] = { text: "x" };
-      else if (s.kind === "choice") a[s.id] = { optionIds: [s.options[0].id] };
-      else if (s.kind === "grid") s.rows.forEach((r) => { a[r.id] = { optionIds: ["3"] }; });
-    }
-    expect(seen).toEqual(PRE_STEPS.map((s) => s.id));
+  it("the whole test is 29 questions: 3 from the module around the 26 scored ones", () => {
+    expect(PRE_PAGES.map((p) => p.id)).toEqual([fpId("A2"), fpId("A3")]);
+    expect(POST_PAGES.map((p) => p.id)).toEqual([fpId("C3.gap")]);
+    expect(FP_PAGE_COUNT).toBe(3);
+    const core = screenOrder({}).filter((id) => id !== "Q0");
+    expect(FP_PAGE_COUNT + core.length).toBe(29);
   });
-  it("a grid is only done when every row is answered", () => {
+  it("every module question that is asked has worded answers: no 1-to-5 scale, no typing", () => {
+    for (const p of [...PRE_PAGES, ...POST_PAGES]) {
+      expect(p.kind).toBe("choice");
+      expect(p.options.length).toBeGreaterThanOrEqual(3);
+      p.options.forEach((o) => expect(o.label).toMatch(/[A-Za-z]{3,}/));
+    }
+  });
+  it("pages are asked one at a time, in order", () => {
+    const a: FpAnswers = {};
+    PRE_PAGES.forEach((p) => {
+      expect(nextPrePage(a)?.id).toBe(p.id);
+      expect(pageDone(p, a)).toBe(false);
+      a[p.id] = { optionIds: [p.options[0].id] };
+      expect(pageDone(p, a)).toBe(true);
+    });
+    expect(nextPrePage(a)).toBeNull();
+    expect(nextPostPage(a)?.id).toBe(fpId("C3.gap"));
+  });
+  it("a grid question becomes one page per row, stored under the row's id", () => {
     const grid = PRE_STEPS.find((s) => s.kind === "grid")!;
+    if (grid.kind !== "grid") throw new Error("expected a grid");
+    const rows = pagesOf(PRE_STEPS).filter((p) => p.lead === grid.prompt);
+    expect(rows.map((p) => p.id)).toEqual(grid.rows.map((r) => r.id));
+    expect(rows.every((p) => p.kind === "scale" && p.options.length === 5)).toBe(true);
     const partial: FpAnswers = { [fpId("A7.career")]: { optionIds: ["2"] } };
     expect(stepDone(grid, partial)).toBe(false);
+    expect(pageDone(rows[0], partial)).toBe(true);
+    expect(pageDone(rows[1], partial)).toBe(false);
   });
-  it("ends on the conclusions step", () => {
-    expect(POST_STEPS[POST_STEPS.length - 1].kind).toBe("conclusions");
-    // Everything before the conclusions is answered, so that is the next open step.
-    expect(nextPostStep(ANANYA_FP)?.kind).toBe("conclusions");
+  it("answers the test no longer asks for are ignored, so the Thinking Page is not built", () => {
+    const asked = askedOnly(ANANYA_FP);
+    expect(Object.keys(asked).sort()).toEqual([fpId("A2"), fpId("A3"), fpId("C3.gap")].sort());
+    expect(fpComplete(ANANYA_FP)).toBe(true);
+    expect(fpComplete(asked)).toBe(false);
+    expect(buildThinking({ fp: asked, radar })).toBeNull();
+  });
+  it("the test ends after Part C: the conclusions are written on the report, not in the test", () => {
+    expect(nextPostPage(ANANYA_FP)).toBeNull();
+    expect(CONCLUSION_IDS.some((id) => id in ANANYA_FP)).toBe(false);
   });
 });
 

@@ -6,7 +6,8 @@ import { ANANYA_ANSWERS } from "../../lib/v2/fixtures";
 import { ALL_FP_STEPS, B_STATEMENTS, CONCLUSION_IDS, fpId, GAP_OPTIONS } from "../../lib/v2/fp/bank";
 import type { FpStep } from "../../lib/v2/fp/bank";
 import type { FpAnswers } from "../../lib/v2/fp/score";
-import { nextPostStep, nextPreStep } from "../../lib/v2/fp/steps";
+import { FP_PAGE_COUNT, nextPostPage, nextPrePage, PRE_PAGES } from "../../lib/v2/fp/steps";
+import type { FpPage } from "../../lib/v2/fp/steps";
 import { buildThinking, fpComplete } from "../../lib/v2/fp/thinking";
 import type { V2Answers } from "../../lib/v2/types";
 
@@ -24,10 +25,21 @@ function answerStep(step: FpStep, a: FpAnswers, r: () => number) {
     const ids = new Set<string>();
     for (let tries = 0; ids.size < n && tries < 20; tries++) ids.add(pick(step.options).id);
     a[step.id] = { optionIds: [...ids] };
-  } else if (step.kind === "grid") {
+  } else {
     step.rows.forEach((row) => { a[row.id] = { optionIds: [pick(row.options ?? step.options).id] }; });
-  } else CONCLUSION_IDS.forEach((id) => { a[id] = { text: "my own words here" }; });
+  }
 }
+/** One tap (or a short answer) on a single page of the test. */
+function answerPage(page: FpPage, a: FpAnswers, r: () => number) {
+  const pick = <T,>(xs: T[]) => xs[Math.floor(r() * xs.length)];
+  if (page.kind === "text") { a[page.id] = { text: r() < 0.2 ? "I have no idea yet" : pick(["Risk analyst", "Marketing", "CA", "Software engineer", "teaching"]) }; return; }
+  const n = page.multi ? 1 + Math.floor(r() * Math.min(2, page.max ?? 2)) : 1;
+  const ids = new Set<string>();
+  for (let tries = 0; ids.size < n && tries < 20; tries++) ids.add(pick(page.options).id);
+  a[page.id] = { optionIds: [...ids] };
+}
+/** What the student does on the report's Thinking Page. */
+const saveConclusions = (a: FpAnswers) => CONCLUSION_IDS.forEach((id) => { a[id] = { text: "my own words here" }; });
 
 function randomCore(r: () => number): V2Answers {
   const answers: V2Answers = { Q0: [(["a", "b", "c", "d", "e"] as const)[Math.floor(r() * 5)]] };
@@ -45,15 +57,19 @@ describe("full journey simulation", () => {
     for (let seed = 1; seed <= 60; seed++) {
       const r = rng(seed);
       const fp: FpAnswers = {};
-      let steps = 0;
-      for (let s = nextPreStep(fp); s; s = nextPreStep(fp)) { answerStep(s, fp, r); steps++; }
-      expect(steps).toBe(7);
+      let pages = 0;
+      for (let p = nextPrePage(fp); p; p = nextPrePage(fp)) { answerPage(p, fp, r); pages++; }
+      expect(pages).toBe(PRE_PAGES.length);
       const core = randomCore(r);
       expect(nextScreenId(core)).toBeNull();
-      for (let s = nextPostStep(fp); s; s = nextPostStep(fp)) { answerStep(s, fp, r); steps++; }
-      expect(nextPostStep(fp)).toBeNull();
-      expect(steps).toBe(ALL_FP_STEPS.length);
-      expect(fpComplete(fp)).toBe(true);
+      for (let p = nextPostPage(fp); p; p = nextPostPage(fp)) { answerPage(p, fp, r); pages++; }
+      expect(nextPostPage(fp)).toBeNull();
+      expect(pages).toBe(FP_PAGE_COUNT);
+      // Three starting-point answers are not enough for a Thinking Page, and the report says so cleanly.
+      expect(fpComplete(fp)).toBe(false);
+      const report = buildReportV2({ name: "T", dateISO: "2026-11-26", answers: core, fp });
+      expect(report.thinking).toBeNull();
+      expect(report.startingPoint).not.toBeNull();
     }
   });
 });
@@ -63,7 +79,7 @@ describe("Thinking Page invariants over random answers", () => {
     for (let seed = 1; seed <= 300; seed++) {
       const r = rng(seed * 7919);
       const fp: FpAnswers = {};
-      ALL_FP_STEPS.filter((s) => s.kind !== "conclusions").forEach((s) => answerStep(s, fp, r));
+      ALL_FP_STEPS.forEach((s) => answerStep(s, fp, r));
       const core = randomCore(r);
       const radar = computeRadar(core);
       const t = buildThinking({ fp, radar });
@@ -98,7 +114,7 @@ describe("Thinking Page invariants over random answers", () => {
   it("is deterministic for the same answers", () => {
     const r = rng(42);
     const fp: FpAnswers = {};
-    ALL_FP_STEPS.filter((s) => s.kind !== "conclusions").forEach((s) => answerStep(s, fp, r));
+    ALL_FP_STEPS.forEach((s) => answerStep(s, fp, r));
     const radar = computeRadar(ANANYA_ANSWERS);
     expect(buildThinking({ fp, radar })).toEqual(buildThinking({ fp, radar }));
   });
@@ -107,7 +123,7 @@ describe("Thinking Page invariants over random answers", () => {
     const radar = computeRadar(ANANYA_ANSWERS);
     for (const text of ["", "   ", "x".repeat(5000), "<script>alert(1)</script>", "💼🚀", "a\nb\tc", "no", "Idk."]) {
       const fp: FpAnswers = {};
-      ALL_FP_STEPS.filter((s) => s.kind !== "conclusions").forEach((s) => answerStep(s, fp, () => 0.3));
+      ALL_FP_STEPS.forEach((s) => answerStep(s, fp, () => 0.3));
       fp[fpId("A1")] = { text };
       expect(() => buildThinking({ fp, radar })).not.toThrow();
     }
@@ -116,7 +132,7 @@ describe("Thinking Page invariants over random answers", () => {
   it("ignores gap values it does not know", () => {
     const radar = computeRadar(ANANYA_ANSWERS);
     const fp: FpAnswers = {};
-    ALL_FP_STEPS.filter((s) => s.kind !== "conclusions").forEach((s) => answerStep(s, fp, () => 0.5));
+    ALL_FP_STEPS.forEach((s) => answerStep(s, fp, () => 0.5));
     fp[fpId("C3.gap")] = { optionIds: ["bogus"] };
     expect(buildThinking({ fp, radar })).toBeNull();
     fp[fpId("C3.gap")] = { optionIds: ["bogus", GAP_OPTIONS[0].id] };
@@ -131,12 +147,14 @@ describe("report integration across degrees", () => {
       const r = rng(q0.charCodeAt(0));
       const fp: FpAnswers = {};
       ALL_FP_STEPS.forEach((s) => answerStep(s, fp, r));
+      saveConclusions(fp);
       const withFp = buildReportV2({ name: "T", dateISO: "2026-11-23", answers, fp });
       expect(withFp.thinking?.saved).toBe(true);
       const without = buildReportV2({ name: "T", dateISO: "2026-11-23", answers });
       expect(without.thinking).toBeNull();
       // The module never changes the existing report content.
-      expect({ ...withFp, thinking: null }).toEqual(without);
+      expect(without.startingPoint).toBeNull();
+      expect({ ...withFp, thinking: null, startingPoint: null }).toEqual(without);
     }
   });
 });

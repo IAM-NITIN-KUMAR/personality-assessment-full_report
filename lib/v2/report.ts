@@ -11,6 +11,7 @@ import { chosenDomain, degreeOf } from "./flow";
 import { showAbroad } from "./gate";
 import { selectJourneys } from "./journeys/select";
 import { buildThinking } from "./fp/thinking";
+import { startingPoint } from "./fp/score";
 import type { FpAnswers } from "./fp/score";
 import type { Discipline } from "../course-catalog";
 import { ROLE_LABELS, VALUE_BY_KEY, VALUE_LABELS } from "./types";
@@ -175,5 +176,6 @@ export function buildReportV2(input: {
     domain,
     journeys,
     thinking: fp ? buildThinking({ fp, radar }) : null,
+    startingPoint: fp ? startingPoint(fp) : null,
   };
 }
