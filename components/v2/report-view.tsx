@@ -126,6 +126,37 @@ const MORE_SIGNAL_FALLBACK_COPY =
   "We don't have enough signal yet to name your type honestly, and a made-up label would waste your time. The next steps below will help build that picture faster than another question could.";
 
 // ---------------------------------------------------------------------------
+// Layout rules that keep a page packed whatever the report holds: how many
+// cards, lines and tips there are, and which sections are missing.
+// ---------------------------------------------------------------------------
+
+/** In a two-column grid, a last card left alone on its row takes the whole row. */
+const FILL_ROW = "sm:[&>*:last-child:nth-child(odd)]:col-span-2";
+/** A page's first section sits just under the page tag in the card's corner. */
+const PAGE_FIRST = "first-of-type:pt-4 sm:first-of-type:pt-0";
+/** A page's last section ends at the card's own padding. */
+const PAGE_LAST = "last:pb-2 sm:last:pb-0";
+/** Columns for a row of one, two or three equal cards, so the row is always full. */
+const COLS_SM = ["", "", "sm:grid-cols-2", "sm:grid-cols-3"];
+/** A list shown as a panel, so two lists side by side are the same height whatever their length. */
+const LIST_PANEL = "rounded-[14px] border border-line/50 bg-surface-subtle/60 p-4 sm:p-5 flex flex-col gap-5";
+/** The lines of such a list spread over the panel's height, so the shorter list has no blank end. */
+const LIST_LINES = "flex-1 flex flex-col justify-around gap-4";
+
+/** The lines of a list that has the full width to itself: side by side, each row filled. */
+const LIST_ROW = "flex flex-wrap gap-x-6 gap-y-4 [&>*]:flex-1 [&>*]:basis-[200px]";
+
+/**
+ * How much the first list has to say next to the second (1 = the same). Side by side, each list
+ * gets width in this proportion so the two come out close in height.
+ */
+function columnShare(first: string[], second: string[]): number {
+  // Every line costs its own spacing as well as its words.
+  const weight = (lines: string[]) => lines.reduce((n, line) => n + line.length + 40, 0);
+  return weight(first) / Math.max(1, weight(second));
+}
+
+// ---------------------------------------------------------------------------
 // Sub-components
 // ---------------------------------------------------------------------------
 
@@ -199,7 +230,8 @@ function HexRadar({ scores }: { scores: Record<RadarDim, number> }) {
   const size = 260;
   const cx = size / 2;
   const cy = size / 2;
-  const radius = size * 0.38;
+  // The hexagon fills its square, leaving only room for the dots on its corners.
+  const radius = size * 0.46;
   const n = 6;
   const ringValues = [25, 50, 75, 100];
   const angleFor = (i: number) => -Math.PI / 2 + (2 * Math.PI * i) / n;
@@ -213,17 +245,18 @@ function HexRadar({ scores }: { scores: Record<RadarDim, number> }) {
 
   const labelPositions = [
     "absolute top-0 left-1/2 -translate-x-1/2 flex flex-col items-center text-center",
-    "absolute top-[18%] -right-2 sm:right-0 flex flex-col items-start",
-    "absolute bottom-[18%] -right-2 sm:right-0 flex flex-col items-start",
+    "absolute top-[13%] -right-2 sm:right-0 flex flex-col items-start",
+    "absolute bottom-[13%] -right-2 sm:right-0 flex flex-col items-start",
     "absolute bottom-0 left-1/2 -translate-x-1/2 flex flex-col items-center text-center",
-    "absolute bottom-[18%] -left-2 sm:left-0 flex flex-col items-end",
-    "absolute top-[18%] -left-2 sm:left-0 flex flex-col items-end",
+    "absolute bottom-[13%] -left-2 sm:left-0 flex flex-col items-end",
+    "absolute top-[13%] -left-2 sm:left-0 flex flex-col items-end",
   ];
   const scoreAlign = ["", "pl-4", "pl-4", "", "pr-4", "pr-4"];
 
+  // The chart is sized to its column: full width on a phone and a tablet, half the page from md up.
   return (
-    <div className="relative w-full max-w-[290px] sm:max-w-[360px] h-[260px] sm:h-[320px] flex items-center justify-center mt-2 shrink-0">
-      <svg viewBox={`0 0 ${size} ${size}`} className="w-[140px] h-[140px] sm:w-[220px] sm:h-[220px] max-w-full h-auto">
+    <div className="relative w-full max-w-[330px] sm:max-w-[420px] h-[270px] sm:h-[340px] md:h-[290px] lg:h-[340px] flex items-center justify-center mt-2 shrink-0">
+      <svg viewBox={`0 0 ${size} ${size}`} className="w-[190px] h-[190px] sm:w-[250px] sm:h-[250px] md:w-[200px] md:h-[200px] lg:w-[250px] lg:h-[250px] max-w-full">
         {ringValues.map((rv) => {
           const r = (rv / 100) * radius;
           return (
@@ -325,10 +358,10 @@ const JOURNEY_STEPS: { key: keyof Journey["steps"]; label: string }[] = [
   { key: "now", label: "Now" },
 ];
 
-function JourneyCard({ journey }: { journey: Journey }) {
+function JourneyCard({ journey, className = "" }: { journey: Journey; className?: string }) {
   const last = JOURNEY_STEPS.length - 1;
   return (
-    <div className="rounded-[16px] p-5 border border-line bg-surface-subtle/30 hover:bg-surface-subtle/60 transition-all flex flex-col gap-4">
+    <div className={`rounded-[16px] p-5 border border-line bg-surface-subtle/30 hover:bg-surface-subtle/60 transition-all flex flex-col gap-4 ${className}`}>
       <div className="flex items-start justify-between gap-2">
         <h4 className="text-[14px] font-extrabold text-ink-700 leading-snug">{journey.label}</h4>
         <span className="text-[8.5px] font-mono font-black text-electric bg-electric-tint px-2 py-0.5 rounded-md whitespace-nowrap uppercase shrink-0">
@@ -336,7 +369,8 @@ function JourneyCard({ journey }: { journey: Journey }) {
         </span>
       </div>
 
-      <ol className="relative border-l border-electric/30 ml-1.5 space-y-3">
+      {/* The timeline takes up whatever height the tallest card in the row sets, its steps spread along it. */}
+      <ol className="relative border-l border-electric/30 ml-1.5 flex-1 flex flex-col justify-between gap-3">
         {JOURNEY_STEPS.map((st, i) => (
           <li key={st.key} className="pl-4 relative">
             <span
@@ -400,6 +434,13 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
 
   const heroCopy = isFull && t.kind === "explorer" ? t.copy : MORE_SIGNAL_FALLBACK_COPY;
 
+  const steps = [report.nextSteps.counselling, report.nextSteps.exposure, report.nextSteps.conversation];
+  // Tips and steps sit side by side, sharing the width by how much each says. When one says more
+  // than twice the other, no split evens them out, so each takes the full width with its lines in a row.
+  const tipShare = columnShare(report.growthTips, steps);
+  const listsStacked = tipShare < 0.5 || tipShare > 2;
+  const listLines = listsStacked ? LIST_ROW : LIST_LINES;
+
   return (
     <article className="max-w-4xl mx-auto px-3 sm:px-6 pb-20 mt-4 sm:mt-8 space-y-8">
       {/* PAGE 1: Personal Assessment */}
@@ -412,7 +453,8 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
         <PageTag n={1} total={totalPages} />
 
         {/* Header Block */}
-        <header className="flex flex-wrap items-center justify-between gap-4 pb-6 border-b border-line">
+        {/* On a phone the header starts below the page tag, which sits in the top-right corner. */}
+        <header className="flex flex-wrap items-center justify-between gap-4 pt-5 sm:pt-0 pb-6 border-b border-line">
           <div className="flex items-center gap-2.5">
             <Logo className="size-7 text-electric" />
             <span className="text-[24px] font-black tracking-tight text-ink font-sans">SecureSteps</span>
@@ -426,7 +468,9 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
         </header>
 
         {/* Title & Profile Card */}
-        <section className="grid md:grid-cols-[1.2fr,1fr] gap-8 py-8 items-start">
+        {/* The name card is as tall as the title beside it. The columns keep their share of the
+            width whatever the length of the name, which wraps rather than being cut. */}
+        <section className="grid md:grid-cols-[minmax(0,1.2fr),minmax(0,1fr)] gap-6 md:gap-8 py-6">
           <div className="space-y-4">
             <h1 className="text-[32px] sm:text-[40px] font-black leading-tight text-ink uppercase tracking-tight">
               YOUR PERSONAL PATHWAY INSIGHT
@@ -438,12 +482,13 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
             </p>
           </div>
 
-          <div className="rounded-[18px] p-6 border border-line bg-surface-subtle/40 flex gap-4 items-center">
-            <div className="size-14 rounded-full bg-ink text-white flex items-center justify-center font-mono text-[18px] font-black shrink-0">
+          {/* Beside the title the card stands tall, so its contents stack to use the height. */}
+          <div className="rounded-[18px] p-6 border border-line bg-surface-subtle/40 flex gap-4 items-center md:flex-col md:items-start md:justify-center">
+            <div className="size-14 md:size-16 rounded-full bg-ink text-white flex items-center justify-center font-mono text-[18px] md:text-[20px] font-black shrink-0">
               {initials}
             </div>
             <div className="min-w-0 space-y-1.5">
-              <h3 className="text-[17px] font-extrabold text-ink leading-tight truncate">{report.header.name}</h3>
+              <h3 className="text-[17px] font-extrabold text-ink leading-tight break-words">{report.header.name}</h3>
               <div className="space-y-1">
                 <div className="flex items-center gap-2 text-[11px] text-ink-400 font-mono">
                   <Calendar className="size-3.5" />
@@ -528,17 +573,19 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
             full-state only; more_signal flows straight from strengths to
             the page-2 fallback content, same as the prior design. */}
         <section className={isFull ? "grid md:grid-cols-2 gap-10 py-6 border-t border-line/50" : "py-6 border-t border-line/50"}>
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6">
             <SectionHeader icon={Star}>YOUR CORE STRENGTHS</SectionHeader>
-            <div className="space-y-3">
+            {/* Beside the chart the strengths stack and share the column's height, so three of them
+                fill it as well as four; without the chart they pair up across the page. */}
+            <div className={isFull ? "flex-1 grid gap-3 auto-rows-fr" : `grid sm:grid-cols-2 gap-3 ${FILL_ROW}`}>
               {report.coreStrengths.map((s) => {
                 const Icon = STRENGTH_ICONS[s.label] ?? Star;
                 return (
                   <div
                     key={s.label}
-                    className="rounded-[14px] p-4 border border-line/40 bg-surface-subtle/60 hover:bg-surface-subtle transition-all flex gap-3.5 items-start"
+                    className="rounded-[14px] p-4 border border-line/40 bg-surface-subtle/60 hover:bg-surface-subtle transition-all flex gap-3.5 items-center"
                   >
-                    <div className="size-8 rounded-full bg-electric-tint flex items-center justify-center text-electric shrink-0 mt-0.5">
+                    <div className="size-8 rounded-full bg-electric-tint flex items-center justify-center text-electric shrink-0">
                       <Icon className="size-5" />
                     </div>
                     <div>
@@ -554,22 +601,25 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
           </div>
 
           {isFull && (
-            <div className="space-y-6 flex flex-col items-center">
+            <div className="flex flex-col items-center gap-6">
               <div className="flex flex-col gap-1.5 self-start">
                 <SectionHeader icon={TrendingUp}>YOUR PATH FIT SCORE</SectionHeader>
                 <div className="text-[11px] font-extrabold text-electric tracking-wider uppercase font-mono pl-8.5">
                   SIX-DIMENSION PROFILE
                 </div>
               </div>
-              <HexRadar scores={report.radar} />
+              {/* The chart sits in the middle of whatever height the strengths beside it take. */}
+              <div className="flex-1 w-full flex items-center justify-center">
+                <HexRadar scores={report.radar} />
+              </div>
             </div>
           )}
         </section>
 
         {/* Career Traits */}
-        <section className="py-6 border-t border-line/50 space-y-6">
+        <section className={`py-6 ${PAGE_LAST} border-t border-line/50 space-y-6`}>
           <SectionHeader icon={LineChart}>CAREER TRAITS ANALYSIS</SectionHeader>
-          <div className="grid sm:grid-cols-2 gap-4">
+          <div className={`grid sm:grid-cols-2 gap-4 ${FILL_ROW}`}>
             {report.coreStrengths.map((s) =>
               s.label === "Mobility" ? (
                 <MobilityChip key={s.label} heading={s.heading} sentence={s.sentence} />
@@ -586,12 +636,13 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
           </div>
         </section>
 
-        {/* Key Drivers */}
-        <section className="py-6 border-t border-line/50 space-y-6 mt-2">
+        {/* Key Drivers — left out when there is nothing to show; a direction or role on its own takes the full row. */}
+        {(report.domain || report.role || report.nextSteps.abroad) && (
+        <section className={`py-6 ${PAGE_LAST} border-t border-line/50 space-y-6`}>
           <SectionHeader icon={Compass}>KEY DRIVERS</SectionHeader>
           <div className="grid sm:grid-cols-2 gap-4">
             {report.domain && (
-              <div className="rounded-[14px] p-4 border border-line bg-surface-subtle/60 shadow-sm space-y-2">
+              <div className={`rounded-[14px] p-4 border border-line bg-surface-subtle/60 shadow-sm space-y-2 ${report.role ? "" : "sm:col-span-2"}`}>
                 <div className="text-[10px] font-bold text-ink-400 font-mono uppercase">Chosen Direction</div>
                 <h4 className="text-[14px] font-extrabold text-electric">{DOMAIN_LABELS[report.domain]}</h4>
                 <p className="text-[12px] text-ink-600 leading-relaxed">
@@ -600,7 +651,7 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
               </div>
             )}
             {report.role && (
-              <div className="rounded-[14px] p-4 border border-line bg-surface-subtle/60 shadow-sm space-y-2">
+              <div className={`rounded-[14px] p-4 border border-line bg-surface-subtle/60 shadow-sm space-y-2 ${report.domain ? "" : "sm:col-span-2"}`}>
                 <div className="flex items-center justify-between gap-2">
                   <div className="text-[10px] font-bold text-ink-400 font-mono uppercase">Role Resolution</div>
                   <span className={`text-[9px] font-mono font-black px-2 py-0.5 rounded-md capitalize ${CONF_BAND_STYLE[report.role.confBand]}`}>
@@ -625,6 +676,7 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
             )}
           </div>
         </section>
+        )}
       </motion.div>
 
       {/* PAGE 2: Future Plans */}
@@ -639,9 +691,9 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
 
         {isFull && report.cards ? (
           <>
-            <section className="py-6 space-y-6">
+            <section className={`py-6 ${PAGE_FIRST} ${PAGE_LAST} space-y-6`}>
               <SectionHeader icon={Award}>BEST PATH MATCHES FOR YOU</SectionHeader>
-              <div className="grid sm:grid-cols-2 gap-4">
+              <div className={`grid sm:grid-cols-2 gap-4 ${FILL_ROW}`}>
                 {report.cards.slice(0, 2).map((c, i) => (
                   <MatchCardBig key={c.career} card={c} index={i} />
                 ))}
@@ -649,9 +701,9 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
             </section>
 
             {report.cards.length > 2 && (
-              <section className="py-6 border-t border-line/50 space-y-6">
+              <section className={`py-6 ${PAGE_LAST} border-t border-line/50 space-y-6`}>
                 <SectionHeader icon={Globe}>ALTERNATIVE PATHWAYS</SectionHeader>
-                <div className="grid sm:grid-cols-2 gap-4">
+                <div className={`grid sm:grid-cols-2 gap-4 ${FILL_ROW}`}>
                   {report.cards.slice(2, 4).map((c) => (
                     <MatchCardSmall key={c.career} card={c} />
                   ))}
@@ -660,16 +712,22 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
             )}
 
             {report.journeys.length > 0 && (
-              <section className="py-6 border-t border-line/50 space-y-6">
+              <section className={`py-6 ${PAGE_LAST} border-t border-line/50 space-y-6`}>
                 <SectionHeader icon={Footprints}>PEOPLE WHO WALKED THIS PATH</SectionHeader>
                 <p className="text-[13px] text-ink-600 leading-relaxed max-w-2xl">
                   {journeyIntroLead(report.journeys.length)} What they studied, where they began, what they added
                   on top of the degree, and where it took them. The road to{" "}
                   <span className="font-semibold text-ink-700">{report.cards[0].career}</span> is not theoretical.
                 </p>
-                <div className="grid md:grid-cols-3 gap-4">
+                {/* Up to three to a row; a row that is not full shares its width, so one, two, four or
+                    five journeys leave no empty cell. Four sit two and two. */}
+                <div className="flex flex-wrap gap-4">
                   {report.journeys.map((j) => (
-                    <JourneyCard key={j.id} journey={j} />
+                    <JourneyCard
+                      key={j.id}
+                      journey={j}
+                      className={`flex-1 min-w-0 ${report.journeys.length === 4 ? "basis-[300px]" : "basis-[220px]"}`}
+                    />
                   ))}
                 </div>
                 <p className="text-[10px] text-ink-400 leading-relaxed">
@@ -680,9 +738,9 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
             )}
           </>
         ) : (
-          <section className="py-10 space-y-6">
+          <section className={`py-6 ${PAGE_FIRST} ${PAGE_LAST} space-y-6`}>
             <SectionHeader icon={Sparkles}>WHAT HAPPENS NEXT</SectionHeader>
-            <div className="rounded-[18px] p-6 sm:p-8 border border-line bg-surface-subtle/40 max-w-2xl">
+            <div className="rounded-[18px] p-5 sm:p-6 border border-line bg-surface-subtle/40">
               <p className="text-[14.5px] leading-relaxed text-ink-600">
                 No percentages today — they wouldn&apos;t be honest. The fastest way forward is below.
               </p>
@@ -716,9 +774,10 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
         <PageTag n={totalPages} total={totalPages} />
 
         {report.verdicts.length > 0 && (
-          <section className="py-6 border-b border-line/50 space-y-4 mb-6">
+          <section className={`py-6 ${PAGE_FIRST} border-b border-line/50 space-y-4`}>
             <SectionHeader icon={Lightbulb}>WE FEEL</SectionHeader>
-            <div className="grid sm:grid-cols-3 gap-4">
+            {/* As many columns as there are lines, so two lines fill the row instead of leaving a third empty. */}
+            <div className={`grid gap-4 ${COLS_SM[Math.min(report.verdicts.length, 3)]}`}>
               {report.verdicts.slice(0, 3).map((v) => (
                 <div key={v.id} className="rounded-[14px] p-4 border border-line/50 bg-surface-subtle/60 space-y-2">
                   <Quote className="size-4 text-electric/40" />
@@ -729,15 +788,22 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
           </section>
         )}
 
-        <section className="grid md:grid-cols-2 gap-10 py-6">
-          <div className="space-y-5">
+        {/* Tips and steps are two panels of equal height, however many lines each holds. With no
+            tips, the steps take the full width. */}
+        <section className={`py-6 ${PAGE_FIRST} space-y-4`}>
+         <div
+           className={`grid gap-4 ${listsStacked ? "" : "md:grid-cols-[minmax(0,var(--tips))_minmax(0,1fr)]"}`}
+           style={{ "--tips": `${Math.min(1.5, Math.max(0.67, tipShare))}fr` } as React.CSSProperties}
+         >
+          {report.growthTips.length > 0 && (
+          <div className={LIST_PANEL}>
             <div className="flex items-center gap-2.5">
               <div className="size-6 rounded-full bg-[#e8f8ef] flex items-center justify-center text-green-600">
                 <Leaf className="size-3.5" strokeWidth={3} />
               </div>
               <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">GROWTH TIPS FOR YOU</h2>
             </div>
-            <div className="space-y-4">
+            <div className={listLines}>
               {report.growthTips.map((tip, idx) => (
                 <div key={idx} className="flex gap-3 items-start">
                   <CheckCircle2 className="size-5 text-green-600 shrink-0 mt-0.5" />
@@ -746,16 +812,17 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
               ))}
             </div>
           </div>
+          )}
 
-          <div className="space-y-5">
+          <div className={LIST_PANEL}>
             <div className="flex items-center gap-2.5">
               <div className="size-6 rounded-full bg-[#eef3fe] flex items-center justify-center text-blue-600">
                 <Send className="size-3" strokeWidth={3} />
               </div>
               <h2 className="text-[13px] font-black tracking-widest text-ink-700 uppercase">YOUR NEXT STEPS</h2>
             </div>
-            <div className="space-y-4">
-              {[report.nextSteps.counselling, report.nextSteps.exposure, report.nextSteps.conversation].map((step, idx) => (
+            <div className={listLines}>
+              {steps.map((step, idx) => (
                 <div key={idx} className="flex gap-3.5 items-start">
                   <span className="size-5 rounded-full bg-blue-600 text-white font-mono text-[10.5px] font-black flex items-center justify-center shrink-0 mt-0.5">
                     {idx + 1}
@@ -763,16 +830,19 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
                   <p className="text-[13.5px] text-ink-600 font-medium leading-relaxed">{step}</p>
                 </div>
               ))}
-              {report.nextSteps.abroad && (
-                <div className="flex gap-3.5 items-start rounded-xl border border-electric/20 bg-electric-tint/60 p-3">
-                  <span className="size-5 rounded-full bg-electric text-white font-mono text-[10.5px] font-black flex items-center justify-center shrink-0 mt-0.5">
-                    4
-                  </span>
-                  <p className="text-[13.5px] text-ink-700 font-medium leading-relaxed">{report.nextSteps.abroad}</p>
-                </div>
-              )}
             </div>
           </div>
+         </div>
+
+          {/* The fourth step runs the full width under both lists, so the shorter list leaves no hole beside it. */}
+          {report.nextSteps.abroad && (
+            <div className="flex gap-3.5 items-start rounded-xl border border-electric/20 bg-electric-tint/60 p-3 sm:px-4">
+              <span className="size-5 rounded-full bg-electric text-white font-mono text-[10.5px] font-black flex items-center justify-center shrink-0 mt-0.5">
+                4
+              </span>
+              <p className="text-[13.5px] text-ink-700 font-medium leading-relaxed">{report.nextSteps.abroad}</p>
+            </div>
+          )}
         </section>
 
         <section className="py-6 border-t border-line/50 flex flex-col items-center text-center space-y-2">
@@ -782,7 +852,7 @@ export default function ReportViewV2({ report, onSaveConclusions }: {
           </p>
         </section>
 
-        <footer className="pt-6 border-t border-line/60 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4 mt-6">
+        <footer className="pt-6 pb-2 sm:pb-0 border-t border-line/60 flex flex-col sm:flex-row items-center sm:items-start justify-between gap-4">
           <div className="flex items-center gap-2">
             <Logo className="size-5 text-electric" />
             <span className="font-bold text-[13px] font-sans text-ink-400">SecureSteps</span>
