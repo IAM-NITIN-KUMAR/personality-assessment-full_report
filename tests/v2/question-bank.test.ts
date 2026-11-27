@@ -1,7 +1,7 @@
 import { describe, it, expect } from "vitest";
 import {
   STATIC_SCREENS, C_BRANCHES, D_STATEMENTS, D_OPTIONS,
-  B_SCENARIOS, B_REACTION_OPTIONS, DEGREE_BY_Q0, F4_PROMPT, C1_PROMPT,
+  B_SCENARIOS, B_REACTIONS, bOptions, DEGREE_BY_Q0, F4_PROMPT, C1_PROMPT,
   Q0_KEY_BY_DISCIPLINE,
 } from "../../lib/v2/question-bank";
 import { DOMAIN_ORDER } from "../../lib/v2/types";
@@ -52,9 +52,16 @@ describe("v2 question bank integrity", () => {
     }
   });
 
-  it("B reaction scale is the fixed 4-option scale", () => {
-    expect(B_REACTION_OPTIONS.map((o) => o.key)).toEqual(["a", "b", "c", "d"]);
+  it("every B scenario has its own four reactions, keyed a to d", () => {
     expect(Object.keys(B_SCENARIOS)).toHaveLength(6);
+    const items = Object.keys(B_SCENARIOS) as (keyof typeof B_SCENARIOS)[];
+    for (const id of items) {
+      expect(bOptions(id).map((o) => o.key), id).toEqual(["a", "b", "c", "d"]);
+      expect(STATIC_SCREENS[id].options, id).toEqual(bOptions(id));
+    }
+    // No wording is reused, so six questions in a row never show the same answers twice.
+    const labels = items.flatMap((id) => B_REACTIONS[id]);
+    expect(new Set(labels).size).toBe(labels.length);
   });
 
   it("never says 'abroad' before F4", () => {

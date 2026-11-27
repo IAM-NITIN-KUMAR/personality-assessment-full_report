@@ -3,7 +3,6 @@
 import { motion } from "framer-motion";
 import { RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { Logo } from "@/components/ui/logo";
 import { THEME, alpha, GLOW, PAGE_WASH } from "@/lib/theme";
 
 interface CloudProps {
@@ -106,24 +105,23 @@ function Header({
   onReset,
 }: {
   name: string;
-  sectionLabel: string;
+  /** Shown under the title. Left out where the page itself says which part the student is in. */
+  sectionLabel?: string;
   onReset: () => void;
 }) {
   return (
     <header className="sticky top-0 z-30 bg-white/25 backdrop-blur-xl border-b border-white/20">
       <div className="max-w-5xl mx-auto px-4 md:px-8 py-4 flex items-center justify-between gap-4">
-        <div className="flex items-center gap-3">
-          <Logo className="size-8 text-ink" />
+        <div>
+          <div className="font-mono text-[13px] font-semibold tracking-wide leading-none uppercase">
+            Roots <span className="text-ink-300">/</span> Routes
+          </div>
 
-          <div>
-            <div className="font-mono text-[13px] font-semibold tracking-wide leading-none uppercase">
-              Roots <span className="text-ink-300">/</span> Routes
-            </div>
-
+          {sectionLabel && (
             <div className="mono-eyebrow text-ink-300 mt-1.5">
               {sectionLabel} · {name.split(" ")[0]}
             </div>
-          </div>
+          )}
         </div>
 
         <Button variant="ghost" onClick={onReset}>
@@ -143,7 +141,7 @@ export function AssessmentChrome({
   children,
 }: {
   name: string;
-  sectionLabel: string;
+  sectionLabel?: string;
   onReset: () => void;
   children: React.ReactNode;
 }) {

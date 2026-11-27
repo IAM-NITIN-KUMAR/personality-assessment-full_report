@@ -22,6 +22,8 @@ interface Store extends AssessmentState {
   setProfile: (p: StudentProfile) => void;
   /** Submit (or update) an answer for a question. */
   answer: (questionId: string, partial: Partial<Answer>) => void;
+  /** Take an answer back, so the question is asked again ("Previous" in the test). */
+  unanswer: (questionId: string) => void;
   /** React to a question (insta-style). */
   react: (questionId: string, reaction: Reaction) => void;
   /** Replace the in-progress trunk with a new ordered list. */
@@ -86,6 +88,14 @@ export const useAssessment = create<Store>()(
           });
         }
       },
+
+      // Local only: the saved row stays until the student answers again, which overwrites it.
+      unanswer: (questionId) =>
+        set((s) => {
+          const rest = { ...s.answers };
+          delete rest[questionId];
+          return { answers: rest };
+        }),
 
       react: (questionId, reaction) =>
         set((s) => ({

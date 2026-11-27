@@ -16,6 +16,10 @@ interface Props {
   onAutoAdvance?: () => void;
   loadingNext?: boolean;
   positionLabel?: string;
+  /** Leave out the card's own header (category, position, corner dot) when the page shows them elsewhere. */
+  bare?: boolean;
+  /** Leave out the card's own Next button when the page provides one. */
+  hideNext?: boolean;
 }
 
 const AUTO_ADVANCE_DELAY = 420;
@@ -28,9 +32,11 @@ export function QuestionCard({
   onAutoAdvance,
   loadingNext,
   positionLabel,
+  bare,
+  hideNext,
 }: Props) {
   const canAdvance = isAnswered(question, answer);
-  const showManualNext = question.type === "short_text" || question.type === "multi_choice";
+  const showManualNext = !hideNext && (question.type === "short_text" || question.type === "multi_choice");
 
   const advancedRef = useRef(false);
   const advanceTimeoutRef = useRef<number | null>(null);
@@ -68,9 +74,9 @@ export function QuestionCard({
 
   return (
     <div className="panel relative w-full p-5 sm:p-8 md:p-12">
-      <CornerMotif kind={question.kind} />
+      {!bare && <CornerMotif kind={question.kind} />}
 
-      <div className="mb-4 sm:mb-7 relative">
+      <div className={cn("mb-4 sm:mb-7 relative", bare && "hidden")}>
         <div className="flex items-center gap-2 flex-wrap mb-1">
           <span className="active-dot" />
           <span className="mono-eyebrow text-ink-700">{question.category}</span>
@@ -191,12 +197,15 @@ function ChoiceList({
   if (!question.options) return null;
   return (
     <div className="grid gap-2 sm:gap-3">
-      {question.options.map((o) => {
+      {question.options.map((o, i) => {
         const isSelected = selected.includes(o.id);
         return (
           <motion.button
             key={o.id}
             type="button"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3, delay: 0.1 + i * 0.05, ease: [0.22, 1, 0.36, 1] }}
             whileHover={{
               y: -3,
               scale: 1.02,
@@ -231,7 +240,16 @@ function ChoiceList({
                   : "border-line group-hover:border-electric-400",
               )}
             >
-              {isSelected && <Check className="h-4 w-4 text-white" strokeWidth={3} />}
+              {isSelected && (
+                <motion.span
+                  initial={{ scale: 0, rotate: -30 }}
+                  animate={{ scale: 1, rotate: 0 }}
+                  transition={{ type: "spring", stiffness: 520, damping: 18 }}
+                  className="flex"
+                >
+                  <Check className="h-4 w-4 text-white" strokeWidth={3} />
+                </motion.span>
+              )}
             </span>
             <span className="text-[14px] sm:text-[16px] md:text-[17px] leading-snug flex-1">{o.label}</span>
           </motion.button>

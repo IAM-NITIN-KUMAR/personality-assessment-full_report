@@ -38,19 +38,67 @@ export const B_SCENARIOS: Record<BItem, string> = {
 };
 
 export const B_REACTION_PROMPT = "What's your honest first reaction?";
-export const B_REACTION_OPTIONS: { key: OptionKey; label: string }[] = [
-  { key: "a", label: "I was already thinking about what I'd try first" },
-  { key: "b", label: "I'd be curious how it turns out, but I wouldn't want to do it myself" },
-  { key: "c", label: "It wouldn't really pull me in either way" },
-  { key: "d", label: "Honestly, just thinking about it drains me" },
-];
+
+/**
+ * Every B question measures the same thing: how strongly the scenario pulls the student in.
+ * The four answers always mean, in this order (and are scored by key in scoring/radar.ts):
+ *   a  I want to get into this myself
+ *   b  I'm curious, but I'd leave the doing to someone else
+ *   c  it doesn't pull me either way
+ *   d  it would drain me
+ * Each scenario words them in its own terms, so six questions in a row do not read as one
+ * question asked six times. When editing, keep each line true to its meaning above.
+ */
+export const B_REACTIONS: Record<BItem, [string, string, string, string]> = {
+  B1: [
+    "Give me the numbers. I want to find where the money went",
+    "I'd want to hear the answer, but someone else can do the digging",
+    "Numbers like these don't really grab me",
+    "Hunting through spreadsheets for it would wear me out",
+  ],
+  B2: [
+    "I'd start calling people and get the project moving again",
+    "I'd want to know what happened, but I'd rather not be the one chasing",
+    "I'd finish my own part and not think much more about it",
+    "Chasing people who have gone quiet is exactly what tires me out",
+  ],
+  B3: [
+    "I'd already be reworking it so more people stop and look",
+    "I'd wonder why it didn't land, but I wouldn't redo it myself",
+    "I'd shrug and move on to the next thing",
+    "Trying to win attention for my work sounds exhausting",
+  ],
+  B4: [
+    "I'm already planning how to spend the first Rs 5,000",
+    "I'd love to watch someone try it, just not with me running it",
+    "It doesn't excite me, and it doesn't scare me",
+    "That much uncertainty would stress me out",
+  ],
+  B5: [
+    "I'd want to track down the cause and fix it for good",
+    "I'd like to know why it keeps happening, but fixing it isn't for me",
+    "If the workaround works, I wouldn't give it another thought",
+    "Untangling other people's routines sounds tiring",
+  ],
+  B6: [
+    "I'd find a quiet moment and ask them what's going on",
+    "I'd wonder what's wrong, but leave it to someone closer to them",
+    "It's their business. I'd stay out of it",
+    "Carrying someone else's struggles would drain me",
+  ],
+};
+
+const B_KEYS: OptionKey[] = ["a", "b", "c", "d"];
+
+export const bOptions = (id: BItem): { key: OptionKey; label: string }[] =>
+  B_REACTIONS[id].map((label, i) => ({ key: B_KEYS[i], label }));
 
 const bScreen = (id: BItem): ScreenDef => ({
   id,
   category: "React honestly",
   prompt: B_SCENARIOS[id],
   hint: B_REACTION_PROMPT,
-  options: B_REACTION_OPTIONS,
+  options: bOptions(id),
 });
 
 export const C1_PROMPT = "Based on how you reacted, which of these worlds would you like to look inside?";
