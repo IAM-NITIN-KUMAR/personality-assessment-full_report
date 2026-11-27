@@ -140,11 +140,9 @@ export default function ReportPage() {
   const handleDownloadV2 = async () => {
     setDownloadingV2(true);
     try {
-      const [{ pdf }, { default: ReportPdfV2 }] = await Promise.all([
-        import("@react-pdf/renderer"),
-        import("@/lib/v2/report-pdf"),
-      ]);
-      const blob = await pdf(<ReportPdfV2 report={reportV2} />).toBlob();
+      // Set at the size that fills its sheets, so no page is left part empty (lib/v2/report-pdf-fit.tsx).
+      const { renderFittedReport } = await import("@/lib/v2/report-pdf-fit");
+      const { blob } = await renderFittedReport(reportV2);
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
