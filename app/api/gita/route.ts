@@ -1,17 +1,12 @@
 import { createHash } from "node:crypto";
 import { NextRequest, NextResponse } from "next/server";
-import { toGitaReply } from "@/lib/v2/gita/chat";
+import { BadConversation } from "@/lib/v2/gita/reply";
+import { askGita, gitaAvailable, NotConfigured, OverDailyLimit } from "@/lib/v2/gita/service";
 
-// The "Ask the Gita" section of the report talks to this route, and this route
-// talks to the Gita chat service (a separate Python service that holds the
-// verses and writes the answers). The browser never learns where that service
-// lives, and the shared secret never leaves the server.
-//
-//   GITA_API_URL     base URL of the service. Unset in production means the
-//                    section is simply not shown. In development it defaults
-//                    to http://127.0.0.1:8000.
-//   GITA_API_SECRET  optional; sent as x-gita-secret so the service can refuse
-//                    callers that are not this app.
+// The "Ask the Gita" section of the report talks to this route. The route finds the verses
+// that bear on the student's message and has the model answer from those verses only
+// (lib/v2/gita). The Gemini key never leaves the server; settings are listed in
+// lib/v2/gita/service.ts. Without a key the section is simply not shown.
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -20,49 +15,25 @@ export const maxDuration = 60;
 const MAX_BODY_CHARS = 64_000;
 const MAX_TURNS = 40;
 const MAX_TURN_CHARS = 4000;
-const HEALTH_TIMEOUT_MS = 4000;
-const CHAT_TIMEOUT_MS = 55_000;
+const MAX_REPORT_BYTES = 20_000;
 
-function serviceUrl(): string | null {
-  const url = process.env.GITA_API_URL ?? (process.env.NODE_ENV === "production" ? "" : "http://127.0.0.1:8000");
-  return url ? url.replace(/\/+$/, "") : null;
-}
-
-function serviceHeaders(req?: NextRequest): Record<string, string> {
-  const headers: Record<string, string> = { "content-type": "application/json" };
-  if (process.env.GITA_API_SECRET) headers["x-gita-secret"] = process.env.GITA_API_SECRET;
-  if (req) {
-    // A stable, non-reversible id per visitor so the service can cap questions per person
-    // without ever seeing an IP address.
-    const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
-    headers["x-gita-client"] = createHash("sha256").update(`gita:${ip}`).digest("hex").slice(0, 24);
-  }
-  return headers;
-}
-
-/** Is the chat service reachable? The report shows the section only when it is. */
+/** Is the chat set up? The report shows the section only when it is. */
 export async function GET() {
-  const base = serviceUrl();
-  if (!base) return NextResponse.json({ available: false, reason: "not_configured" });
-  try {
-    const res = await fetch(`${base}/healthz`, {
-      headers: serviceHeaders(),
-      cache: "no-store",
-      signal: AbortSignal.timeout(HEALTH_TIMEOUT_MS),
-    });
-    return NextResponse.json(res.ok ? { available: true } : { available: false, reason: "unhealthy" });
-  } catch {
-    return NextResponse.json({ available: false, reason: "unreachable" });
-  }
+  return NextResponse.json(gitaAvailable() ? { available: true } : { available: false, reason: "not_configured" });
 }
 
 function fail(status: number, error: string) {
   return NextResponse.json({ error }, { status });
 }
 
+/** A stable, non-reversible id per visitor, so questions can be capped per person without keeping an IP address. */
+function studentId(req: NextRequest): string {
+  const ip = req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() || "local";
+  return createHash("sha256").update(`gita:${ip}`).digest("hex").slice(0, 24);
+}
+
 export async function POST(req: NextRequest) {
-  const base = serviceUrl();
-  if (!base) return fail(503, "unavailable");
+  if (!gitaAvailable()) return fail(503, "unavailable");
 
   const raw = await req.text();
   if (raw.length > MAX_BODY_CHARS) return fail(413, "too_long");
@@ -72,11 +43,11 @@ export async function POST(req: NextRequest) {
   } catch {
     return fail(400, "bad_request");
   }
-  if (!Array.isArray(body.messages) || body.messages.length === 0 || body.messages.length > MAX_TURNS) {
+  if (!body || !Array.isArray(body.messages) || body.messages.length === 0 || body.messages.length > MAX_TURNS) {
     return fail(400, "bad_request");
   }
 
-  // Forward only the fields the service expects.
+  // Keep only the fields the chat uses.
   const messages: { role: string; content: string; kind?: string }[] = [];
   for (const m of body.messages as Record<string, unknown>[]) {
     if (!m || typeof m.role !== "string" || typeof m.content !== "string") return fail(400, "bad_request");
@@ -84,28 +55,16 @@ export async function POST(req: NextRequest) {
     messages.push({ role: m.role, content: m.content, ...(typeof m.kind === "string" ? { kind: m.kind } : {}) });
   }
   const report = body.report && typeof body.report === "object" && !Array.isArray(body.report) ? body.report : null;
-
-  let res: Response;
-  try {
-    res = await fetch(`${base}/api/chat`, {
-      method: "POST",
-      headers: serviceHeaders(req),
-      body: JSON.stringify({ messages, report }),
-      cache: "no-store",
-      signal: AbortSignal.timeout(CHAT_TIMEOUT_MS),
-    });
-  } catch {
-    return fail(502, "unavailable");
-  }
-
-  if (res.status === 429) return fail(429, "limit");
-  if (res.status === 413 || res.status === 422) return fail(413, "too_long");
-  if (res.status === 400) return fail(400, "bad_request");
-  if (!res.ok) return fail(502, "unavailable");
+  if (report && Buffer.byteLength(JSON.stringify(report), "utf8") > MAX_REPORT_BYTES) return fail(413, "too_long");
 
   try {
-    return NextResponse.json(toGitaReply(await res.json()));
-  } catch {
+    return NextResponse.json(await askGita(messages, report, studentId(req)));
+  } catch (e) {
+    if (e instanceof BadConversation) return fail(400, "bad_request");
+    if (e instanceof OverDailyLimit) return fail(429, "limit");
+    if (e instanceof NotConfigured) return fail(503, "unavailable");
+    // Model or network failure: say which kind in the server log, never to the browser.
+    console.error(`Ask the Gita failed: ${e instanceof Error ? e.constructor.name : "error"}`);
     return fail(502, "unavailable");
   }
 }

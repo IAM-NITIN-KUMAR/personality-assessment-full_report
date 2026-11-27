@@ -233,3 +233,36 @@ the fix).
 To wire up live LLM probes on the deployed version: add `ANTHROPIC_API_KEY`
 under Vercel → Project Settings → Environment Variables → Production +
 Preview, then redeploy.
+
+---
+
+## Ask the Gita
+
+The last section of the web report is a chat that answers a student's doubt
+from verses of the Bhagavad Gita. It runs inside this app: the browser calls
+`/api/gita`, and the code behind it is in `lib/v2/gita/`.
+
+- **Switching it on.** Set `GEMINI_API_KEY` (in `.env.local` locally, and under
+  Vercel → Project Settings → Environment Variables for the live site). Without
+  a key the section is not shown. The other settings (model, daily caps) are
+  listed at the top of `lib/v2/gita/service.ts`.
+- **How a reply is made.** The student's message is turned into a search for
+  the closest verses (`verse-store.ts`), and the model is given only those
+  verses and a summary of the report with no name, email, phone or profile ID
+  (`report-summary.ts`, `report-text.ts`). Every reply is then checked
+  (`reply.ts`): an answer must cite verses it was given, or the student sees
+  "I could not find this in the provided texts." A message that signals
+  self-harm is answered with a helpline message before any model is called
+  (`crisis.ts`).
+- **The verses.** `lib/v2/gita/data/verses.json` holds 695 verses (Shri Purohit
+  Swami's 1935 translation) with the numbers they are searched by. It is built
+  by `scripts/build-gita-index.mjs` and only needs rebuilding if the
+  translation or the embedding model changes.
+- **Limits to know about.** The daily caps are counted in memory, so on Vercel
+  they are a brake rather than an exact limit. On Gemini's free tier, Google
+  may use what is sent to improve its products, and busy models are common
+  (the code falls back to lighter models); a paid key removes both.
+
+The logic was first built and evaluated as a Python service in the separate
+`THE GITA PROJECT` repository, which still holds the retrieval evaluation and
+the source file for the verses.

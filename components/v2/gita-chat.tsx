@@ -256,9 +256,9 @@ function GitaChat({ summary, starters }: { summary: GitaReportSummary; starters:
         {service === "off" ? (
           <div className="rounded-[12px] border border-amber-200 bg-[#fffaf0] px-4 py-3 text-[12.5px] text-amber-800 leading-relaxed">
             <span className="font-bold">Developer note: </span>
-            the Gita chat service is not reachable, so students would not see this section at all. Start it from
-            THE GITA PROJECT with <code className="font-mono">python -m scripture_rag.web --no-model</code>, or point{" "}
-            <code className="font-mono">GITA_API_URL</code> at a running service.
+            no Gemini key is set, so students would not see this section at all. Add{" "}
+            <code className="font-mono">GEMINI_API_KEY</code> to <code className="font-mono">.env.local</code> and
+            restart the server.
           </div>
         ) : (
           <>
